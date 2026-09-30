@@ -1,0 +1,277 @@
+{
+  "name": "ReceiptBatch_get_expense_data",
+  "description": "",
+  "formUrl": "${env.DB_CONNECTION_STR}",
+  "command": "EXECUTE BATCH_GET_EXPENSE_DATA(${P_RECEIPT_ID}, ^{P_EXPENSE_TYPE:VARCHAR}, ^{P_TOTAL_AMOUNT:INTEGER}, ^{P_RECEIPT_DATE:DATE}, ^{P_MERCHANT:VARCHAR}, ^{P_LOCATION:VARCHAR}, ^{P_DEPARTMENT:VARCHAR}, ^{P_CREDIT_TRANSACTION:VARCHAR}, ^{P_EXPENSE_DATA_JSON:CLOB}, ^{P_STATUS:VARCHAR}, ^{P_UPDATED_DATE:VARCHAR}, ^{P_ERROR:VARCHAR})",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "username",
+        "serviceName": "ReceiptBatch_get_expense_data"
+      },
+      "paramLabel": "username",
+      "paramValue": "${env.DB_USER}",
+      "visible": false
+    },
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "password",
+        "serviceName": "ReceiptBatch_get_expense_data"
+      },
+      "paramLabel": "password",
+      "paramValue": "${env.DB_PASSWORD}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "P_RECEIPT_ID",
+        "serviceName": "ReceiptBatch_get_expense_data"
+      },
+      "paramLabel": "P_RECEIPT_ID",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "P_EXPENSE_DATA_JSON",
+        "serviceName": "ReceiptBatch_get_expense_data"
+      },
+      "paramLabel": "P_EXPENSE_DATA_JSON",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "P_STATUS",
+        "serviceName": "ReceiptBatch_get_expense_data"
+      },
+      "paramLabel": "P_STATUS",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "P_UPDATED_DATE",
+        "serviceName": "ReceiptBatch_get_expense_data"
+      },
+      "paramLabel": "P_UPDATED_DATE",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "P_ERROR",
+        "serviceName": "ReceiptBatch_get_expense_data"
+      },
+      "paramLabel": "P_ERROR",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "P_EXPENSE_TYPE",
+        "serviceName": "ReceiptBatch_get_expense_data"
+      },
+      "paramLabel": "P_EXPENSE_TYPE",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "P_TOTAL_AMOUNT",
+        "serviceName": "ReceiptBatch_get_expense_data"
+      },
+      "paramLabel": "P_TOTAL_AMOUNT",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "P_RECEIPT_DATE",
+        "serviceName": "ReceiptBatch_get_expense_data"
+      },
+      "paramLabel": "P_RECEIPT_DATE",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "P_MERCHANT",
+        "serviceName": "ReceiptBatch_get_expense_data"
+      },
+      "paramLabel": "P_MERCHANT",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "P_LOCATION",
+        "serviceName": "ReceiptBatch_get_expense_data"
+      },
+      "paramLabel": "P_LOCATION",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "P_DEPARTMENT",
+        "serviceName": "ReceiptBatch_get_expense_data"
+      },
+      "paramLabel": "P_DEPARTMENT",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "P_CREDIT_TRANSACTION",
+        "serviceName": "ReceiptBatch_get_expense_data"
+      },
+      "paramLabel": "P_CREDIT_TRANSACTION",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_get_expense_data"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_get_expense_data"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_get_expense_data"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@sql",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "DB",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": [
+    "LiveExpense_AI_orig"
+  ]
+}

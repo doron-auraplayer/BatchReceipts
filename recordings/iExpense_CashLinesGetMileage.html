@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://auravm01.us-west-2.compute.internal:8000/" />
+<title>iExpense_CashLinesGetMileage</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_CashLinesGetMileage</td></tr>
+</thead><tbody>
+<tr>
+	<td>input</td>
+	<td>N51</td>
+	<td>ExpensesTableCashLinePrefix</td>
+</tr>
+<tr>
+	<td>waitForTitle</td>
+	<td>*Expense Report: Cash and Other Expenses</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=OIEMileageLines</td>
+	<td>MileageLinesExists</td>
+</tr>
+<!--Click Mileage only if not displayed-->
+<tr>
+	<td>if</td>
+	<td>!MileageLinesExists</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[contains(@title,'Mileage')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//a[contains(@id,':LineNumber:0')]</td>
+	<td>CashLines_Index</td>
+</tr>
+<tr>
+	<td>storeVisible</td>
+	<td>//input[contains(@id,':Date:0')]</td>
+	<td>tableEditable</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>tableEditable</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//input[contains(@id,':Date:0')]</td>
+	<td>CashLines_Date</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,':OIEDOExpType:0')]</td>
+	<td>CashLines_ExpenseType</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//*[contains(@id,':Justification:0')]</td>
+	<td>CashLines_Justification</td>
+</tr>
+<tr>
+	<td>storeSelectedLabel</td>
+	<td>//*[contains(@id,':OIEUOM:0')]</td>
+	<td>CashLines_Units</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//*[contains(@id,':OIETripDistance:0')]</td>
+	<td>CashLines_Distance</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,':OIEDistanceRate:0')]</td>
+	<td>CashLines_DistanceRate</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,':Amount:0')]</td>
+	<td>CashLines_ReimbAmount</td>
+</tr>
+<tr>
+	<td>else</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,':Date:0')]</td>
+	<td>CashLines_Date</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,':OIEDOExpType:0')]</td>
+	<td>CashLines_ExpenseType</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,':Justification:0')]</td>
+	<td>CashLines_Justification</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,':OIEUOM:0')]</td>
+	<td>CashLines_Units</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,'TripDistance:0')]</td>
+	<td>CashLines_Distance</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,':OIEDistanceRate:0')]</td>
+	<td>CashLines_DistanceRate</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,':Amount:0')]</td>
+	<td>CashLines_ReimbAmount</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//th[9]/span</td>
+	<td>CashLines_ReimbursableColumnHeader</td>
+</tr>
+<!--get pagination info-->
+<tr>
+	<td>storeElementPresent</td>
+	<td>//select[contains(@id,'M__Id')]</td>
+	<td>paginationExist</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>paginationExist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeSelectedLabel</td>
+	<td>//select[contains(@id,'M__Id')]</td>
+	<td>paginationLabel</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//a[contains(text(),'Next')]</td>
+	<td>nextEnabled</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//a[contains(text(),'Previous')]</td>
+	<td>previousEnabled</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

@@ -1,0 +1,89 @@
+{
+  "name": "lExpense_SelectValueSearchWindow",
+  "description": "",
+  "formUrl": "http://auravm01.us-west-2.compute.internal:8000/",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "SelectSearchIndex",
+        "serviceName": "lExpense_SelectValueSearchWindow"
+      },
+      "paramLabel": "SelectSearchIndex",
+      "paramValue": "1",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "lExpense_SelectValueSearchWindow"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "lExpense_SelectValueSearchWindow"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "lExpense_SelectValueSearchWindow"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "lExpense_SelectValueSearchWindow.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 20,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"lExpense_SelectValueSearchWindowSuccess\":true,\"lExpense_SelectValueSearchWindowElements\":{},\"lExpense_SelectValueSearchWindowMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Update Expense Report: Expense Allocations\",\"sessionId\":\"7839912\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense"
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "name": "iExpense_empOrGuestTableRemoveJS",
+  "description": "",
+  "formUrl": "",
+  "command": "@inject:iExpense_empOrGuestTableRemoveJS.command.js",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "removeIndex",
+        "serviceName": "iExpense_empOrGuestTableRemoveJS"
+      },
+      "paramLabel": "removeIndex",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "SelectorPart",
+        "serviceName": "iExpense_empOrGuestTableRemoveJS"
+      },
+      "paramLabel": "SelectorPart",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "calculatedIndex",
+        "serviceName": "iExpense_empOrGuestTableRemoveJS"
+      },
+      "paramLabel": "calculatedIndex",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_empOrGuestTableRemoveJS"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_empOrGuestTableRemoveJS"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_empOrGuestTableRemoveJS"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@js",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "contentType": "application/json",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "JS",
+  "createdBy": "AuraPlayer",
+  "labels": [],
+  "apps": [
+    "LiveExpense",
+    "LiveExpenseWithChanges"
+  ]
+}

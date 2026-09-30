@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head profile="http://selenium-ide.openqa.org/profiles/test-case">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="selenium.base" href="" />
+    <title>iExpense_attendeesGuestTableGet</title>
+    </head>
+    <body>
+    <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+    <tr><td rowspan="1" colspan="3">iExpense_attendeesGuestTableGet</td></tr>
+  </thead><tbody><tr>
+      <td>input</td>
+      <td></td>
+      <td>ItemizedItem</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>false</td>
+      <td>scrollDown</td>
+      <td></td>
+    </tr><tr>
+      <td>assertTitle</td>
+      <td>*Details for Line *</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//if guest table empty add guest if asked</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>id=ItemizedDetails</td>
+      <td>ItemizedGuestTableExist</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>id=ChildGuestTableRN:GuestName1:0</td>
+      <td>FirstGuestExist</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>!ItemizedGuestTableExist</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeExpression</td>
+      <td>scrollDiv:GuestTableRN</td>
+      <td>guestScrollDivId</td>
+      <td></td>
+    </tr><tr>
+      <td>storeExpression</td>
+      <td>div[@id='GuestTableRN:ControlBar']//td[contains(text(),"Rows")]</td>
+      <td>guestScrollPagenationSelector</td>
+      <td></td>
+    </tr><tr>
+      <td>else</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeExpression</td>
+      <td>scrollDiv:ChildGuestTableRN</td>
+      <td>guestScrollDivId</td>
+      <td></td>
+    </tr><tr>
+      <td>storeExpression</td>
+      <td>div[@id='ChildGuestTableRN:ControlBar']//td[contains(text(),"Rows")]</td>
+      <td>guestScrollPagenationSelector</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//Scroll down if needed</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>scrollDown === "true"</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>scrollDownAndWait</td>
+      <td>id=${guestScrollDivId}</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>else</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>scrollUpAndWait</td>
+      <td>id=${guestScrollDivId}</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>runScript</td>
+      <td>javascript{triggerPaginationEvent()}</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>waitForPageToLoad</td>
+      <td>30000</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//img[@id="addParentGuest"] | //img[@id="addChildGuest"]</td>
+      <td>writeMode</td>
+      <td></td>
+    </tr><tr>
+      <td>//write mode</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>writeMode</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeValue</td>
+      <td>//input[@id='GuestTableRN:GuestName:0'] | //input[@id='ChildGuestTableRN:GuestName1:0']</td>
+      <td>AttendiesGuestTableName</td>
+      <td></td>
+    </tr><tr>
+      <td>storeValue</td>
+      <td>//*[@id='GuestTableRN:GuestTitle:0'] | //*[@id='ChildGuestTableRN:GuestTitle1:0']</td>
+      <td>AttendiesGuestTableTitle</td>
+      <td></td>
+    </tr><tr>
+      <td>storeValue</td>
+      <td>//*[@id='GuestTableRN:GuestEmployer:0'] | //*[@id='ChildGuestTableRN:GuestEmployer1:0']</td>
+      <td>AttendiesGuestTableEmployer</td>
+      <td></td>
+    </tr><tr>
+      <td>else</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//display mode</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//*[@id='GuestTableRN:GuestName:0'] | //*[@id='ChildGuestTableRN:GuestName1:0']</td>
+      <td>AttendiesGuestTableName</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//*[@id='GuestTableRN:GuestTitle:0'] | //*[@id='ChildGuestTableRN:GuestTitle1:0']</td>
+      <td>AttendiesGuestTableTitle</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//*[@id='GuestTableRN:GuestEmployer:0'] | //*[@id='ChildGuestTableRN:GuestEmployer1:0']</td>
+      <td>AttendiesGuestTableEmployer</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//${guestScrollPagenationSelector}</td>
+      <td>guestPaginationInfo</td>
+      <td></td>
+    </tr></tbody></table></body></html>

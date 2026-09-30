@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://auravm01.us-west-2.compute.internal:8000/" />
+<title>iExpense_CreateReport</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_CreateReport</td></tr>
+</thead><tbody>
+<tr>
+	<td>input</td>
+	<td>Oracle Applications Home Page</td>
+	<td>HomePageTitle</td>
+</tr>
+<tr>
+	<td>input</td>
+	<td>/OA_HTML/RF.jsp?function_id=1019886&amp;resp_id=54021&amp;resp_appl_id=200</td>
+	<td>ExpensesHomeUrl</td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>${ExpensesHomeUrl}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTitle</td>
+	<td>Expenses Home</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>id=CreateButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=CreateButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTitle</td>
+	<td>Create Expense Report: General Information</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

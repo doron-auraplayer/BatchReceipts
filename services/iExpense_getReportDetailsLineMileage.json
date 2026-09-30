@@ -1,0 +1,525 @@
+{
+  "name": "iExpense_getReportDetailsLineMileage",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "index",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "index",
+      "paramValue": "0",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "currentPage",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "currentPage",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StartDateExist",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "StartDateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StartDate",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "StartDate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "NumDaysExist",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "NumDaysExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "NumDays",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "NumDays",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AccEndDateExist",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "AccEndDateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AccEndDate",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "AccEndDate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "JustificationExist",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "JustificationExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Justification",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "Justification",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TripDistanceExist",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "TripDistanceExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TripDistance",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "TripDistance",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DistancePopListExist",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "DistancePopListExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DistancePopList",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "DistancePopList",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DistanceRateExist",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "DistanceRateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DistanceRate",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "DistanceRate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReimbursAmtExist",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "DetailReimbursAmtExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReimbursAmt",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "DetailReimbursAmt",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "VehicleCategoryExist",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "VehicleCategoryExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "VehicleCategory",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "VehicleCategory",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "VehicleTypeExist",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "VehicleTypeExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "VehicleType",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "VehicleType",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "FromLocationExist",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "FromLocationExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "FromLocation",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "FromLocation",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ToLocationExist",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "ToLocationExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ToLocation",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "ToLocation",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LicensePlateExist",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "LicensePlateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LicensePlate",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "LicensePlate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReceiptMissingExist",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "DetailReceiptMissingExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReceiptMissing",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "DetailReceiptMissing",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_getReportDetailsLineMileage"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_getReportDetailsLineMileage.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_getReportDetailsLineMileageSuccess\":true,\"iExpense_getReportDetailsLineMileageElements\":{\"currentPage\":\"Details for Line 1\",\"StartDateExist\":\"true\",\"StartDate\":\"01-May-2022\",\"NumDaysExist\":\"true\",\"NumDays\":\"1\",\"AccEndDateExist\":\"true\",\"AccEndDate\":\"01-May-2022\",\"JustificationExist\":\"true\",\"Justification\":\"conference\",\"TripDistanceExist\":\"true\",\"TripDistance\":\"10\",\"DistancePopListExist\":\"true\",\"DistancePopList\":\"Miles\",\"DistanceRateExist\":\"true\",\"DistanceRate\":\"0.485\",\"DetailReimbursAmtExist\":\"true\",\"DetailReimbursAmt\":\"4.85 USD\",\"VehicleCategoryExist\":\"false\",\"VehicleTypeExist\":\"false\",\"FromLocationExist\":\"false\",\"ToLocationExist\":\"false\",\"ToLocation\":\"\",\"LicensePlateExist\":\"false\",\"DetailReceiptMissingExist\":\"false\"},\"iExpense_getReportDetailsLineMileageMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Details for Line 1\",\"sessionId\":\"8661838\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense",
+    "LiveExpenseIndus"
+  ]
+}

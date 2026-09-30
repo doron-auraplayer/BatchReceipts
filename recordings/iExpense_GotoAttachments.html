@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://auravm01.us-west-2.compute.internal:8000/" />
+<title>iExpense_GotoAttachments</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_GotoAttachments</td></tr>
+</thead><tbody>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//a[contains(@id,'ReviewGenInfoHeaderAttachments')]</td>
+	<td>ReviewAttachmentLinkExists</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>ReviewAttachmentLinkExists</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[contains(@id,'ReviewGenInfoHeaderAttachments')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeTitle</td>
+	<td>currentPage</td>
+	<td></td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>currentPage.toLowerCase().indexOf(&quot;attachments&quot;) &lt; 0</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[contains(@id,'LineAttachments')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Attachments</td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,'AkFileName:0')]</td>
+	<td>ExpenseAttachmentTitle</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,'AkDataType:0')]</td>
+	<td>ExpenseAttachmentType</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,'AkCategoryName:0')]</td>
+	<td>ExpenseAttachmentCategory</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,'AkDocDescription:0')]</td>
+	<td>ExpenseAttachmentDescription</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//*[contains(@id,'DeleteSwitcher:0')]</td>
+	<td>deleteExists</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>deleteExists</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeAttribute</td>
+	<td>//*[contains(@id,'DeleteSwitcher:0')]/img@title</td>
+	<td>ExpenseAttachmentDelete</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//*[contains(@id,'UpdateSwitcher:0')]</td>
+	<td>updateExists</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>updateExists</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeAttribute</td>
+	<td>//*[contains(@id,'UpdateSwitcher:0')]/img@title</td>
+	<td>ExpenseAttachmentUpdate</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

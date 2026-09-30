@@ -1,0 +1,284 @@
+{
+  "name": "iExpense_lineItemizedOpenLine",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ItemizedItemAddFlag",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "ItemizedItemAddFlag",
+      "paramValue": "false",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ReportCreateEmpName",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "ReportCreateEmpName",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ReportCreateGuestName",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "ReportCreateGuestName",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "StartDate",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "StartDate",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "StartDateFormatted",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "StartDateFormatted",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Justification",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "Justification",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ItemizedExpenseType",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "ItemizedExpenseType",
+      "paramValue": "Hotel/Lodging",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Select_By_id__ChildExpTypeChoice",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "ChildExpTypeChoice",
+      "paramValue": "${ItemizedExpenseType}",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__ChildStartDate",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "ChildStartDate",
+      "paramValue": "${StartDate}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__ChildJustification",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "ChildJustification",
+      "paramValue": "${Justification}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__ChildEmployeeTableRN_ChildEmployeeName_0",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "ChildEmployeeTableRN_ChildEmployeeName_0",
+      "paramValue": "${ReportCreateEmpName}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__ChildGuestTableRN_GuestName1_0",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "ChildGuestTableRN_GuestName1_0",
+      "paramValue": "${ReportCreateGuestName}",
+      "visible": false
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ItemizedEmpTableExist",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "ItemizedEmpTableExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "FirstEmpName",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "FirstEmpName",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ItemizedGuestTableExist",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "ItemizedGuestTableExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "FirstGuestExist",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "FirstGuestExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ChildExpTypeBtnExist",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "ChildExpTypeBtnExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_lineItemizedOpenLine"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_lineItemizedOpenLine.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense"
+  ]
+}

@@ -1,0 +1,291 @@
+{
+  "name": "iExpense_login_with_resps",
+  "description": "",
+  "formUrl": "",
+  "command": "@inject:iExpense_login_with_resps.command.js",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "HomePageTitle",
+        "serviceName": "iExpense_login_with_resps"
+      },
+      "paramLabel": "HomePageTitle",
+      "paramValue": "Oracle Applications Home Page",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "passwordField",
+        "serviceName": "iExpense_login_with_resps"
+      },
+      "paramLabel": "passwordField",
+      "paramValue": "welcome",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "FormsUrl",
+        "serviceName": "iExpense_login_with_resps"
+      },
+      "paramLabel": "FormsUrl",
+      "paramValue": "${env.EBS_URL}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "keepAlive",
+        "serviceName": "iExpense_login_with_resps"
+      },
+      "paramLabel": "keepAlive",
+      "paramValue": "false",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "usernameField",
+        "serviceName": "iExpense_login_with_resps"
+      },
+      "paramLabel": "usernameField",
+      "paramValue": "operations",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "RespName",
+        "serviceName": "iExpense_login_with_resps"
+      },
+      "paramLabel": "RespName",
+      "paramValue": "iExpenses",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "FunctionId",
+        "serviceName": "iExpense_login_with_resps"
+      },
+      "paramLabel": "FunctionId",
+      "paramValue": "1019886",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LoginErrorLineExists",
+        "serviceName": "iExpense_login_with_resps"
+      },
+      "paramLabel": "LoginErrorLineExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LoginErrorBoxExists",
+        "serviceName": "iExpense_login_with_resps"
+      },
+      "paramLabel": "LoginErrorBoxExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LoginErrorMessage",
+        "serviceName": "iExpense_login_with_resps"
+      },
+      "paramLabel": "LoginErrorMessage",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LoginErrorMessageExists",
+        "serviceName": "iExpense_login_with_resps"
+      },
+      "paramLabel": "LoginErrorMessageExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LoggedInUsername",
+        "serviceName": "iExpense_login_with_resps"
+      },
+      "paramLabel": "LoggedInUsername",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "sessionId",
+        "serviceName": "iExpense_login_with_resps"
+      },
+      "paramLabel": "sessionId",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "respNames",
+        "serviceName": "iExpense_login_with_resps"
+      },
+      "paramLabel": "respNames",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "respIds",
+        "serviceName": "iExpense_login_with_resps"
+      },
+      "paramLabel": "respIds",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "respAppIds",
+        "serviceName": "iExpense_login_with_resps"
+      },
+      "paramLabel": "respAppIds",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_login_with_resps"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_login_with_resps"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_login_with_resps"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@js",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "contentType": "application/json",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_login_with_respsSuccess\":true,\"iExpense_login_with_respsTableArray\":{\"iExpense_login_with_respsArrayItem\":[{\"respNames\":\"Internet Expenses Trade Show Executive\",\"respIds\":\"51497\"},{\"respNames\":\"Internet Expenses United Aviation\",\"respIds\":\"51503\"},{\"respNames\":\"Internet Expenses United Maintenance\",\"respIds\":\"51498\"},{\"respNames\":\"Internet Expenses United National\",\"respIds\":\"51499\"},{\"respNames\":\"Internet Expenses United Security\",\"respIds\":\"51500\"},{\"respNames\":\"Internet Expenses United Services Companies\",\"respIds\":\"51502\"},{\"respNames\":\"Internet Expenses United Temps\",\"respIds\":\"51501\"}]},\"iExpense_login_with_respsElements\":{\"LoginErrorLineExists\":\"false\",\"LoginErrorBoxExists\":\"false\",\"LoginErrorMessage\":\"\",\"LoginErrorMessageExists\":\"\",\"LoggedInUsername\":\"AURA_TEAM\"},\"iExpense_login_with_respsMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Home\",\"sessionId\":\"142390\"}}}",
+  "type": "JS",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense"
+  ]
+}

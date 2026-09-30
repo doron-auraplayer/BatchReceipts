@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head profile="http://selenium-ide.openqa.org/profiles/test-case">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="selenium.base" href="" />
+    <title>iExpense_empOrGustTableScrollDown</title>
+    </head>
+    <body>
+    <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+    <tr><td rowspan="1" colspan="3">iExpense_empOrGustTableScrollDown</td></tr>
+  </thead><tbody><tr>
+      <td>input</td>
+      <td>Employee</td>
+      <td>SelectorPart</td>
+      <td></td>
+    </tr><tr>
+      <td>assertTitle</td>
+      <td>*: Details for Line *</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>scrollDownAndWait</td>
+      <td>//div[@id="scrollDiv:${SelectorPart}TableRN"]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>pause</td>
+      <td>3000</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>xpath=//div[contains(@id, '${SelectorPart}TableRN:ControlBar')]/table/tbody/tr/td[9]</td>
+      <td>RowRange</td>
+      <td></td>
+    </tr></tbody></table></body></html>

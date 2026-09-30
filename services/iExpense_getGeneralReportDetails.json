@@ -1,0 +1,255 @@
+{
+  "name": "iExpense_getGeneralReportDetails",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DepartmentsListExist",
+        "serviceName": "iExpense_getGeneralReportDetails"
+      },
+      "paramLabel": "DepartmentsListExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Department",
+        "serviceName": "iExpense_getGeneralReportDetails"
+      },
+      "paramLabel": "Department",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Purpose",
+        "serviceName": "iExpense_getGeneralReportDetails"
+      },
+      "paramLabel": "Purpose",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EmployeeName",
+        "serviceName": "iExpense_getGeneralReportDetails"
+      },
+      "paramLabel": "EmployeeName",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ApproverExist",
+        "serviceName": "iExpense_getGeneralReportDetails"
+      },
+      "paramLabel": "ApproverExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "OverridingApprover",
+        "serviceName": "iExpense_getGeneralReportDetails"
+      },
+      "paramLabel": "OverridingApprover",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CurrencyListExist",
+        "serviceName": "iExpense_getGeneralReportDetails"
+      },
+      "paramLabel": "CurrencyListExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReimbCurrency",
+        "serviceName": "iExpense_getGeneralReportDetails"
+      },
+      "paramLabel": "ReimbCurrency",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TxtCurrency",
+        "serviceName": "iExpense_getGeneralReportDetails"
+      },
+      "paramLabel": "TxtCurrency",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TemplateListExist",
+        "serviceName": "iExpense_getGeneralReportDetails"
+      },
+      "paramLabel": "TemplateListExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TemplateList",
+        "serviceName": "iExpense_getGeneralReportDetails"
+      },
+      "paramLabel": "TemplateList",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Template",
+        "serviceName": "iExpense_getGeneralReportDetails"
+      },
+      "paramLabel": "Template",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_getGeneralReportDetails"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_getGeneralReportDetails"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_getGeneralReportDetails"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_getGeneralReportDetails.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_getGeneralReportDetailsSuccess\":true,\"iExpense_getGeneralReportDetailsElements\":{\"DepartmentsListExist\":\"true\",\"Department\":\"750\",\"Purpose\":\"12lines\",\"EmployeeName\":\"Stock, Ms. Pat (24)\",\"ApproverExist\":\"true\",\"OverridingApprover\":\"\",\"CurrencyListExist\":\"true\",\"ReimbCurrency\":\"USD - US dollar\",\"TemplateListExist\":\"false\",\"Template\":\"Travel\"},\"iExpense_getGeneralReportDetailsMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Update Expense Report: General Information\",\"sessionId\":\"9139379\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": []
+}

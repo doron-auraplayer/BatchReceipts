@@ -1,0 +1,212 @@
+{
+  "name": "iExpense_GetAttachments",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "attachmentExists",
+        "serviceName": "iExpense_GetAttachments"
+      },
+      "paramLabel": "attachmentExists",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExpenseAttachmentTitle",
+        "serviceName": "iExpense_GetAttachments"
+      },
+      "paramLabel": "ExpenseAttachmentTitle",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExpenseAttachmentType",
+        "serviceName": "iExpense_GetAttachments"
+      },
+      "paramLabel": "ExpenseAttachmentType",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExpenseAttachmentDescription",
+        "serviceName": "iExpense_GetAttachments"
+      },
+      "paramLabel": "ExpenseAttachmentDescription",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExpenseAttachmentCategory",
+        "serviceName": "iExpense_GetAttachments"
+      },
+      "paramLabel": "ExpenseAttachmentCategory",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "deleteExists",
+        "serviceName": "iExpense_GetAttachments"
+      },
+      "paramLabel": "deleteExists",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExpenseAttachmentDelete",
+        "serviceName": "iExpense_GetAttachments"
+      },
+      "paramLabel": "ExpenseAttachmentDelete",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "updateExists",
+        "serviceName": "iExpense_GetAttachments"
+      },
+      "paramLabel": "updateExists",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExpenseAttachmentUpdate",
+        "serviceName": "iExpense_GetAttachments"
+      },
+      "paramLabel": "ExpenseAttachmentUpdate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_GetAttachments"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_GetAttachments"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_GetAttachments"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_GetAttachments.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_GetAttachmentsSuccess\":true,\"iExpense_GetAttachmentsTableArray\":{\"iExpense_GetAttachmentsArrayItem\":[{\"ExpenseAttachmentTitle\":\"attach1.txt\",\"ExpenseAttachmentType\":\"File\",\"ExpenseAttachmentDescription\":\"\",\"ExpenseAttachmentCategory\":\"Miscellaneous\",\"ExpenseAttachmentDelete\":\"Select to delete\",\"ExpenseAttachmentUpdate\":\"Select to update\"}]},\"iExpense_GetAttachmentsElements\":{\"attachmentExists\":\"true\",\"deleteExists\":\"false\",\"updateExists\":\"false\"},\"iExpense_GetAttachmentsMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Details for Line 1\",\"sessionId\":\"8661838\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense"
+  ]
+}

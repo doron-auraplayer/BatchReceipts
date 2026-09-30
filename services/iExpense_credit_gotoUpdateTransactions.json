@@ -1,0 +1,103 @@
+{
+  "name": "iExpense_credit_gotoUpdateTransactions",
+  "description": "",
+  "formUrl": "http://auravm01.us-west-2.compute.internal:8000/",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "WizardTitle",
+        "serviceName": "iExpense_credit_gotoUpdateTransactions"
+      },
+      "paramLabel": "WizardTitle",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_credit_gotoUpdateTransactions"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_credit_gotoUpdateTransactions"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_credit_gotoUpdateTransactions"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_credit_gotoUpdateTransactions.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 20,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense",
+    "LiveExpense_DHL",
+    "LiveExpense_Emerson",
+    "LiveExpense_Michelin",
+    "LiveExpense_Powell",
+    "LiveExpense_Rheem",
+    "LiveExpense_Rogers",
+    "LiveExpense_SWN",
+    "LiveExpense_TAQA",
+    "LiveExpense_TAQA_Final",
+    "LiveExpense_United",
+    "LiveExpense_Worthington",
+    "LiveExpense_michelin"
+  ]
+}

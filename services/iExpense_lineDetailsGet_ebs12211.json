@@ -1,0 +1,1232 @@
+{
+  "name": "iExpense_lineDetailsGet_ebs12211",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "index",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "index",
+      "paramValue": "0",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ExpTypeInput",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "ExpTypeInput",
+      "paramValue": "Airfare",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Select_By_xpath____select_contains__id___ExpTypeChoice___",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "__select_contains__id___ExpTypeChoice___",
+      "paramValue": "${ExpTypeInput}",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "itemizedExpenseTypes",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "itemizedExpenseTypes",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ItemizationExists",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "ItemizationExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "attachmentPathExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "attachmentPathExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "expenseTypeExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "expenseTypeExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "expenseTypeCurrent",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "expenseTypeCurrent",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "expenseTypeWasChanged",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "expenseTypeWasChanged",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "goButtonExists",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "goButtonExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "expenseType",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "expenseType",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StartDateExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "StartDateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StartDate",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "StartDate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EndDateExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "EndDateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EndDate",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "EndDate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReceiptAmountExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "DetailReceiptAmountExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReceiptAmountText",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "DetailReceiptAmountText",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReceiptAmount",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "DetailReceiptAmount",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "JustificationExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "JustificationExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Justification",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "Justification",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RBLocationNameExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "RBLocationNameExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LocationNameExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "LocationNameExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LocationName",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "LocationName",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailMerchantNameExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "DetailMerchantNameExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailMerchantName",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "DetailMerchantName",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReceiptMissingExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "DetailReceiptMissingExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReceiptMissing",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "DetailReceiptMissing",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReceiptCurrencyChoiceExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "ReceiptCurrencyChoiceExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReceiptCurrencyChoice",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "ReceiptCurrencyChoice",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExchRateTextExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "ExchRateTextExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExchRateCreditTextExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "ExchRateCreditTextExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExchRateInputExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "ExchRateInputExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExchRate",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "ExchRate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExchRateExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "ExchRateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReimbursementCurrencyExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "DetailReimbursementCurrencyExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReimbursementCurrency",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "DetailReimbursementCurrency",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AirTravelTypeExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "AirTravelTypeExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AirTravelType",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "AirTravelType",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AirTicketClassExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "AirTicketClassExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AirTicketClass",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "AirTicketClass",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AirFromLocationExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "AirFromLocationExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AirFromLocation",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "AirFromLocation",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AirToLocationExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "AirToLocationExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AirToLocation",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "AirToLocation",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailDailyRateExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "DetailDailyRateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailDailyRateTextExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "DetailDailyRateTextExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailDailyRate",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "DetailDailyRate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "NumberOfDaysExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "NumberOfDaysExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "NumberOfDays",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "NumberOfDays",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LocationNameOrigExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "LocationNameOrigExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CompanyAttendeesExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "CompanyAttendeesExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CompanyAttendees",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "CompanyAttendees",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AccEndDateExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "AccEndDateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AccEndDate",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "AccEndDate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "MealNumberAttendeesExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "MealNumberAttendeesExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "MealNumberAttendees",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "MealNumberAttendees",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "MealAttendeesExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "MealAttendeesExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "MealAttendees",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "MealAttendees",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttendeesTableExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "AttendeesTableExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttendeesTableEmpName",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "AttendeesTableEmpName",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttendeesTableEmpTitle",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "AttendeesTableEmpTitle",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "GuestTableExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "GuestTableExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "GuestTableEmpName",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "GuestTableEmpName",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "GuestTableEmployer",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "GuestTableEmployer",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "SearchLocationButtonExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "SearchLocationButtonExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttachmentExists",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "AttachmentExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttachmentsPopup",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "AttachmentsPopup",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttachmentTitle",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "AttachmentTitle",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttachmentType",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "AttachmentType",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "attachmentPath_filename",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "attachmentPath_filename",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReimbursAmtExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "DetailReimbursAmtExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReimbursAmt",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "DetailReimbursAmt",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ItemizationTableExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "ItemizationTableExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReceiptAmountTextExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "DetailReceiptAmountTextExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailMerchantNameTextExist",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "DetailMerchantNameTextExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailMerchantNameText",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "DetailMerchantNameText",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LineTitle",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "LineTitle",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ItemizedItem",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "ItemizedItem",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_lineDetailsGet_ebs12211"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_lineDetailsGet_ebs12211.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense",
+    "LiveExpense_AI"
+  ]
+}

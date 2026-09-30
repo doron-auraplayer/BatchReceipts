@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head profile="http://selenium-ide.openqa.org/profiles/test-case">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="selenium.base" href="" />
+    <title>iExpense_locationEnterName</title>
+    </head>
+    <body>
+    <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+    <tr><td rowspan="1" colspan="3">iExpense_locationEnterName</td></tr>
+  </thead><tbody><tr>
+      <td>input</td>
+      <td>A</td>
+      <td>LocationName</td>
+      <td></td>
+    </tr><tr>
+      <td>assertTitle</td>
+      <td>*: Details for Line *</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//If start date is empty it causes location not to resolve - EBS issue</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td> 11-Aug-2025</td>
+      <td>StartDate</td>
+      <td></td>
+    </tr><tr>
+	  <td>input</td>
+      <td> 11-Aug-2025</td>
+      <td>StartDateFormatted</td>
+      <td></td>
+    </tr><tr>
+      <td>typeAndWait</td>
+      <td>//input[contains(@id,'StartDate')]</td>
+      <td>${StartDateFormatted}</td>
+      <td></td>
+    </tr><tr>
+      <td>//single value no need to open LOV</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>typeAndWait</td>
+      <td>//input[@id="LocationName"] | //input[@id="IPL_LocationName"]</td>
+      <td>${LocationName}</td>
+      <td></td>
+    </tr><tr>
+      <td>pause</td>
+      <td>1000</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeWindowOpen</td>
+      <td>Search and Select List of Values</td>
+      <td>searchWindowOpen</td>
+      <td></td>
+    </tr><tr>
+      <td>echo</td>
+      <td>${searchWindowOpen}</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>!searchWindowOpen</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeValue</td>
+      <td>//input[@id="LocationName"] | //input[@id="IPL_LocationName"] </td>
+      <td>LocationResolvedValue</td>
+      <td></td>
+    </tr><tr>
+      <td>exitTest</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>else</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>waitForPopUp</td>
+      <td>lovWindow</td>
+      <td>30000</td>
+      <td></td>
+    </tr><tr>
+      <td>selectWindow</td>
+      <td>lovWindow</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>selectFrame</td>
+      <td>index=0</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeValue</td>
+      <td>//input[@id="LocationName"] | //input[@id="IPL_LocationName"] </td>
+      <td>LocationResolvedValue</td>
+      <td></td>
+    </tr></tbody></table></body></html>

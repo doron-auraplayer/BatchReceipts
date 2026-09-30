@@ -1,0 +1,122 @@
+{
+  "name": "iExpense_LocationSearchOpen",
+  "description": "",
+  "formUrl": "http://auravm01.us-west-2.compute.internal:8000/",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "mainWindowLocation",
+        "serviceName": "iExpense_LocationSearchOpen"
+      },
+      "paramLabel": "mainWindowLocation",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "windowLocation",
+        "serviceName": "iExpense_LocationSearchOpen"
+      },
+      "paramLabel": "windowLocation",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "searchWindowOpen",
+        "serviceName": "iExpense_LocationSearchOpen"
+      },
+      "paramLabel": "searchWindowOpen",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_LocationSearchOpen"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_LocationSearchOpen"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_LocationSearchOpen"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_LocationSearchOpen.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 20,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_LocationSearchOpenSuccess\":true,\"iExpense_LocationSearchOpenElements\":{\"mainWindowLocation\":\"http://auravm01.us-west-2.compute.internal:8000/OA_HTML/OA.jsp?page=/oracle/apps/ap/oie/entry/lines/webui/CashAndOtherLinesPG&CurrentClassification=PER_DIEM&_ti=845700837&retainAM=Y&addBreadCrumb=N&oapc=51\"},\"iExpense_LocationSearchOpenMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Search and Select List of Values\",\"sessionId\":\"8661838\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense"
+  ]
+}

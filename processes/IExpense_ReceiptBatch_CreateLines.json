@@ -1,0 +1,10 @@
+{
+  "name": "IExpense_ReceiptBatch_CreateLines",
+  "description": "",
+  "steps": [],
+  "createdBy": "admin",
+  "labels": [],
+  "isEnabled": true,
+  "authenticationMethod": "None",
+  "isPrivate": false
+}

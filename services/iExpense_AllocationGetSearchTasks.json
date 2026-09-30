@@ -1,0 +1,239 @@
+{
+  "name": "iExpense_AllocationGetSearchTasks",
+  "description": "",
+  "formUrl": "http://auravm01.us-west-2.compute.internal:8000/",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ListSearchBy",
+        "serviceName": "iExpense_AllocationGetSearchTasks"
+      },
+      "paramLabel": "ListSearchBy",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ListSearchValue",
+        "serviceName": "iExpense_AllocationGetSearchTasks"
+      },
+      "paramLabel": "ListSearchValue",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Select_By_id__categoryChoice",
+        "serviceName": "iExpense_AllocationGetSearchTasks"
+      },
+      "paramLabel": "categoryChoice",
+      "paramValue": "${ListSearchBy}",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_xpath____input__title__Search_Term__",
+        "serviceName": "iExpense_AllocationGetSearchTasks"
+      },
+      "paramLabel": "__input__title__Search_Term__",
+      "paramValue": "${ListSearchValue}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "TaskOnlyGet",
+        "serviceName": "iExpense_AllocationGetSearchTasks"
+      },
+      "paramLabel": "TaskOnlyGet",
+      "paramValue": "false",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TaskNumber",
+        "serviceName": "iExpense_AllocationGetSearchTasks"
+      },
+      "paramLabel": "TaskNumber",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TaskName",
+        "serviceName": "iExpense_AllocationGetSearchTasks"
+      },
+      "paramLabel": "TaskName",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TaskProjectNumber",
+        "serviceName": "iExpense_AllocationGetSearchTasks"
+      },
+      "paramLabel": "TaskProjectNumber",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TaskStartDate",
+        "serviceName": "iExpense_AllocationGetSearchTasks"
+      },
+      "paramLabel": "TaskStartDate",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TaskEndDate",
+        "serviceName": "iExpense_AllocationGetSearchTasks"
+      },
+      "paramLabel": "TaskEndDate",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TaskAllowCharges",
+        "serviceName": "iExpense_AllocationGetSearchTasks"
+      },
+      "paramLabel": "TaskAllowCharges",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "lovPaginationInfo",
+        "serviceName": "iExpense_AllocationGetSearchTasks"
+      },
+      "paramLabel": "lovPaginationInfo",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_AllocationGetSearchTasks"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_AllocationGetSearchTasks"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_AllocationGetSearchTasks"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_AllocationGetSearchTasks.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_AllocationGetSearchTasksSuccess\":true,\"iExpense_AllocationGetSearchTasksTableArray\":{\"iExpense_AllocationGetSearchTasksArrayItem\":[{\"TaskNumber\":\"1\",\"TaskName\":\"Detect Fraud\",\"TaskProjectNumber\":\"1001\",\"TaskStartDate\":\"01-Apr-2004\",\"TaskEndDate\":\"31-Dec-2023\",\"TaskAllowCharges\":\"Yes\"},{\"TaskNumber\":\"4\",\"TaskName\":\"Proper Recording\",\"TaskProjectNumber\":\"1001\",\"TaskStartDate\":\"01-Apr-2004\",\"TaskEndDate\":\"31-Dec-2023\",\"TaskAllowCharges\":\"Yes\"}]},\"iExpense_AllocationGetSearchTasksElements\":{},\"iExpense_AllocationGetSearchTasksMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Search and Select List of Values\",\"sessionId\":\"7839912\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense",
+    "LiveExpenseFNF"
+  ]
+}

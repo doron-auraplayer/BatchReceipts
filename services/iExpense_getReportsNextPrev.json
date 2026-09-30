@@ -1,0 +1,359 @@
+{
+  "name": "iExpense_getReportsNextPrev",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ExpensesLongScroll",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "ExpensesLongScroll",
+      "paramValue": "\"false\"",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "moveNext",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "moveNext",
+      "paramValue": "true",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ExpensesTableSubmittedReportPrefix",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "ExpensesTableSubmittedReportPrefix",
+      "paramValue": "N11",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "repButtonName",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "repButtonName",
+      "paramValue": "Next",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "repButtonName_2",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "repButtonName_2",
+      "paramValue": "Previous",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "isNextPrevExists",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "isNextPrevExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "hasTotalCurrency",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "hasTotalCurrency",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "currentListRange",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "currentListRange",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "nextButtonExist",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "nextButtonExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "prevButtonExist",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "prevButtonExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "prevButtonLabel",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "prevButtonLabel",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "nextButtonLabel",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "nextButtonLabel",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReportNumber",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "ReportNumber",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReportDate",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "ReportDate",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TotalUSD",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "TotalUSD",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReportStatus",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "ReportStatus",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReportStatusActivitydays",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "ReportStatusActivitydays",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReportApprover",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "ReportApprover",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReportReceiptStatus",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "ReportReceiptStatus",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReportPurpose",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "ReportPurpose",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_getReportsNextPrev"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_getReportsNextPrev.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_getReportsNextPrevSuccess\":true,\"iExpense_getReportsNextPrevTableArray\":{\"iExpense_getReportsNextPrevArrayItem\":[{\"ReportNumber\":\"W156174\",\"ReportDate\":\"17-Feb-2022\",\"TotalUSD\":\"467.11 USD\",\"ReportStatus\":\"Pending Manager Approval\",\"ReportStatusActivitydays\":\"73\",\"ReportApprover\":\"Brady, Mrs. Jennifer Kathleen\",\"ReportReceiptStatus\":\"Not Required\",\"ReportPurpose\":\"test\"},{\"ReportNumber\":\"W156175\",\"ReportDate\":\"17-Feb-2022\",\"TotalUSD\":\"467.11 USD\",\"ReportStatus\":\"Pending Manager Approval\",\"ReportStatusActivitydays\":\"73\",\"ReportApprover\":\"Brady, Mrs. Jennifer Kathleen\",\"ReportReceiptStatus\":\"Not Required\",\"ReportPurpose\":\"Testing\"},{\"ReportNumber\":\"W156179\",\"ReportDate\":\"17-Feb-2022\",\"TotalUSD\":\"48.50 USD\",\"ReportStatus\":\"Pending Manager Approval\",\"ReportStatusActivitydays\":\"73\",\"ReportApprover\":\"Brady, Mrs. Jennifer Kathleen\",\"ReportReceiptStatus\":\"Not Required\",\"ReportPurpose\":\"test\"},{\"ReportNumber\":\"W155229\",\"ReportDate\":\"07-Feb-2022\",\"TotalUSD\":\"467.11 USD\",\"ReportStatus\":\"Pending Manager Approval\",\"ReportStatusActivitydays\":\"83\",\"ReportApprover\":\"Brady, Mrs. Jennifer Kathleen\",\"ReportReceiptStatus\":\"Not Required\",\"ReportPurpose\":\"fff\"},{\"ReportNumber\":\"W155228\",\"ReportDate\":\"07-Feb-2022\",\"TotalUSD\":\"467.11 USD\",\"ReportStatus\":\"Pending Manager Approval\",\"ReportStatusActivitydays\":\"83\",\"ReportApprover\":\"Brady, Mrs. Jennifer Kathleen\",\"ReportReceiptStatus\":\"Not Required\",\"ReportPurpose\":\"test\"}]},\"iExpense_getReportsNextPrevElements\":{\"isNextPrevExists\":\"true\",\"hasTotalCurrency\":\"true\",\"currentListRange\":\"6-10\",\"nextButtonExist\":\"true\",\"prevButtonExist\":\"true\",\"prevButtonLabel\":\"Previous 5\",\"nextButtonLabel\":\"Next 5\"},\"iExpense_getReportsNextPrevMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Expenses Home\",\"sessionId\":\"8661838\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense",
+    "LiveExpenseFNF"
+  ]
+}

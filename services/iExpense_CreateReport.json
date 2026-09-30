@@ -1,0 +1,112 @@
+{
+  "name": "iExpense_CreateReport",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "HomePageTitle",
+        "serviceName": "iExpense_CreateReport"
+      },
+      "paramLabel": "HomePageTitle",
+      "paramValue": "Oracle Applications Home Page",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ExpensesHomeUrl",
+        "serviceName": "iExpense_CreateReport"
+      },
+      "paramLabel": "ExpensesHomeUrl",
+      "paramValue": "/OA_HTML/RF.jsp?function_id=1019886&resp_id=54021&resp_appl_id=200",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_CreateReport"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_CreateReport"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_CreateReport"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_CreateReport.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_CreateReportSuccess\":true,\"iExpense_CreateReportElements\":{},\"iExpense_CreateReportMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Create Expense Report: General Information\",\"sessionId\":\"6520633\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense",
+    "LiveExpense_DHL",
+    "LiveExpense_Emerson",
+    "LiveExpense_Michelin",
+    "LiveExpense_Powell",
+    "LiveExpense_Rheem",
+    "LiveExpense_Rogers",
+    "LiveExpense_SWN",
+    "LiveExpense_TAQA",
+    "LiveExpense_TAQA_Final",
+    "LiveExpense_United",
+    "LiveExpense_Worthington",
+    "LiveExpense_michelin"
+  ]
+}

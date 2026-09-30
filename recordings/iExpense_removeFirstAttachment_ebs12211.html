@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://auravm01.us-west-2.compute.internal:8000/" />
+<title>iExpense_removeFirstAttachment_ebs12211</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_removeFirstAttachment_ebs12211</td></tr>
+</thead><tbody>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//a[contains(@id,'Attachments_link')]</td>
+	<td>AttachmentExists</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>!AttachmentExists</td>
+	<td></td>
+</tr>
+<tr>
+	<td>exitTest</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[contains(@id,'Attachments_link')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//h2[@id='WzdialogHeader']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//img[@alt='Action']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Delete</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=dialogYesButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>*Expense*</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

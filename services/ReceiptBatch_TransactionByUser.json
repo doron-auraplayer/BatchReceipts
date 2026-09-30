@@ -1,0 +1,215 @@
+{
+  "name": "ReceiptBatch_TransactionByUser",
+  "description": "",
+  "formUrl": "${env.DB_CONNECTION_STR}",
+  "command": "SELECT  trxns.TRX_ID AS TRANSACTION_ID,\r\n        trxns.TRANSACTION_AMOUNT AS TRANSACTION_AMOUNT,\r\n        trxns.FOLIO_TYPE AS TRANSACTION_FOLIO_EXPENSE_TYPE,\r\n            CASE\r\n        /* Airfare */\r\n        WHEN REGEXP_LIKE(\r\n                 UPPER(NVL(trxns.merchant_name1, '')),\r\n                 'AIRLINE|AIRWAYS|AIRLINES|AIR FARE|TRAVEL AGENCY|TRAVEL AGENT|LUFTHANSA|DELTA|UNITED|AMERICAN AIR|SOUTHWEST|MEXICANA|USAIRWAY|NORTHWEST|BRITISH AIR|AIR FRANCE|KLM|EL AL'\r\n             )\r\n            THEN 'Airfare'\r\n\r\n        /* Car Rental */\r\n        WHEN REGEXP_LIKE(\r\n                 UPPER(NVL(trxns.merchant_name1, '')),\r\n                 'RENT[- ]?A[- ]?CAR|RENTAL CAR|CAR RENTAL|AVIS|HERTZ|ENTERPRISE|BUDGET|DOLLAR RENT|NATIONAL CAR|ALAMO|SIXT'\r\n             )\r\n            THEN 'Car Rental'\r\n\r\n        /* Entertainment */\r\n        WHEN REGEXP_LIKE(\r\n                 UPPER(NVL(trxns.merchant_name1, '')),\r\n                 'CINEMA|MOVIE|THEATER|THEATRE|CONCERT|CLUB|NIGHTCLUB|AMUSEMENT|PARK|DISNEY|MUSEUM|GALLERY|EXHIBITION|CASINO|BOWLING|STADIUM|ARENA|TICKETS|EVENTBRITE|TICKETMASTER'\r\n             )\r\n            THEN 'Entertainment'\r\n\r\n        /* Hotel */\r\n        WHEN REGEXP_LIKE(\r\n                 UPPER(NVL(trxns.merchant_name1, '')),\r\n                 'HOTEL|MOTEL|INN|LODGE|RESORT|SUITES|MARRIOTT|HYATT|HILTON|HOLIDAY INN|FOUR SEASONS|SHERATON|WESTIN|CONRAD|EMBASSY SUITES|BEST WESTERN|RADISSON|COURTYARD|HAMPTON INN'\r\n             )\r\n            THEN 'Hotel'\r\n\r\n        /* Meals */\r\n        WHEN REGEXP_LIKE(\r\n                 UPPER(NVL(trxns.merchant_name1, '')),\r\n                 'RESTAURANT|GRILL|CAFE|CAFÉ|BISTRO|BUFFET|PIZZA|BURGER|SUSHI|STEAK|STEAKHOUSE|BBQ|BARBEQUE|DELI|DINER|MCDONALD|STARBUCKS|WENDY|HOOTERS|SUBWAY|TACO|CHILI|OLIVE GARDEN|RED LOBSTER|LOBSTER HOUSE|CHINESE FOOD'\r\n             )\r\n            THEN 'Meals'\r\n\r\n        /* Taxis */\r\n        WHEN REGEXP_LIKE(\r\n                 UPPER(NVL(trxns.merchant_name1, '')),\r\n                 'TAXI|TAXIS|UBER|LYFT|LIMO|LIMOUSINE|TRANSIT|METRO|RAIL|BAHN|BUS|SHUTTLE'\r\n             )\r\n            THEN 'Taxis'\r\n\r\n        /* Telephone Calls */\r\n        WHEN REGEXP_LIKE(\r\n                 UPPER(NVL(trxns.merchant_name1, '')),\r\n                 'AT%T|VERIZON|VODAFONE|ORANGE|TELECOM|TELEFONICA|TELEPHONE|PHONE CARD|CALLING CARD|SBC|SPRINT|T-MOBILE|SFR'\r\n             )\r\n            THEN 'Telephone Calls'\r\n\r\n        /* Default */\r\n        ELSE 'Miscellaneous'\r\n    END AS TRANSACTION_EXPENSE_TYPE,\r\n        TO_CHAR(trxns.TRANSACTION_DATE, 'YYYY-MM-DD') AS TRANSACTION_RECEIPT_DATE,\r\n        trxns.MERCHANT_NAME1           AS TRANSACTION_MERCHANT\r\nFROM   ap_credit_card_trxns_all trxns\r\nJOIN   ap_cards_all cards\r\n       ON cards.card_id = trxns.card_id\r\nJOIN   fnd_user fu\r\n       ON fu.employee_id = cards.employee_id\r\nWHERE   fu.user_name = UPPER('${EBS_USER}')",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "username",
+        "serviceName": "ReceiptBatch_TransactionByUser"
+      },
+      "paramLabel": "username",
+      "paramValue": "${env.DB_USER}",
+      "visible": false
+    },
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "password",
+        "serviceName": "ReceiptBatch_TransactionByUser"
+      },
+      "paramLabel": "password",
+      "paramValue": "${env.DB_PASSWORD}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "EBS_USER",
+        "serviceName": "ReceiptBatch_TransactionByUser"
+      },
+      "paramLabel": "EBS_USER",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_ID",
+        "serviceName": "ReceiptBatch_TransactionByUser"
+      },
+      "paramLabel": "TRANSACTION_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_AMOUNT",
+        "serviceName": "ReceiptBatch_TransactionByUser"
+      },
+      "paramLabel": "TRANSACTION_AMOUNT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_FOLIO_EXPENSE_TYPE",
+        "serviceName": "ReceiptBatch_TransactionByUser"
+      },
+      "paramLabel": "TRANSACTION_FOLIO_EXPENSE_TYPE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_EXPENSE_TYPE",
+        "serviceName": "ReceiptBatch_TransactionByUser"
+      },
+      "paramLabel": "TRANSACTION_EXPENSE_TYPE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_TOTAL_AMOUNT",
+        "serviceName": "ReceiptBatch_TransactionByUser"
+      },
+      "paramLabel": "TRANSACTION_TOTAL_AMOUNT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_RECEIPT_DATE",
+        "serviceName": "ReceiptBatch_TransactionByUser"
+      },
+      "paramLabel": "TRANSACTION_RECEIPT_DATE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_MERCHANT",
+        "serviceName": "ReceiptBatch_TransactionByUser"
+      },
+      "paramLabel": "TRANSACTION_MERCHANT",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_TransactionByUser"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_TransactionByUser"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_TransactionByUser"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@sql",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "DB",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": []
+}

@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://auravm01.us-west-2.compute.internal:8000/" />
+<title>iExpense_reviewAndFinish</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_reviewAndFinish</td></tr>
+</thead><tbody>
+<tr>
+	<td>storeTitle</td>
+	<td>reviewPageTitle</td>
+	<td></td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>reviewPageTitle.indexOf(&quot;Expense Allocations&quot;) &gt; -1</td>
+	<td></td>
+</tr>
+<!--Wizard step 5: Expense Allocations-->
+<tr>
+	<td>assertTitle</td>
+	<td>*Expense Report: Expense Allocations</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>xpath=(//button[@type='button'])[2]</td>
+	<td>/* Next button */</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<!--Wizard step 6 : Review-->
+<tr>
+	<td>assertTitle</td>
+	<td>*Expense Report: Review</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//table[@id='CreditCardExpensesHeader']/tbody</td>
+	<td>isCreditCardExpensesExist</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//table[@id='RevReceiptBased']/tbody</td>
+	<td>isCashLinesExist</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//table[@id='RevMileage']/tbody</td>
+	<td>isMileageLinesExist</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//table[@id='RevPerDiem']/tbody</td>
+	<td>isPerDiemLinesExist</td>
+</tr>
+<!--handle attachment-->
+<tr>
+	<td>echo</td>
+	<td>@@@ handle attachment</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=attachmentLinkViewButton</td>
+	<td>AttachmentExists</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>!AttachmentExists</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//a[@id='ReviewGenInfoHeaderAttachments' and contains(text(),'View')]</td>
+	<td>AttachmentExists</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>input</td>
+	<td></td>
+	<td>attachmentPath</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//*[@id='attachmentLinkAddButton']</td>
+	<td>attachmentAddButton1</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>css=#ReviewGenInfoHeaderAttachments &gt; button.x7g</td>
+	<td>attachmentAddButton2</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>!AttachmentExists &amp;&amp; attachmentPath!=&quot;&quot; &amp;&amp; attachmentAddButton1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//*[@id='attachmentLinkAddButton']</td>
+	<td>/* Add button */</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>!AttachmentExists &amp;&amp; attachmentPath!=&quot;&quot; &amp;&amp; attachmentAddButton2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=#ReviewGenInfoHeaderAttachments &gt; button.x7g</td>
+	<td>/* Add button */</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>css=img[alt=&quot;Close Popup&quot;]</td>
+	<td>AttachmentsPopup</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>!AttachmentExists &amp;&amp; attachmentPath!=&quot;&quot; &amp;&amp; AttachmentsPopup</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=FileInput</td>
+	<td>${attachmentPath}</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@value='Apply']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@value='Ok'] | //input[@value='Close']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>elseIf</td>
+	<td>!AttachmentExists &amp;&amp; attachmentPath!=&quot;&quot;</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>id=FileInput_oafileUpload</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=FileInput_oafileUpload</td>
+	<td>${attachmentPath}</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=Okay</td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<!--Capture output and submit-->
+<tr>
+	<td>waitForTitle</td>
+	<td>*Expense Report: Review</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>css=td.x77</td>
+	<td>Warnings</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=OIERevCashTable_OIERevReimbAmount_totalCell</td>
+	<td>Total</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=OIESubmit</td>
+	<td>/* Submit */</td>
+</tr>
+<!--Handle receipt justification field-->
+<tr>
+	<td>storeTitle</td>
+	<td>CurrentTitle</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=MissingImgJust</td>
+	<td>MissingReceiptJustExist</td>
+</tr>
+<tr>
+	<td>input</td>
+	<td>Not Available</td>
+	<td>ReceiptJustification</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>CurrentTitle.indexOf(&quot;Review&quot;) &gt; -1 &amp;&amp; MissingReceiptJustExist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=MissingImgJust</td>
+	<td>${ReceiptJustification}</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=OIESubmit</td>
+	<td>/* Submit */</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<!--Get final message-->
+<tr>
+	<td>storeText</td>
+	<td>//table[@id=&quot;FwkErrorBeanId&quot;]</td>
+	<td>ReviewMessage</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//table[@id=&quot;FwkErrorBeanId&quot;]//*[contains(text(), &quot;Expense report number&quot;)]</td>
+	<td>ConfirmationExists</td>
+</tr>
+<tr>
+	<td>storeTitle</td>
+	<td>ReviewTitle</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

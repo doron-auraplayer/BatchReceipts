@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://auravm01.us-west-2.compute.internal:8000/" />
+<title>iExpense_GetReviewLineViolation_ebs12211</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_GetReviewLineViolation_ebs12211</td></tr>
+</thead><tbody>
+<tr>
+	<td>input</td>
+	<td>OIERevCashTable</td>
+	<td>reviewTableId</td>
+</tr>
+<tr>
+	<td>input</td>
+	<td>0</td>
+	<td>ViolationIndex</td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>*Expense Report*</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//a[@id='${reviewTableId}:OIEViolationExist:${ViolationIndex}']/img</td>
+	<td>violationExist</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>violationExist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=${reviewTableId}:OIEViolationExist:${ViolationIndex}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,'contentDiv:ViolationsTable')]</td>
+	<td>PolicyViolation</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=ReturnButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>*Report: Review*</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head profile="http://selenium-ide.openqa.org/profiles/test-case">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="selenium.base" href="" />
+    <title>iExpense_AllocationGetSearchTasks</title>
+    </head>
+    <body>
+    <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+    <tr><td rowspan="1" colspan="3">iExpense_AllocationGetSearchTasks</td></tr>
+  </thead><tbody><tr>
+      <td>input</td>
+      <td>false</td>
+      <td>TaskOnlyGet</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td></td>
+      <td>ListSearchBy</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td></td>
+      <td>ListSearchValue</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>TaskOnlyGet === "false" && ListSearchBy !== ""</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>select</td>
+      <td>id=categoryChoice</td>
+      <td>label=${ListSearchBy}</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>TaskOnlyGet === "false"</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>type</td>
+      <td>//input[@title="Search Term"]</td>
+      <td>${ListSearchValue}</td>
+      <td></td>
+    </tr><tr>
+      <td>click</td>
+      <td>//button[text() = "Go"]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>id=N1:TaskNumber:0</td>
+      <td>TaskNumber</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>id=N1:TaskName:0</td>
+      <td>TaskName</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>id=N1:TaskProjectNumber:0</td>
+      <td>TaskProjectNumber</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>id=N1:TaskStartDate:0</td>
+      <td>TaskStartDate</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>id=N1:TaskEndDate:0</td>
+      <td>TaskEndDate</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>id=N1:TaskAllowCharges:0</td>
+      <td>TaskAllowCharges</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//div[contains(@id, 'OIETASKLOV_lovTable:ControlBar')]/table/tbody</td>
+      <td>lovPaginationInfo</td>
+      <td></td>
+    </tr></tbody></table></body></html>

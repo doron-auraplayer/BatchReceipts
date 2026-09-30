@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://auravm01.us-west-2.compute.internal:8000/" />
+<title>iExpense_credit_markTransactionsAndPaginate</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_credit_markTransactionsAndPaginate</td></tr>
+</thead><tbody>
+<tr>
+	<td>forJson</td>
+	<td>selection</td>
+	<td></td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>${select}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>check</td>
+	<td>name=AvailableTrxnList:selected:${index}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>else</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>uncheck</td>
+	<td>name=AvailableTrxnList:selected:${index}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>endForJson</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//span[@id='AvailableTrxnList']/table/tbody/tr/td/table/tbody/tr/td[2]/table/tbody/tr/td[5]/select</td>
+	<td>hasPaginationRange</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>hasPaginationRange</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeSelectedLabel</td>
+	<td>//span[@id='AvailableTrxnList']/table/tbody/tr/td/table/tbody/tr/td[2]/table/tbody/tr/td[5]/select</td>
+	<td>paginationRange</td>
+</tr>
+<tr>
+	<td>storeHtmlSource</td>
+	<td>2_markTransactions_${paginationRange}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>xpath=(//a[contains(text(),'Next ')])[1]</td>
+	<td>hasPagination</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>hasPagination</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=(//a[contains(text(),'Next ')])[1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>else</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[@title='Next']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTitle</td>
+	<td>*Expense Report: Credit Card Expenses</td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeHtmlSource</td>
+	<td>2_afterMarks</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

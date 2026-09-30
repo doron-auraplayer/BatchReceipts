@@ -1,0 +1,168 @@
+{
+  "name": "iExpense_attendeesEmpTableGetJS",
+  "description": "",
+  "formUrl": "",
+  "command": "@inject:iExpense_attendeesEmpTableGetJS.command.js",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ItemizedItem",
+        "serviceName": "iExpense_attendeesEmpTableGetJS"
+      },
+      "paramLabel": "ItemizedItem",
+      "paramValue": "\"false\"",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ReportCreateEmpName",
+        "serviceName": "iExpense_attendeesEmpTableGetJS"
+      },
+      "paramLabel": "ReportCreateEmpName",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "sessionId",
+        "serviceName": "iExpense_attendeesEmpTableGetJS"
+      },
+      "paramLabel": "sessionId",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "mock",
+        "serviceName": "iExpense_attendeesEmpTableGetJS"
+      },
+      "paramLabel": "mock",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttendiesEmpTableEmpName",
+        "serviceName": "iExpense_attendeesEmpTableGetJS"
+      },
+      "paramLabel": "AttendiesEmpTableEmpName",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "rowsTo",
+        "serviceName": "iExpense_attendeesEmpTableGetJS"
+      },
+      "paramLabel": "rowsTo",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttendiesEmpTableEmpTitle",
+        "serviceName": "iExpense_attendeesEmpTableGetJS"
+      },
+      "paramLabel": "AttendiesEmpTableEmpTitle",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_attendeesEmpTableGetJS"
+      },
+      "paramLabel": "Error",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_attendeesEmpTableGetJS"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_attendeesEmpTableGetJS"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": true
+    }
+  ],
+  "fileName": "@js",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "JS",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense",
+    "LiveExpenseWithChanges"
+  ]
+}

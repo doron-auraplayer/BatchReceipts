@@ -1,0 +1,521 @@
+{
+  "name": "iExpense_CashLinesCalculateMileage",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "index",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "index",
+      "paramValue": "0",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "StartDate",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "StartDate",
+      "paramValue": "value",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Justification",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "Justification",
+      "paramValue": "just1",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "NumDays",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "NumDays",
+      "paramValue": "1",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "index_2",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "index_2",
+      "paramValue": "0",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__DetailStartDate",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "DetailStartDate",
+      "paramValue": "${StartDateFormatted}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__DetailDays",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "DetailDays",
+      "paramValue": "${NumDays}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__DetailJust1",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "DetailJust1",
+      "paramValue": "${Justification}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__TripDistance",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "TripDistance",
+      "paramValue": "1",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__DailyDistance",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "DailyDistance",
+      "paramValue": "1",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Select_By_id__DistancePopList",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "DistancePopList",
+      "paramValue": "Miles",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Select_By_id__VehicleCategory",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "VehicleCategory",
+      "paramValue": "Private",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Select_By_id__VehicleType",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "VehicleType",
+      "paramValue": "Electric",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__FromLocation",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "FromLocation",
+      "paramValue": "l1",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__ToLocation",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "ToLocation",
+      "paramValue": "t1",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__LicensePlate",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "LicensePlate",
+      "paramValue": "1",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "StartDateFormatted",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "StartDateFormatted",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StartDateExist",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "StartDateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "NumDaysExist",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "NumDaysExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "JustificationExist",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "JustificationExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TripDistanceExist",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "TripDistanceExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DailyDistanceExist",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "DailyDistanceExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DistancePopListExist",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "DistancePopListExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "VehicleCategoryExist",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "VehicleCategoryExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "VehicleTypeExist",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "VehicleTypeExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "FromLocationExist",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "FromLocationExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ToLocationExist",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "ToLocationExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LicensePlateExist",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "LicensePlateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DistanceRate",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "DistanceRate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReimbursAmt",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "DetailReimbursAmt",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AccEndDateExist",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "AccEndDateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AccEndDate",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "AccEndDate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "MileageErrorExist",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "MileageErrorExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "MileageError",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "MileageError",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_CashLinesCalculateMileage"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_CashLinesCalculateMileage.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_CashLinesCalculateMileageSuccess\":true,\"iExpense_CashLinesCalculateMileageElements\":{\"StartDateExist\":\"true\",\"NumDaysExist\":\"true\",\"JustificationExist\":\"true\",\"TripDistanceExist\":\"true\",\"DailyDistanceExist\":\"false\",\"DistancePopListExist\":\"true\",\"VehicleCategoryExist\":\"false\",\"VehicleTypeExist\":\"false\",\"FromLocationExist\":\"false\",\"ToLocationExist\":\"false\",\"LicensePlateExist\":\"false\",\"DistanceRate\":\"0.301364\",\"DetailReimbursAmt\":\"6.03 USD\",\"AccEndDateExist\":\"true\",\"AccEndDate\":\"02-May-2022\",\"MileageErrorExist\":\"false\"},\"iExpense_CashLinesCalculateMileageMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Cash and Other Expenses: Details for Line 2\",\"sessionId\":\"8661838\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense",
+    "LiveExpenseFNF",
+    "LiveExpenseWithDateSupport"
+  ]
+}

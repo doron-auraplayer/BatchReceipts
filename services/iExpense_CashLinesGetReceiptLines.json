@@ -1,0 +1,341 @@
+{
+  "name": "iExpense_CashLinesGetReceiptLines",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "lineIndex",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "lineIndex",
+      "paramValue": "0",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReceiptListContainerExists",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "ReceiptListContainerExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReceiptBasedTabExist",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "ReceiptBasedTabExist",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLines_Index",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "CashLines_Index",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "tableEditable",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "tableEditable",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLines_Date",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "CashLines_Date",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLines_ReceiptAmount",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "CashLines_ReceiptAmount",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLines_ExpenseType",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "CashLines_ExpenseType",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLines_Justification",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "CashLines_Justification",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLines_ReimbAmount",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "CashLines_ReimbAmount",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLines_ReimbursableColumnHeader",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "CashLines_ReimbursableColumnHeader",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "paginationExist",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "paginationExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "paginationLabel",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "paginationLabel",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "nextEnabled",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "nextEnabled",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "previousEnabled",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "previousEnabled",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLines_Receipt_header",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "CashLines_Receipt_header",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLines_PerDiem_header",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "CashLines_PerDiem_header",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLines_Mileage_header",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "CashLines_Mileage_header",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_CashLinesGetReceiptLines"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_CashLinesGetReceiptLines.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": true,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": []
+}

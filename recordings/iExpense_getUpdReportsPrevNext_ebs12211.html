@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head profile="http://selenium-ide.openqa.org/profiles/test-case">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="selenium.base" href="" />
+    <title>iExpense_getUpdReportsPrevNext_ebs12211</title>
+    </head>
+    <body>
+    <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+    <tr><td rowspan="1" colspan="3">iExpense_getUpdReportsPrevNext_ebs12211</td></tr>
+  </thead><tbody><tr>
+      <td>input</td>
+      <td>true</td>
+      <td>moveNext</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>ReportTotalCurrency</td>
+      <td>ExpensesTableReportTotalColumnName</td>
+      <td></td>
+    </tr><tr>
+      <td>waitForTitle</td>
+      <td>Expenses Home</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>${moveNext} == true</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>store</td>
+      <td>Next</td>
+      <td>updButtonName</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//div[@id='ActiveReportsRN.ActiveReportsTbl:ControlBar']/table/tbody/tr/td/table/tbody/tr/td/a[contains(@title, 'Next')]</td>
+      <td>isNextPrevExists</td>
+      <td></td>
+    </tr><tr>
+      <td>else</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>store</td>
+      <td>Previous</td>
+      <td>updButtonName</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//div[@id='ActiveReportsRN.ActiveReportsTbl:ControlBar']/table/tbody/tr/td/table/tbody/tr/td/a[contains(@title, 'Previous')]</td>
+      <td>isNextPrevExists</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>!${isNextPrevExists}</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>exitTest</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td> ${moveNext}</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>scrollDownAndWait</td>
+      <td>id=scrollDiv:ActiveReportsRN.ActiveReportsTbl</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//div[@id='ActiveReportsRN.ActiveReportsTbl:ControlBar']/table/tbody/tr/td/table/tbody/tr/td/a[contains(@title, 'Previous')]</td>
+      <td>prevButtonExist</td>
+      <td></td>
+    </tr><tr>
+      <td>else</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>scrollUpAndWait</td>
+      <td>id=scrollDiv:ActiveReportsRN.ActiveReportsTbl</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>runScript</td>
+      <td>javascript{triggerPaginationEvent()}</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>waitForPageToLoad</td>
+      <td>8000</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeExpression</td>
+      <td>false</td>
+      <td>prevButtonExist</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>assertTitle</td>
+      <td>Expenses Home</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//a[contains(@id, ':ReportNumber:0')]</td>
+      <td>UpdateReportNumber</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//span[contains(@id, ':Date:0')]</td>
+      <td>UpdateReportDate</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//span[contains(@id, ':Status:0')]</td>
+      <td>UpdateReportStatus</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//span[contains(@id, ':ReportTotalCurrency:0')]</td>
+      <td>hasTotalCurrency</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>hasTotalCurrency</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//span[@id='ActiveReportsRN.ActiveReportsTbl']//span[contains(@id, ':ReportTotalCurrency:0')]</td>
+      <td>UpdateReportTotal</td>
+      <td></td>
+    </tr><tr>
+      <td>else</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//span[@id='ActiveReportsRN.ActiveReportsTbl']//span[contains(@id, ':ReportTotal:0')]</td>
+      <td>UpdateReportTotal</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//span[contains(@id, ':Purpose:0')]</td>
+      <td>UpdateReportPurpose</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//div[@id='ActiveReportsRN.ActiveReportsTbl:ControlBar']/table/tbody/tr/td[last()]</td>
+      <td>currentListRange</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//div[@id='ActiveReportsRN.ActiveReportsTbl:ControlBar']/table/tbody/tr/td/table/tbody/tr/td/a[contains(@title, 'Next')]</td>
+      <td>nextButtonExist</td>
+      <td></td>
+    </tr></tbody></table></body></html>

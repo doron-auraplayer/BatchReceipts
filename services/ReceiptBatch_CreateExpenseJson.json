@@ -1,0 +1,167 @@
+{
+  "name": "ReceiptBatch_CreateExpenseJson",
+  "description": "",
+  "formUrl": "",
+  "command": "@inject:ReceiptBatch_CreateExpenseJson.command.js",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "EXPENSE_TYPE",
+        "serviceName": "ReceiptBatch_CreateExpenseJson"
+      },
+      "paramLabel": "EXPENSE_TYPE",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EXPENSE_DATA_JSON",
+        "serviceName": "ReceiptBatch_CreateExpenseJson"
+      },
+      "paramLabel": "EXPENSE_DATA_JSON",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExpenseType",
+        "serviceName": "ReceiptBatch_CreateExpenseJson"
+      },
+      "paramLabel": "ExpenseType",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Currency",
+        "serviceName": "ReceiptBatch_CreateExpenseJson"
+      },
+      "paramLabel": "Currency",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EXPENSE_TYPES_JSON",
+        "serviceName": "ReceiptBatch_CreateExpenseJson"
+      },
+      "paramLabel": "EXPENSE_TYPES_JSON",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EXPENSE_METADATA_JSON",
+        "serviceName": "ReceiptBatch_CreateExpenseJson"
+      },
+      "paramLabel": "EXPENSE_METADATA_JSON",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_CreateExpenseJson"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_CreateExpenseJson"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_CreateExpenseJson"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@js",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "contentType": "application/json",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "JS",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": [
+    "LiveExpense_AI",
+    "LiveExpense_AI_ORIG"
+  ]
+}

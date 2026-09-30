@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head profile="http://selenium-ide.openqa.org/profiles/test-case">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="selenium.base" href="" />
+    <title>iExpense_downloadAttachment</title>
+    </head>
+    <body>
+    <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+    <tr><td rowspan="1" colspan="3">iExpense_downloadAttachment</td></tr>
+  </thead><tbody><tr>
+      <td>storeElementPresent</td>
+      <td>id=LineAttachments</td>
+      <td>viewLinkExist</td>
+      <td></td>
+    </tr><tr>
+      <td>//Check if we are already in the attachment window</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>viewLinkExist</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>id=LineAttachments</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>assertTitle</td>
+      <td>Attachments</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>0</td>
+      <td>attachmentRowIndex</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>xpath=//span[contains(@id, 'AkDataType:${attachmentRowIndex}')]</td>
+      <td>AttachmentType</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>AttachmentType.toLowerCase() === "file"</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//This will download the file</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>id=N65:AkFileName:${attachmentRowIndex}</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//Thsi pause is a hack untill SM-1544 is solved</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>pause</td>
+      <td>1000</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>elseIf</td>
+      <td>AttachmentType.toLowerCase().indexOf("text") > -1</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>id=N65:AkFileName:${attachmentRowIndex}</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>xpath=//table[contains(@id, 'TextInput')]//pre</td>
+      <td>AttachmentText</td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>id=ReturnLink</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>viewLinkExist</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>css=.xg > div:nth-child(4)</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr></tbody></table></body></html>

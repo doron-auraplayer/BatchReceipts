@@ -1,0 +1,240 @@
+{
+  "name": "iExpense_CreditGetLinesJS",
+  "description": "",
+  "formUrl": "",
+  "command": "@inject:iExpense_CreditGetLinesJS.command.js",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "sessionId",
+        "serviceName": "iExpense_CreditGetLinesJS"
+      },
+      "paramLabel": "sessionId",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "paginationExist",
+        "serviceName": "iExpense_CreditGetLinesJS"
+      },
+      "paramLabel": "paginationExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "paginationLabel",
+        "serviceName": "iExpense_CreditGetLinesJS"
+      },
+      "paramLabel": "paginationLabel",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "nextEnabled",
+        "serviceName": "iExpense_CreditGetLinesJS"
+      },
+      "paramLabel": "nextEnabled",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "previousEnabled",
+        "serviceName": "iExpense_CreditGetLinesJS"
+      },
+      "paramLabel": "previousEnabled",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CreditTransactionDate",
+        "serviceName": "iExpense_CreditGetLinesJS"
+      },
+      "paramLabel": "CreditTransactionDate",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CreditTransactionAmount",
+        "serviceName": "iExpense_CreditGetLinesJS"
+      },
+      "paramLabel": "CreditTransactionAmount",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CreditTransactionExpenseType",
+        "serviceName": "iExpense_CreditGetLinesJS"
+      },
+      "paramLabel": "CreditTransactionExpenseType",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CreditTransactionMerchantName",
+        "serviceName": "iExpense_CreditGetLinesJS"
+      },
+      "paramLabel": "CreditTransactionMerchantName",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CreditTransactionJustification",
+        "serviceName": "iExpense_CreditGetLinesJS"
+      },
+      "paramLabel": "CreditTransactionJustification",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CreditLinesLineNum",
+        "serviceName": "iExpense_CreditGetLinesJS"
+      },
+      "paramLabel": "CreditLinesLineNum",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_CreditGetLinesJS"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_CreditGetLinesJS"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_CreditGetLinesJS"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@js",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "contentType": "application/json",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_CashLinesGetReceiptLinesJS_HDRSuccess\":true,\"iExpense_CashLinesGetReceiptLinesJS_HDRTableArray\":{\"iExpense_CashLinesGetReceiptLinesJS_HDRArrayItem\":[{\"CashLines_Index\":\"1\",\"CashLines_Date\":\"08-Jul-2025\",\"CashLines_ReceiptAmount\":\"500.00\",\"CashLines_ExpenseType\":\"Hotel/Lodging\",\"CashLines_Justification\":\"conference\",\"CashLines_ReimbAmount\":\"200.00\"},{\"CashLines_Index\":\"2\",\"CashLines_Date\":\"\",\"CashLines_ReceiptAmount\":\"\",\"CashLines_ExpenseType\":\"\",\"CashLines_Justification\":\"\",\"CashLines_ReimbAmount\":\"\"},{\"CashLines_Index\":\"3\",\"CashLines_Date\":\"\",\"CashLines_ReceiptAmount\":\"\",\"CashLines_ExpenseType\":\"\",\"CashLines_Justification\":\"\",\"CashLines_ReimbAmount\":\"\"},{\"CashLines_Index\":\"4\",\"CashLines_Date\":\"\",\"CashLines_ReceiptAmount\":\"\",\"CashLines_ExpenseType\":\"\",\"CashLines_Justification\":\"\",\"CashLines_ReimbAmount\":\"\"},{\"CashLines_Index\":\"5\",\"CashLines_Date\":\"\",\"CashLines_ReceiptAmount\":\"\",\"CashLines_ExpenseType\":\"\",\"CashLines_Justification\":\"\",\"CashLines_ReimbAmount\":\"\"},{\"CashLines_Index\":\"6\",\"CashLines_Date\":\"\",\"CashLines_ReceiptAmount\":\"\",\"CashLines_ExpenseType\":\"\",\"CashLines_Justification\":\"\",\"CashLines_ReimbAmount\":\"\"},{\"CashLines_Index\":\"7\",\"CashLines_Date\":\"\",\"CashLines_ReceiptAmount\":\"\",\"CashLines_ExpenseType\":\"\",\"CashLines_Justification\":\"\",\"CashLines_ReimbAmount\":\"\"},{\"CashLines_Index\":\"8\",\"CashLines_Date\":\"\",\"CashLines_ReceiptAmount\":\"\",\"CashLines_ExpenseType\":\"\",\"CashLines_Justification\":\"\",\"CashLines_ReimbAmount\":\"\"},{\"CashLines_Index\":\"9\",\"CashLines_Date\":\"\",\"CashLines_ReceiptAmount\":\"\",\"CashLines_ExpenseType\":\"\",\"CashLines_Justification\":\"\",\"CashLines_ReimbAmount\":\"\"},{\"CashLines_Index\":\"10\",\"CashLines_Date\":\"\",\"CashLines_ReceiptAmount\":\"\",\"CashLines_ExpenseType\":\"\",\"CashLines_Justification\":\"\",\"CashLines_ReimbAmount\":\"\"},{\"CashLines_Index\":\"\",\"CashLines_Date\":\"\",\"CashLines_ReceiptAmount\":\"\",\"CashLines_ExpenseType\":\"\",\"CashLines_Justification\":\"\",\"CashLines_ReimbAmount\":\"\"}]},\"iExpense_CashLinesGetReceiptLinesJS_HDRElements\":{\"CashLines_ReimbursableColumnHeader\":\"Reimbursable Amount (USD)\",\"paginationExist\":\"false\",\"paginationLabel\":\"\",\"nextEnabled\":\"\",\"previousEnabled\":\"\",\"CashLines_Receipt_header\":\"Receipt-Based Expenses [200.00]\",\"CashLines_Mileage_header\":\"Mileage Expenses [0.00]\",\"CashLines_PerDiem_header\":\"Per Diem Expenses [0.00]\"},\"iExpense_CashLinesGetReceiptLinesJS_HDRMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Create Expense Report: Cash and Other Expenses;Create Expense Report: Cash and Other Expenses;Create Expense Report: Cash and Other Expenses;Create Expense Report: Cash and Other Expenses;Create Expense Report: Cash and Other Expenses;Create Expense Report: Cash and Other Expenses;Create Expense Report: Cash and Other Expenses;Create Expense Report: Cash and Other Expenses;Create Expense Report: Cash and Other Expenses;Create Expense Report: Cash and Other Expenses;Create Expense Report: Cash and Other Expenses\",\"sessionId\":\"7381019\"}}}",
+  "type": "JS",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense"
+  ]
+}

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://auravm01.us-west-2.compute.internal:8000/" />
+<title>iExpense_getReportDetailsPerDiemLines</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_getReportDetailsPerDiemLines</td></tr>
+</thead><tbody>
+<tr>
+	<td>assertTitle</td>
+	<td>*Expense Report*</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[@title=&quot;Expense Lines&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=ReviewPerDiemTable:PD_StartDate:0</td>
+	<td>perDiemLineExists</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>perDiemLineExists</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=ReviewPerDiemTable:PD_StartDate:0</td>
+	<td>PerDiemLineDate</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=ReviewPerDiemTable:PD_EndDate:0</td>
+	<td>PerDiemLineEndDate</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=ReviewPerDiemTable:PD_NumDays:0</td>
+	<td>PerDiemLineNumDays</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=ReviewPerDiemTable:PD_ExpenseType:0</td>
+	<td>PerDiemLineExpenseType</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=ReviewPerDiemTable:PD_Justification:0</td>
+	<td>PerDiemLineJustification</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=ReviewPerDiemTable:PD_Destination:0</td>
+	<td>PerDiemLineTripDestination</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=ReviewPerDiemTable:PD_ReimbAmount:0</td>
+	<td>PerDiemLineReimbAmount</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=PD_ReimbAmountHeader</td>
+	<td>PerDiemLineReimbAmtHeader</td>
+</tr>
+<tr>
+	<td>storeAttribute</td>
+	<td>//a[@id='OIERevCashTable:OIEViolationExist:0']/img@title</td>
+	<td>PerDiemLineViolation</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

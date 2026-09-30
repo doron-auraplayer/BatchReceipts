@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://auravm01.us-west-2.compute.internal:8000/" />
+<title>iExpense_removeFirstAttachment</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_removeFirstAttachment</td></tr>
+</thead><tbody>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=attachmentLinkViewButton</td>
+	<td>AttachmentExists</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>!AttachmentExists</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//a[contains(@id, &quot;Attachments&quot;) and contains(text(),'View')]</td>
+	<td>AttachmentExists</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>!AttachmentExists</td>
+	<td></td>
+</tr>
+<tr>
+	<td>exitTest</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=attachmentLinkViewButton</td>
+	<td>attachmentViewButton1</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//a[contains(@id, &quot;Attachments&quot;) and contains(text(),'View')]</td>
+	<td>attachmentViewButton2</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>AttachmentExists &amp;&amp; attachmentViewButton1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=attachmentLinkViewButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>AttachmentExists &amp;&amp; attachmentViewButton2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[contains(@id, &quot;Attachments&quot;) and contains(text(),'View')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//img[@alt='Close Popup']</td>
+	<td>AttachmentsPopup</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//img[@alt='Action']</td>
+	<td>AttachmentPopupActionButton</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>AttachmentExists &amp;&amp; AttachmentsPopup &amp;&amp; AttachmentPopupActionButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//h2[@id='WzdialogHeader']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//img[@alt='Action']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeHtmlSource</td>
+	<td>iExpenseLineAfterRemoveAttach1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Delete</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeHtmlSource</td>
+	<td>iExpenseLineAfterRemoveAttach2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=dialogYesButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>elseIf</td>
+	<td>AttachmentExists &amp;&amp; AttachmentsPopup</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//h2[@id='WzdialogHeader']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//img[@alt='Select to delete']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeHtmlSource</td>
+	<td>iExpenseLineAfterRemoveAttach2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=dialogYesButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>elseIf</td>
+	<td>AttachmentExists</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Attachments</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=N65:DeleteSwitcher:0</td>
+	<td>attchLineExists</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=N65:DeleteSwitcher:0</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Warning</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//button[@type='submit']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Attachments</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=ReturnLink</td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeHtmlSource</td>
+	<td>iExpenseLineAfterRemoveAttach3</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>*Expense*</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

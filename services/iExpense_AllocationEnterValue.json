@@ -1,0 +1,158 @@
+{
+  "name": "iExpense_AllocationEnterValue",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AllocationTextField",
+        "serviceName": "iExpense_AllocationEnterValue"
+      },
+      "paramLabel": "AllocationTextField",
+      "paramValue": "ProjectName:1",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AllocationSearchButtonId",
+        "serviceName": "iExpense_AllocationEnterValue"
+      },
+      "paramLabel": "AllocationSearchButtonId",
+      "paramValue": "ProjectNumber:0",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AllocationValue",
+        "serviceName": "iExpense_AllocationEnterValue"
+      },
+      "paramLabel": "AllocationValue",
+      "paramValue": "10090527",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AllocationCategory",
+        "serviceName": "iExpense_AllocationEnterValue"
+      },
+      "paramLabel": "AllocationCategory",
+      "paramValue": "Project Number",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Select_By_id__categoryChoice",
+        "serviceName": "iExpense_AllocationEnterValue"
+      },
+      "paramLabel": "categoryChoice",
+      "paramValue": "${AllocationCategory}",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_xpath____input__title__Search_Term__",
+        "serviceName": "iExpense_AllocationEnterValue"
+      },
+      "paramLabel": "__input__title__Search_Term__",
+      "paramValue": "${AllocationValue}",
+      "visible": false
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AllocationResolvedValue",
+        "serviceName": "iExpense_AllocationEnterValue"
+      },
+      "paramLabel": "AllocationResolvedValue",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_AllocationEnterValue"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_AllocationEnterValue"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_AllocationEnterValue"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_AllocationEnterValue.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense"
+  ]
+}

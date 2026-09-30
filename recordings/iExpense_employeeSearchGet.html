@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://auravm01.us-west-2.compute.internal:8000/" />
+<title>iExpense_employeeSearchGet</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_employeeSearchGet</td></tr>
+</thead><tbody>
+<tr>
+	<td>input</td>
+	<td></td>
+	<td>EmployeeSearchBy</td>
+</tr>
+<tr>
+	<td>input</td>
+	<td></td>
+	<td>EmployeeSearchValue</td>
+</tr>
+<tr>
+	<td>storeHtmlSource</td>
+	<td>iExpense_empSearchGet1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>EmployeeSearchBy!== &quot;&quot;</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=categoryChoice</td>
+	<td>label=${EmployeeSearchBy}</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>//input[@title=&quot;Search Term&quot;]</td>
+	<td>${EmployeeSearchValue}</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//button[text()=&quot;Go&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=N1:LovEmployeeName:0</td>
+	<td>PopupEmployeeName</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=N1:EmployeeNumber:0</td>
+	<td>PopupEmployeeNumber</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=N1:LovEmployeeTitle:0</td>
+	<td>PopupEmployeeTitle</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=N1:Organization:0</td>
+	<td>PopupEmployeeOrganization</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//td//select[contains(@id, &quot;M__Id&quot;)]</td>
+	<td>paginationExists</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>!${paginationExists}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>exitTest</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeSelectedLabel</td>
+	<td>//td//select[contains(@id, &quot;M__Id&quot;)]</td>
+	<td>currentListRange</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//td//a[contains(text(),'Next 10')]</td>
+	<td>nextButtonExist</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//td//a[contains(text(),'Previous 10')]</td>
+	<td>prevButtonExist</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>${prevButtonExist}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//a[contains(text(),'Previous')]</td>
+	<td>prevButtonLabel</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>${nextButtonExist}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//a[contains(text(),'Next')]</td>
+	<td>nextButtonLabel</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

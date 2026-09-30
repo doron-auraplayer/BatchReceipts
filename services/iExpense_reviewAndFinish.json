@@ -1,0 +1,374 @@
+{
+  "name": "iExpense_reviewAndFinish",
+  "description": "",
+  "formUrl": "http://auravm01.us-west-2.compute.internal:8000/",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "attachmentPath",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "attachmentPath",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__FileInput",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "FileInput",
+      "paramValue": "${attachmentPath}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__FileInput_oafileUpload",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "FileInput_oafileUpload",
+      "paramValue": "${attachmentPath}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ReceiptJustification",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "ReceiptJustification",
+      "paramValue": "Not Available",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__MissingImgJust",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "MissingImgJust",
+      "paramValue": "${ReceiptJustification}",
+      "visible": false
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "reviewPageTitle",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "reviewPageTitle",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "isCreditCardExpensesExist",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "isCreditCardExpensesExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "isCashLinesExist",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "isCashLinesExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "isMileageLinesExist",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "isMileageLinesExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "isPerDiemLinesExist",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "isPerDiemLinesExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttachmentExists",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "AttachmentExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "attachmentAddButton1",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "attachmentAddButton1",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "attachmentAddButton2",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "attachmentAddButton2",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttachmentsPopup",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "AttachmentsPopup",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Warnings",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "Warnings",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Total",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "Total",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CurrentTitle",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "CurrentTitle",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "MissingReceiptJustExist",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "MissingReceiptJustExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReviewMessage",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "ReviewMessage",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ConfirmationExists",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "ConfirmationExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReviewTitle",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "ReviewTitle",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_reviewAndFinish"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_reviewAndFinish.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 20,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_reviewAndFinishSuccess\":true,\"iExpense_reviewAndFinishElements\":{\"reviewPageTitle\":\"Create Expense Report: Review\",\"isCreditCardExpensesExist\":\"false\",\"isCashLinesExist\":\"true\",\"isMileageLinesExist\":\"true\",\"isPerDiemLinesExist\":\"true\",\"AttachmentExists\":\"false\",\"attachmentAddButton1\":\"false\",\"attachmentAddButton2\":\"true\",\"AttachmentsPopup\":\"false\",\"Warnings\":\"  \\nInformation\\nExpense report W165172 for 352.88 is saved. Once you have completed this report, click Submit on the Review page to submit the report for approval.\",\"Total\":\"150.00\",\"CurrentTitle\":\"Expense Report W165172\",\"MissingReceiptJustExist\":\"false\",\"ReviewMessage\":\"  \\n \\n  \\nConfirmation\\nExpense report number W165172 for 352.88 has been submitted to Brown, Ms. Casey for approval.\\n \\n  \",\"ConfirmationExists\":\"true\",\"ReviewTitle\":\"Expense Report W165172\"},\"iExpense_reviewAndFinishMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Expense Report W165172\",\"sessionId\":\"8661838\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense",
+    "LiveExpenseIndus"
+  ]
+}

@@ -1,0 +1,247 @@
+{
+  "name": "iExpense_AddUpdateAttachment_ebs12211",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AttachmentUpdateMode",
+        "serviceName": "iExpense_AddUpdateAttachment_ebs12211"
+      },
+      "paramLabel": "AttachmentUpdateMode",
+      "paramValue": "false",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AttachDescription",
+        "serviceName": "iExpense_AddUpdateAttachment_ebs12211"
+      },
+      "paramLabel": "AttachDescription",
+      "paramValue": "desc1",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AttachName",
+        "serviceName": "iExpense_AddUpdateAttachment_ebs12211"
+      },
+      "paramLabel": "AttachName",
+      "paramValue": "att1",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AttachUrlValue",
+        "serviceName": "iExpense_AddUpdateAttachment_ebs12211"
+      },
+      "paramLabel": "AttachUrlValue",
+      "paramValue": "google.com",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AttachText",
+        "serviceName": "iExpense_AddUpdateAttachment_ebs12211"
+      },
+      "paramLabel": "AttachText",
+      "paramValue": "text1",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AttachFilePath",
+        "serviceName": "iExpense_AddUpdateAttachment_ebs12211"
+      },
+      "paramLabel": "AttachFilePath",
+      "paramValue": "C:\\AuraPlayer\\attach1.txt",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AttachType",
+        "serviceName": "iExpense_AddUpdateAttachment_ebs12211"
+      },
+      "paramLabel": "AttachType",
+      "paramValue": "text",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__attachTitle",
+        "serviceName": "iExpense_AddUpdateAttachment_ebs12211"
+      },
+      "paramLabel": "attachTitle",
+      "paramValue": "${AttachName}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__attachDescription",
+        "serviceName": "iExpense_AddUpdateAttachment_ebs12211"
+      },
+      "paramLabel": "attachDescription",
+      "paramValue": "${AttachDescription}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__FileInput",
+        "serviceName": "iExpense_AddUpdateAttachment_ebs12211"
+      },
+      "paramLabel": "FileInput",
+      "paramValue": "${AttachFilePath}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Select_By_id__attType",
+        "serviceName": "iExpense_AddUpdateAttachment_ebs12211"
+      },
+      "paramLabel": "attType",
+      "paramValue": "File",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Select_By_id__attType_2",
+        "serviceName": "iExpense_AddUpdateAttachment_ebs12211"
+      },
+      "paramLabel": "attType_2",
+      "paramValue": "Short Text",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AttachCategory",
+        "serviceName": "iExpense_AddUpdateAttachment_ebs12211"
+      },
+      "paramLabel": "AttachCategory",
+      "paramValue": "Receipts",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Select_By_id__categoryList",
+        "serviceName": "iExpense_AddUpdateAttachment_ebs12211"
+      },
+      "paramLabel": "categoryList",
+      "paramValue": "${AttachCategory}",
+      "visible": false
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "reviewPageAddAttachment",
+        "serviceName": "iExpense_AddUpdateAttachment_ebs12211"
+      },
+      "paramLabel": "reviewPageAddAttachment",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_AddUpdateAttachment_ebs12211"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_AddUpdateAttachment_ebs12211"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_AddUpdateAttachment_ebs12211"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_AddUpdateAttachment_ebs12211.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense",
+    "LiveExpenseHDR"
+  ]
+}

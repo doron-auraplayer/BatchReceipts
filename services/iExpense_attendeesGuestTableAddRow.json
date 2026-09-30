@@ -1,0 +1,185 @@
+{
+  "name": "iExpense_attendeesGuestTableAddRow",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "GuestName",
+        "serviceName": "iExpense_attendeesGuestTableAddRow"
+      },
+      "paramLabel": "GuestName",
+      "paramValue": "guest1",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "GuestEmployer",
+        "serviceName": "iExpense_attendeesGuestTableAddRow"
+      },
+      "paramLabel": "GuestEmployer",
+      "paramValue": "Emp1",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "guestIndex",
+        "serviceName": "iExpense_attendeesGuestTableAddRow"
+      },
+      "paramLabel": "guestIndex",
+      "paramValue": "0",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "GuestNewRow",
+        "serviceName": "iExpense_attendeesGuestTableAddRow"
+      },
+      "paramLabel": "GuestNewRow",
+      "paramValue": "true",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "guestPos",
+        "serviceName": "iExpense_attendeesGuestTableAddRow"
+      },
+      "paramLabel": "guestPos",
+      "paramValue": "14",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "guestPos_2",
+        "serviceName": "iExpense_attendeesGuestTableAddRow"
+      },
+      "paramLabel": "guestPos_2",
+      "paramValue": "${guestIndex}",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Select_By_xpath____select_contains__id___GuestTableRN_GuestType_$_guestPos_________select_contains__id___ChildGuestTableRN_ChildGuestType_$_guestPos____",
+        "serviceName": "iExpense_attendeesGuestTableAddRow"
+      },
+      "paramLabel": "__select_contains__id___GuestTableRN_GuestType_$_guestPos_________select_contains__id___ChildGuestTableRN_ChildGuestType_$_guestPos____",
+      "paramValue": "Private Sector",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "GuestNameExist",
+        "serviceName": "iExpense_attendeesGuestTableAddRow"
+      },
+      "paramLabel": "GuestNameExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "GuestTypeExists",
+        "serviceName": "iExpense_attendeesGuestTableAddRow"
+      },
+      "paramLabel": "GuestTypeExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_attendeesGuestTableAddRow"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_attendeesGuestTableAddRow"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_attendeesGuestTableAddRow"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_attendeesGuestTableAddRow.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense",
+    "LiveExpenseFNF"
+  ]
+}

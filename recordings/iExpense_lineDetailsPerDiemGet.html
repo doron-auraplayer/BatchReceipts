@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://auravm01.us-west-2.compute.internal:8000/" />
+<title>iExpense_lineDetailsPerDiemGet</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_lineDetailsPerDiemGet</td></tr>
+</thead><tbody>
+<tr>
+	<td>store</td>
+	<td>0</td>
+	<td>index</td>
+</tr>
+<tr>
+	<td>storeHtmlSource</td>
+	<td>iExpensePerDiemLineGetStart_${index}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>*: Details for Line *</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=DetailExpType</td>
+	<td>expenseTypeExist</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>expenseTypeExist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeSelectedLabel</td>
+	<td>id=DetailExpType</td>
+	<td>expenseType</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=DetailStartDate</td>
+	<td>StartDateExist</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>StartDateExist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>id=DetailStartDate</td>
+	<td>StartDate</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=NumDays</td>
+	<td>NumDaysExist</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>NumDaysExist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>id=NumDays</td>
+	<td>NumDays</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=TxtEndDate</td>
+	<td>AccEndDateExist</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>AccEndDateExist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=TxtEndDate</td>
+	<td>AccEndDate</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=DetailJust</td>
+	<td>JustificationExist</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>JustificationExist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>id=DetailJust</td>
+	<td>Justification</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=DetailReimbursAmt</td>
+	<td>DetailReimbursAmtExist</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>DetailReimbursAmtExist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=DetailReimbursAmt</td>
+	<td>DetailReimbursAmt</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=LocationName</td>
+	<td>LocationNameExist</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>LocationNameExist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>id=LocationName</td>
+	<td>LocationName</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//h1[contains(text(),'Details for Line')]</td>
+	<td>LineTitle</td>
+</tr>
+</tbody></table>
+</body>
+</html>

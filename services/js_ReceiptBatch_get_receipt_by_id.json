@@ -1,0 +1,166 @@
+{
+  "name": "js_ReceiptBatch_get_receipt_by_id",
+  "description": "",
+  "formUrl": "",
+  "command": "@inject:js_ReceiptBatch_get_receipt_by_id.command.js",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "receipt_ID",
+        "serviceName": "js_ReceiptBatch_get_receipt_by_id"
+      },
+      "paramLabel": "receipt_ID",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_RECEIPT_ID",
+        "serviceName": "js_ReceiptBatch_get_receipt_by_id"
+      },
+      "paramLabel": "RECEIPTBATCH_RECEIPT_ID",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_FILE_NAME",
+        "serviceName": "js_ReceiptBatch_get_receipt_by_id"
+      },
+      "paramLabel": "RECEIPTBATCH_FILE_NAME",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_FILE_TYPE",
+        "serviceName": "js_ReceiptBatch_get_receipt_by_id"
+      },
+      "paramLabel": "RECEIPTBATCH_FILE_TYPE",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_path",
+        "serviceName": "js_ReceiptBatch_get_receipt_by_id"
+      },
+      "paramLabel": "RECEIPTBATCH_path",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_DOCUMENT_URL",
+        "serviceName": "js_ReceiptBatch_get_receipt_by_id"
+      },
+      "paramLabel": "RECEIPTBATCH_DOCUMENT_URL",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "js_ReceiptBatch_get_receipt_by_id"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "js_ReceiptBatch_get_receipt_by_id"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "js_ReceiptBatch_get_receipt_by_id"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@js",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "contentType": "application/json",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "JS",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": [
+    "LiveExpense_AI"
+  ]
+}

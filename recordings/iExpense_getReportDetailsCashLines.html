@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://auravm01.us-west-2.compute.internal:8000/" />
+<title>iExpense_getReportDetailsCashLines</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_getReportDetailsCashLines</td></tr>
+</thead><tbody>
+<tr>
+	<td>assertTitle</td>
+	<td>*Expense Report*</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[@title=&quot;Expense Lines&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=OIERevCashTable:OIERevDate:0</td>
+	<td>cashLineExists</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>cashLineExists</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=OIERevCashTable:OIERevDate:0</td>
+	<td>CashLineDate</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=OIERevCashTable:OIERevReceiptAmount:0</td>
+	<td>CashLineReceiptAmount:</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=OIERevCashTable:OIERevExpenseType:0</td>
+	<td>cashLineExpenseType</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=OIERevCashTable:Justification:0</td>
+	<td>CashLineJustification</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=OIERevCashTable:OIERevReimbAmount:0</td>
+	<td>CashLineReimbAmount</td>
+</tr>
+<tr>
+	<td>storeAttribute</td>
+	<td>//span[@id='OIERevCashTable:LineAttachments:0']/a/img@title</td>
+	<td>AttachmentText</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=ReimbursementAmountHeader</td>
+	<td>ReimbursementAmountHeader</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

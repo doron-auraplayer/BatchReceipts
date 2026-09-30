@@ -1,0 +1,353 @@
+{
+  "name": "iExpense_lineItemizedSet",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ItemizedStartDate",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ItemizedStartDate",
+      "paramValue": "05-Nov-2023",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ItemizedNumDays",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ItemizedNumDays",
+      "paramValue": "1",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ItemizedDailyRate",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ItemizedDailyRate",
+      "paramValue": "10",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ItemizedAmount",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ItemizedAmount",
+      "paramValue": "10",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ItemizedJustification",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ItemizedJustification",
+      "paramValue": "Hotel stay",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__ChildStartDate",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ChildStartDate",
+      "paramValue": "${ItemizedStartDateFormatted}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__ChildDetailDailyRate",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ChildDetailDailyRate",
+      "paramValue": "${ItemizedDailyRate}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__ChildNumberOfDays",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ChildNumberOfDays",
+      "paramValue": "${ItemizedNumDays}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__ChildDetailReceiptAmount",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ChildDetailReceiptAmount",
+      "paramValue": "${ItemizedAmount}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__ChildJustification",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ChildJustification",
+      "paramValue": "${ItemizedJustification}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ItemizedCompanyAttendees",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ItemizedCompanyAttendees",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ItemizeNumberAttendees",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ItemizeNumberAttendees",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ItemizedMealAttendees",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ItemizedMealAttendees",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ItemizedStartDateFormatted",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ItemizedStartDateFormatted",
+      "paramValue": "05-Nov-2023",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ItemizedNumDailyRateExist",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ItemizedNumDailyRateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ItemizedNumDaysExist",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ItemizedNumDaysExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ItemizedLineWarningMessageExists",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ItemizedLineWarningMessageExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ItemizedLineWarningMessage",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ItemizedLineWarningMessage",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ItemizedCompanyAttendeesExist",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ItemizedCompanyAttendeesExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ItemizeNumberAttendeesExist",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ItemizeNumberAttendeesExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ItemizedMealAttendeesExist",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ItemizedMealAttendeesExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ChildDetailReceiptAmountBtnExist",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "ChildDetailReceiptAmountBtnExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_lineItemizedSet"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_lineItemizedSet.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense",
+    "LiveExpenseFNF",
+    "LiveExpenseWithDateSupport"
+  ]
+}

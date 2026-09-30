@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head profile="http://selenium-ide.openqa.org/profiles/test-case">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="selenium.base" href="" />
+    <title>iExpense_updReportUpdateDetails</title>
+    </head>
+    <body>
+    <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+    <tr><td rowspan="1" colspan="3">iExpense_updReportUpdateDetails</td></tr>
+  </thead><tbody><tr>
+      <td>input</td>
+      <td></td>
+      <td>OverridingApprover</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>label=USD - US dollar</td>
+      <td>ReimbCurrency</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td></td>
+      <td>ExpTemplate</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td></td>
+      <td>Department</td>
+      <td></td>
+    </tr><tr>
+      <td>//Wizard  update step 1 : General Information</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>waitForTitle</td>
+      <td>*Expense Report: General Information*</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//Handle Currency. Make sure not to change currency even to same value as it changes the report state</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//If you are in update mode and change currency even to same value it will reset the credit transactions</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>id=ReimbCurrency</td>
+      <td>CurrencyListExist</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>CurrencyListExist</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeSelectedLabel</td>
+      <td>id=ReimbCurrency</td>
+      <td>CurrentCurrency</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>CurrencyListExist && CurrentCurrency !== ReimbCurrency</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>select</td>
+      <td>//select[@id='ReimbCurrency']</td>
+      <td>${ReimbCurrency}</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//tr[@id='ReimbCurrency__xc_']/td[3]/button</td>
+      <td>hasCurrencyButton</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>CurrencyListExist&nbsp;&nbsp;&& CurrentCurrency !== ReimbCurrency&& hasCurrencyButton==true</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>//tr[@id='ReimbCurrency__xc_']/td[3]/button</td>
+      <td>/* Go button of currency */</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeTitle</td>
+      <td>currentTitle</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//In update mode there might be confirmation screen</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>currentTitle == 'Warning'</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>//button[contains(text(),'es')]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>assertTitle</td>
+      <td>*Expense Report: General Information*</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//Type page fields value</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>id=KffSEGMENT2</td>
+      <td>DeparmentFieldExist</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>DeparmentFieldExist</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>typeAndWait</td>
+      <td>id=KffSEGMENT2</td>
+      <td>${Department}</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>type</td>
+      <td>id=Purpose</td>
+      <td>Conference2</td>
+      <td></td>
+    </tr><tr>
+      <td>pause</td>
+      <td>200</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>OverridingApprover !== ""</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>type</td>
+      <td>id=OverrideApprover</td>
+      <td>${OverridingApprover}</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>OverridingApprover !== ""</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>type</td>
+      <td>id=OverrideApprover</td>
+      <td>${OverridingApprover}</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//select[@id='ExpTemplate']</td>
+      <td>ExpenseTemplateListExist</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>ExpenseTemplateListExist</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>select</td>
+      <td>id=ExpTemplate</td>
+      <td>${ExpTemplate}</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//go to next step</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>//button[@title='Next']</td>
+      <td>/* Next button */</td>
+      <td></td>
+    </tr><tr>
+      <td>//Check Error</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//table[@id='FwkErrorBeanId']/tbody//img[contains(@src, 'error')]</td>
+      <td>isErrorMessage</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>isErrorMessage === true</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//table[@id='FwkErrorBeanId']</td>
+      <td>reportErrorMessage</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//Check Warning popup (change template) - 12.2.11</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>id=OADialogPopupRN</td>
+      <td>reportPopupExist</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>reportPopupExist</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//span[@id='OADialogPopupRN']/table/tbody</td>
+      <td>reportPopupContent</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>reportPopupExist && reportPopupContent.indexOf('change the expense template') > -1</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>//button[@title="Yes"]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//Check error page (change template) - 12.1.3</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeTitle</td>
+      <td>reportErrorPageTitle</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>reportErrorPageTitle.indexOf("Warning") > -1</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>xpath=(//button[@title='Yes'])</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//Wizard step 4 : Cash and Other Expenses Table</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeTitle</td>
+      <td>wizardTitle</td>
+      <td></td>
+      <td></td>
+    </tr></tbody></table></body></html>

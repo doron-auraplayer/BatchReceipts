@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head profile="http://selenium-ide.openqa.org/profiles/test-case">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="selenium.base" href="" />
+    <title>iExpense_LocationSearchPerDiemGet</title>
+    </head>
+    <body>
+    <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+    <tr><td rowspan="1" colspan="3">iExpense_LocationSearchPerDiemGet</td></tr>
+  </thead><tbody><tr>
+      <td>input</td>
+      <td></td>
+      <td>LocationSearchBy</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td></td>
+      <td>LocationSearchValue</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>false</td>
+      <td>LocationOnlyGet</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>LocationSearchBy !== ""</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>select</td>
+      <td>id=categoryChoice</td>
+      <td>label=${LocationSearchBy}</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>id=N1:LocationName:0</td>
+      <td>LocationLinesDisplayed</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>LocationOnlyGet === "false"</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>type</td>
+      <td>//input[@title="Search Term"]</td>
+      <td>${LocationSearchValue}</td>
+      <td></td>
+    </tr><tr>
+      <td>click</td>
+      <td>//button[text() = "Go"]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>id=N1:LocationName:0</td>
+      <td>PopupLocationName</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>id=N1:Description:0</td>
+      <td>PopupLocationDescription</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>id=N1:Country:0</td>
+      <td>PopupLocationCountry</td>
+      <td></td>
+    </tr><tr>
+      <td>storeValue</td>
+      <td>//input[@title="Search Term"]</td>
+      <td>LocationSearchValue</td>
+      <td></td>
+    </tr></tbody></table></body></html>

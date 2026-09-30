@@ -1,0 +1,303 @@
+{
+  "name": "iExpense_getUpdReports",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ExpensesLongScroll",
+        "serviceName": "iExpense_getUpdReports"
+      },
+      "paramLabel": "ExpensesLongScroll",
+      "paramValue": "\"false\"",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "HomePageTitle",
+        "serviceName": "iExpense_getUpdReports"
+      },
+      "paramLabel": "HomePageTitle",
+      "paramValue": "Oracle Applications Home Page",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ExpensesHomeUrl",
+        "serviceName": "iExpense_getUpdReports"
+      },
+      "paramLabel": "ExpensesHomeUrl",
+      "paramValue": "/OA_HTML/RF.jsp?function_id=1019886&resp_id=54021&resp_appl_id=200",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ExpensesTableUpdateReportPrefix",
+        "serviceName": "iExpense_getUpdReports"
+      },
+      "paramLabel": "ExpensesTableUpdateReportPrefix",
+      "paramValue": "N12",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Update Report Number",
+        "serviceName": "iExpense_getUpdReports"
+      },
+      "paramLabel": "UpdateReportNumber",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Update Report Date",
+        "serviceName": "iExpense_getUpdReports"
+      },
+      "paramLabel": "UpdateReportDate",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Update Report Status",
+        "serviceName": "iExpense_getUpdReports"
+      },
+      "paramLabel": "UpdateReportStatus",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "hasTotalCurrency",
+        "serviceName": "iExpense_getUpdReports"
+      },
+      "paramLabel": "hasTotalCurrency",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Update Report Total",
+        "serviceName": "iExpense_getUpdReports"
+      },
+      "paramLabel": "UpdateReportTotal",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Update Report Purpose",
+        "serviceName": "iExpense_getUpdReports"
+      },
+      "paramLabel": "UpdateReportPurpose",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "paginationExists",
+        "serviceName": "iExpense_getUpdReports"
+      },
+      "paramLabel": "paginationExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "currentListRange",
+        "serviceName": "iExpense_getUpdReports"
+      },
+      "paramLabel": "currentListRange",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "nextButtonExist",
+        "serviceName": "iExpense_getUpdReports"
+      },
+      "paramLabel": "nextButtonExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "prevButtonExist",
+        "serviceName": "iExpense_getUpdReports"
+      },
+      "paramLabel": "prevButtonExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "prevButtonLabel",
+        "serviceName": "iExpense_getUpdReports"
+      },
+      "paramLabel": "prevButtonLabel",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "nextButtonLabel",
+        "serviceName": "iExpense_getUpdReports"
+      },
+      "paramLabel": "nextButtonLabel",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_getUpdReports"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_getUpdReports"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_getUpdReports"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_getUpdReports.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_getUpdReportsSuccess\":true,\"iExpense_getUpdReportsTableArray\":{\"iExpense_getUpdReportsArrayItem\":[{\"UpdateReportNumber\":\"W73124\",\"UpdateReportDate\":\"28-May-2024\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"134.48\",\"UpdateReportPurpose\":\"12lines\"},{\"UpdateReportNumber\":\"W78112\",\"UpdateReportDate\":\"14-May-2024\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"500.00\",\"UpdateReportPurpose\":\"32lines\"},{\"UpdateReportNumber\":\"W67113\",\"UpdateReportDate\":\"26-Aug-2021\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"4.00\",\"UpdateReportPurpose\":\"dfdfff\"},{\"UpdateReportNumber\":\"W67112\",\"UpdateReportDate\":\"26-Aug-2021\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"3.00\",\"UpdateReportPurpose\":\"sssd\"},{\"UpdateReportNumber\":\"W66121\",\"UpdateReportDate\":\"02-Jun-2021\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"3.00\",\"UpdateReportPurpose\":\"dddf\"},{\"UpdateReportNumber\":\"W66124\",\"UpdateReportDate\":\"02-Jun-2021\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"2.00\",\"UpdateReportPurpose\":\"ddd\"},{\"UpdateReportNumber\":\"W73119\",\"UpdateReportDate\":\"01-Jun-2021\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"12.00\",\"UpdateReportPurpose\":\"aqq\"},{\"UpdateReportNumber\":\"W66116\",\"UpdateReportDate\":\"01-Jun-2021\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"120.00\",\"UpdateReportPurpose\":\"conference\"},{\"UpdateReportNumber\":\"W66115\",\"UpdateReportDate\":\"01-Jun-2021\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"3,002.85\",\"UpdateReportPurpose\":\"conference\"},{\"UpdateReportNumber\":\"W74114\",\"UpdateReportDate\":\"01-Jun-2021\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"4.00\",\"UpdateReportPurpose\":\"ttt\"},{\"UpdateReportNumber\":\"W66118\",\"UpdateReportDate\":\"01-Jun-2021\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"100.00\",\"UpdateReportPurpose\":\"ddd\"},{\"UpdateReportNumber\":\"W73138\",\"UpdateReportDate\":\"01-Jun-2021\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"12.00\",\"UpdateReportPurpose\":\"swwsw\"},{\"UpdateReportNumber\":\"W73134\",\"UpdateReportDate\":\"07-Dec-2020\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"12.00\",\"UpdateReportPurpose\":\"wwww\"},{\"UpdateReportNumber\":\"W64115\",\"UpdateReportDate\":\"04-Oct-2020\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"12.00\",\"UpdateReportPurpose\":\"test allocations\"},{\"UpdateReportNumber\":\"W63113\",\"UpdateReportDate\":\"07-Sep-2020\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"12.00\",\"UpdateReportPurpose\":\"ddd\"}]},\"iExpense_getUpdReportsElements\":{\"hasTotalCurrency\":\"false\",\"paginationExists\":\"true\",\"currentListRange\":\"Rows 1 to 15\",\"nextButtonExist\":\"true\",\"prevButtonExist\":\"false\"},\"iExpense_getUpdReportsMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Expenses Home\",\"sessionId\":\"9139379\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense",
+    "LiveExpenseWithChanges"
+  ]
+}

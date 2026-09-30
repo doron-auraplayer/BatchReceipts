@@ -1,0 +1,197 @@
+{
+  "name": "iExpense_getReportDetailsCashLines",
+  "description": "",
+  "formUrl": "http://auravm01.us-west-2.compute.internal:8000/",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "cashLineExists",
+        "serviceName": "iExpense_getReportDetailsCashLines"
+      },
+      "paramLabel": "cashLineExists",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLineDate",
+        "serviceName": "iExpense_getReportDetailsCashLines"
+      },
+      "paramLabel": "CashLineDate",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLineReceiptAmount:",
+        "serviceName": "iExpense_getReportDetailsCashLines"
+      },
+      "paramLabel": "CashLineReceiptAmount",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "cashLineExpenseType",
+        "serviceName": "iExpense_getReportDetailsCashLines"
+      },
+      "paramLabel": "cashLineExpenseType",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLineJustification",
+        "serviceName": "iExpense_getReportDetailsCashLines"
+      },
+      "paramLabel": "CashLineJustification",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLineReimbAmount",
+        "serviceName": "iExpense_getReportDetailsCashLines"
+      },
+      "paramLabel": "CashLineReimbAmount",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttachmentText",
+        "serviceName": "iExpense_getReportDetailsCashLines"
+      },
+      "paramLabel": "AttachmentText",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReimbursementAmountHeader",
+        "serviceName": "iExpense_getReportDetailsCashLines"
+      },
+      "paramLabel": "ReimbursementAmountHeader",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_getReportDetailsCashLines"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_getReportDetailsCashLines"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_getReportDetailsCashLines"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_getReportDetailsCashLines.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_getReportDetailsCashLinesSuccess\":true,\"iExpense_getReportDetailsCashLinesTableArray\":{\"iExpense_getReportDetailsCashLinesArrayItem\":[{\"CashLineDate\":\"01-May-2022\",\"CashLineReceiptAmount\":\"100.00 USD\",\"cashLineExpenseType\":\"Airfare\",\"CashLineJustification\":\"conference\",\"CashLineReimbAmount\":\"100.00\",\"AttachmentText\":\"View\"},{\"CashLineDate\":\"01-May-2022\",\"CashLineReceiptAmount\":\"50.00 USD\",\"cashLineExpenseType\":\"Hotel\",\"CashLineJustification\":\"conference\",\"CashLineReimbAmount\":\"50.00\",\"AttachmentText\":\"Add\"},{\"CashLineDate\":\"150.00\",\"CashLineReceiptAmount\":\"\",\"cashLineExpenseType\":\"\",\"CashLineJustification\":\"\",\"CashLineReimbAmount\":\"\",\"AttachmentText\":\"\"}]},\"iExpense_getReportDetailsCashLinesElements\":{\"cashLineExists\":\"true\",\"ReimbursementAmountHeader\":\"Reimbursable Amount (USD)\"},\"iExpense_getReportDetailsCashLinesMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Expense Report W165172\",\"sessionId\":\"8661838\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense"
+  ]
+}

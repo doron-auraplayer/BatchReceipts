@@ -1,0 +1,368 @@
+{
+  "name": "iExpense_updReportUpdateDetails",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "OverridingApprover",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "OverridingApprover",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ReimbCurrency",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "ReimbCurrency",
+      "paramValue": "label=USD - US dollar",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ExpTemplate",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "ExpTemplate",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Select_By_xpath____select__id__ReimbCurrency__",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "__select__id__ReimbCurrency__",
+      "paramValue": "${ReimbCurrency}",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__KffSEGMENT2",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "KffSEGMENT2",
+      "paramValue": "${Department}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__Purpose",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "Purpose",
+      "paramValue": "Conference2",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__OverrideApprover",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "OverrideApprover",
+      "paramValue": "${OverridingApprover}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__OverrideApprover_2",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "OverrideApprover_2",
+      "paramValue": "${OverridingApprover}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Select_By_id__ExpTemplate",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "ExpTemplate1",
+      "paramValue": "${ExpTemplate}",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Department",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "Department",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CurrencyListExist",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "CurrencyListExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CurrentCurrency",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "CurrentCurrency",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "hasCurrencyButton",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "hasCurrencyButton",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "currentTitle",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "currentTitle",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DeparmentFieldExist",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "DeparmentFieldExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExpenseTemplateListExist",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "ExpenseTemplateListExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "isErrorMessage",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "isErrorMessage",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "reportErrorMessage",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "reportErrorMessage",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "wizardTitle",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "wizardTitle",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "reportPopupExist",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "reportPopupExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "reportPopupContent",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "reportPopupContent",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "reportErrorPageTitle",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "reportErrorPageTitle",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_updReportUpdateDetails"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_updReportUpdateDetails.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_updReportUpdateDetailsSuccess\":true,\"iExpense_updReportUpdateDetailsElements\":{\"CurrencyListExist\":\"true\",\"CurrentCurrency\":\"USD - US dollar\",\"currentTitle\":\"Update Expense Report: General Information\",\"DeparmentFieldExist\":\"true\",\"ExpenseTemplateListExist\":\"false\",\"isErrorMessage\":\"false\",\"wizardTitle\":\"Update Expense Report: Cash and Other Expenses\"},\"iExpense_updReportUpdateDetailsMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Update Expense Report: Cash and Other Expenses\",\"sessionId\":\"9139379\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense"
+  ]
+}

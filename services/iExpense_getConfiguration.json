@@ -1,0 +1,168 @@
+{
+  "name": "iExpense_getConfiguration",
+  "description": "get environment variables",
+  "formUrl": "",
+  "command": "@inject:iExpense_getConfiguration.command.js",
+  "isEnabled": true,
+  "inputParams": [],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EBS1213_ExpensesEbsUrl",
+        "serviceName": "iExpense_getConfiguration"
+      },
+      "paramLabel": "EBS1213_ExpensesEbsUrl",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EBS1213_ExpensesMenuPrefix",
+        "serviceName": "iExpense_getConfiguration"
+      },
+      "paramLabel": "EBS1213_ExpensesMenuPrefix",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EBS1213_ExpensesFunctionId",
+        "serviceName": "iExpense_getConfiguration"
+      },
+      "paramLabel": "EBS1213_ExpensesFunctionId",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EBS122_ExpensesEbsUrl",
+        "serviceName": "iExpense_getConfiguration"
+      },
+      "paramLabel": "EBS122_ExpensesEbsUrl",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EBS122_ExpensesMenuPrefix",
+        "serviceName": "iExpense_getConfiguration"
+      },
+      "paramLabel": "EBS122_ExpensesMenuPrefix",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EBS122_ExpensesFunctionId",
+        "serviceName": "iExpense_getConfiguration"
+      },
+      "paramLabel": "EBS122_ExpensesFunctionId",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_getConfiguration"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_getConfiguration"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_getConfiguration"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@js",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 20,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_getConfigurationSuccess\":true,\"iExpense_getConfigurationElements\":{\"configurations\":{\"ebs12_1_3\":{\"ExpensesTableUpdateReportPrefix\":\"N12\",\"ExpensesFilteredExpenseTypes\":\"\",\"ExpensesTextDepartmentSelector\":\"KffSEGMENT3ReadOnly\",\"ExpensesTableCashLinePrefix_PerDiem\":\"N77\",\"FormsUrl\":\"http://auravm01.us-west-2.compute.internal:8000\",\"ExpensesSearchLocPDSelector\":\"Search for Destination\",\"ExpenseCreditTableSelectAllSelector\":\"a[contains(text(),'Select All')]\",\"ExpenseConfirmationDialogExists\":\"false\",\"ExpenseTypeCategories\":\"Receipt-Based;PerDiem;Mileage;\",\"ExpensesTableSubmittedReportPrefix\":\"N11\",\"ExpensesSearchLocRBSelector\":\"Search for Expense Location\",\"tableHeaderRows\":1,\"ExpenseShowMultiLanguage\":false,\"HomePageTitle\":\"Oracle Applications Home Page\",\"ExpensesLongScroll\":\"false\",\"ExpensesTableCashLinePrefix_Mileage\":\"N77\",\"loginSubmitButtonSelector\":\"button[@id='SubmitButton']\",\"ExpensesTableReportTotalColumnName\":\"ReportTotalCurrency\",\"ExpenseReviewReceiptRequiredSelector\":\"ReceiptRequired\",\"ExpensesTableCashLinePrefix_Receipt\":\"N77\"},\"emerson\":{\"ExpensesFilteredExpenseTypes\":\"\",\"ExpensesDisabledFeatures\":\"DOWLOAD_ATTACHMENT\",\"FormsUrl\":\"http://usmtnpmdebswia7.dev.emrsn.org:34104\",\"ExpenseCreditTableSelectAllSelector\":\"input[@id='AvailableTrxnList:triState']\",\"ExpenseConfirmationDialogExists\":\"false\",\"ExpenseTypeCategories\":\"Receipt-Based;Mileage;\",\"ExpensesSearchLocRBSelector\":\"Search: Expense Location\",\"tableHeaderRows\":1,\"ExpenseShowMultiLanguage\":false,\"ExpensesHomeUrl\":\"/OA_HTML/RF.jsp?function_id=20080&resp_id=59021&resp_appl_id=200\",\"ExpenseAttendiesSelectAllSelector\":\"a[contains(text(),'Select All')]\",\"loginSubmitButtonSelector\":\"button[@onclick='submitCredentials()']\",\"ExpensesTableCashLinePrefix_Receipt\":\"N62\",\"ExpensesTableUpdateReportPrefix\":\"N14\",\"ExpenseTableHasHeaderServices\":\"\",\"ExpensesTableCashLinePrefix\":\"N62\",\"ExpensesTextDepartmentSelector\":\"KffSEGMENT3ReadOnly\",\"ExpensesTableCashLinePrefix_PerDiem\":\"N51\",\"ExpensesSearchLocPDSelector\":\"Search: Destination\",\"ExpensesTableSubmittedReportPrefix\":\"N13\",\"HomePageTitle\":\"Home\",\"ExpensesLongScroll\":\"false\",\"ExpensesTableCashLinePrefix_Mileage\":\"N62\",\"ExpensesTableReportTotalColumnName\":\"ReportTotal\",\"ExpenseReviewReceiptRequiredSelector\":\"ReceiptRequired\"},\"michelin\":{\"ExpensesFilteredExpenseTypes\":\"\",\"ExpensePreviewImageReceiptStatusExist\":true,\"FormsUrl\":\"https://ifopame0.michelin.com:8030/OA_HTML/AppsLocalLogin.jsp\",\"ExpenseCreditTableSelectAllSelector\":\"input[@id='AvailableTrxnList:triState']\",\"ExpenseConfirmationDialogExists\":\"true\",\"ExpenseTypeCategories\":\"Receipt-Based;Mileage;\",\"ExpensesSearchLocRBSelector\":\"Search: Expense Location\",\"tableHeaderRows\":1,\"ExpenseShowMultiLanguage\":true,\"ExpensesHomeUrl\":\"/OA_HTML/RF.jsp?function_id=18355&resp_id=50904&resp_appl_id=673\",\"ExpenseAttendiesSelectAllSelector\":\"input[@id='EmployeeTableRN:triState']\",\"loginSubmitButtonSelector\":\"button[@onclick='submitCredentials()']\",\"ExpensesTableCashLinePrefix_Receipt\":\"N51\",\"ExpensesTableUpdateReportPrefix\":\"N12\",\"ExpenseTableHasHeaderServices\":\"iExpense_getReportDetailsPerDiemLines,iExpense_getReportDetailsMileageLines\",\"ExpensesTextDepartmentSelector\":\"KffSEGMENT4ReadOnly\",\"ExpensesTableCashLinePrefix_PerDiem\":\"N51\",\"ExpensesSearchLocPDSelector\":\"Search: Destination\",\"ExpensesTableSubmittedReportPrefix\":\"N11\",\"tableHasHeader\":true,\"HomePageTitle\":\"Home\",\"ExpensesLongScroll\":\"false\",\"ExpensesTableCashLinePrefix_Mileage\":\"N51\",\"ExpensesTableReportTotalColumnName\":\"ReportTotal\",\"ExpenseReviewReceiptRequiredSelector\":\"ImageReceiptRequired\"},\"ebs12_2_7\":{\"ExpensesTableUpdateReportPrefix\":\"N12\",\"ExpensesFilteredExpenseTypes\":\"\",\"ExpenseTableHasHeaderServices\":\"iExpense_getReportDetailsPerDiemLines,iExpense_getReportDetailsMileageLines\",\"ExpensesTextDepartmentSelector\":\"KffSEGMENT3ReadOnly\",\"ExpensesTableCashLinePrefix_PerDiem\":\"N51\",\"FormsUrl\":\"http://apps.example.com:8000\",\"ExpensesSearchLocPDSelector\":\"Search: Destination\",\"ExpenseCreditTableSelectAllSelector\":\"input[@id='AvailableTrxnList:triState']\",\"ExpenseConfirmationDialogExists\":\"true\",\"ExpenseTypeCategories\":\"Receipt-Based;PerDiem;Mileage;\",\"ExpensesTableSubmittedReportPrefix\":\"N11\",\"ExpensesSearchLocRBSelector\":\"Search: Expense Location\",\"tableHeaderRows\":0,\"ExpenseShowMultiLanguage\":true,\"HomePageTitle\":\"Home\",\"ExpensesLongScroll\":\"true\",\"ExpenseAttendiesSelectAllSelector\":\"input[@id='EmployeeTableRN:triState']\",\"ExpensesTableCashLinePrefix_Mileage\":\"N51\",\"loginSubmitButtonSelector\":\"button[@onclick='submitCredentials()']\",\"ExpensesTableReportTotalColumnName\":\"ReportTotal\",\"ExpenseReviewReceiptRequiredSelector\":\"ReceiptRequired\",\"ExpensesTableCashLinePrefix_Receipt\":\"N51\"},\"michelinLocal\":{\"ExpensesFilteredExpenseTypes\":\"\",\"ExpensePreviewImageReceiptStatusExist\":true,\"FormsUrl\":\"https://ifopame0vw.mpl.michelin.com:8030/OA_HTML/AppsLocalLogin.jsp\",\"ExpenseCreditTableSelectAllSelector\":\"input[@id='AvailableTrxnList:triState']\",\"ExpenseConfirmationDialogExists\":\"true\",\"ExpenseTypeCategories\":\"Receipt-Based;Mileage;\",\"ExpensesSearchLocRBSelector\":\"Search: Expense Location\",\"tableHeaderRows\":1,\"ExpenseShowMultiLanguage\":true,\"ExpensesHomeUrl\":\"/OA_HTML/RF.jsp?function_id=18355&resp_id=50904&resp_appl_id=673\",\"ExpenseAttendiesSelectAllSelector\":\"input[@id='EmployeeTableRN:triState']\",\"loginSubmitButtonSelector\":\"button[@onclick='submitCredentials()']\",\"ExpensesTableCashLinePrefix_Receipt\":\"N51\",\"ExpensesTableUpdateReportPrefix\":\"N12\",\"ExpenseTableHasHeaderServices\":\"iExpense_getReportDetailsPerDiemLines,iExpense_getReportDetailsMileageLines\",\"ExpensesTextDepartmentSelector\":\"KffSEGMENT4ReadOnly\",\"ExpensesTableCashLinePrefix_PerDiem\":\"N51\",\"ExpensesSearchLocPDSelector\":\"Search: Destination\",\"ExpensesTableSubmittedReportPrefix\":\"N11\",\"tableHasHeader\":true,\"HomePageTitle\":\"Home\",\"ExpensesLongScroll\":\"false\",\"ExpensesTableCashLinePrefix_Mileage\":\"N51\",\"ExpensesTableReportTotalColumnName\":\"ReportTotal\",\"ExpenseReviewReceiptRequiredSelector\":\"ImageReceiptRequired\"}},\"DefaultConfiguration\":\"ebs12_1_3\"},\"iExpense_getConfigurationMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"\"}}}",
+  "type": "JS",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense",
+    "LiveHRApps"
+  ]
+}

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://auravm01.us-west-2.compute.internal:8000/" />
+<title>iExpense_credit_openLineDetails</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_credit_openLineDetails</td></tr>
+</thead><tbody>
+<tr>
+	<td>assertTitle</td>
+	<td>*Expense Report: Credit Card Expenses</td>
+	<td></td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>0</td>
+	<td>index</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[@id='N3:CCDetails:${index}']/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Credit Card Expenses: Details for Line *</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeHtmlSource</td>
+	<td>iExpenseCreditCardLineDetails</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeSelectedLabel</td>
+	<td>//select[contains(@id, &quot;ExpTypeChoice&quot;)]</td>
+	<td>expenseType</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//span[contains(@id, 'ReceiptAmount')]</td>
+	<td>DetailReceiptAmount</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//span[contains(@id, 'ReceiptCurrency')]/span</td>
+	<td>ReceiptCurrencyChoice</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//span[contains(@id,&quot;ExchRate&quot;)]</td>
+	<td>ExchRateExist</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>ExchRateExist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//span[contains(@id,&quot;ExchRate&quot;)]</td>
+	<td>ExchRate</td>
+</tr>
+<tr>
+	<td>else</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//span[contains(@id,&quot;ExchangeRate&quot;)]</td>
+	<td>ExchRate</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//span[contains(@id,&quot;MerchantName&quot;)]</td>
+	<td>DetailMerchantName</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//h1[contains(text(),'Details for Line')]</td>
+	<td>LineTitle</td>
+</tr>
+</tbody></table>
+</body>
+</html>

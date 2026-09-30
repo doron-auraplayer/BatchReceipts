@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://auravm01.us-west-2.compute.internal:8000/" />
+<title>iExpense_getGeneralReportDetails</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_getGeneralReportDetails</td></tr>
+</thead><tbody>
+<tr>
+	<td>assertTitle</td>
+	<td>*Expense Report: General Information</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=KffSEGMENT2</td>
+	<td>DepartmentsListExist</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>DepartmentsListExist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>id=KffSEGMENT2</td>
+	<td>Department</td>
+</tr>
+<tr>
+	<td>else</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//span[contains(@id, 'KffSEGMENT')]</td>
+	<td>Department</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>id=Purpose</td>
+	<td>Purpose</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=TxtName</td>
+	<td>EmployeeName</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=OverrideApprover</td>
+	<td>ApproverExist</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>id=OverrideApprover</td>
+	<td>OverridingApprover</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=ReimbCurrency</td>
+	<td>CurrencyListExist</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>CurrencyListExist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeSelectedLabel</td>
+	<td>id=ReimbCurrency</td>
+	<td>ReimbCurrency</td>
+</tr>
+<tr>
+	<td>else</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=TxtReimbCurrency</td>
+	<td>TxtCurrency</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=ExpTemplate</td>
+	<td>TemplateListExist</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>TemplateListExist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeSelectedLabel</td>
+	<td>id=ExpTemplate</td>
+	<td>TemplateList</td>
+</tr>
+<tr>
+	<td>else</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=TxtExpTemplate</td>
+	<td>Template</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

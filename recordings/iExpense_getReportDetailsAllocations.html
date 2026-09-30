@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://auravm01.us-west-2.compute.internal:8000/" />
+<title>iExpense_getReportDetailsAllocations</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_getReportDetailsAllocations</td></tr>
+</thead><tbody>
+<tr>
+	<td>assertTitle</td>
+	<td>*Expense Report*</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>link=Expense Allocations</td>
+	<td>ExpenseAllocationPageExists</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>ExpenseAllocationPageExists</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Expense Allocations</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,'PaymentMethod:0')]</td>
+	<td>AllocationPaymentMethod</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,'Date:0')]</td>
+	<td>AllocationStartDate</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,'ExpenseType:0')]</td>
+	<td>AllocationExpenseType</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,'ReceiptAmt:0')]</td>
+	<td>AllocationReceiptAmount</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,'ReimbursementAmt:0')]</td>
+	<td>AllocationReimAmount</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,'Merchant:0')]</td>
+	<td>AllocationMerchant</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,'Location:0')]</td>
+	<td>AllocationLocation</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,'Justification:0')]</td>
+	<td>AllocationJustification</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,'ProjectLayout:0')]</td>
+	<td>AllocationProjectDetails</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,'TaskLayout:0')]</td>
+	<td>AllocationTaskDetails</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

@@ -1,0 +1,63 @@
+
+
+/* Hidden generated controls */
+#Add_Attachment,
+#refresh {
+  display: none !important;
+}
+
+/* Credit rows */
+.credit-row td {
+  color: #2f5d73 !important;
+  font-weight: 600;
+  background-color: #eef6fa;
+  border-top: 1px solid #c9dde7;
+  border-bottom: 1px solid #c9dde7;
+}
+
+.credit-row td:first-child {
+  border-left: 3px solid #d4b04c;
+}
+
+.credit-row td:last-child {
+  border-right: 1px solid #e7d7a8;
+}
+
+/* Receipt status rows */
+#tableOutput tbody tr.receipt-status-new > td,
+#tableOutput tbody tr.receipt-status-processing > td,
+#tableOutput tbody tr.receipt-status-processed > td,
+#tableOutput tbody tr.receipt-status-failed > td,
+#tableOutput tbody tr.receipt-status-ai-failed > td {
+  background-color: #eef3f8;
+  color: #1f2a37;
+  font-weight: 600;
+}
+
+#tableOutput tbody tr.receipt-status-ready > td {
+  background-color: #e8f6ea;
+  color: #1f2a37;
+  font-weight: 600;
+}
+
+/* NEW-row pending hint (text styling is inline; layout only here) */
+#tableOutput tbody .receipt-pending-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Refused (not-READY) row checkbox: visible label, not the input */
+#tableOutput tbody tr label.receipt-select-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+#tableOutput tbody tr label.receipt-select-disabled .ui-checkboxradio-icon {
+  opacity: 0.45;
+}
+
+#tableOutput tbody tr input[id^='Select_']:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

@@ -1,0 +1,835 @@
+{
+  "name": "iExpense_getReportDetailsLineCash",
+  "description": "",
+  "formUrl": "http://auravm01.us-west-2.compute.internal:8000/",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "CreditLines",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "CreditLines",
+      "paramValue": "\"false\"",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "index",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "index",
+      "paramValue": "0",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "attachmentPathExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "attachmentPathExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "expenseTypeExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "expenseTypeExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExpenseType",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "ExpenseType",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StartDateExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "StartDateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StartDate",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "StartDate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReceiptAmountExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "DetailReceiptAmountExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReceiptAmount",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "DetailReceiptAmount",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "JustificationExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "JustificationExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Justification",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "Justification",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RBLocationExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "RBLocationExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RBLocation",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "RBLocation",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailMerchantNameExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "DetailMerchantNameExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailMerchantName",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "DetailMerchantName",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReceiptCurrencyChoiceExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "ReceiptCurrencyChoiceExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReceiptCurrencyChoice",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "ReceiptCurrencyChoice",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExchRateExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "ExchRateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExchRate",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "ExchRate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReimbursAmtExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "DetailReimbursAmtExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReimbursAmt",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "DetailReimbursAmt",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AirTravelTypeExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "AirTravelTypeExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AirTravelType",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "AirTravelType",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AirTicketClassExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "AirTicketClassExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AirTicketClass",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "AirTicketClass",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AirFromLocationExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "AirFromLocationExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AirFromLocation",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "AirFromLocation",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AirToLocationExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "AirToLocationExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AirToLocation",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "AirToLocation",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailDailyRateExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "DetailDailyRateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailDailyRate",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "DetailDailyRate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "NumberOfDaysExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "NumberOfDaysExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "NumberOfDays",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "NumberOfDays",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LocationNameExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "LocationNameExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LocationName",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "LocationName",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CompanyAttendeesExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "CompanyAttendeesExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CompanyAttendees",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "CompanyAttendees",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AccEndDateExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "AccEndDateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AccEndDate",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "AccEndDate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "MealNumberAttendeesExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "MealNumberAttendeesExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "MealNumberAttendees",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "MealNumberAttendees",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "MealAttendeesExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "MealAttendeesExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "MealAttendees",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "MealAttendees",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttendeesTableExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "AttendeesTableExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "GuestTableExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "GuestTableExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttachmentExists",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "AttachmentExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "attachmentPath_filename",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "attachmentPath_filename",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "currentPage",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "currentPage",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttachmentsPopup",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "AttachmentsPopup",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ItemizationTableExist",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "ItemizationTableExist",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ItemizationTableLineNumber",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "ItemizationTableLineNumber",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_getReportDetailsLineCash"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_getReportDetailsLineCash.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_getReportDetailsLineCashSuccess\":true,\"iExpense_getReportDetailsLineCashElements\":{\"attachmentPathExist\":\"true\",\"expenseTypeExist\":\"true\",\"ExpenseType\":\"Airfare\",\"StartDateExist\":\"true\",\"StartDate\":\"01-May-2022\",\"DetailReceiptAmountExist\":\"true\",\"DetailReceiptAmount\":\"100.00\",\"JustificationExist\":\"true\",\"Justification\":\"conference\",\"RBLocationExist\":\"true\",\"RBLocation\":\"All Other Locations\",\"DetailMerchantNameExist\":\"true\",\"DetailMerchantName\":\"\",\"ReceiptCurrencyChoiceExist\":\"true\",\"ReceiptCurrencyChoice\":\"USD - US dollar\",\"ExchRateExist\":\"true\",\"ExchRate\":\"1\",\"DetailReimbursAmtExist\":\"true\",\"DetailReimbursAmt\":\"100.00\",\"AirTravelTypeExist\":\"true\",\"AirTravelType\":\"International\",\"AirTicketClassExist\":\"true\",\"AirTicketClass\":\"Coach\",\"AirFromLocationExist\":\"true\",\"AirFromLocation\":\"\",\"AirToLocationExist\":\"true\",\"AirToLocation\":\"\",\"DetailDailyRateExist\":\"false\",\"NumberOfDaysExist\":\"false\",\"LocationNameExist\":\"false\",\"CompanyAttendeesExist\":\"false\",\"AccEndDateExist\":\"false\",\"MealNumberAttendeesExist\":\"false\",\"MealAttendeesExist\":\"false\",\"AttendeesTableExist\":\"false\",\"GuestTableExist\":\"false\",\"AttachmentExists\":\"true\",\"attachmentPath_filename\":\"attach1.txt\"},\"iExpense_getReportDetailsLineCashMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Cash and Other Expenses: Details for Line 1\",\"sessionId\":\"8661838\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense"
+  ]
+}

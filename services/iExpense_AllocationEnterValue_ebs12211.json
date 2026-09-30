@@ -1,0 +1,166 @@
+{
+  "name": "iExpense_AllocationEnterValue_ebs12211",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AllocationNumberField",
+        "serviceName": "iExpense_AllocationEnterValue_ebs12211"
+      },
+      "paramLabel": "AllocationNumberField",
+      "paramValue": "SplitCriteriaTblRN:ProjectNumber:0",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AllocationNameField",
+        "serviceName": "iExpense_AllocationEnterValue_ebs12211"
+      },
+      "paramLabel": "AllocationNameField",
+      "paramValue": "SplitCriteriaTblRN:ProjectName:0",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AllocationValue",
+        "serviceName": "iExpense_AllocationEnterValue_ebs12211"
+      },
+      "paramLabel": "AllocationValue",
+      "paramValue": "1001",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__$_AllocationNumberField_",
+        "serviceName": "iExpense_AllocationEnterValue_ebs12211"
+      },
+      "paramLabel": "_AllocationNumberField_",
+      "paramValue": "${AllocationValue}",
+      "visible": false
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "searchWindowOpen",
+        "serviceName": "iExpense_AllocationEnterValue_ebs12211"
+      },
+      "paramLabel": "searchWindowOpen",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AllocationResolvedValue",
+        "serviceName": "iExpense_AllocationEnterValue_ebs12211"
+      },
+      "paramLabel": "AllocationResolvedValue",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AllocationResolvedName",
+        "serviceName": "iExpense_AllocationEnterValue_ebs12211"
+      },
+      "paramLabel": "AllocationResolvedName",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_AllocationEnterValue_ebs12211"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_AllocationEnterValue_ebs12211"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_AllocationEnterValue_ebs12211"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_AllocationEnterValue_ebs12211.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense"
+  ]
+}

@@ -1,0 +1,202 @@
+{
+  "name": "iExpense_login",
+  "description": "",
+  "formUrl": "${env.EBS_URL}",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "HomePageTitle",
+        "serviceName": "iExpense_login"
+      },
+      "paramLabel": "HomePageTitle",
+      "paramValue": "Oracle Applications Home Page",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__usernameField",
+        "serviceName": "iExpense_login"
+      },
+      "paramLabel": "usernameField",
+      "paramValue": "6096406",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__passwordField",
+        "serviceName": "iExpense_login"
+      },
+      "paramLabel": "passwordField",
+      "paramValue": "Welcome0123#",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LoginErrorLineExists",
+        "serviceName": "iExpense_login"
+      },
+      "paramLabel": "LoginErrorLineExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LoginErrorBoxExists",
+        "serviceName": "iExpense_login"
+      },
+      "paramLabel": "LoginErrorBoxExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LoginErrorMessage",
+        "serviceName": "iExpense_login"
+      },
+      "paramLabel": "LoginErrorMessage",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LoginErrorMessageExists",
+        "serviceName": "iExpense_login"
+      },
+      "paramLabel": "LoginErrorMessageExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LoggedInUsername",
+        "serviceName": "iExpense_login"
+      },
+      "paramLabel": "LoggedInUsername",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "cookies",
+        "serviceName": "iExpense_login"
+      },
+      "paramLabel": "cookies",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_login"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_login"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_login"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_login.html",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 20,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_loginSuccess\":true,\"iExpense_loginElements\":{\"LoginErrorLineExists\":\"false\",\"LoginErrorBoxExists\":\"false\",\"LoggedInUsername\":\"OPERATIONS\",\"cookies\":[{\"name\":\"EBSDB\",\"value\":\"GBAGESI4AhFnE8cBU4R0lZ8JUb\",\"path\":\"/\",\"domain\":\"apps.example.com\",\"isSecure\":false,\"isHttpOnly\":false},{\"name\":\"JSESSIONID\",\"value\":\"6ykVBstLYDDOw5m65wRlM6D9dAuIosEeXMT7qac_SUeUt0hUqcGK!-1994165652\",\"path\":\"/\",\"domain\":\"apps.example.com\",\"isSecure\":false,\"isHttpOnly\":false},{\"name\":\"oracle.uix\",\"value\":\"0^^GMT+3:00^p\",\"path\":\"/\",\"domain\":\".apps.example.com\",\"expiry\":2032855221000,\"isSecure\":false,\"isHttpOnly\":false}]},\"iExpense_loginMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Home\",\"sessionId\":\"9139379\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveApprovals",
+    "LiveExpense"
+  ]
+}

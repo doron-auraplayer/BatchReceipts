@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head profile="http://selenium-ide.openqa.org/profiles/test-case">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="selenium.base" href="" />
+    <title>iExpense_openAllocationUpdateWindow</title>
+    </head>
+    <body>
+    <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+    <tr><td rowspan="1" colspan="3">iExpense_openAllocationUpdateWindow</td></tr>
+  </thead><tbody><tr>
+      <td>assertTitle</td>
+      <td>*Expense Allocation*</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//input[contains(@name,'selected:0')]</td>
+      <td>checkBox1</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//input[contains(@id,'triState')]</td>
+      <td>checkBox2</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>checkBox1</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>check</td>
+      <td>//input[contains(@name,'selected:0')]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>checkBox2</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>check</td>
+      <td>//input[contains(@id,'triState')]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>id=UpdateAllocations</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>assertTitle</td>
+      <td>*Update Project Allocations*</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeHtmlSource</td>
+      <td>iExpense_AfterOpenUpdateGroupAlloc</td>
+      <td></td>
+      <td></td>
+    </tr></tbody></table></body></html>

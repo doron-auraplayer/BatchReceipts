@@ -1,0 +1,314 @@
+{
+  "name": "iExpense_getReportDetailsLinePerDiem",
+  "description": "",
+  "formUrl": "http://auravm01.us-west-2.compute.internal:8000/",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "index",
+        "serviceName": "iExpense_getReportDetailsLinePerDiem"
+      },
+      "paramLabel": "index",
+      "paramValue": "0",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StartDateExist",
+        "serviceName": "iExpense_getReportDetailsLinePerDiem"
+      },
+      "paramLabel": "StartDateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StartDate",
+        "serviceName": "iExpense_getReportDetailsLinePerDiem"
+      },
+      "paramLabel": "StartDate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "NumDaysExist",
+        "serviceName": "iExpense_getReportDetailsLinePerDiem"
+      },
+      "paramLabel": "NumDaysExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "NumDays",
+        "serviceName": "iExpense_getReportDetailsLinePerDiem"
+      },
+      "paramLabel": "NumDays",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AccEndDateExist",
+        "serviceName": "iExpense_getReportDetailsLinePerDiem"
+      },
+      "paramLabel": "AccEndDateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AccEndDate",
+        "serviceName": "iExpense_getReportDetailsLinePerDiem"
+      },
+      "paramLabel": "AccEndDate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "JustificationExist",
+        "serviceName": "iExpense_getReportDetailsLinePerDiem"
+      },
+      "paramLabel": "JustificationExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Justification",
+        "serviceName": "iExpense_getReportDetailsLinePerDiem"
+      },
+      "paramLabel": "Justification",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReimbursAmtExist",
+        "serviceName": "iExpense_getReportDetailsLinePerDiem"
+      },
+      "paramLabel": "DetailReimbursAmtExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReimbursAmt",
+        "serviceName": "iExpense_getReportDetailsLinePerDiem"
+      },
+      "paramLabel": "DetailReimbursAmt",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LocationNameExist",
+        "serviceName": "iExpense_getReportDetailsLinePerDiem"
+      },
+      "paramLabel": "LocationNameExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LocationName",
+        "serviceName": "iExpense_getReportDetailsLinePerDiem"
+      },
+      "paramLabel": "LocationName",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "currentPage",
+        "serviceName": "iExpense_getReportDetailsLinePerDiem"
+      },
+      "paramLabel": "currentPage",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "expenseTypeExist",
+        "serviceName": "iExpense_getReportDetailsLinePerDiem"
+      },
+      "paramLabel": "expenseTypeExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "expenseType",
+        "serviceName": "iExpense_getReportDetailsLinePerDiem"
+      },
+      "paramLabel": "expenseType",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_getReportDetailsLinePerDiem"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_getReportDetailsLinePerDiem"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_getReportDetailsLinePerDiem"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_getReportDetailsLinePerDiem.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 20,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_getReportDetailsLinePerDiemSuccess\":true,\"iExpense_getReportDetailsLinePerDiemElements\":{\"StartDateExist\":\"true\",\"StartDate\":\"01-May-2022\",\"NumDaysExist\":\"true\",\"NumDays\":\"2\",\"AccEndDateExist\":\"true\",\"AccEndDate\":\"02-May-2022\",\"JustificationExist\":\"true\",\"Justification\":\"conference\",\"DetailReimbursAmtExist\":\"true\",\"DetailReimbursAmt\":\"192.00 USD\",\"LocationNameExist\":\"true\",\"LocationName\":\"All Other Locations\"},\"iExpense_getReportDetailsLinePerDiemMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Details for Line 1\",\"sessionId\":\"8661838\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense"
+  ]
+}

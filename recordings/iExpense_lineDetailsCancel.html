@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://auravm01.us-west-2.compute.internal:8000/" />
+<title>iExpense_lineDetailsCancel</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_lineDetailsCancel</td></tr>
+</thead><tbody>
+<tr>
+	<td>input</td>
+	<td>N51</td>
+	<td>ExpensesTableCashLinePrefix</td>
+</tr>
+<tr>
+	<td>input</td>
+	<td>&quot;false&quot;</td>
+	<td>ExpenseConfirmationDialogExists</td>
+</tr>
+<tr>
+	<td>input</td>
+	<td>0</td>
+	<td>index</td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>*: Details for Line *</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//button[contains(text(), 'Cancel')]</td>
+	<td>cancelBtnExist</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>cancelBtnExist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//button[contains(text(), 'Cancel')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>else</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=ReturnButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeTitle</td>
+	<td>currentPageTitle</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>${currentPageTitle}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>ExpenseConfirmationDialogExists == &quot;true&quot; &amp;&amp; currentPageTitle.indexOf(&quot;Details for Line&quot;) &gt; -1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeTitle</td>
+	<td>currentPage</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectFrame</td>
+	<td>index=0</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//button[@title=&quot;Yes&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//button[@title=&quot;Yes&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>elseIf</td>
+	<td>currentPageTitle.indexOf(&quot;Confirmation&quot;) &gt; -1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//button[@title=&quot;Yes&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTitle</td>
+	<td>*Expense Report: *</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeTitle</td>
+	<td>title</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

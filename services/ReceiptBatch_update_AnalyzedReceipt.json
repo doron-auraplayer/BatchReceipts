@@ -1,0 +1,187 @@
+{
+  "name": "ReceiptBatch_update_AnalyzedReceipt",
+  "description": "",
+  "formUrl": "${env.DB_CONNECTION_STR}",
+  "command": "UPDATE XX_AP_BATCH_RECEIPTS\nSET \nSTATUS = ${STATUS:VARCHAR},\nTOTAL_AMOUNT = TO_NUMBER(${TOTAL_AMOUNT:VARCHAR}, '999999999999999999999999999999D999999999', 'NLS_NUMERIC_CHARACTERS=''.,'''),\nMERCHANT = ${MERCHANT:VARCHAR},\nEXPENSE_TYPE = ${EXPENSE_TYPE:VARCHAR},\nLOCATION = ${LOCATION:VARCHAR},\nRECEIPT_DATE = TO_DATE(${RECEIPT_DATE:VARCHAR}, 'YYYY-MM-DD'),\nEXPENSE_DATA_JSON = ${EXPENSE_DATA_JSON:CLOB},\nEXPENSE_DATA_UPDATED_DATE = SYSTIMESTAMP\nWHERE RECEIPT_ID = ${RECEIPT_ID:NUMERIC}",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "username",
+        "serviceName": "ReceiptBatch_update_AnalyzedReceipt"
+      },
+      "paramLabel": "username",
+      "paramValue": "${env.DB_USER}",
+      "visible": false
+    },
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "password",
+        "serviceName": "ReceiptBatch_update_AnalyzedReceipt"
+      },
+      "paramLabel": "password",
+      "paramValue": "${env.DB_PASSWORD}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "STATUS",
+        "serviceName": "ReceiptBatch_update_AnalyzedReceipt"
+      },
+      "paramLabel": "STATUS",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "TOTAL_AMOUNT",
+        "serviceName": "ReceiptBatch_update_AnalyzedReceipt"
+      },
+      "paramLabel": "TOTAL_AMOUNT",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "MERCHANT",
+        "serviceName": "ReceiptBatch_update_AnalyzedReceipt"
+      },
+      "paramLabel": "MERCHANT",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "EXPENSE_TYPE",
+        "serviceName": "ReceiptBatch_update_AnalyzedReceipt"
+      },
+      "paramLabel": "EXPENSE_TYPE",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "LOCATION",
+        "serviceName": "ReceiptBatch_update_AnalyzedReceipt"
+      },
+      "paramLabel": "LOCATION",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "RECEIPT_DATE",
+        "serviceName": "ReceiptBatch_update_AnalyzedReceipt"
+      },
+      "paramLabel": "RECEIPT_DATE",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "RECEIPT_ID",
+        "serviceName": "ReceiptBatch_update_AnalyzedReceipt"
+      },
+      "paramLabel": "RECEIPT_ID",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "EXPENSE_DATA_JSON",
+        "serviceName": "ReceiptBatch_update_AnalyzedReceipt"
+      },
+      "paramLabel": "EXPENSE_DATA_JSON",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_update_AnalyzedReceipt"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_update_AnalyzedReceipt"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_update_AnalyzedReceipt"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@sql",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "DB",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": []
+}

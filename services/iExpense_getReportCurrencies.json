@@ -1,0 +1,122 @@
+{
+  "name": "iExpense_getReportCurrencies",
+  "description": "",
+  "formUrl": "http://auravm01.us-west-2.compute.internal:8000/",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [],
+  "outputParams": [
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Currency",
+        "serviceName": "iExpense_getReportCurrencies"
+      },
+      "paramLabel": "Currency",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReimbCurrencyExists",
+        "serviceName": "iExpense_getReportCurrencies"
+      },
+      "paramLabel": "ReimbCurrencyExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReceiptCurrencyChoiceExists",
+        "serviceName": "iExpense_getReportCurrencies"
+      },
+      "paramLabel": "ReceiptCurrencyChoiceExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_getReportCurrencies"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_getReportCurrencies"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_getReportCurrencies"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_getReportCurrencies.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_getReportCurrenciesSuccess\":true,\"iExpense_getReportCurrenciesTableArray\":{\"iExpense_getReportCurrenciesArrayItem\":[{\"Currency\":\"AED - UAE Dirham\"},{\"Currency\":\"ANY - ANY Currency\"},{\"Currency\":\"ARS - Argentine Peso\"},{\"Currency\":\"ATS - Schilling\"},{\"Currency\":\"AUD - Australian Dollar\"},{\"Currency\":\"BEF - Belgian Franc\"},{\"Currency\":\"BHT - Thailand Baht (=old code used on SoB's)\"},{\"Currency\":\"BRL - Brazilian Real\"},{\"Currency\":\"CAD - Canadian Dollar\"},{\"Currency\":\"CHF - Swiss Franc\"},{\"Currency\":\"CLP - Chilean Peso\"},{\"Currency\":\"CNY - Yuan Renminbi\"},{\"Currency\":\"COP - Colombian Peso\"},{\"Currency\":\"CZK - Czech Koruna\"},{\"Currency\":\"DEM - Deutsche Mark\"},{\"Currency\":\"DKK - Danish Krone\"},{\"Currency\":\"ESP - Spanish Peseta\"},{\"Currency\":\"EUR - Euro\"},{\"Currency\":\"FRF - French Franc\"},{\"Currency\":\"GBP - Pound Sterling\"},{\"Currency\":\"GRD - Drachma\"},{\"Currency\":\"HEADCOUNT - Headcount\"},{\"Currency\":\"HKD - Hong Kong Dollar\"},{\"Currency\":\"HUF - Forint\"},{\"Currency\":\"IEP - Irish Pound\"},{\"Currency\":\"INR - Indian Rupee\"},{\"Currency\":\"ITL - Italian Lira\"},{\"Currency\":\"JPY - Yen\"},{\"Currency\":\"KRW - Won\"},{\"Currency\":\"KWD - Kuwaiti Dinar\"},{\"Currency\":\"LUF - Luxembourg Franc\"},{\"Currency\":\"MXN - Mexican Nuevo Peso\"},{\"Currency\":\"MXP - Mexican Peso\"},{\"Currency\":\"NLG - Netherlands Guilder\"},{\"Currency\":\"NOK - Norwegian Krone\"},{\"Currency\":\"NTD - New Taiwan Dollar (old code used on SoB's)\"},{\"Currency\":\"NZD - New Zealand Dollar\"},{\"Currency\":\"PLN - Polish Zloty\"},{\"Currency\":\"PTE - Portuguese Escudo\"},{\"Currency\":\"ROL - Leu\"},{\"Currency\":\"RON - New Leu\"},{\"Currency\":\"RUR - Russian Ruble\"},{\"Currency\":\"SAR - Saudi Riyal\"},{\"Currency\":\"SEK - Swedish Krona\"},{\"Currency\":\"SGD - Singapore Dollar\"},{\"Currency\":\"SQF - Square Footage\"},{\"Currency\":\"THB - Thailand Baht (corrected)\"},{\"Currency\":\"TRL - Turkish Lira\"},{\"Currency\":\"TWD - New Taiwan Dollar\"},{\"Currency\":\"UAH - Hryvnia\"},{\"Currency\":\"USD - US dollar\"},{\"Currency\":\"VEB - Bolivar\"},{\"Currency\":\"ZAR - Rand\"}]},\"iExpense_getReportCurrenciesElements\":{},\"iExpense_getReportCurrenciesMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Create Expense Report: General Information\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense"
+  ]
+}

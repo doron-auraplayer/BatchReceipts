@@ -1,0 +1,409 @@
+{
+  "name": "ReceiptBatch_get_by_userAndStatuses",
+  "description": "",
+  "formUrl": "${env.DB_CONNECTION_STR}",
+  "command": "SELECT\r\n    RECEIPT_ID        AS ReceiptBatch_RECEIPT_ID,\r\n    TO_CHAR(INSERT_DATE, 'DD-MM-YYYY HH24:MI:SS')\r\n                      AS ReceiptBatch_INSERT_DATE,\r\n    STATUS            AS ReceiptBatch_STATUS,\r\n    EBS_USER_NAME     AS ReceiptBatch_EBS_USER_NAME,\r\n    FILE_NAME         AS ReceiptBatch_FILE_NAME,\r\n    FILE_TYPE         AS ReceiptBatch_FILE_TYPE,\r\n    EXPENSE_TYPE      AS ReceiptBatch_EXPENSE_TYPE,\r\n    TOTAL_AMOUNT      AS ReceiptBatch_TOTAL_AMOUNT,\r\n    TO_CHAR(RECEIPT_DATE, 'YYYY-MM-DD') AS ReceiptBatch_RECEIPT_DATE,\r\n    MERCHANT          AS ReceiptBatch_MERCHANT,\r\n    LOCATION          AS ReceiptBatch_LOCATION,\r\n    CREDIT_TRANSACTION AS ReceiptBatch_CREDIT,\r\n    REPORT_ID         AS ReceiptBatch_REPORT_ID,\r\n    REPORT_NAME       AS ReceiptBatch_REPORT_NAME,\r\n    REPORT_CREATE_DATE\r\n                      AS ReceiptBatch_REPORT_CREATE_DATE,\r\n    DEPARTMENT        AS ReceiptBatch_DEPARTMENT,\r\n    TEMPLATE_NAME     AS ReceiptBatch_TEMPLATE_NAME,\r\n    PAYMENT_TYPE      AS ReceiptBatch_PAYMENT_TYPE,\r\n    LINE_NUM          AS ReceiptBatch_LINE_NUM\r\nFROM XX_AP_BATCH_RECEIPTS\r\nWHERE INSTR(\r\n          ',' || '${ReceiptBatch_statuses}' || ',',\r\n          ',' || STATUS || ','\r\n      ) > 0\r\n  AND EBS_USER_NAME = UPPER('${EBS_USER}')\r\nORDER BY RECEIPT_DATE DESC,\r\n         RECEIPT_ID DESC",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "username",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "username",
+      "paramValue": "${env.DB_USER}",
+      "visible": false
+    },
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "password",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "password",
+      "paramValue": "${env.DB_PASSWORD}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "EBS_USER",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "EBS_USER",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "ReceiptBatch_statuses",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "ReceiptBatch_statuses",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_RECEIPT_ID",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "ReceiptBatch_RECEIPT_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_INSERT_DATE",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "ReceiptBatch_INSERT_DATE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_STATUS",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "ReceiptBatch_STATUS",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_EBS_USER_NAME",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "ReceiptBatch_EBS_USER_NAME",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_FILE_NAME",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "ReceiptBatch_FILE_NAME",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_FILE_TYPE",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "ReceiptBatch_FILE_TYPE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_EXPENSE_TYPE",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "ReceiptBatch_EXPENSE_TYPE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_TOTAL_AMOUNT",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "ReceiptBatch_TOTAL_AMOUNT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_RECEIPT_DATE",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "ReceiptBatch_RECEIPT_DATE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_MERCHANT",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "ReceiptBatch_MERCHANT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_LOCATION",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "ReceiptBatch_LOCATION",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_REPORT_ID",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "ReceiptBatch_REPORT_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_REPORT_NAME",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "ReceiptBatch_REPORT_NAME",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_REPORT_CREATE_DATE",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "ReceiptBatch_REPORT_CREATE_DATE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_DEPARTMENT",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "ReceiptBatch_DEPARTMENT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_TEMPLATE_NAME",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "ReceiptBatch_TEMPLATE_NAME",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_PAYMENT_TYPE",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "ReceiptBatch_PAYMENT_TYPE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_LINE_NUM",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "ReceiptBatch_LINE_NUM",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_CREDIT",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "RECEIPTBATCH_CREDIT",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@sql",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "DB",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": [
+    "AP_BatchReceipts",
+    "LiveExpense"
+  ]
+}

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head profile="http://selenium-ide.openqa.org/profiles/test-case">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="selenium.base" href="" />
+    <title>iExpense_CashLinesGetReceiptLines</title>
+    </head>
+    <body>
+    <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+    <tr><td rowspan="1" colspan="3">iExpense_CashLinesGetReceiptLines</td></tr>
+  </thead><tbody><tr>
+      <td>waitForTitle</td>
+      <td>*Expense Report: Cash and Other Expenses</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//Click Receipt-Based only if not displayed</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//table[contains(@id,'OIEReceiptListContainer')]</td>
+      <td>ReceiptListContainerExists</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>!ReceiptListContainerExists</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>//a[contains(@title,'Receipt-Based')]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//td[@aria-controls="ReceiptBasedContainer"]</td>
+      <td>ReceiptBasedTabExist</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>0</td>
+      <td>lineIndex</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//a[contains(@id, ':LineNumber:${lineIndex}')]</td>
+      <td>CashLines_Index</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//input[contains(@id,':Date:${lineIndex}') and @type != "hidden"]</td>
+      <td>tableEditable</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//*[contains(@id,':Date:${lineIndex}')]</td>
+      <td>CashLines_Date</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//*[contains(@id,':ReceiptCurrencyAmount:${lineIndex}')]</td>
+      <td>CashLines_ReceiptAmount</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//*[contains(@id,':WebParameterId:${lineIndex}')]</td>
+      <td>CashLines_ExpenseType</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//*[contains(@id,':Justification:${lineIndex}')]</td>
+      <td>CashLines_Justification</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//*[contains(@id,':Amount:${lineIndex}')]</td>
+      <td>CashLines_ReimbAmount</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//th[7]/span</td>
+      <td>CashLines_ReimbursableColumnHeader</td>
+      <td></td>
+    </tr><tr>
+      <td>//get pagination info</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//select[contains(@id,'M__Id')]</td>
+      <td>paginationExist</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>paginationExist</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeSelectedLabel</td>
+      <td>//select[contains(@id,'M__Id')]</td>
+      <td>paginationLabel</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//a[contains(text(),'Next')]</td>
+      <td>nextEnabled</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//a[contains(text(),'Previous')]</td>
+      <td>previousEnabled</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>id=tab0</td>
+      <td>CashLines_Receipt_header</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>id=tab1</td>
+      <td>CashLines_PerDiem_header</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>id=tab2</td>
+      <td>CashLines_Mileage_header</td>
+      <td></td>
+    </tr></tbody></table></body></html>

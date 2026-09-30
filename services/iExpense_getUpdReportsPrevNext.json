@@ -1,0 +1,326 @@
+{
+  "name": "iExpense_getUpdReportsPrevNext",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ExpensesLongScroll",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "ExpensesLongScroll",
+      "paramValue": "\"false\"",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "moveNext",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "moveNext",
+      "paramValue": "true",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ExpensesTableUpdateReportPrefix",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "ExpensesTableUpdateReportPrefix",
+      "paramValue": "N14",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ExpensesTableReportTotalColumnName",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "ExpensesTableReportTotalColumnName",
+      "paramValue": "ReportTotalCurrency",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "updButtonName",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "updButtonName",
+      "paramValue": "Next",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "updButtonName_2",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "updButtonName_2",
+      "paramValue": "Previous",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "isNextPrevExists",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "isNextPrevExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "hasTotalCurrency",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "hasTotalCurrency",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "currentListRange",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "currentListRange",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "nextButtonExist",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "nextButtonExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "prevButtonExist",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "prevButtonExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "prevButtonLabel",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "prevButtonLabel",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "nextButtonLabel",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "nextButtonLabel",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Update Report Number",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "UpdateReportNumber",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Update Report Date",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "UpdateReportDate",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Update Report Status",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "UpdateReportStatus",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Update Report Total",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "UpdateReportTotal",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Update Report Purpose",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "UpdateReportPurpose",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_getUpdReportsPrevNext"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_getUpdReportsPrevNext.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_getUpdReportsPrevNextSuccess\":true,\"iExpense_getUpdReportsPrevNextTableArray\":{\"iExpense_getUpdReportsPrevNextArrayItem\":[{\"UpdateReportNumber\":\"W164177\",\"UpdateReportDate\":\"24-Apr-2022\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"0.00 USD\",\"UpdateReportPurpose\":\"test\"},{\"UpdateReportNumber\":\"W164176\",\"UpdateReportDate\":\"24-Apr-2022\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"0.00 USD\",\"UpdateReportPurpose\":\"test\"},{\"UpdateReportNumber\":\"W164173\",\"UpdateReportDate\":\"24-Apr-2022\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"0.00 USD\",\"UpdateReportPurpose\":\"test\"},{\"UpdateReportNumber\":\"W164172\",\"UpdateReportDate\":\"24-Apr-2022\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"0.00 USD\",\"UpdateReportPurpose\":\"test\"},{\"UpdateReportNumber\":\"W163177\",\"UpdateReportDate\":\"17-Apr-2022\",\"UpdateReportStatus\":\"In Progress\",\"UpdateReportTotal\":\"0.00 USD\",\"UpdateReportPurpose\":\"\"}]},\"iExpense_getUpdReportsPrevNextElements\":{\"isNextPrevExists\":\"true\",\"hasTotalCurrency\":\"true\",\"currentListRange\":\"11-15\",\"nextButtonExist\":\"true\",\"prevButtonExist\":\"true\",\"prevButtonLabel\":\"Previous 5\",\"nextButtonLabel\":\"Next 5\"},\"iExpense_getUpdReportsPrevNextMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Expenses Home\",\"sessionId\":\"8661838\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense",
+    "LiveExpenseHDR",
+    "LiveExpenseUnitedHQ"
+  ]
+}

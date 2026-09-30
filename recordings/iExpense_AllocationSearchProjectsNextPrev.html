@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://auravm01.us-west-2.compute.internal:8000/" />
+<title>iExpense_AllocationSearchProjectsNextPrev</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_AllocationSearchProjectsNextPrev</td></tr>
+</thead><tbody>
+<tr>
+	<td>input</td>
+	<td>true</td>
+	<td>moveNext</td>
+</tr>
+<tr>
+	<td>storeHtmlSource</td>
+	<td>ProjectsNextPrevBefore</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPageToLoad</td>
+	<td>15000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>${moveNext} == true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>scrollDownAndWait</td>
+	<td>id=scrollDiv:OIEPROJECTLOV_lovTable</td>
+	<td></td>
+</tr>
+<tr>
+	<td>else</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>scrollUpAndWait</td>
+	<td>id=scrollDiv:OIEPROJECTLOV_lovTable</td>
+	<td></td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>javascript{triggerPaginationEvent()}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPageToLoad</td>
+	<td>15000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeHtmlSource</td>
+	<td>ProjectsNextPrevAfter</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=N1:ProjectNum:0</td>
+	<td>ProjectNumber</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=N1:ProjectName:0</td>
+	<td>ProjectName</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=N1:ProjectStartDate:0</td>
+	<td>ProjectStartDate</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=N1:ProjectEndDate:0</td>
+	<td>ProjectEndDate</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=N1:OrgName:0</td>
+	<td>ProjectOrgName</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[@id='OIEPROJECTLOV_lovTable:ControlBar']</td>
+	<td>lovPaginationInfo</td>
+</tr>
+</tbody></table>
+</body>
+</html>

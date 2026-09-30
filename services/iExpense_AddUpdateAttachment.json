@@ -1,0 +1,259 @@
+{
+  "name": "iExpense_AddUpdateAttachment",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AttachmentUpdateMode",
+        "serviceName": "iExpense_AddUpdateAttachment"
+      },
+      "paramLabel": "AttachmentUpdateMode",
+      "paramValue": "false",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AttachName",
+        "serviceName": "iExpense_AddUpdateAttachment"
+      },
+      "paramLabel": "AttachName",
+      "paramValue": "att1",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AttachDescription",
+        "serviceName": "iExpense_AddUpdateAttachment"
+      },
+      "paramLabel": "AttachDescription",
+      "paramValue": "desc1",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AttachUrlValue",
+        "serviceName": "iExpense_AddUpdateAttachment"
+      },
+      "paramLabel": "AttachUrlValue",
+      "paramValue": "google.com",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AttachText",
+        "serviceName": "iExpense_AddUpdateAttachment"
+      },
+      "paramLabel": "AttachText",
+      "paramValue": "text1",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AttachFilePath",
+        "serviceName": "iExpense_AddUpdateAttachment"
+      },
+      "paramLabel": "AttachFilePath",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AttachType",
+        "serviceName": "iExpense_AddUpdateAttachment"
+      },
+      "paramLabel": "AttachType",
+      "paramValue": "text",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__FileName",
+        "serviceName": "iExpense_AddUpdateAttachment"
+      },
+      "paramLabel": "FileName",
+      "paramValue": "${AttachName}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__AkDescription",
+        "serviceName": "iExpense_AddUpdateAttachment"
+      },
+      "paramLabel": "AkDescription",
+      "paramValue": "${AttachDescription}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_id__FileInput_oafileUpload",
+        "serviceName": "iExpense_AddUpdateAttachment"
+      },
+      "paramLabel": "FileInput_oafileUpload",
+      "paramValue": "${AttachFilePath}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AddAttachBtnSelector",
+        "serviceName": "iExpense_AddUpdateAttachment"
+      },
+      "paramLabel": "AddAttachBtnSelector",
+      "paramValue": "*[contains(@id,'LineAttachments')]/button",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "currentWindow",
+        "serviceName": "iExpense_AddUpdateAttachment"
+      },
+      "paramLabel": "currentWindow",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "addAnchorExist",
+        "serviceName": "iExpense_AddUpdateAttachment"
+      },
+      "paramLabel": "addAnchorExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AddAttachBtnSelector_2",
+        "serviceName": "iExpense_AddUpdateAttachment"
+      },
+      "paramLabel": "AddAttachBtnSelector_2",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "reviewAttachmentButton",
+        "serviceName": "iExpense_AddUpdateAttachment"
+      },
+      "paramLabel": "reviewAttachmentButton",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_AddUpdateAttachment"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_AddUpdateAttachment"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_AddUpdateAttachment"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_AddUpdateAttachment.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_AddUpdateAttachmentSuccess\":true,\"iExpense_AddUpdateAttachmentElements\":{\"currentWindow\":\"Details for Line 1\"},\"iExpense_AddUpdateAttachmentMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Details for Line 1\",\"sessionId\":\"8661838\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense"
+  ]
+}

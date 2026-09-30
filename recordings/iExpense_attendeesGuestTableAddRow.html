@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head profile="http://selenium-ide.openqa.org/profiles/test-case">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="selenium.base" href="" />
+    <title>iExpense_attendeesGuestTableAddRow</title>
+    </head>
+    <body>
+    <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+    <tr><td rowspan="1" colspan="3">iExpense_attendeesGuestTableAddRow</td></tr>
+  </thead><tbody><tr>
+      <td>input</td>
+      <td>guest1</td>
+      <td>GuestName</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>Emp1</td>
+      <td>GuestEmployer</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>true</td>
+      <td>GuestNewRow</td>
+      <td></td>
+    </tr><tr>
+      <td>assertTitle</td>
+      <td>*: Details for Line *</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>store</td>
+      <td>0</td>
+      <td>guestIndex</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>GuestNewRow=== "true"</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>//img[@id='addParentGuest'] | //img[@id='addChildGuest'] </td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>guestIndex > 14</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>store</td>
+      <td>14</td>
+      <td>guestPos</td>
+      <td></td>
+    </tr><tr>
+      <td>else</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>store</td>
+      <td>${guestIndex}</td>
+      <td>guestPos</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//input[@id='GuestTableRN:GuestName:${guestPos}'] | //input[@id='ChildGuestTableRN:GuestName1:${guestPos}']</td>
+      <td>GuestNameExist</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>GuestNameExist</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>type</td>
+      <td>//input[@id='GuestTableRN:GuestName:${guestPos}'] | //input[@id='ChildGuestTableRN:GuestName1:${guestPos}']</td>
+      <td>${GuestName}</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>type</td>
+      <td>//input[@id='GuestTableRN:GuestEmployer:${guestPos}'] | //input[@id='ChildGuestTableRN:GuestEmployer1:${guestPos}']</td>
+      <td>${GuestEmployer}</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//select[contains(@id, 'GuestTableRN:GuestType:${guestPos}')] | //select[contains(@id, 'ChildGuestTableRN:ChildGuestType:${guestPos}')]</td>
+      <td>GuestTypeExists</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>GuestTypeExists</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>select</td>
+      <td>//select[contains(@id, 'GuestTableRN:GuestType:${guestPos}')] | //select[contains(@id, 'ChildGuestTableRN:ChildGuestType:${guestPos}')]</td>
+      <td>label=Private Sector</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr></tbody></table></body></html>

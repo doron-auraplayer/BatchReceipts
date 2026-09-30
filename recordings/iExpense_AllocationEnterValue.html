@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head profile="http://selenium-ide.openqa.org/profiles/test-case">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="selenium.base" href="" />
+    <title>iExpense_AllocationEnterValue</title>
+    </head>
+    <body>
+    <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+    <tr><td rowspan="1" colspan="3">iExpense_AllocationEnterValue</td></tr>
+  </thead><tbody><tr>
+      <td>input</td>
+      <td>ProjectName:1</td>
+      <td>AllocationTextField</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>ProjectNumber:0</td>
+      <td>AllocationSearchButtonId</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>10090527</td>
+      <td>AllocationValue</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>Project Number</td>
+      <td>AllocationCategory</td>
+      <td></td>
+    </tr><tr>
+      <td>assertTitle</td>
+      <td>*Allocation*</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>//*[contains(@id,'${AllocationSearchButtonId}')]/a/img</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>waitForPopUp</td>
+      <td>lovWindow</td>
+      <td>30000</td>
+      <td></td>
+    </tr><tr>
+      <td>pause</td>
+      <td>1000</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>selectWindow</td>
+      <td>lovWindow</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//LOV has a frame in it</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>waitForTitle</td>
+      <td>*Search*</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>selectFrame</td>
+      <td>index=0</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>select</td>
+      <td>id=categoryChoice</td>
+      <td>label=${AllocationCategory}</td>
+      <td></td>
+    </tr><tr>
+      <td>type</td>
+      <td>//input[@title="Search Term"]</td>
+      <td>${AllocationValue}</td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>//button[text() = "Go"]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//press first value</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>pause</td>
+      <td>500</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>//a[contains(@onclick, "_LovInputQSF('N1','0'")]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>selectWindow</td>
+      <td>null</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//span[contains(@id,'${AllocationTextField}')]</td>
+      <td>AllocationResolvedValue</td>
+      <td></td>
+    </tr></tbody></table></body></html>

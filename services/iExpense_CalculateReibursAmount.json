@@ -1,0 +1,300 @@
+{
+  "name": "iExpense_CalculateReibursAmount",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "StartDate",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "StartDate",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "StartDateFormatted",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "StartDateFormatted",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ReceiptCurrencyChoice",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "ReceiptCurrencyChoice",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "DetailReceiptAmount",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "DetailReceiptAmount",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ExchRate",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "ExchRate",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_xpath____input_contains__id__StartDate___",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "__input_contains__id__StartDate___",
+      "paramValue": "${StartDate}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_xpath_______id__DetailsPG____input_contains__id__ReceiptAmount___",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "_____id__DetailsPG____input_contains__id__ReceiptAmount___",
+      "paramValue": "${DetailReceiptAmount}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Select_By_xpath____select__id____ReceiptCurrencyChoice_______select__id____IPL_ReceiptCurrency___",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "__select__id____ReceiptCurrencyChoice_______select__id____IPL_ReceiptCurrency___",
+      "paramValue": "${ReceiptCurrencyChoice}",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReimbursAmt",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "DetailReimbursAmt",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReceiptCurrencyChoiceExist",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "ReceiptCurrencyChoiceExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "hasCurrencyButton",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "hasCurrencyButton",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DetailReimbursAmtExist",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "DetailReimbursAmtExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExchRateExist",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "ExchRateExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "hasExchRateButtonExist",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "hasExchRateButtonExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExchRateTextExist",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "ExchRateTextExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExchRateInputExist",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "ExchRateInputExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExchRate_2",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "ExchRate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_CalculateReibursAmount"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_CalculateReibursAmount.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense"
+  ]
+}

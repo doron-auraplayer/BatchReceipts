@@ -1,0 +1,424 @@
+{
+  "name": "IExpense_ReceiptBatch_Analyze",
+  "description": "",
+  "steps": [
+    {
+      "type": "Service",
+      "name": "markReceiptsProcessing",
+      "nickname": "markReceiptsProcessing",
+      "keepAlive": false,
+      "throwError": true,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": true,
+          "isJavaScript": false,
+          "name": "EBS_USER",
+          "label": "EBS_USER",
+          "paramValue": ""
+        },
+        {
+          "visible": true,
+          "isJavaScript": false,
+          "name": "P_STATUSES",
+          "label": "P_STATUSES",
+          "paramValue": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Error",
+          "label": "Error",
+          "visible": true,
+          "inTable": false
+        },
+        {
+          "name": "PopupMessages",
+          "label": "PopupMessages",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "StatusBarMessages",
+          "label": "StatusBarMessages",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Service",
+      "name": "getProcessingReceipts",
+      "nickname": "getProcessingReceipts",
+      "keepAlive": false,
+      "throwError": true,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": true,
+          "isJavaScript": false,
+          "name": "EBS_USER",
+          "label": "EBS_USER",
+          "paramValue": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "RECEIPT_ID",
+          "label": "RECEIPT_ID",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "FILE_CONTENT",
+          "label": "FILE_CONTENT",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "Error",
+          "label": "Error",
+          "visible": true,
+          "inTable": false
+        },
+        {
+          "name": "PopupMessages",
+          "label": "PopupMessages",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "StatusBarMessages",
+          "label": "StatusBarMessages",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Loop",
+      "name": "Start Loop",
+      "nickname": "Loop",
+      "command": "for (var index_1 = 0; index_1 < PROCESS.getProcessingReceipts.output[\"RECEIPT_ID\"].length; index_1++) {",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "LOOP_START"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "array"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "paramValue": "PROCESS.getProcessingReceipts.output[\"RECEIPT_ID\"]"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "1"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "loopIndex",
+          "paramValue": "1",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "JavaScript",
+      "name": "JavaScript",
+      "nickname": "create  line",
+      "command": "var receipt_id = PROCESS.getProcessingReceipts.output[\"RECEIPT_ID\"][index_1];\nvar blob_file = PROCESS.getProcessingReceipts.output[\"FILE_CONTENT\"][index_1];\n\n// console.log(\"------------ RECEIPT_ID: \", receipt_id);\n// console.log(\"------------ FILE_CONTENT: \", blob_file);\n\n",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "receipt_id",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "blob_file",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Service",
+      "name": "ReceiptBatch_AnalyzeFile",
+      "nickname": "ReceiptBatch_AnalyzeFile",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "receipt_id",
+          "label": "receipt_id",
+          "paramValue": "return PROCESS.getProcessingReceipts.output[\"RECEIPT_ID\"][index_1];"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "blob_file",
+          "label": "blob_file",
+          "paramValue": "return blob_file;"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Error",
+          "label": "Error",
+          "visible": true,
+          "inTable": false
+        },
+        {
+          "name": "PopupMessages",
+          "label": "PopupMessages",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "StatusBarMessages",
+          "label": "StatusBarMessages",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Condition",
+      "name": "IFSERVICE",
+      "nickname": "Condition",
+      "command": "ReceiptBatch_AnalyzeFileError.length == 0",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "IF"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "paramValue": "ReceiptBatch_AnalyzeFileError.length"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "paramValue": "0"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "Condition",
+      "name": "ELSE",
+      "nickname": "Condition",
+      "command": "",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "ELSE"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "Exit",
+      "name": "Exit",
+      "nickname": "Continue",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "continue"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "Condition",
+      "name": "END IF",
+      "nickname": "Condition",
+      "command": "",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "END IF"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "Loop",
+      "name": "End Loop",
+      "nickname": "Loop",
+      "command": "}",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "LOOP_END"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "array"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "1"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false
+        }
+      ],
+      "outputs": [
+        {
+          "name": "loopIndex",
+          "paramValue": "NaN",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    }
+  ],
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "isEnabled": true,
+  "authenticationMethod": "None",
+  "isPrivate": false
+}

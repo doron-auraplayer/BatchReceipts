@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://auravm01.us-west-2.compute.internal:8000/" />
+<title>iExpense_updateExpenseAllocation</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_updateExpenseAllocation</td></tr>
+</thead><tbody>
+<tr>
+	<td>storeTitle</td>
+	<td>currentPageTitle</td>
+	<td></td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>currentPageTitle.indexOf(&quot;Expense Allocations&quot;) &gt; -1</td>
+	<td></td>
+</tr>
+<!--Wizard step 5: Expense Allocations-->
+<tr>
+	<td>assertTitle</td>
+	<td>*Expense Report: Expense Allocations</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>xpath=(//button[@type='button'])[2]</td>
+	<td>/* Next button */</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//table[@id='FwkErrorBeanId']</td>
+	<td>AllocationError</td>
+</tr>
+<tr>
+	<td>storeTitle</td>
+	<td>currentPageTitle</td>
+	<td></td>
+</tr>
+<tr>
+	<td>else</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>exitTest</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>currentPageTitle.indexOf(&quot;Expense Allocations&quot;) &gt; -1 &amp;&amp; AllocationError.toLowerCase().indexOf(&quot;error&quot;) &gt; -1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>exitTest</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>else</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTitle</td>
+	<td>*Expense Report: Review</td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

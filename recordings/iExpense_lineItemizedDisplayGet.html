@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="https://ebsprod.hdrinc.com" />
+<title>iExpense_lineItemizedDisplayGet_HDR</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_lineItemizedDisplayGet_HDR</td></tr>
+</thead><tbody>
+<tr>
+	<td>input</td>
+	<td>0</td>
+	<td>ItemizedLineIndex</td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>*: Details for Line*</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[contains(@id, 'ItemizationMasterTable:ItemizationSingleSelection:${ItemizedLineIndex}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=ChildExpTypeChoice</td>
+	<td>ItemizedExpenseType</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=ChildStartDate</td>
+	<td>ItemizedStartDate</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=ChildDetailDailyRate</td>
+	<td>ItemizedNumDailyRateExist</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>ItemizedNumDailyRateExist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=ChildDetailDailyRate</td>
+	<td>ItemizedDailyRate</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=ChildNumberOfDays</td>
+	<td>ItemizedNumDaysExist</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>ItemizedNumDaysExist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=ChildNumberOfDays</td>
+	<td>ItemizedNumDays</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>id=ChildDetailReceiptAmount</td>
+	<td>ItemizedAmount</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//tr[contains(@id,'ChildJustification')]//pre</td>
+	<td>ItemizedJustification</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=ChildEmployeeTableRN:ChildEmployeeName:0</td>
+	<td>ItemizedEmpTableExist</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=ChildGuestTableRN:header</td>
+	<td>ItemizedGuestTableExist</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//span[contains(@id,&quot;ItemizationMasterTable:ReceiptAmountValue&quot;)]</td>
+	<td>ItemizedOrigAmount</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//span[contains(@id,&quot;ItemizationMasterTable:BusinessExpValue&quot;)]</td>
+	<td>ItemizedBussinessExpenses</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//span[contains(@id,&quot;ItemizationMasterTable:PersonalExpValue:&quot;)]</td>
+	<td>ItemizedPersonalExpenses</td>
+</tr>
+</tbody></table>
+</body>
+</html>

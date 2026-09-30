@@ -1,0 +1,227 @@
+{
+  "name": "iExpense_getReportDetailsPerDiemLines",
+  "description": "",
+  "formUrl": "http://auravm01.us-west-2.compute.internal:8000/",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "perDiemLineExists",
+        "serviceName": "iExpense_getReportDetailsPerDiemLines"
+      },
+      "paramLabel": "perDiemLineExists",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PerDiemLineDate",
+        "serviceName": "iExpense_getReportDetailsPerDiemLines"
+      },
+      "paramLabel": "PerDiemLineDate",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PerDiemLineEndDate",
+        "serviceName": "iExpense_getReportDetailsPerDiemLines"
+      },
+      "paramLabel": "PerDiemLineEndDate",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PerDiemLineNumDays",
+        "serviceName": "iExpense_getReportDetailsPerDiemLines"
+      },
+      "paramLabel": "PerDiemLineNumDays",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PerDiemLineExpenseType",
+        "serviceName": "iExpense_getReportDetailsPerDiemLines"
+      },
+      "paramLabel": "PerDiemLineExpenseType",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PerDiemLineJustification",
+        "serviceName": "iExpense_getReportDetailsPerDiemLines"
+      },
+      "paramLabel": "PerDiemLineJustification",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PerDiemLineTripDestination",
+        "serviceName": "iExpense_getReportDetailsPerDiemLines"
+      },
+      "paramLabel": "PerDiemLineTripDestination",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PerDiemLineReimbAmount",
+        "serviceName": "iExpense_getReportDetailsPerDiemLines"
+      },
+      "paramLabel": "PerDiemLineReimbAmount",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PerDiemLineReimbAmtHeader",
+        "serviceName": "iExpense_getReportDetailsPerDiemLines"
+      },
+      "paramLabel": "PerDiemLineReimbAmtHeader",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PerDiemLineViolation",
+        "serviceName": "iExpense_getReportDetailsPerDiemLines"
+      },
+      "paramLabel": "PerDiemLineViolation",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_getReportDetailsPerDiemLines"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_getReportDetailsPerDiemLines"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_getReportDetailsPerDiemLines"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_getReportDetailsPerDiemLines.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_getReportDetailsPerDiemLinesSuccess\":true,\"iExpense_getReportDetailsPerDiemLinesTableArray\":{\"iExpense_getReportDetailsPerDiemLinesArrayItem\":[{\"PerDiemLineDate\":\"01-May-2022\",\"PerDiemLineEndDate\":\"02-May-2022\",\"PerDiemLineNumDays\":\"2\",\"PerDiemLineExpenseType\":\"Per Diem\",\"PerDiemLineJustification\":\"conference\",\"PerDiemLineTripDestination\":\"All Other Locations\",\"PerDiemLineReimbAmount\":\"192.00\"},{\"PerDiemLineDate\":\"192.00\",\"PerDiemLineEndDate\":\"\",\"PerDiemLineNumDays\":\"\",\"PerDiemLineExpenseType\":\"\",\"PerDiemLineJustification\":\"\",\"PerDiemLineTripDestination\":\"\",\"PerDiemLineReimbAmount\":\"\"}]},\"iExpense_getReportDetailsPerDiemLinesElements\":{\"perDiemLineExists\":\"true\",\"PerDiemLineReimbAmtHeader\":\"Reimbursable Amount (USD)\"},\"iExpense_getReportDetailsPerDiemLinesMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Create Expense Report: Review\",\"sessionId\":\"8661838\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense"
+  ]
+}

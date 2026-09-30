@@ -1,0 +1,242 @@
+{
+  "name": "iExpense_getReportDetailsAllocations",
+  "description": "",
+  "formUrl": "http://auravm01.us-west-2.compute.internal:8000/",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExpenseAllocationPageExists",
+        "serviceName": "iExpense_getReportDetailsAllocations"
+      },
+      "paramLabel": "ExpenseAllocationPageExists",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AllocationPaymentMethod",
+        "serviceName": "iExpense_getReportDetailsAllocations"
+      },
+      "paramLabel": "AllocationPaymentMethod",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AllocationStartDate",
+        "serviceName": "iExpense_getReportDetailsAllocations"
+      },
+      "paramLabel": "AllocationStartDate",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AllocationExpenseType",
+        "serviceName": "iExpense_getReportDetailsAllocations"
+      },
+      "paramLabel": "AllocationExpenseType",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AllocationReceiptAmount",
+        "serviceName": "iExpense_getReportDetailsAllocations"
+      },
+      "paramLabel": "AllocationReceiptAmount",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AllocationReimAmount",
+        "serviceName": "iExpense_getReportDetailsAllocations"
+      },
+      "paramLabel": "AllocationReimAmount",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AllocationMerchant",
+        "serviceName": "iExpense_getReportDetailsAllocations"
+      },
+      "paramLabel": "AllocationMerchant",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AllocationLocation",
+        "serviceName": "iExpense_getReportDetailsAllocations"
+      },
+      "paramLabel": "AllocationLocation",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AllocationJustification",
+        "serviceName": "iExpense_getReportDetailsAllocations"
+      },
+      "paramLabel": "AllocationJustification",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AllocationProjectDetails",
+        "serviceName": "iExpense_getReportDetailsAllocations"
+      },
+      "paramLabel": "AllocationProjectDetails",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AllocationTaskDetails",
+        "serviceName": "iExpense_getReportDetailsAllocations"
+      },
+      "paramLabel": "AllocationTaskDetails",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_getReportDetailsAllocations"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_getReportDetailsAllocations"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_getReportDetailsAllocations"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_getReportDetailsAllocations.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_getReportDetailsAllocationsSuccess\":true,\"iExpense_getReportDetailsAllocationsTableArray\":{\"iExpense_getReportDetailsAllocationsArrayItem\":[{\"AllocationPaymentMethod\":\"\",\"AllocationStartDate\":\"\",\"AllocationExpenseType\":\"\",\"AllocationReceiptAmount\":\"\",\"AllocationReimAmount\":\"100.00\",\"AllocationMerchant\":\"\",\"AllocationLocation\":\"\",\"AllocationJustification\":\"\",\"AllocationProjectDetails\":\"\",\"AllocationTaskDetails\":\"\"},{\"AllocationPaymentMethod\":\"Cash Receipt\",\"AllocationStartDate\":\"01-May-2022\",\"AllocationExpenseType\":\"Airfare\",\"AllocationReceiptAmount\":\"100.00 USD\",\"AllocationReimAmount\":\"100.00\",\"AllocationMerchant\":\"\",\"AllocationLocation\":\"All Other Locations\",\"AllocationJustification\":\"conference\",\"AllocationProjectDetails\":\"1001\\nAmericas Purchasing Audit Q1\",\"AllocationTaskDetails\":\"1\\nDetect Fraud\"}]},\"iExpense_getReportDetailsAllocationsElements\":{\"ExpenseAllocationPageExists\":\"true\"},\"iExpense_getReportDetailsAllocationsMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Expense Report W165172\",\"sessionId\":\"6108691\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense"
+  ]
+}

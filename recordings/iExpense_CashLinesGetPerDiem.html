@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://auravm01.us-west-2.compute.internal:8000/" />
+<title>iExpense_CashLinesGetPerDiem</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">iExpense_CashLinesGetPerDiem</td></tr>
+</thead><tbody>
+<tr>
+	<td>input</td>
+	<td>N77</td>
+	<td>ExpensesTableCashLinePrefix</td>
+</tr>
+<tr>
+	<td>waitForTitle</td>
+	<td>*Expense Report: Cash and Other Expenses</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>id=OIEPerDiemLines</td>
+	<td>PerDiemLinesExists</td>
+</tr>
+<!--Click Per Diem only if not displayed-->
+<tr>
+	<td>if</td>
+	<td>!PerDiemLinesExists</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[contains(@title,'Per Diem')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeHtmlSource</td>
+	<td>iExpense_cashLinesPerDiemTable</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,':LineNumber:0')]</td>
+	<td>CashLines_Index</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//*[contains(@id,':Date:0')]</td>
+	<td>CashLines_Date</td>
+</tr>
+<tr>
+	<td>storeSelectedLabel</td>
+	<td>//*[contains(@id,':WebParameterId:0')]</td>
+	<td>CashLines_ExpenseType</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//*[contains(@id,':OIEDestination:0')]//input</td>
+	<td>CashLines_Destination</td>
+</tr>
+<tr>
+	<td>storeValue</td>
+	<td>//*[contains(@id,':Justification:0')]</td>
+	<td>CashLines_Justification</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//*[contains(@id,':Amount:0')]</td>
+	<td>CashLines_ReimbAmount</td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>//th[8]/span</td>
+	<td>CashLines_ReimbursableColumnHeader</td>
+</tr>
+<!--get pagination info-->
+<tr>
+	<td>storeElementPresent</td>
+	<td>//select[contains(@id,'M__Id')]</td>
+	<td>paginationExist</td>
+</tr>
+<tr>
+	<td>if</td>
+	<td>paginationExist</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeSelectedLabel</td>
+	<td>//select[contains(@id,'M__Id')]</td>
+	<td>paginationLabel</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//a[contains(text(),'Next')]</td>
+	<td>nextEnabled</td>
+</tr>
+<tr>
+	<td>storeElementPresent</td>
+	<td>//a[contains(text(),'Previous')]</td>
+	<td>previousEnabled</td>
+</tr>
+<tr>
+	<td>endIf</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

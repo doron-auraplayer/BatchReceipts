@@ -1,0 +1,392 @@
+{
+  "name": "iExpense_ReviewGetDetails",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "isCreditCardExpensesExist",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "isCreditCardExpensesExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "isCashLinesExist",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "isCashLinesExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "isMileageLinesExist",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "isMileageLinesExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "isPerDiemLinesExist",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "isPerDiemLinesExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReviewEmployeeName",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "ReviewEmployeeName",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReviewExpenseDates",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "ReviewExpenseDates",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReviewPurpose",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "ReviewPurpose",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ApproverFieldExist",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "ApproverFieldExist",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReviewApprover",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "ReviewApprover",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReviewReimbursementTotal",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "ReviewReimbursementTotal",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ImageReceiptStatus",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "ImageReceiptStatus",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttachmetAddButton1Exists",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "AttachmetAddButton1Exists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttachmetAddButton2Exists",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "AttachmetAddButton2Exists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttachmentExists",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "AttachmentExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "attachmentViewButton1",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "attachmentViewButton1",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "attachmentViewButton2",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "attachmentViewButton2",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttachmentsPopup",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "AttachmentsPopup",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "attachmentPath_filename",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "attachmentPath_filename",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ReviewErrorMsg",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "ReviewErrorMsg",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttachmentTitle",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "AttachmentTitle",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AttachmentType",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "AttachmentType",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_ReviewGetDetails"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_ReviewGetDetails.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_ReviewGetDetailsSuccess\":true,\"iExpense_ReviewGetDetailsElements\":{\"isCreditCardExpensesExist\":\"false\",\"isCashLinesExist\":\"true\",\"isMileageLinesExist\":\"true\",\"isPerDiemLinesExist\":\"true\",\"ReviewEmployeeName\":\"Stock, Ms. Pat (24)\",\"ReviewExpenseDates\":\"01-MAY-2022 - 02-MAY-2022\",\"ReviewPurpose\":\"demo\",\"ApproverFieldExist\":\"true\",\"ReviewApprover\":\"Brown, Ms. Casey\",\"ReviewReimbursementTotal\":\"352.88 USD\",\"ImageReceiptStatus\":\"Required\",\"AttachmetAddButton1Exists\":\"true\",\"AttachmetAddButton2Exists\":\"false\",\"AttachmentExists\":\"false\",\"attachmentViewButton1\":\"false\",\"attachmentViewButton2\":\"false\",\"AttachmentsPopup\":\"false\"},\"iExpense_ReviewGetDetailsMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Update Expense Report: Review\",\"sessionId\":\"7839912\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense"
+  ]
+}

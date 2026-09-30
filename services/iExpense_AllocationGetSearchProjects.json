@@ -1,0 +1,223 @@
+{
+  "name": "iExpense_AllocationGetSearchProjects",
+  "description": "",
+  "formUrl": "http://auravm01.us-west-2.compute.internal:8000/",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ListSearchBy",
+        "serviceName": "iExpense_AllocationGetSearchProjects"
+      },
+      "paramLabel": "ListSearchBy",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ListSearchValue",
+        "serviceName": "iExpense_AllocationGetSearchProjects"
+      },
+      "paramLabel": "ListSearchValue",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Select_By_id__categoryChoice",
+        "serviceName": "iExpense_AllocationGetSearchProjects"
+      },
+      "paramLabel": "categoryChoice",
+      "paramValue": "${ListSearchBy}",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "By_xpath____input__title__Search_Term__",
+        "serviceName": "iExpense_AllocationGetSearchProjects"
+      },
+      "paramLabel": "__input__title__Search_Term__",
+      "paramValue": "${ListSearchValue}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ProjectOnlyGet",
+        "serviceName": "iExpense_AllocationGetSearchProjects"
+      },
+      "paramLabel": "ProjectOnlyGet",
+      "paramValue": "false",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ProjectNumber",
+        "serviceName": "iExpense_AllocationGetSearchProjects"
+      },
+      "paramLabel": "ProjectNumber",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ProjectName",
+        "serviceName": "iExpense_AllocationGetSearchProjects"
+      },
+      "paramLabel": "ProjectName",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ProjectStartDate",
+        "serviceName": "iExpense_AllocationGetSearchProjects"
+      },
+      "paramLabel": "ProjectStartDate",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ProjectEndDate",
+        "serviceName": "iExpense_AllocationGetSearchProjects"
+      },
+      "paramLabel": "ProjectEndDate",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ProjectOrgName",
+        "serviceName": "iExpense_AllocationGetSearchProjects"
+      },
+      "paramLabel": "ProjectOrgName",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "lovPaginationInfo",
+        "serviceName": "iExpense_AllocationGetSearchProjects"
+      },
+      "paramLabel": "lovPaginationInfo",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "iExpense_AllocationGetSearchProjects"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "iExpense_AllocationGetSearchProjects"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "iExpense_AllocationGetSearchProjects"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "iExpense_AllocationGetSearchProjects.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "mockResponse": "{\"success\":true,\"Response\":{\"iExpense_AllocationGetSearchProjectsSuccess\":true,\"iExpense_AllocationGetSearchProjectsTableArray\":{\"iExpense_AllocationGetSearchProjectsArrayItem\":[{\"ProjectNumber\":\"1001\",\"ProjectName\":\"Americas Purchasing Audit Q1\",\"ProjectStartDate\":\"01-Apr-2004\",\"ProjectEndDate\":\"31-Dec-2023\",\"ProjectOrgName\":\"Vision Operations\"},{\"ProjectNumber\":\"100123\",\"ProjectName\":\"New Store 100123\",\"ProjectStartDate\":\"01-Jan-2004\",\"ProjectEndDate\":\"31-Dec-2008\",\"ProjectOrgName\":\"Vision Operations\"},{\"ProjectNumber\":\"1005\",\"ProjectName\":\"Americas Order to Cash Audit\",\"ProjectStartDate\":\"01-Jan-2004\",\"ProjectEndDate\":\"31-Dec-2004\",\"ProjectOrgName\":\"Vision Operations\"},{\"ProjectNumber\":\"ABC\",\"ProjectName\":\"ABC-Financials Implementation\",\"ProjectStartDate\":\"04-Feb-2002\",\"ProjectEndDate\":\"31-Dec-2010\",\"ProjectOrgName\":\"Services-East\"},{\"ProjectNumber\":\"AD201\",\"ProjectName\":\"Administrative\",\"ProjectStartDate\":\"01-May-2004\",\"ProjectEndDate\":\"31-Dec-2010\",\"ProjectOrgName\":\"Vision Operations\"},{\"ProjectNumber\":\"ASN-BW Int\",\"ProjectName\":\"ASN Interest\",\"ProjectStartDate\":\"01-Jun-2005\",\"ProjectEndDate\":\"25-Dec-2008\",\"ProjectOrgName\":\"Vision Operations\"},{\"ProjectNumber\":\"ASN-BW Laptop\",\"ProjectName\":\"ASN Laptop\",\"ProjectStartDate\":\"01-Jun-2005\",\"ProjectEndDate\":\"25-Dec-2008\",\"ProjectOrgName\":\"Vision Operations\"},{\"ProjectNumber\":\"ASN-BW Q3\",\"ProjectName\":\"ASN Q3 Deal\",\"ProjectStartDate\":\"01-Jun-2005\",\"ProjectEndDate\":\"25-Dec-2008\",\"ProjectOrgName\":\"Vision Operations\"},{\"ProjectNumber\":\"ATZ Services\",\"ProjectName\":\"ATZ Services\",\"ProjectStartDate\":\"01-Jan-2003\",\"ProjectEndDate\":\"\",\"ProjectOrgName\":\"Vision Operations\"},{\"ProjectNumber\":\"Admin01\",\"ProjectName\":\"Services Admin Project\",\"ProjectStartDate\":\"01-May-2007\",\"ProjectEndDate\":\"31-Dec-2012\",\"ProjectOrgName\":\"Information Services\"}]},\"iExpense_AllocationGetSearchProjectsElements\":{},\"iExpense_AllocationGetSearchProjectsMessage\":{\"Error\":\"\",\"PopupMessages\":\"\",\"StatusBarMessages\":\"Search and Select List of Values\",\"sessionId\":\"7839912\"}}}",
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense"
+  ]
+}

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head profile="http://selenium-ide.openqa.org/profiles/test-case">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="selenium.base" href="" />
+    <title>iExpense_employeeTableAddLine</title>
+    </head>
+    <body>
+    <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+    <tr><td rowspan="1" colspan="3">iExpense_employeeTableAddLine</td></tr>
+  </thead><tbody><tr>
+      <td>input</td>
+      <td>emp1</td>
+      <td>EmployeeName</td>
+      <td></td>
+    </tr><tr>
+      <td>assertTitle</td>
+      <td>*: Details for Line *</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>store</td>
+      <td>0</td>
+      <td>attendeeIndex</td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>//img[@id='addParentEmp'] | //img[@id='addChildEmp']</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>type</td>
+      <td>//input[@id='EmployeeTableRN:EmployeeName:${attendeeIndex}'] | //input[@id='ChildEmployeeTableRN:ChildEmployeeName:${attendeeIndex}']</td>
+      <td>${EmployeeName}</td>
+      <td></td>
+    </tr><tr>
+      <td>//We click it just to make the forms resolve the employee title</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>//*[@id='Justification'] | //*[@id='ChildJustification']</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>pause</td>
+      <td>1000</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeHtmlSource</td>
+      <td>iExpenseEmpAddLineAfter</td>
+      <td></td>
+      <td></td>
+    </tr></tbody></table></body></html>

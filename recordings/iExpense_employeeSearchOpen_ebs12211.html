@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head profile="http://selenium-ide.openqa.org/profiles/test-case">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="selenium.base" href="" />
+    <title>iExpense_employeeSearchOpen_ebs12211</title>
+    </head>
+    <body>
+    <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+    <tr><td rowspan="1" colspan="3">iExpense_employeeSearchOpen_ebs12211</td></tr>
+  </thead><tbody><tr>
+      <td>store</td>
+      <td>0</td>
+      <td>attendeeIndex</td>
+      <td></td>
+    </tr><tr>
+      <td>assertTitle</td>
+      <td>*: Details for Line *</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>waitForElementPresent</td>
+      <td>//*[@id='addParentEmp'] | //*[@id='addChildEmp']</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//span[@id='EmployeeTableRN:EmployeeName:${attendeeIndex}__xc_0']/a/img | //span[@id='ChildEmployeeTableRN:ChildEmployeeName:${attendeeIndex}__xc_0']/a/img </td>
+      <td>EmployeeSearchButtonExist</td>
+      <td></td>
+    </tr><tr>
+      <td>//make sure we have at least 1 line with the search icon to press</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>!EmployeeSearchButtonExist</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>//*[@id='addParentEmp'] | //*[@id='addChildEmp']</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>attendeeIndex > 14</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>//span[@id='EmployeeTableRN:EmployeeName:14__xc_0']/a/img | //span[@id='ChildEmployeeTableRN:ChildEmployeeName:14__xc_0']/a/img </td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>else</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>//span[@id='EmployeeTableRN:EmployeeName:${attendeeIndex}__xc_0']/a/img | //span[@id='ChildEmployeeTableRN:ChildEmployeeName:${attendeeIndex}__xc_0']/a/img </td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr></tbody></table></body></html>
