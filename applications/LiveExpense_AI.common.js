@@ -1835,6 +1835,10 @@ function RemoveActivePreviewReceipt() {
     return false;
   }
 
+  if (removeAttachmentViewer() === false) {
+    return false;
+  }
+  
   deleteInFlight = true;
 
   Popup.okCancel(
@@ -2758,9 +2762,9 @@ function showAttachmentPreview(link, fileType) {
 
   if (isImageUrl(url, selectedFileType)) {
     generateReciptImagePreview(url, selectedFileType); 
-    if (getViewerCapabilities().canEdit) 
-        { openReceiptDetailsBesidePreview(); 
-            
+    if (getViewerCapabilities().canEdit && currentPreviewReceiptStatus() !== 'NEW')
+        { 
+            openReceiptDetailsBesidePreview(); 
         }
     return;
   }
@@ -2953,8 +2957,6 @@ function initReceiptAttachmentViewer(options) {
   }
 }
 
-app.isSPA = true;
-app.loginPage = 'Login.html';
 
 /***** TAB: ReceiptBatch1 *****/
 

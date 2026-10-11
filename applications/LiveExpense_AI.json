@@ -12448,6 +12448,26 @@
             },
             "paramLabel": "Status",
             "visible": true
+          },
+          {
+            "dataTypeInfo": {
+              "format": "%s",
+              "type": "READONLY"
+            },
+            "isSortable": false,
+            "inTable": true,
+            "newLine": false,
+            "required": false,
+            "custom": false,
+            "validationFunction": "NONE",
+            "fromInput": false,
+            "centred": false,
+            "id": {
+              "name": "REPORT_NUMBER",
+              "serviceName": "ReceiptBatch_get_draft_reports"
+            },
+            "paramLabel": "Report number",
+            "visible": true
           }
         ],
         "type": "table",
