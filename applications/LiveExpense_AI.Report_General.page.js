@@ -1,4 +1,5 @@
 var updateMode = Storage.get("updateMode").toLowerCase() === 'true';
+console.log ("updateMode - ",updateMode);
 
 function isCreditLinesFlow() {
 	var wizardTitle = Storage.get("wizardTitle");
@@ -109,6 +110,10 @@ function OnPageLoad() {
     } else {
         // New report or duplicate
         // setTimeout(function(){Spinner.start()},0);
+        
+        if (Storage.get("NEW_AI_REPORT") === "true") {
+           $("#Next").text("Create Report");
+        }
         if (duplicateMode) {
     	    Storage.remove("DuplicateReport");
             response = Services.call("iExpense_getGeneralReportDetails", function() {
@@ -131,20 +136,21 @@ function OnPageLoad() {
 
 function doNext() {
     Storage.clear("isErrorMessage");
+    
     if (!updateMode) {
-        Storage.set("ExpTemplate", Storage.get("TemplateList"));
-        Services.call("iExpense_create", iExpense_create_onSuccess, displayReportServiceError("Failed to create report"));
+        if (Storage.get("NEW_AI_REPORT") === "true") {
+                createAiReceiptBatchLines();
+        }else {
+          Storage.set("ExpTemplate", Storage.get("TemplateList"));
+          Services.call("iExpense_create", iExpense_create_onSuccess, displayReportServiceError("Failed to create report"));
+        }
     } else {
         Services.call("iExpense_updReportUpdateDetails", function() {
             var isErrorMessage = Storage.get("isErrorMessage");
             if (isErrorMessage == "true" && Storage.get("wizardTitle").indexOf("General Information") > -1) {
                 // There was an error and we stayed on the same page
                 Popup.ok(getTranslationForId("@popup_title_error"), Storage.get("reportErrorMessage"));
-            } else if (Storage.get("NEW_AI_REPORT") === "true") {
-    
-                createAiReceiptBatchLines();
-            
-            } else {
+            }else {
                 if (isCreditLinesFlow()) {
                 	Page.navigate("Credit_Transactions.html");
                 } else {
@@ -156,23 +162,32 @@ function doNext() {
 }
 
 function createAiReceiptBatchLines() {
-  // Report number the update service returned for the new AI report
-  var storedReportNumber = Storage.get("UpdateReportNumber");
-
-  Services.call("IExpense_ReceiptBatch_CreateLines");
-  var reportNumbers = [];
-  try {
-    var storedReportNumbers = JSON.parse(Storage.get("ReceiptBatch_CreateLines_ReportNumbers"));
-    if (Array.isArray(storedReportNumbers)) {
-      reportNumbers = storedReportNumbers;
-    }
-  } catch (ignoredMalformedReportNumbers) {
-    reportNumbers = [];
-  }
-  reportNumbers.push(storedReportNumber);
-  Storage.set("ReceiptBatch_CreateLines_ReportNumbers", JSON.stringify(reportNumbers));
-  Storage.set('NEW_AI_REPORT', 'false');    
-  Page.navigate("Update_Reports.html");
+  console.log("createAiReceiptBatchLines");
+  
+  Services.call("iExpense_create",function(){
+        console.log("iExpense_create success");
+      Services.call("iExpense_saveReportDetails",function(){
+          console.log("iExpense_saveReportDetails success");
+            var expenseReportMessage = Storage.get("ExpenseReportMessage") || "";
+            var reportNumberMatch =expenseReportMessage.match(
+                /Expense report\s+([A-Za-z0-9_-]+)\s+for/
+            );
+            var reportNumber = reportNumberMatch ? reportNumberMatch[1] : null;
+            if(reportNumber != null){
+                Storage.set("ReportNumber",reportNumber);
+                //Purpose
+                console.log("reportNumber:",reportNumber);
+                Services.call("Ping_ReceiptBatch_CreateLinesRPA",function(){
+                    Storage.set('NEW_AI_REPORT', 'false');
+                    Page.navigate("DraftReports.html");
+                });
+            }else{
+                console.log("Failed to get report number: " + expenseReportMessage );
+            }
+      });
+  })  
+   
+  
 }
 
 function OnCancel() {

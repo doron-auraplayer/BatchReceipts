@@ -404,9 +404,21 @@ function readReceiptCore() {
 function readLoadedStatus() {
   return textOf(Storage.get('P_STATUS'));
 }
+
+function formatReceiptStartDate(value) {
+  var text = textOf(value);
+  var date = moment(text, 'YYYY-MM-DD', true);
+
+  if (date.isValid()) {
+    return date.locale('en').format('DD-MMM-YYYY');
+  }
+
+  return text;
+}
+
 function renderReceiptCore() {
   Storage.set('expenseType', textOf(receiptCore.expenseType));
-  setReceiptField('StartDate', receiptCore.startDate, true, true);
+  setReceiptField('StartDate', formatReceiptStartDate(receiptCore.startDate), true, true);
   setReceiptField('DetailReceiptAmount', receiptCore.receiptAmount, false, true);
   setReceiptField('DetailMerchantName', receiptCore.merchantName, false, true);
   setReceiptField('LocationName', receiptCore.expenseLocation, false, true);
@@ -757,14 +769,16 @@ function applyReadOnlyMetadata() {
 }
 
 function renderReceiptLine() {
+  if (isBlank(receiptLine.receiptCurrency)) {
+      receiptLine.receiptCurrency = 'USD - US dollar';
+  }
   renderedFieldValues = {};
   storeReceiptLine(receiptLine);
   renderMetadataFields();
   applyReadOnlyMetadata();
   renderReceiptCore();
   storeExpenseType(textOf(receiptCore.expenseType));
-  Storage.set('Currency', receiptLine.receiptCurrency || '');
-
+  
   refreshRequiredControls();
   renderRequiredMarkers();
 }

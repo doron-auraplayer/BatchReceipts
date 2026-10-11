@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head profile="http://selenium-ide.openqa.org/profiles/test-case">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="selenium.base" href="" />
+    <title>openInProgressReport</title>
+    </head>
+    <body>
+    <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+    <tr><td rowspan="1" colspan="3">openInProgressReport</td></tr>
+  </thead><tbody><tr>
+      <td>clickAndWait</td>
+      <td>xpath=(//a[contains(@id, 'SFAV')]/div/img)[2]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>xpath=//div[contains(@id, 'favListContainer0')]/div/div/a/div[2]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>W72171</td>
+      <td>reportNumber</td>
+      <td></td>
+    </tr><tr>
+      <td>assertText</td>
+      <td>xpath=//table[contains(@id, 'ActiveReportsRN')]/tbody/tr[2]/td/table/tbody/tr/td/h2</td>
+      <td>Update Expense Reports</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>xpath=//table[contains(@id,'ActiveReportsRN.ActiveReportsTbl:Content')]/tbody/tr[td[1][normalize-space(.)='${reportNumber}']]</td>
+      <td>reportExists</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>reportExists</td>
+      <td>true</td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>//table[contains(@id,'ActiveReportsRN.ActiveReportsTbl:Content')]/tbody/tr[td[1][normalize-space(.)='${reportNumber}']]//a[contains(@id,'Update')]/img</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>//button[@title='Next']</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr></tbody></table></body></html>

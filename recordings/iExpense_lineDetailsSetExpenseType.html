@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head profile="http://selenium-ide.openqa.org/profiles/test-case">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="selenium.base" href="" />
+    <title>iExpense_lineDetailsSetExpenseType</title>
+    </head>
+    <body>
+    <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+    <tr><td rowspan="1" colspan="3">iExpense_lineDetailsSetExpenseType</td></tr>
+  </thead><tbody><tr>
+      <td>input</td>
+      <td></td>
+      <td>itemizedExpenseTypes</td>
+      <td></td>
+    </tr><tr>
+      <td>store</td>
+      <td>0</td>
+      <td>index</td>
+      <td></td>
+    </tr><tr>
+      <td>storeHtmlSource</td>
+      <td>iExpenseLineGetStart_${index}</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td></td>
+      <td>ExpTypeInput</td>
+      <td></td>
+    </tr><tr>
+      <td>assertTitle</td>
+      <td>*: Details for Line*</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//expense type</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//Checking for 2 possible options (ebs-12-1 and ebs 12-2-7)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//a[contains(@id,'attachmentLinkAddButton')]/img</td>
+      <td>attachmentPathExist</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>!attachmentPathExist</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//*[contains(@id,'LineAttachments')]/button</td>
+      <td>attachmentPathExist</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//select[contains(@id, "ExpTypeChoice")]</td>
+      <td>expenseTypeExist</td>
+      <td></td>
+    </tr><tr>
+      <td>storeSelectedLabel</td>
+      <td>//select[contains(@id, "ExpTypeChoice")]</td>
+      <td>expenseTypeCurrent</td>
+      <td></td>
+    </tr><tr>
+      <td>storeExpression</td>
+      <td>false</td>
+      <td>expenseTypeWasChanged</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>ExpTypeInput !== "" && expenseTypeCurrent!== ExpTypeInput</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>selectAndWait</td>
+      <td>//select[contains(@id, "ExpTypeChoice")]</td>
+      <td>label=${ExpTypeInput}</td>
+      <td></td>
+    </tr><tr>
+      <td>storeExpression</td>
+      <td>true</td>
+      <td>expenseTypeWasChanged</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr></tbody></table></body></html>

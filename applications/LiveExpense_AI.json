@@ -56,6 +56,8 @@
     "iExpense_CreateReport",
     "iExpense_create",
     "iExpense_updReportUpdateDetails",
+    "iExpense_saveReportDetails",
+    "Ping_ReceiptBatch_CreateLinesRPA",
     "iExpense_OpenApproverSearchWindow",
     "iExpense_credit_getCreditCards",
     "iExpense_credit_getTransactions",
@@ -69,7 +71,6 @@
     "iExpense_credit_openLineDetails",
     "iExpense_CreditGetLinesJS",
     "iExpense_Credit_ExpensesSave",
-    "iExpense_saveReportDetails",
     "iExpense_CashLinesGetReceiptLinesJS",
     "iExpense_CashLinesGetMileage",
     "iExpense_CashLinesGetPerDiem",
@@ -165,14 +166,14 @@
     "iExpense_getItemizedExpenseTypes",
     "iExpense_lineItemizedGet",
     "iExpense_lineItemizedSet",
-    "IExpense_ReceiptBatch_Analyze",
+    "ReceiptBatch_AnalyzeRPA",
     "ReceiptBatch_TransactionMatching",
     "ReceiptBatch_delete_receipt",
     "js_ReceiptBatch_add_receipt",
     "ReceiptBatch_CreateExpenseJson",
     "ReceiptBatch_get_expense_data",
     "ReceiptBatch_save_expense_data",
-    "IExpense_ReceiptBatch_CreateLines"
+    "ReceiptBatch_get_draft_reports"
   ],
   "keepAlive": [
     "iExpense_getReportDetailsGeneral",
@@ -11297,7 +11298,7 @@
         "disableDataTables": false,
         "isSearchable": false,
         "isAddRows": false,
-        "isResponsive": false,
+        "isResponsive": true,
         "isHidden": false,
         "startIndex": 0
       },
@@ -11383,6 +11384,25 @@
             "type": "callFunction",
             "attribute": {
               "main": "onTableClick"
+            }
+          }
+        },
+        {
+          "event": {
+            "type": "buttonClick",
+            "element": "Draft Reports",
+            "elementId": "Draft_Reports",
+            "attributes": [
+              "bottom",
+              "50",
+              "false",
+              "false"
+            ]
+          },
+          "action": {
+            "type": "navigateToPage",
+            "attribute": {
+              "main": "DraftReports.html"
             }
           }
         }
@@ -11798,7 +11818,7 @@
             "serviceName": "Ebs_iExpense_line"
           },
           "paramLabel": "Receipt Currency",
-          "paramValue": "",
+          "paramValue": "USD - US dollar",
           "visible": true
         },
         {
@@ -12360,6 +12380,140 @@
       ],
       "javascript": "@inject:LiveExpense_AI.ScannedReceiptsSelection.page.js",
       "css": "",
+      "shouldSkip": false,
+      "hasMenu": true,
+      "inMenu": false,
+      "centred": false
+    },
+    {
+      "name": "DraftReports.html",
+      "title": "DraftReports",
+      "params": [],
+      "multiRecord": {
+        "params": [
+          {
+            "dataTypeInfo": {
+              "format": "%s",
+              "type": "READONLY"
+            },
+            "isSortable": false,
+            "inTable": true,
+            "newLine": false,
+            "required": false,
+            "custom": false,
+            "validationFunction": "NONE",
+            "fromInput": false,
+            "centred": false,
+            "id": {
+              "name": "REPORT_PURPOSE",
+              "serviceName": "ReceiptBatch_get_draft_reports"
+            },
+            "paramLabel": "Report name",
+            "visible": true
+          },
+          {
+            "dataTypeInfo": {
+              "format": "%s",
+              "type": "READONLY"
+            },
+            "isSortable": false,
+            "inTable": true,
+            "newLine": false,
+            "required": false,
+            "custom": false,
+            "validationFunction": "NONE",
+            "fromInput": false,
+            "centred": false,
+            "id": {
+              "name": "REPORT_CREATE_DATE",
+              "serviceName": "ReceiptBatch_get_draft_reports"
+            },
+            "paramLabel": "Date",
+            "visible": true
+          },
+          {
+            "dataTypeInfo": {
+              "type": "READONLY"
+            },
+            "isSortable": false,
+            "inTable": true,
+            "newLine": true,
+            "required": false,
+            "custom": true,
+            "validationFunction": "NONE",
+            "fromInput": false,
+            "centred": false,
+            "id": {
+              "name": "REPORT_LINE_STATUS"
+            },
+            "paramLabel": "Status",
+            "visible": true
+          }
+        ],
+        "type": "table",
+        "disableDataTables": false,
+        "isSearchable": false,
+        "isAddRows": false,
+        "isResponsive": true,
+        "isHidden": false,
+        "startIndex": 0
+      },
+      "actions": [
+        {
+          "event": {
+            "type": "onLoad",
+            "element": "",
+            "elementId": ""
+          },
+          "action": {
+            "type": "callFunction",
+            "attribute": {
+              "main": "onLoad"
+            }
+          }
+        },
+        {
+          "event": {
+            "type": "buttonClick",
+            "element": "Receipts",
+            "elementId": "Receipts",
+            "attributes": [
+              "top",
+              "33",
+              "false",
+              "true"
+            ]
+          },
+          "action": {
+            "type": "navigateToPage",
+            "attribute": {
+              "main": "ReceiptsAttachments.html"
+            }
+          }
+        },
+        {
+          "event": {
+            "type": "buttonClick",
+            "element": "Refresh",
+            "elementId": "Refresh",
+            "elementIcon": "fa-refresh",
+            "attributes": [
+              "top",
+              "25",
+              "false",
+              "false"
+            ]
+          },
+          "action": {
+            "type": "callFunction",
+            "attribute": {
+              "main": "click_Refresh"
+            }
+          }
+        }
+      ],
+      "javascript": "@inject:LiveExpense_AI.DraftReports.page.js",
+      "css": "@inject:LiveExpense_AI.DraftReports.page.css",
       "shouldSkip": false,
       "hasMenu": true,
       "inMenu": false,

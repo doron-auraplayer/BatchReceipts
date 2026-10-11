@@ -1,0 +1,188 @@
+{
+  "name": "Ping_ReceiptBatch_CreateLinesRPA",
+  "description": "",
+  "formUrl": "",
+  "command": "@inject:Ping_ReceiptBatch_CreateLinesRPA.command.js",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ReportNumber",
+        "serviceName": "Ping_ReceiptBatch_CreateLinesRPA"
+      },
+      "paramLabel": "ReportNumber",
+      "paramValue": "W72183",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "Purpose",
+        "serviceName": "Ping_ReceiptBatch_CreateLinesRPA"
+      },
+      "paramLabel": "Purpose",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "SELECTED_RECEIPT_IDS",
+        "serviceName": "Ping_ReceiptBatch_CreateLinesRPA"
+      },
+      "paramLabel": "SELECTED_RECEIPT_IDS",
+      "paramValue": "[\"9\"]",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "itemizedExpenseTypes",
+        "serviceName": "Ping_ReceiptBatch_CreateLinesRPA"
+      },
+      "paramLabel": "itemizedExpenseTypes",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ExpensesTableCashLinePrefix",
+        "serviceName": "Ping_ReceiptBatch_CreateLinesRPA"
+      },
+      "paramLabel": "ExpensesTableCashLinePrefix",
+      "paramValue": "N77",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "HomePageTitle",
+        "serviceName": "Ping_ReceiptBatch_CreateLinesRPA"
+      },
+      "paramLabel": "HomePageTitle",
+      "paramValue": "Oracle Applications Home Page",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "passwordField",
+        "serviceName": "Ping_ReceiptBatch_CreateLinesRPA"
+      },
+      "paramLabel": "passwordField",
+      "paramValue": "welcome1",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "usernameField",
+        "serviceName": "Ping_ReceiptBatch_CreateLinesRPA"
+      },
+      "paramLabel": "usernameField",
+      "paramValue": "operations",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "RespName",
+        "serviceName": "Ping_ReceiptBatch_CreateLinesRPA"
+      },
+      "paramLabel": "RespName",
+      "paramValue": "iExpenses",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "FunctionId",
+        "serviceName": "Ping_ReceiptBatch_CreateLinesRPA"
+      },
+      "paramLabel": "FunctionId",
+      "paramValue": "1019886",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "Ping_ReceiptBatch_CreateLinesRPA"
+      },
+      "paramLabel": "Error",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "Ping_ReceiptBatch_CreateLinesRPA"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "Ping_ReceiptBatch_CreateLinesRPA"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": true
+    }
+  ],
+  "fileName": "@js",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "JS",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense_AI"
+  ]
+}

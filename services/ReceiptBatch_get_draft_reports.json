@@ -1,0 +1,206 @@
+{
+  "name": "ReceiptBatch_get_draft_reports",
+  "description": "",
+  "formUrl": "${env.DB_CONNECTION_STR}",
+  "command": "SELECT\n    r.REPORT_NUMBER,\n    r.REPORT_PURPOSE,\n    TO_CHAR(\n        r.REPORT_CREATE_DATE,\n        'DD-Mon-YYYY',\n        'NLS_DATE_LANGUAGE=English'\n    ) AS REPORT_CREATE_DATE,\n    r.TOTAL_LINES,\n    r.PENDING_LINES,\n    r.CREATED_LINES,\n    r.FAILED_LINES\nFROM (\n    SELECT\n        REPORT_ID AS REPORT_NUMBER,\n        MAX(REPORT_NAME) AS REPORT_PURPOSE,\n        MAX(REPORT_CREATE_DATE) AS REPORT_CREATE_DATE,\n        COUNT(*) AS TOTAL_LINES,\n        SUM(CASE WHEN STATUS = 'READY' THEN 1 ELSE 0 END) AS PENDING_LINES,\n        SUM(CASE WHEN STATUS = 'LINE_CREATED' THEN 1 ELSE 0 END) AS CREATED_LINES,\n        SUM(CASE WHEN STATUS = 'LINE_FAILED' THEN 1 ELSE 0 END) AS FAILED_LINES\n    FROM XX_AP_BATCH_RECEIPTS\n    WHERE REPORT_ID IS NOT NULL\n      AND STATUS IN ('READY', 'LINE_CREATED', 'LINE_FAILED')\n    GROUP BY REPORT_ID\n) r\nORDER BY r.REPORT_CREATE_DATE DESC",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "username",
+        "serviceName": "ReceiptBatch_get_draft_reports"
+      },
+      "paramLabel": "username",
+      "paramValue": "${env.DB_USER}",
+      "visible": false
+    },
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "password",
+        "serviceName": "ReceiptBatch_get_draft_reports"
+      },
+      "paramLabel": "password",
+      "paramValue": "${env.DB_PASSWORD}",
+      "visible": false
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "REPORT_NUMBER",
+        "serviceName": "ReceiptBatch_get_draft_reports"
+      },
+      "paramLabel": "REPORT_NUMBER",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "REPORT_PURPOSE",
+        "serviceName": "ReceiptBatch_get_draft_reports"
+      },
+      "paramLabel": "REPORT_PURPOSE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "REPORT_CREATE_DATE",
+        "serviceName": "ReceiptBatch_get_draft_reports"
+      },
+      "paramLabel": "REPORT_CREATE_DATE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TOTAL_LINES",
+        "serviceName": "ReceiptBatch_get_draft_reports"
+      },
+      "paramLabel": "TOTAL_LINES",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PENDING_LINES",
+        "serviceName": "ReceiptBatch_get_draft_reports"
+      },
+      "paramLabel": "PENDING_LINES",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CREATED_LINES",
+        "serviceName": "ReceiptBatch_get_draft_reports"
+      },
+      "paramLabel": "CREATED_LINES",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "FAILED_LINES",
+        "serviceName": "ReceiptBatch_get_draft_reports"
+      },
+      "paramLabel": "FAILED_LINES",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_get_draft_reports"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_get_draft_reports"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_get_draft_reports"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@sql",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "DB",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": [
+    "LiveExpense_AI"
+  ]
+}

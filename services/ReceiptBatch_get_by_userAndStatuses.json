@@ -2,7 +2,7 @@
   "name": "ReceiptBatch_get_by_userAndStatuses",
   "description": "",
   "formUrl": "${env.DB_CONNECTION_STR}",
-  "command": "SELECT\r\n    RECEIPT_ID        AS ReceiptBatch_RECEIPT_ID,\r\n    TO_CHAR(INSERT_DATE, 'DD-MM-YYYY HH24:MI:SS')\r\n                      AS ReceiptBatch_INSERT_DATE,\r\n    STATUS            AS ReceiptBatch_STATUS,\r\n    EBS_USER_NAME     AS ReceiptBatch_EBS_USER_NAME,\r\n    FILE_NAME         AS ReceiptBatch_FILE_NAME,\r\n    FILE_TYPE         AS ReceiptBatch_FILE_TYPE,\r\n    EXPENSE_TYPE      AS ReceiptBatch_EXPENSE_TYPE,\r\n    TOTAL_AMOUNT      AS ReceiptBatch_TOTAL_AMOUNT,\r\n    TO_CHAR(RECEIPT_DATE, 'YYYY-MM-DD') AS ReceiptBatch_RECEIPT_DATE,\r\n    MERCHANT          AS ReceiptBatch_MERCHANT,\r\n    LOCATION          AS ReceiptBatch_LOCATION,\r\n    CREDIT_TRANSACTION AS ReceiptBatch_CREDIT,\r\n    REPORT_ID         AS ReceiptBatch_REPORT_ID,\r\n    REPORT_NAME       AS ReceiptBatch_REPORT_NAME,\r\n    REPORT_CREATE_DATE\r\n                      AS ReceiptBatch_REPORT_CREATE_DATE,\r\n    DEPARTMENT        AS ReceiptBatch_DEPARTMENT,\r\n    TEMPLATE_NAME     AS ReceiptBatch_TEMPLATE_NAME,\r\n    PAYMENT_TYPE      AS ReceiptBatch_PAYMENT_TYPE,\r\n    LINE_NUM          AS ReceiptBatch_LINE_NUM\r\nFROM XX_AP_BATCH_RECEIPTS\r\nWHERE INSTR(\r\n          ',' || '${ReceiptBatch_statuses}' || ',',\r\n          ',' || STATUS || ','\r\n      ) > 0\r\n  AND EBS_USER_NAME = UPPER('${EBS_USER}')\r\nORDER BY RECEIPT_DATE DESC,\r\n         RECEIPT_ID DESC",
+  "command": "SELECT\n    RECEIPT_ID AS ReceiptBatch_RECEIPT_ID,\n    TO_CHAR(RECEIPT_DATE,\n            'DD-Mon-YYYY',\n             'NLS_DATE_LANGUAGE=English'\n            ) AS ReceiptBatch_RECEIPT_DATE,\n    STATUS AS ReceiptBatch_STATUS,\n    EBS_USER_NAME AS ReceiptBatch_EBS_USER_NAME,\n    FILE_NAME AS ReceiptBatch_FILE_NAME,\n    FILE_TYPE AS ReceiptBatch_FILE_TYPE,\n    EXPENSE_TYPE AS ReceiptBatch_EXPENSE_TYPE,\n    TOTAL_AMOUNT AS ReceiptBatch_TOTAL_AMOUNT,\n    TO_CHAR(RECEIPT_DATE, 'YYYY-MM-DD')\n        AS ReceiptBatch_RECEIPT_DATE,\n    MERCHANT AS ReceiptBatch_MERCHANT,\n    LOCATION AS ReceiptBatch_LOCATION,\n    CREDIT_TRANSACTION AS ReceiptBatch_CREDIT,\n    REPORT_ID AS ReceiptBatch_REPORT_ID,\n    REPORT_NAME AS ReceiptBatch_REPORT_NAME,\n    TO_CHAR(\n        REPORT_CREATE_DATE,\n        'DD-Mon-YYYY',\n        'NLS_DATE_LANGUAGE=English'\n    ) AS ReceiptBatch_REPORT_CREATE_DATE,\n    DEPARTMENT AS ReceiptBatch_DEPARTMENT,\n    TEMPLATE_NAME AS ReceiptBatch_TEMPLATE_NAME,\n    PAYMENT_TYPE AS ReceiptBatch_PAYMENT_TYPE,\n    LINE_NUM AS ReceiptBatch_LINE_NUM\nFROM XX_AP_BATCH_RECEIPTS\nWHERE INSTR(\n          ',' || '${ReceiptBatch_statuses}' || ',',\n          ',' || STATUS || ','\n      ) > 0\n  AND EBS_USER_NAME = UPPER('${EBS_USER}')\n  AND REPORT_ID IS NULL\nORDER BY RECEIPT_DATE DESC,\n         RECEIPT_ID DESC",
   "isEnabled": true,
   "inputParams": [
     {
@@ -403,7 +403,6 @@
     "BATCH_RECEIPTS"
   ],
   "apps": [
-    "AP_BatchReceipts",
-    "LiveExpense"
+    "LiveExpense_AI"
   ]
 }

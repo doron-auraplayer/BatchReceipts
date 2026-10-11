@@ -11,6 +11,21 @@
       "newLine": false,
       "required": false,
       "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ExpenseReportMessage",
+        "serviceName": "iExpense_saveReportDetails"
+      },
+      "paramLabel": "ExpenseReportMessage",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
       "validationFunction": "EMPTY",
       "fromInput": false,
       "centred": false,
@@ -73,17 +88,7 @@
   "labels": [],
   "apps": [
     "LiveExpense",
-    "LiveExpense_DHL",
-    "LiveExpense_Emerson",
-    "LiveExpense_Michelin",
-    "LiveExpense_Powell",
-    "LiveExpense_Rheem",
-    "LiveExpense_Rogers",
-    "LiveExpense_SWN",
-    "LiveExpense_TAQA",
-    "LiveExpense_TAQA_Final",
-    "LiveExpense_United",
-    "LiveExpense_Worthington",
-    "LiveExpense_michelin"
+    "LiveExpense_AI",
+    "LiveExpense_AI_OLD"
   ]
 }

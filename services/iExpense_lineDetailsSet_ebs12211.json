@@ -278,7 +278,7 @@
       },
       "paramLabel": "__select__id__AirTravelType__",
       "paramValue": "${AirTravelType}",
-      "visible": true
+      "visible": false
     },
     {
       "isRequired": false,
@@ -289,7 +289,7 @@
       },
       "paramLabel": "__select__id__AirTicketClass__",
       "paramValue": "${AirTicketClass}",
-      "visible": true
+      "visible": false
     },
     {
       "isRequired": false,
@@ -300,7 +300,7 @@
       },
       "paramLabel": "__input__id____ReceiptMissing_______input__id____IPL_ReceiptMissing_______input__id____DetailReceiptMissing__",
       "paramValue": "true",
-      "visible": true
+      "visible": false
     },
     {
       "isRequired": false,
@@ -311,7 +311,7 @@
       },
       "paramLabel": "__input__id____ReceiptMissing_______input__id____IPL_ReceiptMissing_______input__id____DetailReceiptMissing___2",
       "paramValue": "false",
-      "visible": true
+      "visible": false
     },
     {
       "isRequired": false,
@@ -322,7 +322,7 @@
       },
       "paramLabel": "__select__id____ReceiptCurrencyChoice_______select__id____IPL_ReceiptCurrency__",
       "paramValue": "${ReceiptCurrencyChoice}",
-      "visible": true
+      "visible": false
     },
     {
       "isRequired": false,
@@ -907,7 +907,6 @@
   "labels": [],
   "apps": [
     "LiveExpense",
-    "LiveExpenseFNF",
-    "LiveExpenseWithDateSupport"
+    "LiveExpense_AI"
   ]
 }
