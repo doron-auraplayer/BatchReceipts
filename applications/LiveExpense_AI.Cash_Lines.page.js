@@ -423,6 +423,7 @@ function onNext() {
 
 function OnCancel() {
    OnCancelPopup(function() {
+        Storage.set("draftAiReport", "false");
         var updateMode = Storage.get("updateMode").toLowerCase() === 'true';
         updateMode ? Page.navigate("Update_Reports.html") : Page.navigate("Reports.html");
    });

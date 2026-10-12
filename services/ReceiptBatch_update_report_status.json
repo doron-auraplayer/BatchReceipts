@@ -1,8 +1,8 @@
 {
-  "name": "ReceiptBatch_update_status",
+  "name": "ReceiptBatch_update_report_status",
   "description": "",
   "formUrl": "${env.DB_CONNECTION_STR}",
-  "command": "UPDATE XX_AP_BATCH_RECEIPTS\nSET STATUS = '${STATUS}',\n    ERROR_MESSAGE = '${ERROR_MESSAGE}'\nWHERE RECEIPT_ID = ${RECEIPT_ID}",
+  "command": "UPDATE XX_AP_BATCH_RECEIPTS\nSET STATUS = '${STATUS}'\nWHERE REPORT_ID = '${ReportNumber}'",
   "isEnabled": true,
   "inputParams": [
     {
@@ -10,7 +10,7 @@
       "isCustom": false,
       "id": {
         "name": "username",
-        "serviceName": "ReceiptBatch_update_status"
+        "serviceName": "ReceiptBatch_update_report_status"
       },
       "paramLabel": "username",
       "paramValue": "${env.DB_USER}",
@@ -21,7 +21,7 @@
       "isCustom": false,
       "id": {
         "name": "password",
-        "serviceName": "ReceiptBatch_update_status"
+        "serviceName": "ReceiptBatch_update_report_status"
       },
       "paramLabel": "password",
       "paramValue": "${env.DB_PASSWORD}",
@@ -31,19 +31,8 @@
       "isRequired": false,
       "isCustom": true,
       "id": {
-        "name": "RECEIPT_ID",
-        "serviceName": "ReceiptBatch_update_status"
-      },
-      "paramLabel": "RECEIPT_ID",
-      "paramValue": "",
-      "visible": true
-    },
-    {
-      "isRequired": false,
-      "isCustom": true,
-      "id": {
         "name": "STATUS",
-        "serviceName": "ReceiptBatch_update_status"
+        "serviceName": "ReceiptBatch_update_report_status"
       },
       "paramLabel": "STATUS",
       "paramValue": "",
@@ -53,10 +42,10 @@
       "isRequired": false,
       "isCustom": true,
       "id": {
-        "name": "ERROR_MESSAGE",
-        "serviceName": "ReceiptBatch_update_status"
+        "name": "ReportNumber",
+        "serviceName": "ReceiptBatch_update_report_status"
       },
-      "paramLabel": "ERROR_MESSAGE",
+      "paramLabel": "ReportNumber",
       "paramValue": "",
       "visible": true
     }
@@ -72,7 +61,7 @@
       "centred": false,
       "id": {
         "name": "Error",
-        "serviceName": "ReceiptBatch_update_status"
+        "serviceName": "ReceiptBatch_update_report_status"
       },
       "paramLabel": "Error",
       "visible": false
@@ -87,7 +76,7 @@
       "centred": false,
       "id": {
         "name": "PopupMessages",
-        "serviceName": "ReceiptBatch_update_status"
+        "serviceName": "ReceiptBatch_update_report_status"
       },
       "paramLabel": "PopupMessages",
       "visible": false
@@ -102,7 +91,7 @@
       "centred": false,
       "id": {
         "name": "StatusBarMessages",
-        "serviceName": "ReceiptBatch_update_status"
+        "serviceName": "ReceiptBatch_update_report_status"
       },
       "paramLabel": "StatusBarMessages",
       "visible": false
@@ -128,5 +117,7 @@
   "labels": [
     "BATCH_RECEIPTS"
   ],
-  "apps": []
+  "apps": [
+    "LiveExpense_AI"
+  ]
 }

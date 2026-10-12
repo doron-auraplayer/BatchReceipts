@@ -129,6 +129,7 @@
     "iExpense_ReviewGetDetails",
     "iExpense_saveReportReview",
     "iExpense_reviewAndFinish",
+    "ReceiptBatch_update_report_status",
     "iExpense_getReportDetailsCashLines",
     "iExpense_GetReviewLineViolation",
     "iExpense_getReportDetailsCreditLines",
@@ -173,7 +174,8 @@
     "ReceiptBatch_CreateExpenseJson",
     "ReceiptBatch_get_expense_data",
     "ReceiptBatch_save_expense_data",
-    "ReceiptBatch_get_draft_reports"
+    "ReceiptBatch_get_draft_reports",
+    "ReceiptBatch_DraftReport"
   ],
   "keepAlive": [
     "iExpense_getReportDetailsGeneral",
@@ -5047,15 +5049,9 @@
             ]
           },
           "action": {
-            "type": "executeService",
+            "type": "callFunction",
             "attribute": {
-              "main": "iExpense_saveAllocationsDetails",
-              "onSuccess": {
-                "action": "nothing"
-              },
-              "onFailure": {
-                "action": "popupErrors"
-              }
+              "main": "onButtonClick_Save"
             }
           }
         },
@@ -11370,7 +11366,7 @@
           "action": {
             "type": "callFunction",
             "attribute": {
-              "main": "onButtonClick_New_Report"
+              "main": "click_New_Report"
             }
           }
         },
@@ -12528,6 +12524,19 @@
             "type": "callFunction",
             "attribute": {
               "main": "click_Refresh"
+            }
+          }
+        },
+        {
+          "event": {
+            "type": "tableClick",
+            "element": "",
+            "elementId": ""
+          },
+          "action": {
+            "type": "callFunction",
+            "attribute": {
+              "main": "onTableClick"
             }
           }
         }

@@ -1619,7 +1619,7 @@
     },
     {
       "type": "Service",
-      "name": "ReceiptBatch_update_status",
+      "name": "ReceiptBatch_update_receipt_status",
       "nickname": "update_status",
       "keepAlive": false,
       "throwError": false,
@@ -1713,7 +1713,7 @@
     },
     {
       "type": "Service",
-      "name": "ReceiptBatch_update_status",
+      "name": "ReceiptBatch_update_receipt_status",
       "nickname": "update_status",
       "keepAlive": false,
       "throwError": false,

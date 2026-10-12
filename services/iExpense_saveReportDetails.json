@@ -88,7 +88,6 @@
   "labels": [],
   "apps": [
     "LiveExpense",
-    "LiveExpense_AI",
-    "LiveExpense_AI_OLD"
+    "LiveExpense_AI"
   ]
 }

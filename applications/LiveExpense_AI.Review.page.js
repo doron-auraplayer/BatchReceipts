@@ -10,6 +10,7 @@ function iExpense_reviewAndFinish_onFailure() {
 }
 
 function OnCancel() {
+    Storage.set('draftAiReport', 'false');
     var updateMode = Storage.get("updateMode").toLowerCase() === 'true';
     updateMode ? Page.navigate("Update_Reports.html") : Page.navigate("Reports.html");
 }
@@ -88,6 +89,7 @@ function singleLine() { return true; }
 
 function onSave() {
     if (!validate()) return;
+    Storage.set('draftAiReport', 'false');
     
 	Services.call("iExpense_saveReportReview", function() {
     	Popup.ok(getTranslationForId("@popup_report_saved_title"), getTranslationForId("@popup_report_saved_message"), function(){});
@@ -102,21 +104,49 @@ function onSubmit() {
     if (!validate()) return;
 
     Services.call("iExpense_reviewAndFinish", function () {
-        // Get Report Number
-        var reportTitleRes = Storage.get("ReviewTitle").match(/Expense Report(.*)/);
-        var num = (reportTitleRes !== null)?reportTitleRes[1]:"";
-        var isConfirmationExist = (Storage.get("ConfirmationExists") == "true");
-        // $("#header-title").text(getTranslationForId("@Report_title") + " " + num);
-        // var msg = Storage.get("ReviewMessage").replace(/\n/g ,"<BR>");
-        if (isConfirmationExist) {
-            var msg = getTranslationForId("@Report_submitted_message", num.trim());
-            Popup.ok("", msg, function() {
-                Page.navigate("Reports.html");
-            });
-        } else {
-            Popup.ok(getTranslationForId("@popup_title_error"), Storage.get("ReviewMessage"), function() {});
+        var reportTitleRes =
+            Storage.get("ReviewTitle").match(/Expense Report(.*)/);
+
+        var num = reportTitleRes !== null ? reportTitleRes[1] : "";
+        var isConfirmationExist =
+            Storage.get("ConfirmationExists") === "true";
+
+        if (!isConfirmationExist) {
+            Popup.ok(
+                getTranslationForId("@popup_title_error"),
+                Storage.get("ReviewMessage")
+            );
+            return;
         }
-    }, displayReportServiceError('Failed to submit report'));
+
+        var msg = getTranslationForId(
+            "@Report_submitted_message",
+            num.trim()
+        );
+
+        Popup.ok("", msg, function () {
+            var isDraftAiReport =
+                String(Storage.get("draftAiReport")).toLowerCase() === "true";
+
+            if (isDraftAiReport) {
+                Storage.set("STATUS", "SUBMITTED");
+                Services.call(
+                    "ReceiptBatch_update_report_status",
+
+                    function () {
+                        Storage.set("draftAiReport", "false");
+                        Page.navigate("Reports.html");
+                    },
+
+                    displayReportServiceError(
+                        "Report submitted, but receipt status update failed"
+                    )
+                );
+            } else {
+                Page.navigate("Reports.html");
+            }
+        });
+    }, displayReportServiceError("Failed to submit report"));
 }
 
 function GoBack() {

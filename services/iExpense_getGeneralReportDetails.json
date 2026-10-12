@@ -4,7 +4,19 @@
   "formUrl": "",
   "command": "IE",
   "isEnabled": true,
-  "inputParams": [],
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "screenshots",
+        "serviceName": "iExpense_getGeneralReportDetails"
+      },
+      "paramLabel": "screenshots",
+      "paramValue": "true",
+      "visible": true
+    }
+  ],
   "outputParams": [
     {
       "inTable": false,
@@ -251,5 +263,8 @@
   "type": "HTML",
   "createdBy": "admin",
   "labels": [],
-  "apps": []
+  "apps": [
+    "LiveExpense",
+    "LiveExpense_AI"
+  ]
 }

@@ -165,6 +165,7 @@ Events.tablePopulated = function(){
 
 function OnCancel() {
    OnCancelPopup(function() {
+        Storage.set("draftAiReport", "false");
         var updateMode = Storage.get("updateMode").toLowerCase() === 'true';
         updateMode ? Page.navigate("Update_Reports.html") : Page.navigate("Reports.html");
    });
@@ -210,5 +211,13 @@ function onAllocations() {
 
     Page.navigate("ExpenseGroupAllocations.html");
     
+}
+
+function onButtonClick_Save() {
+    Storage.set("draftAiReport", "false");
+	Services.call("iExpense_saveAllocationsDetails", function(){}, function(){
+		Popup.ok("Error", Storage.get("Error"));
+	});
+
 }
 

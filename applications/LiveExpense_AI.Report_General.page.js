@@ -111,7 +111,7 @@ function OnPageLoad() {
         // New report or duplicate
         // setTimeout(function(){Spinner.start()},0);
         
-        if (Storage.get("NEW_AI_REPORT") === "true") {
+        if (Storage.get("newAiReport") === "true") {
            $("#Next").text("Create Report");
         }
         if (duplicateMode) {
@@ -138,7 +138,7 @@ function doNext() {
     Storage.clear("isErrorMessage");
     
     if (!updateMode) {
-        if (Storage.get("NEW_AI_REPORT") === "true") {
+        if (Storage.get("newAiReport") === "true") {
                 createAiReceiptBatchLines();
         }else {
           Storage.set("ExpTemplate", Storage.get("TemplateList"));
@@ -178,7 +178,7 @@ function createAiReceiptBatchLines() {
                 //Purpose
                 console.log("reportNumber:",reportNumber);
                 Services.call("Ping_ReceiptBatch_CreateLinesRPA",function(){
-                    Storage.set('NEW_AI_REPORT', 'false');
+                    Storage.set('newAiReport', 'false');
                     Page.navigate("DraftReports.html");
                 });
             }else{
@@ -192,7 +192,8 @@ function createAiReceiptBatchLines() {
 
 function OnCancel() {
    OnCancelPopup(function() {
-       Storage.set('NEW_AI_REPORT', 'false');
+       Storage.set('newAiReport', 'false');
+       Storage.set("draftAiReport", "false");
        Page.navigate(updateMode?"Update_Reports.html":"Reports.html");
        
    });

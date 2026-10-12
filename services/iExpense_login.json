@@ -196,7 +196,7 @@
   "createdBy": "admin",
   "labels": [],
   "apps": [
-    "LiveApprovals",
-    "LiveExpense"
+    "LiveExpense",
+    "LiveExpense_AI"
   ]
 }

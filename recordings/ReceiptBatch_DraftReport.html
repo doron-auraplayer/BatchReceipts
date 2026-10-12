@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head profile="http://selenium-ide.openqa.org/profiles/test-case">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="selenium.base" href="" />
+    <title>ReceiptBatch_DraftReport</title>
+    </head>
+    <body>
+    <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+    <tr><td rowspan="1" colspan="3">ReceiptBatch_DraftReport</td></tr>
+  </thead><tbody><tr>
+      <td>input</td>
+      <td>Oracle Applications Home Page</td>
+      <td>HomePageTitle</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>/OA_HTML/RF.jsp?function_id=1019886&resp_id=54021&resp_appl_id=200</td>
+      <td>ExpensesHomeUrl</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>W72248</td>
+      <td>ReportNumber</td>
+      <td></td>
+    </tr><tr>
+      <td>open</td>
+      <td>${ExpensesHomeUrl}</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>waitForTitle</td>
+      <td>Expenses Home</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//a[contains(@id, ':ReportNumber:0')]</td>
+      <td>UpdateReportNumber</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//span[contains(@id, ':Date:0')]</td>
+      <td>UpdateReportDate</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//span[contains(@id, ':Status:0')]</td>
+      <td>UpdateReportStatus</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//span[contains(@id, ':ReportTotalCurrency:0')]</td>
+      <td>hasTotalCurrency</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>hasTotalCurrency</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//span[@id='ActiveReportsRN.ActiveReportsTbl']//span[contains(@id, ':ReportTotalCurrency:0')]</td>
+      <td>UpdateReportTotal</td>
+      <td></td>
+    </tr><tr>
+      <td>else</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//span[@id='ActiveReportsRN.ActiveReportsTbl']//span[contains(@id, ':ReportTotal:0')]</td>
+      <td>UpdateReportTotal</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//span[contains(@id, ':Purpose:0')]</td>
+      <td>UpdateReportPurpose</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//div[@id="ActiveReportsRN.ActiveReportsTbl:ControlBar"]//td[contains(text(),'Rows')]</td>
+      <td>paginationExists</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>!${paginationExists}</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>exitTest</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>//div[@id="ActiveReportsRN.ActiveReportsTbl:ControlBar"]//td[contains(text(),'Rows')]</td>
+      <td>currentListRange</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//div[@id='ActiveReportsRN.ActiveReportsTbl:ControlBar']/table/tbody/tr/td/table/tbody/tr/td/a[contains(@title, 'Next')]</td>
+      <td>nextButtonExist</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>xpath=//a[contains(@id, ':ReportNumber:') and normalize-space(.)='${ReportNumber}']</td>
+      <td>reportFound</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>xpath=//div[@id='ActiveReportsRN.ActiveReportsTbl:ControlBar']//a[contains(@title,'Next')]</td>
+      <td>nextButtonExist</td>
+      <td></td>
+    </tr><tr>
+      <td>while</td>
+      <td>reportFound==false && nextButtonExist==true</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>xpath=//div[@id='ActiveReportsRN.ActiveReportsTbl:ControlBar']//a[contains(@title,'Next')]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>xpath=//a[contains(@id, ':ReportNumber:') and normalize-space(.)='${ReportNumber}']</td>
+      <td>reportFound</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>xpath=//div[@id='ActiveReportsRN.ActiveReportsTbl:ControlBar']//a[contains(@title,'Next')]</td>
+      <td>nextButtonExist</td>
+      <td></td>
+    </tr><tr>
+      <td>endWhile</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>assertElementPresent</td>
+      <td>xpath=//a[contains(@id, ':ReportNumber:') and normalize-space(.)='${ReportNumber}']</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>xpath=//a[contains(@id, ':ReportNumber:') and normalize-space(.)='${ReportNumber}']/ancestor::tr[1]//a[contains(@id, ':Update:')]/img</td>
+      <td></td>
+      <td></td>
+    </tr></tbody></table></body></html>

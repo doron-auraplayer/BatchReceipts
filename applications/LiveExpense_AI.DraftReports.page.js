@@ -3,6 +3,7 @@ var statuses = 'LINE_CREATED,LINE_FAILED,SUBMITTED';
 
 function onLoad() {
     Table.clear();
+    Storage.set('draftAiReport', 'false');
     Services.call('ReceiptBatch_get_draft_reports',reportStatus);
 }
 
@@ -61,7 +62,34 @@ function reportStatus() {
             renderRow(this, rowIndex);
         });
     }
-}function click_Refresh() {
+}
+
+function click_Refresh() {
     onLoad();
+}
+
+
+function onTableClick(row, col, rowCells) {
+	var pendingLines = Number(Storage.get("PENDING_LINES_" + row));
+	if (pendingLines > 0) {
+    Popup.toast("Some receipts are still pending. Please wait.", 3000);
+    return;
+    }
+    
+    //Storage.copyFromIndex("REPORT_NUMBER", row);
+	Storage.set("ReportNumber", Storage.get("REPORT_NUMBER_" + row));
+	    
+	reLoginAndRun(function() {
+        Services.call(
+            'ReceiptBatch_DraftReport',
+            function() {
+                Storage.set("updateMode", "true");
+                Storage.set('draftAiReport', 'true');
+                Page.navigate("Report_General.html");
+            },
+            displayReportServiceError("Failed to get report details")
+        );
+    });
+
 }
 

@@ -16,7 +16,7 @@ function onLoad() {
   Table.clear();
   
   Storage.deleteByPrefix('Select_');
-  Storage.set("NEW_AI_REPORT", "false");
+  Storage.set("newAiReport", "false");
   
   configureReceiptViewer({
     allowApprove: false,
@@ -2298,7 +2298,7 @@ function hasReceiptCellText(value) {
 
 
 
-function onButtonClick_New_Report() {
+function click_New_Report() {
   var selectedIds = readSelectedReceiptIds();
 
   if (selectedIds.length === 0) {
@@ -2306,10 +2306,13 @@ function onButtonClick_New_Report() {
     return;
   }
 
-  Storage.set('NEW_AI_REPORT', 'true');
-  Services.killSession();
-  Services.startSession();
-  Services.call("iExpense_login_with_resps", function(){
-      Page.navigate('Report_General');
+  Storage.set('newAiReport', 'true');
+
+  reLoginAndRun( function() {
+    Page.navigate('Report_General');
   });
+  
 }
+
+
+

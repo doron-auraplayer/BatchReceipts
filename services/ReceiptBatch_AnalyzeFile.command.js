@@ -86,7 +86,7 @@ function bindText(value) {
 // Best effort: a status write never replaces the original exception.
 function updateStatus(status) {
     try {
-        Services.call('ReceiptBatch_update_status',
+        Services.call('ReceiptBatch_update_receipt_status',
             {"RECEIPT_ID": receiptIdNumber, "STATUS": status});
     } catch (statusError) {
         return;
@@ -121,7 +121,7 @@ log('start receipt_id=' + receiptIdNumber);
 var initialStatusResponse;
 
 try {
-    initialStatusResponse = Services.call('ReceiptBatch_update_status',
+    initialStatusResponse = Services.call('ReceiptBatch_update_receipt_status',
         {"RECEIPT_ID": receiptIdNumber, "STATUS": 'PROCESSING'});
 
     if (getServiceError(initialStatusResponse).length !== 0) {

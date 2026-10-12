@@ -11,7 +11,7 @@ function getServiceError(serviceResponse) {
 }
 
 function updateStatus(status) {
-    Services.call('ReceiptBatch_update_status', {
+    Services.call('ReceiptBatch_update_receipt_status', {
         "RECEIPT_ID": receiptId,
         "STATUS": status
     });
