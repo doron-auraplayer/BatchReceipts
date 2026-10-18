@@ -1,14 +1,4 @@
-/* InProgressLines page CSS only.
-   The status icons of the Status column live here: the page JavaScript writes only
-   the span and its state class, and this sheet draws everything visual with
-   ::before (glyphs for created/failed, a spinning ring for pending). */
 
-/* First column: header and the real data cells are tightened to the icon width.
-   The header carries the id set by the page (caption is user-owned and untouched).
-   The td:first-child selector above already holds the raw status text that exists
-   before the status decoration runs, so the column stays narrow from the first
-   paint instead of waiting for the icon span. Vertical padding is left to the
-   table's own theme; only horizontal padding is forced. */
 #tableOutput thead th[id*="RECEIPTBATCH_STATUS"],
 #tableOutput tbody tr[id^="tablerow_"] > td:first-child {
   box-sizing: border-box;
@@ -38,12 +28,6 @@
   line-height: 1;
 }
 
-/* Pending: small amber spinning ring drawn by the pseudo-element. The spin is
-   scoped to this ::before only, so the DataTables expand control on the cell and
-   the status span itself are never animated.
-   The animation reuses the global "md-spin" keyframes already provided by the
-   AuraPlayer icon font stylesheet; page-local @keyframes and @media rules are
-   discarded by the AuraPlayer page CSS generator, so none are declared here. */
 #tableOutput .in-progress-line-status.in-progress-line-status-pending::before {
   content: "";
   display: block;
@@ -68,9 +52,7 @@
   color: #c62828;
 }
 
-/* The status column is the first column here, so it also carries the DataTables
-   mobile expand/collapse control. Reserve room for that control on the left and
-   keep the tight right padding so the 20px icon still fits. */
+
 #tableOutput.dataTable.dtr-inline.collapsed
   > tbody > tr[id^="tablerow_"]
   > td:first-child {
