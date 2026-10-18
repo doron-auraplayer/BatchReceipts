@@ -1,0 +1,143 @@
+{
+  "name": "ReceiptBatch_update_receipts_status",
+  "description": "Bulk-update STATUS for receipt IDs in RECEIPT_IDS_JSON belonging to EBS_USER. Optional EXPECTED_STATUS limits updates to rows still in that status; leave empty to update any current status. Example IDs: [12,18,25].",
+  "formUrl": "${env.DB_CONNECTION_STR}",
+  "command": "UPDATE XX_AP_BATCH_RECEIPTS\nSET STATUS = '${STATUS}'\nWHERE EBS_USER_NAME = UPPER(TRIM('${EBS_USER}'))\n  AND ('${EXPECTED_STATUS}' IS NULL OR STATUS = '${EXPECTED_STATUS}')\n  AND RECEIPT_ID IN (\n    SELECT ids.RECEIPT_ID\n    FROM JSON_TABLE(\n      '${RECEIPT_IDS_JSON}',\n      '$[*]' ERROR ON ERROR\n      COLUMNS (\n        RECEIPT_ID NUMBER PATH '$' ERROR ON ERROR\n      )\n    ) ids\n  )",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "username",
+        "serviceName": "ReceiptBatch_update_receipts_status"
+      },
+      "paramLabel": "username",
+      "paramValue": "${env.DB_USER}",
+      "visible": false
+    },
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "password",
+        "serviceName": "ReceiptBatch_update_receipts_status"
+      },
+      "paramLabel": "password",
+      "paramValue": "${env.DB_PASSWORD}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "EBS_USER",
+        "serviceName": "ReceiptBatch_update_receipts_status"
+      },
+      "paramLabel": "EBS_USER",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "STATUS",
+        "serviceName": "ReceiptBatch_update_receipts_status"
+      },
+      "paramLabel": "STATUS",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "RECEIPT_IDS_JSON",
+        "serviceName": "ReceiptBatch_update_receipts_status"
+      },
+      "paramLabel": "RECEIPT_IDS_JSON",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "EXPECTED_STATUS",
+        "serviceName": "ReceiptBatch_update_receipts_status"
+      },
+      "paramLabel": "EXPECTED_STATUS",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_update_receipts_status"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_update_receipts_status"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_update_receipts_status"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@sql",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "DB",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": []
+}

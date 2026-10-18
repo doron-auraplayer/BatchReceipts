@@ -962,3 +962,241 @@ button.ui-btn.ReviewBtn {
   min-width: 100vw;
   min-height: 100vh;
 }
+
+/* ============================================================================
+   Split preview layout (opt-in per page)
+
+   Appended, scoped rules only. The fullscreen viewer rules above are untouched.
+   Everything here applies while the InProgressLines page holds the split preview
+   open (receipt-list-preview-open) or to a viewer overlay that was docked into
+   that page (receipt-viewer-docked).
+   ========================================================================= */
+
+#mainPage.ap-page-inprogresslines.receipt-list-preview-open #content,
+#mainPage.ap-page-inprogresslines.receipt-list-preview-open #content.ui-content {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1600px;
+  min-width: 0;
+  margin-left: auto;
+  margin-right: auto;
+  overflow-x: hidden;
+}
+
+#mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptListPreviewSplit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: stretch;
+  gap: 12px;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: calc(100vh - 150px);
+  min-height: 420px;
+  overflow: hidden;
+}
+
+@supports (height: 100dvh) {
+  #mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptListPreviewSplit {
+    height: calc(100dvh - 150px);
+  }
+}
+
+#mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptListPane {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptListPane #tableOutput_wrapper,
+#mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptListPane .dataTables_wrapper {
+  box-sizing: border-box;
+  width: 100% !important;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+#mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptListPane table#tableOutput,
+#mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptListPane table.dataTable {
+  box-sizing: border-box;
+  width: 100% !important;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* Let long header labels wrap inside the narrower list pane. The status column
+   keeps its own nowrap rule further up the sheet. */
+#mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptListPane #tableOutput thead th:not([id*="RECEIPTBATCH_STATUS"]) {
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+#mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptPreviewPane {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+/* Docked overlay: neutralise the fullscreen fixed positioning and sizing. */
+#dynamicImageOverlay.receipt-viewer-docked,
+#dynamicPdfOverlay.receipt-viewer-docked {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  z-index: auto !important;
+  box-sizing: border-box;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid #d8d8d8;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+#dynamicImageOverlay.receipt-viewer-docked .attachmentViewerToolbar,
+#dynamicPdfOverlay.receipt-viewer-docked .attachmentViewerToolbar {
+  gap: 4px;
+  margin: 6px;
+  padding: 6px;
+  border-radius: 8px;
+  max-height: 28vh;
+}
+
+#dynamicImageOverlay.receipt-viewer-docked .attachmentViewerToolbarGroup,
+#dynamicPdfOverlay.receipt-viewer-docked .attachmentViewerToolbarGroup {
+  gap: 4px;
+}
+
+#dynamicImageOverlay.receipt-viewer-docked .attachmentViewerButton,
+#dynamicPdfOverlay.receipt-viewer-docked .attachmentViewerButton {
+  min-height: 32px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+#dynamicImageOverlay.receipt-viewer-docked #receiptMetaPanel.attachmentMetaPanel,
+#dynamicPdfOverlay.receipt-viewer-docked #receiptMetaPanel.attachmentMetaPanel {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px 10px;
+  max-height: 22vh;
+  margin: 6px;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+#dynamicImageOverlay.receipt-viewer-docked #receiptMetaPanel.attachmentMetaPanel .attachmentMetaItem,
+#dynamicPdfOverlay.receipt-viewer-docked #receiptMetaPanel.attachmentMetaPanel .attachmentMetaItem {
+  min-width: 0;
+}
+
+/* The stage keeps filling whatever height the toolbar and metadata leave. */
+#dynamicImageOverlay.receipt-viewer-docked .attachmentViewerStage,
+#dynamicPdfOverlay.receipt-viewer-docked .attachmentViewerStage {
+  flex: 1 1 auto;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  border-radius: 0 0 12px 12px;
+}
+
+@media (max-width: 768px) {
+  #mainPage.ap-page-inprogresslines.receipt-list-preview-open #content,
+  #mainPage.ap-page-inprogresslines.receipt-list-preview-open #content.ui-content {
+    max-width: none;
+  }
+
+  #mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptListPreviewSplit {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  #mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptListPane {
+    height: auto;
+    max-height: 38vh;
+    min-height: 160px;
+    overflow-y: auto;
+  }
+
+  #mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptPreviewPane {
+    height: 55vh;
+    min-height: 340px;
+  }
+
+  #dynamicImageOverlay.receipt-viewer-docked #receiptMetaPanel.attachmentMetaPanel,
+  #dynamicPdfOverlay.receipt-viewer-docked #receiptMetaPanel.attachmentMetaPanel {
+    max-height: 26vh;
+  }
+
+  /* Phone split view: the docked form and the receipt table share one short top
+     pane, so compact them enough to show every current row without hiding any
+     field or resizing the table itself. Split list pane only. */
+  #mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptListPane #mainForm {
+    margin-bottom: 6px;
+  }
+
+  #mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptListPane #mainForm .button-field-container,
+  #mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptListPane #mainForm .multiple-field-container {
+    padding: 3px;
+  }
+
+  #mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptListPane #mainForm .read-only-label {
+    font-size: 13px;
+    line-height: 1.2;
+  }
+
+  #mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptListPane #mainForm .read-only {
+    font-size: 12px;
+    line-height: 1.2;
+    padding: 3px;
+    margin-top: 2px;
+  }
+
+  /* Longhand vertical padding keeps the first column's horizontal padding/width
+     rules from the baseline sheet untouched. */
+  #mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptListPane #tableOutput thead th {
+    font-size: 12px;
+    line-height: 1.2;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+}
+
+@media (max-width: 400px) {
+  #dynamicImageOverlay.receipt-viewer-docked #receiptMetaPanel.attachmentMetaPanel,
+  #dynamicPdfOverlay.receipt-viewer-docked #receiptMetaPanel.attachmentMetaPanel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.attachmentViewerButton .attachmentViewerZoomIcon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  pointer-events: none;
+}

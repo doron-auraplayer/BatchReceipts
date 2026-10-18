@@ -48,3 +48,5 @@
     display: block;
     margin-top: 6px;
 }
+
+#mainForm .button-field-container.draft-refresh-control { margin-left: auto !important; }

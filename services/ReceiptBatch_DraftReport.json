@@ -92,7 +92,11 @@
   "validationResponseCode": 200,
   "type": "HTML",
   "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
   "apps": [
-    "LiveExpense_AI"
+    "LiveExpense_AI",
+    "LiveExpense_AI_1510"
   ]
 }

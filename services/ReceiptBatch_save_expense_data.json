@@ -221,6 +221,7 @@
     "BATCH_RECEIPTS"
   ],
   "apps": [
-    "LiveExpense_AI_orig"
+    "LiveExpense_AI",
+    "LiveExpense_AI_14_10"
   ]
 }

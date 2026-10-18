@@ -1,0 +1,190 @@
+/* InProgressLines page CSS only.
+   The status icons of the Status column live here: the page JavaScript writes only
+   the span and its state class, and this sheet draws everything visual with
+   ::before (glyphs for created/failed, a spinning ring for pending). */
+
+/* First column: header and the real data cells are tightened to the icon width.
+   The header carries the id set by the page (caption is user-owned and untouched).
+   The td:first-child selector above already holds the raw status text that exists
+   before the status decoration runs, so the column stays narrow from the first
+   paint instead of waiting for the icon span. Vertical padding is left to the
+   table's own theme; only horizontal padding is forced. */
+#tableOutput thead th[id*="RECEIPTBATCH_STATUS"],
+#tableOutput tbody tr[id^="tablerow_"] > td:first-child {
+  box-sizing: border-box;
+  width: 56px !important;
+  min-width: 56px !important;
+  max-width: 56px !important;
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* Status cell: keep the one icon on a single centred line. */
+#tableOutput tbody td.in-progress-line-status-cell {
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* Status span: the icon box drawn by CSS. */
+#tableOutput .in-progress-line-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* Pending: small amber spinning ring drawn by the pseudo-element. The spin is
+   scoped to this ::before only, so the DataTables expand control on the cell and
+   the status span itself are never animated.
+   The animation reuses the global "md-spin" keyframes already provided by the
+   AuraPlayer icon font stylesheet; page-local @keyframes and @media rules are
+   discarded by the AuraPlayer page CSS generator, so none are declared here. */
+#tableOutput .in-progress-line-status.in-progress-line-status-pending::before {
+  content: "";
+  display: block;
+  box-sizing: border-box;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #ffe0b2;
+  border-top-color: #b26a00;
+  border-radius: 50%;
+  animation: md-spin 0.8s linear infinite;
+}
+
+/* Created: green check mark. */
+#tableOutput .in-progress-line-status.in-progress-line-status-created::before {
+  content: "\2705";
+  color: #2e7d32;
+}
+
+/* Failed: red cross mark. */
+#tableOutput .in-progress-line-status.in-progress-line-status-failed::before {
+  content: "\274C";
+  color: #c62828;
+}
+
+/* The status column is the first column here, so it also carries the DataTables
+   mobile expand/collapse control. Reserve room for that control on the left and
+   keep the tight right padding so the 20px icon still fits. */
+#tableOutput.dataTable.dtr-inline.collapsed
+  > tbody > tr[id^="tablerow_"]
+  > td:first-child {
+  padding-left: 26px !important;
+  padding-right: 4px !important;
+}
+
+/* Centre that existing control vertically without changing what it draws, and
+   keep it inside the reserved left padding. */
+#tableOutput.dataTable.dtr-inline.collapsed
+  > tbody > tr[id^="tablerow_"]
+  > td.in-progress-line-status-cell::before {
+  left: 4px;
+  top: 50%;
+  margin: 0;
+  transform: translateY(-50%);
+}
+
+/* Edit Report stays at its configured 33% width; only the generated flex
+   outer field container is pushed to the right edge, matching the DraftReports
+   Refresh and ReceiptsAttachments refresh-control approach. */
+#mainForm .button-field-container.in-progress-edit-report-control { margin-left: auto !important; }
+
+/* Docked image preview on this page shows the image stage only: hide the
+   toolbar and metadata panel siblings so the flex stage fills the pane. */
+#receiptPreviewPane #dynamicImageOverlay.receipt-viewer-docked > .attachmentViewerToolbar,
+#receiptPreviewPane #dynamicImageOverlay.receipt-viewer-docked > #receiptMetaPanel {
+  display: none !important;
+}
+
+/* Docked receipt image: centre the stage and keep the image at its natural
+   aspect ratio, downscaling only to fit the pane. */
+#receiptPreviewPane #dynamicImageOverlay.receipt-viewer-docked #imageViewerStage {
+  align-items: center;
+  justify-content: center;
+}
+
+#receiptPreviewPane #dynamicImageOverlay.receipt-viewer-docked #imageViewerStage > #dynamicImage {
+  flex: 0 0 auto;
+  align-self: center;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Loading banner is attached to the table, outside the DataTables wrapper. */
+.in-progress-line-table-container {
+  display: block;
+}
+
+#Loading_container {
+  display: block;
+  box-sizing: border-box;
+  width: 100% !important;
+  max-width: none;
+  padding: 6px 8px;
+  margin: 0;
+  border: 1px solid #d6d9ae;
+  background: #f7f6b2;
+}
+
+#Loading_container > label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: auto !important;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  color: #252525 !important;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: left;
+  white-space: normal;
+}
+
+#Loading_container > label::before {
+  content: "i";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 16px;
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #24617d;
+  border-radius: 50%;
+  background: #2f789b;
+  color: #fff;
+  font: 700 13px/1 Arial, sans-serif;
+}
+
+#Loading_container > label > nobr {
+  white-space: normal;
+}
+
+.in-progress-line-table-container > #tableOutput_wrapper {
+  margin-top: 0 !important;
+  padding-top: 0;
+}
+
+.in-progress-line-table-container #tableOutput {
+  margin-top: 0 !important;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* Completed receipt-line loading: the text/class is set by page JavaScript. */
+#Loading_container.in-progress-lines-complete > label::before {
+  content: "\2713";
+  border-color: #24703b;
+  background: #2e8548;
+}

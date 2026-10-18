@@ -179,7 +179,7 @@ function createAiReceiptBatchLines() {
                 console.log("reportNumber:",reportNumber);
                 Services.call("Ping_ReceiptBatch_CreateLinesRPA",function(){
                     Storage.set('newAiReport', 'false');
-                    Page.navigate("DraftReports.html");
+                    Page.navigate("InProgressLines.html");
                 });
             }else{
                 console.log("Failed to get report number: " + expenseReportMessage );

@@ -395,7 +395,7 @@ function readReceiptCore() {
     receiptAmount: Storage.get('P_TOTAL_AMOUNT'),
     startDate: Storage.get('P_RECEIPT_DATE'),
     merchantName: Storage.get('P_MERCHANT'),
-    expenseLocation: Storage.get('P_LOCATION'),
+    expenseLocation: textOf(Storage.get('P_LOCATION')).trim() || 'All Other Locations',
     department: Storage.get('P_DEPARTMENT'),
     creditTransaction: Storage.get('P_CREDIT_TRANSACTION')
   };
@@ -1038,7 +1038,7 @@ function receiptDateSaveValue(value) {
 function saveInput(receiptId, core, extras) {
   return {
     P_RECEIPT_ID: receiptId,
-    P_STATUS: requiredFieldsComplete(core, extras) ? 'READY' : preservedStatus(),
+    P_STATUS: saveStatus(core, extras),
     P_EXPENSE_TYPE: optionalSaveValue(core.expenseType),
     P_TOTAL_AMOUNT: numericSaveAmount(core.receiptAmount),
     P_RECEIPT_DATE: receiptDateSaveValue(core.startDate),

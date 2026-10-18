@@ -9,7 +9,7 @@ var emptyTemplates = {
         //expenseType: 'Airfare',
         //startDate: null,
         //receiptAmount: null,
-        receiptCurrency: null,
+        receiptCurrency: 'USD - US dollar',
         exchangeRate: null,
         reimbursableAmount: null,
         justification: null,
@@ -26,7 +26,7 @@ var emptyTemplates = {
         //expenseType: 'Car Rental',
         //startDate: null,
         //receiptAmount: null,
-        receiptCurrency: null,
+        receiptCurrency: 'USD - US dollar',
         exchangeRate: null,
         reimbursableAmount: null,
         justification: null,
@@ -41,7 +41,7 @@ var emptyTemplates = {
         //expenseType: 'Entertainment',
         //startDate: null,
         //receiptAmount: null,
-        receiptCurrency: null,
+        receiptCurrency: 'USD - US dollar',
         exchangeRate: null,
         reimbursableAmount: null,
         justification: null,
@@ -57,7 +57,7 @@ var emptyTemplates = {
         //expenseType: 'Hotel',
         //startDate: null,
         //receiptAmount: null,
-        receiptCurrency: null,
+        receiptCurrency: 'USD - US dollar',
         exchangeRate: null,
         reimbursableAmount: null,
         justification: null,
@@ -73,7 +73,7 @@ var emptyTemplates = {
         //expenseType: 'Meals',
         //startDate: null,
         //receiptAmount: null,
-        receiptCurrency: null,
+        receiptCurrency: 'USD - US dollar',
         exchangeRate: null,
         reimbursableAmount: null,
         justification: null,
@@ -82,14 +82,14 @@ var emptyTemplates = {
         //attachments: [],
         //corporateChargeCard: null,
         numberOfAttendeesOrRecipients: null,
-        employees: [],
-        nonEmployees: []
+        // employees: [],
+        // nonEmployees: []
     },
     'Miscellaneous': {
         //expenseType: 'Miscellaneous',
         //startDate: null,
         //receiptAmount: null,
-        receiptCurrency: null,
+        receiptCurrency: 'USD - US dollar',
         exchangeRate: null,
         reimbursableAmount: null,
         justification: null,
@@ -104,7 +104,7 @@ var emptyTemplates = {
         //expenseType: 'Taxis',
         //startDate: null,
         //receiptAmount: null,
-        receiptCurrency: null,
+        receiptCurrency: 'USD - US dollar',
         exchangeRate: null,
         reimbursableAmount: null,
         justification: null,
@@ -119,7 +119,7 @@ var emptyTemplates = {
         //expenseType: 'Telephone Calls',
         //startDate: null,
         //receiptAmount: null,
-        receiptCurrency: null,
+        receiptCurrency: 'USD - US dollar',
         exchangeRate: null,
         reimbursableAmount: null,
         justification: null,
@@ -153,8 +153,7 @@ var requiredFields = {
         'expenseLocation'
     ],
     'Entertainment': [
-        'expenseType', 'startDate', 'receiptAmount', 'receiptCurrency',
-        'justification', 'companyAttendees'
+        'expenseType', 'startDate', 'receiptAmount', 'receiptCurrency','companyAttendees'
     ],
     'Hotel': [
         'expenseType', 'startDate', 'receiptAmount', 'receiptCurrency',
@@ -164,8 +163,7 @@ var requiredFields = {
         'expenseType', 'startDate', 'receiptAmount', 'receiptCurrency'
     ],
     'Miscellaneous': [
-        'expenseType', 'startDate', 'receiptAmount', 'receiptCurrency',
-        'justification'
+        'expenseType', 'startDate', 'receiptAmount', 'receiptCurrency'
     ],
     'Taxis': [
         'expenseType', 'startDate', 'receiptAmount', 'receiptCurrency'

@@ -470,7 +470,7 @@
       "type": "JavaScript",
       "name": "JavaScript",
       "nickname": "cashLine Parameters",
-      "command": "function formatEbsDate(value) {\r\n    if (!value) {\r\n        return \"\";\r\n    }\r\n\r\n    var parts = value.split(\"-\");\r\n    var months = [\"Jan\", \"Feb\", \"Mar\", \"Apr\", \"May\", \"Jun\",\r\n                  \"Jul\", \"Aug\", \"Sep\", \"Oct\", \"Nov\", \"Dec\"];\r\n\r\n    return parts[2] + \"-\" + months[Number(parts[1]) - 1] + \"-\" + parts[0];\r\n}\r\n\r\nfunction valueOrEmpty(value) {\r\n    return value === null || value === undefined ? \"\" : value;\r\n}\r\n\r\nvar expenseData = PROCESS.ReceiptBatch_get_expense_data.output[\"P_EXPENSE_DATA_JSON\"];\r\n\r\nif (typeof expenseData === \"string\" && expenseData.trim() !== \"\") {\r\n    expenseData = JSON.parse(expenseData);\r\n}\r\n\r\nvar line =\r\n    expenseData &&\r\n    Array.isArray(expenseData.lines) &&\r\n    expenseData.lines.length > 0\r\n        ? expenseData.lines[0]\r\n        : {};\r\n\r\nvar expenseType = valueOrEmpty(PROCESS.ReceiptBatch_get_expense_data.output[\"P_EXPENSE_TYPE\"]);\r\nvar totalAmount = valueOrEmpty(PROCESS.ReceiptBatch_get_expense_data.output[\"P_TOTAL_AMOUNT\"]);\r\nvar receiptDate = valueOrEmpty(PROCESS.ReceiptBatch_get_expense_data.output[\"P_RECEIPT_DATE\"]);\r\nvar merchant = valueOrEmpty(PROCESS.ReceiptBatch_get_expense_data.output[\"P_MERCHANT\"]);\r\nvar location = valueOrEmpty(PROCESS.ReceiptBatch_get_expense_data.output[\"P_LOCATION\"]);\r\nvar department = valueOrEmpty(PROCESS.ReceiptBatch_get_expense_data.output[\"P_DEPARTMENT\"]);\r\n\r\nvar attachmentPath = \"\";\r\nvar LocationName = location;\r\nvar DetailReceiptMissing = valueOrEmpty(line.originalReceiptMissing);\r\nvar CompanyAttendees = valueOrEmpty(line.companyAttendees);\r\nvar ReceiptCurrencyChoice = valueOrEmpty(line.receiptCurrency);\r\nvar DetailReceiptAmount = totalAmount;\r\nvar StartDate = receiptDate;\r\nvar StartDateFormatted = formatEbsDate(receiptDate);\r\nvar Justification = valueOrEmpty(line.justification);\r\nvar ExchRate = valueOrEmpty(line.exchangeRate);\r\nvar DetailMerchantName = merchant;\r\nvar AirTravelType = valueOrEmpty(line.travelType);\r\nvar AirTicketClass = valueOrEmpty(line.ticketClass);\r\nvar AirFromLocation = valueOrEmpty(line.locationFrom);\r\nvar AirToLocation = valueOrEmpty(line.locationTo);\r\nvar NumberOfDays = valueOrEmpty(line.numberOfDays);\r\nvar AccEndDate = valueOrEmpty(line.endDate);\r\nvar AccEndDateFormatted = AccEndDate;\r\nvar MealNumberAttendees =\r\n    valueOrEmpty(line.numberOfAttendeesOrRecipients);\r\nvar MealAttendees = \"\";",
+      "command": "function formatEbsDate(value) {\r\n    if (!value) {\r\n        return \"\";\r\n    }\r\n\r\n    var parts = value.split(\"-\");\r\n    var months = [\"Jan\", \"Feb\", \"Mar\", \"Apr\", \"May\", \"Jun\",\r\n                  \"Jul\", \"Aug\", \"Sep\", \"Oct\", \"Nov\", \"Dec\"];\r\n\r\n    return parts[2] + \"-\" + months[Number(parts[1]) - 1] + \"-\" + parts[0];\r\n}\r\n\r\nfunction valueOrEmpty(value) {\r\n    return value === null || value === undefined ? \"\" : value;\r\n}\r\n\r\nvar expenseData = PROCESS.ReceiptBatch_get_expense_data.output[\"P_EXPENSE_DATA_JSON\"];\r\n\r\nif (typeof expenseData === \"string\" && expenseData.trim() !== \"\") {\r\n    expenseData = JSON.parse(expenseData);\r\n}\r\n\r\nvar line =\r\n    expenseData &&\r\n    Array.isArray(expenseData.lines) &&\r\n    expenseData.lines.length > 0\r\n        ? expenseData.lines[0]\r\n        : {};\r\n\r\nvar expenseType = valueOrEmpty(PROCESS.ReceiptBatch_get_expense_data.output[\"P_EXPENSE_TYPE\"]);\r\nvar totalAmount = valueOrEmpty(PROCESS.ReceiptBatch_get_expense_data.output[\"P_TOTAL_AMOUNT\"]);\r\nvar receiptDate = valueOrEmpty(PROCESS.ReceiptBatch_get_expense_data.output[\"P_RECEIPT_DATE\"]);\r\nvar merchant = valueOrEmpty(PROCESS.ReceiptBatch_get_expense_data.output[\"P_MERCHANT\"]);\r\nvar location = valueOrEmpty(PROCESS.ReceiptBatch_get_expense_data.output[\"P_LOCATION\"]);\r\nvar department = valueOrEmpty(PROCESS.ReceiptBatch_get_expense_data.output[\"P_DEPARTMENT\"]);\r\n\r\nvar attachmentPath = \"\";\r\nvar LocationName = location;\r\nvar DetailReceiptMissing = valueOrEmpty(line.originalReceiptMissing);\r\nvar CompanyAttendees = valueOrEmpty(line.companyAttendees);\r\nvar ReceiptCurrencyChoice = valueOrEmpty(line.receiptCurrency);\r\nif (String(ReceiptCurrencyChoice).trim() === \"\") {\r\n    ReceiptCurrencyChoice = \"USD - US dollar\";\r\n}\r\nvar DetailReceiptAmount = totalAmount;\r\nvar StartDate = receiptDate;\r\nvar StartDateFormatted = formatEbsDate(receiptDate);\r\n// var Justification = valueOrEmpty(line.justification);\r\nvar Justification = String(valueOrEmpty(line.justification)).trim() === \"\"\r\n                     ? valueOrEmpty(ServiceManager.getInput(\"REPORT_PURPOSE\"))\r\n                     : line.justification;\r\nvar ExchRate = valueOrEmpty(line.exchangeRate);\r\nvar DetailMerchantName = merchant;\r\nvar AirTravelType = valueOrEmpty(line.travelType);\r\nvar AirTicketClass = valueOrEmpty(line.ticketClass);\r\nvar AirFromLocation = valueOrEmpty(line.locationFrom);\r\nvar AirToLocation = valueOrEmpty(line.locationTo);\r\nvar NumberOfDays = valueOrEmpty(line.numberOfDays);\r\nvar AccEndDate = valueOrEmpty(line.endDate);\r\nvar AccEndDateFormatted = AccEndDate;\r\nvar MealNumberAttendees =\r\n    valueOrEmpty(line.numberOfAttendeesOrRecipients);\r\nvar MealAttendees = \"\";",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,
@@ -626,7 +626,7 @@
       "name": "iExpense_cash_openLineDetails",
       "nickname": "iExpense_cash_openLineDetails",
       "keepAlive": true,
-      "throwError": true,
+      "throwError": false,
       "ignoreError": false,
       "isJavaScript": false,
       "isCustom": false,
@@ -673,6 +673,46 @@
           "inTable": false
         }
       ]
+    },
+    {
+      "type": "Condition",
+      "name": "IFSERVICE",
+      "nickname": "Condition",
+      "command": "iExpense_cash_openLineDetailsError.length == 0",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "IF"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "paramValue": "iExpense_cash_openLineDetailsError.length"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "paramValue": "0"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "undefined"
+        }
+      ],
+      "outputs": []
     },
     {
       "type": "Service",
@@ -1629,7 +1669,7 @@
       "invalid": false,
       "inputs": [
         {
-          "visible": false,
+          "visible": true,
           "isJavaScript": true,
           "name": "RECEIPT_ID",
           "paramValue": "return ServiceManager.getInput(\"SELECTED_RECEIPT_IDS\")[index_0];",
@@ -1675,7 +1715,7 @@
       "type": "Condition",
       "name": "ELSE",
       "nickname": "Condition",
-      "command": "\"false\" == \"false\"",
+      "command": "",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,
@@ -1686,7 +1726,7 @@
         {
           "visible": false,
           "isJavaScript": false,
-          "paramValue": "IF"
+          "paramValue": "ELSE"
         },
         {
           "visible": false,
@@ -1723,7 +1763,7 @@
       "invalid": false,
       "inputs": [
         {
-          "visible": false,
+          "visible": true,
           "isJavaScript": true,
           "name": "RECEIPT_ID",
           "paramValue": "return ServiceManager.getInput(\"SELECTED_RECEIPT_IDS\")[index_0];",
@@ -1801,6 +1841,100 @@
           "visible": false,
           "isJavaScript": false,
           "paramValue": "false"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "Condition",
+      "name": "ELSE",
+      "nickname": "Condition",
+      "command": "",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "ELSE"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "Service",
+      "name": "ReceiptBatch_update_receipt_status",
+      "nickname": "update_Error_openLineDetails",
+      "keepAlive": true,
+      "throwError": true,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": true,
+          "isJavaScript": false,
+          "name": "RECEIPT_ID",
+          "paramValue": "",
+          "valueType": "processInput"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "STATUS",
+          "paramValue": "\"LINE_FAILED\"",
+          "valueType": "staticText"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "ERROR_MESSAGE",
+          "paramValue": "return PROCESS.iExpense_cash_openLineDetails.output[\"Error\"];",
+          "valueType": "selectValue"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Error",
+          "label": "Error",
+          "visible": true,
+          "inTable": false
+        },
+        {
+          "name": "PopupMessages",
+          "label": "PopupMessages",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "StatusBarMessages",
+          "label": "StatusBarMessages",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Condition",
+      "name": "END IF",
+      "nickname": "Condition",
+      "command": "",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "END IF"
         }
       ],
       "outputs": []

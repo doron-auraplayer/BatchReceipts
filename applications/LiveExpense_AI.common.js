@@ -939,6 +939,8 @@ function removeAttachmentViewer() {
 
   closeReceiptDetailsBesidePreview();
 
+  restoreReceiptListPreviewSplit();
+
   $('#dynamicImageOverlay, #dynamicPdfOverlay').remove();
 
   $(document)
@@ -1034,6 +1036,11 @@ var ATTACHMENT_CONFIG = {
     paneId: 'attachmentViewerSplitPane',
     paneClass: 'attachmentViewerSplitPane',
     editableId: 'receiptEditPanel'
+  },
+
+  viewerLayout: {
+    fullscreen: 'fullscreen',
+    split: 'split'
   },
 
   editor: {
@@ -1175,9 +1182,28 @@ function hasSelectedExpenseType() {
 // Viewer capabilities
 // ----------------------------------------------------------------------------
 
+// Preview layout and read-only state are per-page settings. They are kept in
+// shared variables (not storage) and are reset by every configureReceiptViewer
+// call so a page never inherits the previous page's viewer behaviour.
+var attachmentViewerPreviewLayout = ATTACHMENT_CONFIG.viewerLayout.fullscreen;
+var attachmentViewerReadOnly = false;
+
+function getAttachmentViewerPreviewLayout() {
+  return attachmentViewerPreviewLayout;
+}
+
+function isAttachmentViewerReadOnly() {
+  return attachmentViewerReadOnly === true;
+}
+
 function getViewerCapabilities() {
+  var isReadOnly = isAttachmentViewerReadOnly();
+
   return {
+    isReadOnly: isReadOnly,
+
     canApprove:
+      !isReadOnly &&
       Storage.get(ATTACHMENT_CONFIG.storageKeys.allowApprove) ===
       ATTACHMENT_CONFIG.storageValues.allowApprove,
 
@@ -1186,6 +1212,7 @@ function getViewerCapabilities() {
       ATTACHMENT_CONFIG.storageValues.showData,
 
     canEdit:
+      !isReadOnly &&
       Storage.get(ATTACHMENT_CONFIG.storageKeys.allowEdit) ===
       ATTACHMENT_CONFIG.storageValues.allowEdit
   };
@@ -1195,12 +1222,31 @@ function resetViewerCapabilities() {
   Storage.remove(ATTACHMENT_CONFIG.storageKeys.allowApprove);
   Storage.remove(ATTACHMENT_CONFIG.storageKeys.showData);
   Storage.remove(ATTACHMENT_CONFIG.storageKeys.allowEdit);
+
+  attachmentViewerPreviewLayout = ATTACHMENT_CONFIG.viewerLayout.fullscreen;
+  attachmentViewerReadOnly = false;
 }
 
 function configureReceiptViewer(options) {
   options = options || {};
 
+  // Drop any docked split preview/placeholders left behind by the previous
+  // page before the new page's settings are applied.
+  if ((receiptListSplitPlaceholders !== null
+      && receiptListSplitPlaceholders.length > 0)
+    || $('#receiptListPreviewSplit').length > 0) {
+    restoreReceiptListPreviewSplit();
+  }
+
   resetViewerCapabilities();
+
+  if (options.previewLayout === ATTACHMENT_CONFIG.viewerLayout.split) {
+    attachmentViewerPreviewLayout = ATTACHMENT_CONFIG.viewerLayout.split;
+  }
+
+  if (options.readOnly === true) {
+    attachmentViewerReadOnly = true;
+  }
 
   if (options.allowApprove) {
     Storage.set(
@@ -1640,6 +1686,12 @@ function getCancelButtonHtml() {
 
 function getAttachmentViewerActionsHtml(mode, capabilities, url, downloadLabel, downloadName, status) {
   var resolvedMode = resolveAttachmentViewerMode(mode);
+
+  if (capabilities && capabilities.isReadOnly) {
+    return ''
+      + getDownloadButtonHtml(url, downloadLabel, 'downloadAttchViewerBtn', downloadName)
+      + getCloseButtonHtml();
+  }
 
   if (resolvedMode === ATTACHMENT_VIEWER_MODE_EDIT) {
     return ''
@@ -2427,8 +2479,278 @@ function bindOptionalViewerActions(capabilities) {
   if (capabilities.canEdit) {
     bindEditButton();
   }
+  if (!capabilities.isReadOnly) {
+    bindRemoveButton();
+  }
+}
 
-  bindRemoveButton();
+// ----------------------------------------------------------------------------
+// Split preview layout (opt-in per page)
+// The shared viewer stays a fullscreen overlay by default. A page that opts in
+// with previewLayout: 'split' has the rendered overlay docked beside the receipt
+// list, and the list content is put back in place when the viewer closes.
+// ----------------------------------------------------------------------------
+
+var receiptListSplitPlaceholders = null;
+var receiptListSplitResizeBound = false;
+
+function getReceiptListSplitHostPage() {
+  // Matches the CSS scope exactly: only the active InProgressLines #mainPage
+  // opts into the split layout, so no other page can be affected.
+  var $mainPage = $('#mainPage');
+
+  if ($mainPage.length && $mainPage.hasClass('ap-page-inprogresslines')) {
+    return $mainPage;
+  }
+
+  return $();
+}
+
+function getReceiptListSplitContent($mainPage) {
+  var $content = $mainPage.find('#content').first();
+
+  if ($content.length) {
+    return $content;
+  }
+
+  return $mainPage.find('.ui-content').first();
+}
+
+function createReceiptListSplitPlaceholder(element) {
+  var placeholder;
+
+  if (!element || !element.parentNode) {
+    return null;
+  }
+
+  placeholder = document.createComment('receiptListPreviewPlaceholder');
+  element.parentNode.insertBefore(placeholder, element);
+
+  return placeholder;
+}
+
+function restoreReceiptListSplitPlaceholder(entry) {
+  var placeholder;
+  var element;
+  var parentNode;
+
+  if (!entry) {
+    return;
+  }
+
+  placeholder = entry.placeholder;
+  element = entry.element;
+
+  if (!placeholder || !placeholder.parentNode) {
+    return;
+  }
+
+  parentNode = placeholder.parentNode;
+
+  if (element && element.parentNode
+    && (element.parentNode !== parentNode
+      || element.previousSibling !== placeholder)) {
+    parentNode.insertBefore(element, placeholder);
+  }
+
+  parentNode.removeChild(placeholder);
+}
+
+function restoreReceiptListSplitContentWithoutPlaceholders($wrapper, $content) {
+  var $listPane = $wrapper.find('#receiptListPane').first();
+  var $heading;
+  var $moved;
+
+  if (!$listPane.length || !$content.length) {
+    return;
+  }
+
+  $moved = $listPane.children('form#mainForm, .table-field-container');
+
+  if (!$moved.length) {
+    $moved = $listPane.children('form, .field-container');
+  }
+
+  if (!$moved.length) {
+    return;
+  }
+
+  $heading = $content.children('#header-title').first();
+
+  if ($heading.length) {
+    $heading.after($moved);
+  } else {
+    $content.prepend($moved);
+  }
+}
+
+function unbindReceiptListSplitResize() {
+  if (!receiptListSplitResizeBound) {
+    return;
+  }
+
+  receiptListSplitResizeBound = false;
+  $(window).off('resize.receiptListSplit');
+}
+
+function restoreReceiptListPreviewSplit() {
+  var $wrapper = $('#receiptListPreviewSplit');
+  var placeholders = receiptListSplitPlaceholders;
+  var hadSplit = $wrapper.length > 0
+    || (placeholders !== null && placeholders.length > 0);
+
+  receiptListSplitPlaceholders = null;
+
+  if (placeholders && placeholders.length) {
+    $.each(placeholders, function (index, entry) {
+      restoreReceiptListSplitPlaceholder(entry);
+    });
+  } else if ($wrapper.length) {
+    restoreReceiptListSplitContentWithoutPlaceholders(
+      $wrapper,
+      $('#mainPage').find('#content').first()
+    );
+  }
+
+  $wrapper.remove();
+  $('#receiptListPane, #receiptPreviewPane').remove();
+
+  $('#mainPage').removeClass('receipt-list-preview-open');
+  $('.ap-page-inprogresslines').removeClass('receipt-list-preview-open');
+
+  unbindReceiptListSplitResize();
+
+  if (hadSplit) {
+    adjustReceiptListTableForSplit();
+  }
+}
+
+function adjustReceiptListTableForSplit() {
+  var $table = $('#tableOutput');
+
+  if (!$table.length || !$.fn.DataTable
+    || !$.fn.DataTable.isDataTable('#tableOutput')) {
+    return;
+  }
+
+  try {
+    $table.DataTable().columns.adjust();
+  } catch (error) {
+  }
+
+  try {
+    $table.DataTable().responsive.recalc();
+  } catch (error) {
+  }
+}
+
+function bindReceiptListSplitResize() {
+  receiptListSplitResizeBound = true;
+
+  $(window)
+    .off('resize.receiptListSplit')
+    .on('resize.receiptListSplit', function () {
+      adjustReceiptListTableForSplit();
+    });
+}
+
+function moveReceiptListContentIntoSplitPane($content, $listPane) {
+  var $form = $content.children('form#mainForm').first();
+  var $tableContainer = $content.children('.table-field-container').first();
+
+  if (!$form.length) {
+    $form = $content.children('form').first();
+  }
+
+  if (!$tableContainer.length) {
+    $tableContainer = $content.children('.field-container').first();
+  }
+
+  receiptListSplitPlaceholders = [];
+
+  if ($form.length) {
+    receiptListSplitPlaceholders.push({
+      element: $form[0],
+      placeholder: createReceiptListSplitPlaceholder($form[0])
+    });
+    $listPane.append($form);
+  }
+
+  if ($tableContainer.length) {
+    receiptListSplitPlaceholders.push({
+      element: $tableContainer[0],
+      placeholder: createReceiptListSplitPlaceholder($tableContainer[0])
+    });
+    $listPane.append($tableContainer);
+  }
+}
+
+function dockAttachmentViewerForSplitLayout() {
+  var $mainPage;
+  var $content;
+  var $overlay;
+  var $wrapper;
+  var $listPane;
+  var $previewPane;
+  var $heading;
+
+  if (getAttachmentViewerPreviewLayout() !== ATTACHMENT_CONFIG.viewerLayout.split) {
+    return false;
+  }
+
+  $mainPage = getReceiptListSplitHostPage();
+
+  if (!$mainPage.length) {
+    return false;
+  }
+
+  restoreReceiptListPreviewSplit();
+
+  $content = getReceiptListSplitContent($mainPage);
+
+  if (!$content.length) {
+    return false;
+  }
+
+  $overlay = findAttachmentViewerOverlay();
+
+  if (!$overlay.length) {
+    return false;
+  }
+
+  $wrapper = $('<div id="receiptListPreviewSplit" '
+    + 'class="receipt-list-preview-split"></div>');
+  $listPane = $('<div id="receiptListPane" '
+    + 'class="receipt-list-pane"></div>');
+  $previewPane = $('<div id="receiptPreviewPane" '
+    + 'class="receipt-preview-pane"></div>');
+
+  $wrapper.append($listPane).append($previewPane);
+
+  $heading = $content.children('#header-title').first();
+
+  if ($heading.length) {
+    $wrapper.insertAfter($heading);
+  } else {
+    $content.prepend($wrapper);
+  }
+
+  moveReceiptListContentIntoSplitPane($content, $listPane);
+
+  $overlay
+    .addClass('receipt-viewer-docked')
+    .attr('role', 'region')
+    .attr('aria-label', 'Receipt preview')
+    .removeAttr('aria-modal');
+
+  $previewPane.append($overlay);
+
+  $mainPage.addClass('receipt-list-preview-open');
+
+  bindReceiptListSplitResize();
+  adjustReceiptListTableForSplit();
+
+  return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -2539,9 +2861,28 @@ function generateReciptImagePreview(link, fileType) {
     + '<div class="attachmentViewerToolbar">'
     + '<div class="attachmentViewerToolbarGroup attachmentViewerToolbarZoom">'
     + '<button id="zoomOutAttchViewer" type="button" '
-    + 'class="attachmentViewerButton" aria-label="Zoom out">-</button>'
+    + 'class="attachmentViewerButton" aria-label="Zoom out">'
+    + '<svg class="attachmentViewerZoomIcon" aria-hidden="true" '
+    + 'focusable="false" viewBox="0 0 24 24" fill="none" '
+    + 'stroke="currentColor" stroke-width="2" stroke-linecap="round" '
+    + 'stroke-linejoin="round">'
+    + '<circle cx="10" cy="10" r="6"></circle>'
+    + '<path d="M14.5 14.5 L21 21"></path>'
+    + '<path d="M7 10 H13"></path>'
+    + '</svg>'
+    + '</button>'
     + '<button id="zoomInAttchViewer" type="button" '
-    + 'class="attachmentViewerButton" aria-label="Zoom in">+</button>'
+    + 'class="attachmentViewerButton" aria-label="Zoom in">'
+    + '<svg class="attachmentViewerZoomIcon" aria-hidden="true" '
+    + 'focusable="false" viewBox="0 0 24 24" fill="none" '
+    + 'stroke="currentColor" stroke-width="2" stroke-linecap="round" '
+    + 'stroke-linejoin="round">'
+    + '<circle cx="10" cy="10" r="6"></circle>'
+    + '<path d="M14.5 14.5 L21 21"></path>'
+    + '<path d="M7 10 H13"></path>'
+    + '<path d="M10 7 V13"></path>'
+    + '</svg>'
+    + '</button>'
     + '</div>'
     + '<div class="attachmentViewerToolbarGroup attachmentViewerToolbarActions">'
     + getAttachmentViewerActionsHtml(
@@ -2790,6 +3131,7 @@ function showAttachmentPreview(link, fileType) {
         openReceiptDetailsBesidePreview(); 
         
     }
+    dockAttachmentViewerForSplitLayout();
     return;
   }
 
@@ -2799,6 +3141,7 @@ function showAttachmentPreview(link, fileType) {
         { 
             openReceiptDetailsBesidePreview(); 
         }
+    dockAttachmentViewerForSplitLayout();
     return;
   }
 
@@ -2928,7 +3271,7 @@ function Preview(rowIndex) {
   );
 }
 
-function formatReceiptDate(value) {
+function formatReceiptDate(value, dateFormat) {
   var date;
   var day;
   var month;
@@ -2953,7 +3296,10 @@ function formatReceiptDate(value) {
   }
 
   day = pad(date.getDate());
-  month = pad(date.getMonth() + 1);
+  month = dateFormat === 'DD-Mon-YYYY'
+    ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][date.getMonth()]
+    : pad(date.getMonth() + 1);
   year = date.getFullYear();
   hours = pad(date.getHours());
   minutes = pad(date.getMinutes());
@@ -2964,7 +3310,7 @@ function formatReceiptDate(value) {
     date.getMinutes() !== 0 ||
     date.getSeconds() !== 0;
 
-  if (hasTime) {
+  if (hasTime && dateFormat !== 'DD-Mon-YYYY') {
     return day + '-' + month + '-' + year
       + ' ' + hours + ':' + minutes + ':' + seconds;
   }

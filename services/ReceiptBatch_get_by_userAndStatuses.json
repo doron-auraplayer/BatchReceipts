@@ -2,7 +2,7 @@
   "name": "ReceiptBatch_get_by_userAndStatuses",
   "description": "",
   "formUrl": "${env.DB_CONNECTION_STR}",
-  "command": "SELECT\n    RECEIPT_ID AS ReceiptBatch_RECEIPT_ID,\n    TO_CHAR(RECEIPT_DATE,\n            'DD-Mon-YYYY',\n             'NLS_DATE_LANGUAGE=English'\n            ) AS ReceiptBatch_RECEIPT_DATE,\n    STATUS AS ReceiptBatch_STATUS,\n    EBS_USER_NAME AS ReceiptBatch_EBS_USER_NAME,\n    FILE_NAME AS ReceiptBatch_FILE_NAME,\n    FILE_TYPE AS ReceiptBatch_FILE_TYPE,\n    EXPENSE_TYPE AS ReceiptBatch_EXPENSE_TYPE,\n    TOTAL_AMOUNT AS ReceiptBatch_TOTAL_AMOUNT,\n    TO_CHAR(RECEIPT_DATE, 'YYYY-MM-DD')\n        AS ReceiptBatch_RECEIPT_DATE,\n    MERCHANT AS ReceiptBatch_MERCHANT,\n    LOCATION AS ReceiptBatch_LOCATION,\n    CREDIT_TRANSACTION AS ReceiptBatch_CREDIT,\n    REPORT_ID AS ReceiptBatch_REPORT_ID,\n    REPORT_NAME AS ReceiptBatch_REPORT_NAME,\n    TO_CHAR(\n        REPORT_CREATE_DATE,\n        'DD-Mon-YYYY',\n        'NLS_DATE_LANGUAGE=English'\n    ) AS ReceiptBatch_REPORT_CREATE_DATE,\n    DEPARTMENT AS ReceiptBatch_DEPARTMENT,\n    TEMPLATE_NAME AS ReceiptBatch_TEMPLATE_NAME,\n    PAYMENT_TYPE AS ReceiptBatch_PAYMENT_TYPE,\n    LINE_NUM AS ReceiptBatch_LINE_NUM\nFROM XX_AP_BATCH_RECEIPTS\nWHERE INSTR(\n          ',' || '${ReceiptBatch_statuses}' || ',',\n          ',' || STATUS || ','\n      ) > 0\n  AND EBS_USER_NAME = UPPER('${EBS_USER}')\n  AND REPORT_ID IS NULL\nORDER BY RECEIPT_DATE DESC,\n         RECEIPT_ID DESC",
+  "command": "SELECT\n    RECEIPT_ID AS ReceiptBatch_RECEIPT_ID,\n    TO_CHAR(RECEIPT_DATE,\n            'DD-Mon-YYYY',\n             'NLS_DATE_LANGUAGE=English'\n            ) AS ReceiptBatch_RECEIPT_DATE,\n    STATUS AS ReceiptBatch_STATUS,\n    EBS_USER_NAME AS ReceiptBatch_EBS_USER_NAME,\n    FILE_NAME AS ReceiptBatch_FILE_NAME,\n    FILE_TYPE AS ReceiptBatch_FILE_TYPE,\n    EXPENSE_TYPE AS ReceiptBatch_EXPENSE_TYPE,\n    TOTAL_AMOUNT AS ReceiptBatch_TOTAL_AMOUNT,\n    TO_CHAR(RECEIPT_DATE, 'YYYY-MM-DD')\n        AS ReceiptBatch_RECEIPT_DATE,\n    MERCHANT AS ReceiptBatch_MERCHANT,\n    LOCATION AS ReceiptBatch_LOCATION,\n    CREDIT_TRANSACTION AS ReceiptBatch_CREDIT,\n    REPORT_ID AS ReceiptBatch_REPORT_ID,\n    REPORT_NAME AS ReceiptBatch_REPORT_NAME,\n    TO_CHAR(\n        REPORT_CREATE_DATE,\n        'DD-Mon-YYYY',\n        'NLS_DATE_LANGUAGE=English'\n    ) AS ReceiptBatch_REPORT_CREATE_DATE,\n    DEPARTMENT AS ReceiptBatch_DEPARTMENT,\n    TEMPLATE_NAME AS ReceiptBatch_TEMPLATE_NAME,\n    PAYMENT_TYPE AS ReceiptBatch_PAYMENT_TYPE,\n    LINE_NUM AS ReceiptBatch_LINE_NUM,\n    EXPENSE_DATA_JSON AS ReceiptBatch_EXPENSE_DATA_JSON\nFROM XX_AP_BATCH_RECEIPTS\nWHERE INSTR(\n          ',' || '${ReceiptBatch_statuses}' || ',',\n          ',' || STATUS || ','\n      ) > 0\n  AND EBS_USER_NAME = UPPER('${EBS_USER}')\n  AND (REPORT_ID IS NULL OR STATUS = 'LINE_FAILED')\nORDER BY RECEIPT_DATE DESC,\n         RECEIPT_ID DESC",
   "isEnabled": true,
   "inputParams": [
     {
@@ -64,21 +64,6 @@
         "serviceName": "ReceiptBatch_get_by_userAndStatuses"
       },
       "paramLabel": "ReceiptBatch_RECEIPT_ID",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "RECEIPTBATCH_INSERT_DATE",
-        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
-      },
-      "paramLabel": "ReceiptBatch_INSERT_DATE",
       "visible": true
     },
     {
@@ -337,6 +322,21 @@
       "visible": true
     },
     {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_EXPENSE_DATA_JSON",
+        "serviceName": "ReceiptBatch_get_by_userAndStatuses"
+      },
+      "paramLabel": "RECEIPTBATCH_EXPENSE_DATA_JSON",
+      "visible": true
+    },
+    {
       "inTable": false,
       "newLine": false,
       "required": false,
@@ -403,6 +403,7 @@
     "BATCH_RECEIPTS"
   ],
   "apps": [
-    "LiveExpense_AI"
+    "LiveExpense_AI",
+    "LiveExpense_AI_14_10"
   ]
 }

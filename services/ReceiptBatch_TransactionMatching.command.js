@@ -11,7 +11,7 @@ if (error && error.length !== 0) {
 
 var batchResponse = Services.call("ReceiptBatch_get_by_userAndStatuses", {
   "EBS_USER": user,
-  "ReceiptBatch_statuses": "PROCESSED"
+  "ReceiptBatch_statuses": "PROCESSED,READY"
 });
 
 error = ServiceManager.getResponseValue(batchResponse, "Error");

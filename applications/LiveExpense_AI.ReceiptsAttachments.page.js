@@ -1,6 +1,6 @@
 
 //'NEW,PROCESSING,PROCESSED,READY,ANALYZED_FAILED,AI_FAILED,LINE_CREATED,LINE_FAILED,SUBMITTED'
-var statuses = 'NEW,PROCESSING,PROCESSED,READY,ANALYZED_FAILED,AI_FAILED,SUBMITTED';
+var statuses = 'NEW,PROCESSING,PROCESSED,READY,ANALYZED_FAILED,AI_FAILED,LINE_FAILED';
 
 var SUPPORTED_FILE_EXTENSIONS = '.pdf,.png,.jpg,.jpeg,.heic';
 var COMPRESSION_FILE_EXTENSIONS = ['jpg', 'jpeg', 'heic'];
@@ -13,6 +13,7 @@ var COMPRESSION_SIZE_THRESHOLD = 350000;
 // ----------------------------------------------------------------------------
 
 function onLoad() {
+    console.log("onLoad")
   Table.clear();
   
   Storage.deleteByPrefix('Select_');
@@ -23,7 +24,9 @@ function onLoad() {
     showData: true,
     allowEdit: true
   });
-  createReceiptToolbar();
+  createReceiptReportActions();
+  updateReceiptCreateReportButton(readSelectedReceiptIds());
+  $('#refresh').closest('.button-field-container').addClass('receipt-refresh-control');
 
   if (receiptsAttachmentsPageInitialized !== true) {
     receiptsAttachmentsPageInitialized = true;
@@ -33,15 +36,27 @@ function onLoad() {
   beginReceiptSelectionReload();
   receiptTableDrawnForCurrentLoad = false;
 
-  loadReceiptBatchesByUserAndStatuses(
-    statuses,
-    onReceiptListFetchSucceeded,
-    onReceiptListFetchFailed
-  );
+  prepareAndLoadReceiptBatches();
 
   bindReceiptTableDrawHandler();
 
   bindReceiptTableSelectionHandlers();
+}
+
+function prepareAndLoadReceiptBatches() {
+  Storage.set('EBS_USER', Storage.get('LoggedInUsername'));
+
+  Services.call(
+    'ReceiptBatch_get_and_prepare_receipts',
+    function () {
+      loadReceiptBatchesByUserAndStatuses(
+        statuses,
+        onReceiptListFetchSucceeded,
+        onReceiptListFetchFailed
+      );
+    },
+    onReceiptListFetchFailed
+  );
 }
 
 function bindReceiptTableDrawHandler() {
@@ -99,6 +114,7 @@ function renderReceiptTableDecorations() {
     receiptSelectionReloadPending !== true
   );
   colorCreditRows();
+  renderReceiptPaymentIcons();
   applyRowStatusClasses();
   applyReceiptRowGate();
   renderExtractionPendingMessage();
@@ -118,117 +134,34 @@ function hasCreditReceipt(rowIndex) {
 }
 
 
-function createReceiptToolbar() {
-  var $originalAdd = $('#Add_Attachment');
-  var $originalRefresh = $('#refresh');
-  var $newReport = $('#New_Report');
-  var $tableContainer = $(
-    '.field-container.table-field-container'
-  ).first();
-
-  var $toolbar;
-  var $newReportWrapper;
-  var $addBtn;
-  var $refreshBtn;
-
-  if (
-    !$originalAdd.length ||
-    !$originalRefresh.length ||
-    !$newReport.length ||
-    !$tableContainer.length
-  ) {
-    console.log(
-      'Receipt toolbar cannot be created. '
-      + 'Required controls were not found.'
-    );
-    return null;
-  }
-
-  $toolbar = $tableContainer.find('.receipt-table-toolbar');
-
-  if ($toolbar.length) {
-    return $toolbar.show();
-  }
-
-  $originalAdd.hide();
-  $originalRefresh.hide();
-
-  $addBtn = $(
-    '<button type="button" '
-    + 'class="TableAddLineBtn receiptToolbarButton" '
-    + 'aria-label="Add attachment" '
-    + 'title="Add attachment">'
-    + '<i class="fa fa-plus" aria-hidden="true"></i>'
-    + '</button>'
-  );
-
-  $refreshBtn = $(
-    '<button type="button" '
-    + 'class="TableAddLineBtn receiptToolbarButton" '
-    + 'aria-label="Refresh" '
-    + 'title="Refresh">'
-    + '<i class="fa fa-refresh" aria-hidden="true"></i>'
-    + '</button>'
-  );
-
-  $addBtn.on('click.receiptsToolbar', function () {
-    onAddAttachment();
-  });
-
-  $refreshBtn.on('click.receiptsToolbar', function () {
-    Refresh();
-  });
-
-  $toolbar = $('<div class="receipt-table-toolbar"></div>').css({
-    display: 'flex',
-    'justify-content': 'flex-start',
-    'align-items': 'center',
-    'flex-wrap': 'wrap',
-    gap: '10px',
-    'margin-bottom': '10px'
-  });
-
-  $newReportWrapper = $newReport.closest(
-    '.outer-field-container'
-  );
-
-  if (!$newReportWrapper.length) {
-    $newReportWrapper = $newReport.parent();
-  }
-
-  $newReportWrapper.css({
-    margin: '0',
-    display: 'flex',
-    'align-items': 'center',
-    width: 'auto',
-    'min-width': '0'
-  });
-
-  $newReport.css({
-    margin: '0',
-    height: '36px',
-    'line-height': '36px',
-    padding: '0 12px',
-    display: 'inline-flex',
-    'align-items': 'center',
-    'justify-content': 'center',
-    'white-space': 'nowrap'
-  });
-
-  $toolbar.append(
-    $addBtn,
-    $refreshBtn,
-    $newReportWrapper
-  );
-
-  $tableContainer.prepend($toolbar);
-
-  return $toolbar;
-}
 
 // ----------------------------------------------------------------------------
 // Receipt actions
 // ----------------------------------------------------------------------------
+
+function createReceiptReportActions() {
+  var $buttons = $('#New_Report, #Reports_Status');
+  var $content = $('#content');
+  if ($buttons.length !== 2 || !$content.length) {
+    return;
+  }
+  var $actions = $('#receiptReportActions');
+  if (!$actions.length) {
+    $actions = $('<div id="receiptReportActions" role="group" aria-label="Report actions"></div>');
+    $content.append($actions);
+  }
+  $buttons.each(function () {
+    $actions.append($(this).closest('.button-field-container'));
+  });
+  $content.addClass('receipt-has-floating-actions');
+}
+
+function updateReceiptCreateReportButton(selectedIds) {
+  var disabled = selectedIds.length === 0;
+  $('#New_Report')
+    .prop('disabled', disabled)
+    .attr('aria-disabled', String(disabled));
+}
 
 function onAddAttachment() {
   var attachmentInput;
@@ -253,18 +186,18 @@ function onAddAttachment() {
   addAttachmentUsingInput(attachmentInput);
 }
 
-function Refresh() {
+
+
+function Analyze() {
   Storage.set('P_STATUSES', 'NEW');
 
   beginIndependentReceiptSelectionReload();
 
-  Spinner.start('Refreshing receipts', 'REFRESH_RECEIPTS');
 
   Services.call(
-    'ReceiptBatch_AnalyzeRPA',
-
+    'Ping_ReceiptBatch_AnalyzeRPA',
     function () {
-      matchAndLoad();
+      reloadReceiptTable(true);
     },
 
     function () {
@@ -274,7 +207,7 @@ function Refresh() {
 
       Popup.ok(
         'Refresh',
-        'Failed to analyze receipt attachments'
+        'Failed to start receipt analysis'
       );
     }
   );
@@ -311,11 +244,7 @@ function reloadReceiptTable(preserveCapturedSelection) {
     beginIndependentReceiptSelectionReload();
   }
 
-  loadReceiptBatchesByUserAndStatuses(
-    statuses,
-    onReceiptListFetchSucceeded,
-    onReceiptListFetchFailed
-  );
+  prepareAndLoadReceiptBatches();
 
   setTimeout(function () {
     bindReceiptTableDrawHandler();
@@ -536,7 +465,12 @@ function finishUploadProcess(uploadState, attachmentInput) {
     );
   }
 
-  reloadReceiptTable();
+  // Analyze only after the upload batch has finished saving its receipts.
+  if (uploadState.files.length > uploadState.failedFiles.length) {
+    Analyze();
+  } else {
+    reloadReceiptTable();
+  }
 }
 
 function removeAttachmentInput(attachmentInput) {
@@ -851,7 +785,8 @@ var RECEIPT_STATUS_CLASS_BY_STATUS = {
   PROCESSED: 'receipt-status-processed',
   FAILED: 'receipt-status-failed',
   AI_FAILED: 'receipt-status-ai-failed',
-  READY: 'receipt-status-ready'
+  READY: 'receipt-status-ready',
+  LINE_FAILED: 'receipt-status-line-failed'
 };
 
 var RECEIPT_STATUS_CLASSES = [
@@ -860,7 +795,8 @@ var RECEIPT_STATUS_CLASSES = [
   'receipt-status-processed',
   'receipt-status-failed',
   'receipt-status-ai-failed',
-  'receipt-status-ready'
+  'receipt-status-ready',
+  'receipt-status-line-failed'
 ];
 
 function applyRowStatusClasses() {
@@ -1696,6 +1632,7 @@ function getReceiptIdForIndex(index) {
 
 function writeSelectedReceiptIds(ids) {
   Storage.set(SELECTED_RECEIPT_IDS_STORAGE_KEY, JSON.stringify(ids));
+  updateReceiptCreateReportButton(ids);
 
   return ids;
 }
@@ -1933,6 +1870,32 @@ function isReceiptRowReady(rowIndex) {
   return getReceiptRowStatusForIndex(rowIndex) === RECEIPT_ROW_READY_STATUS;
 }
 
+
+// ----------------------------------------------------------------------------
+// Payment icon
+// ----------------------------------------------------------------------------
+function renderReceiptPaymentIcons() {
+  $('#tableOutput tbody tr').each(function () {
+    var index = getRenderedRowDatasetIndex(this);
+    var $cell = $(this).children('td').first();
+
+    $cell.find('.receipt-payment-icon').remove();
+
+    if (index === null || !$cell.length) {
+      return;
+    }
+
+    var matched = hasCreditReceipt(index);
+
+    $('<span></span>')
+      .addClass('receipt-payment-icon')
+      .attr('title', matched
+        ? 'Matched to credit-card transaction'
+        : 'Cash receipt')
+      .html(matched ? '&#128179;' : ' ')
+      .appendTo($cell);
+  });
+}
 // ----------------------------------------------------------------------------
 // 2. A NEW row says so INSIDE its own empty cells
 // ----------------------------------------------------------------------------
@@ -2315,4 +2278,8 @@ function click_New_Report() {
 }
 
 
+
+function Refresh() {
+  reloadReceiptTable();
+}
 
