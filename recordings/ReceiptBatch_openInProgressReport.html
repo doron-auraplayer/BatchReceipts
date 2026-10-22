@@ -4,12 +4,12 @@
     <head profile="http://selenium-ide.openqa.org/profiles/test-case">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="selenium.base" href="" />
-    <title>openInProgressReport</title>
+    <title>ReceiptBatch_openInProgressReport</title>
     </head>
     <body>
     <table cellpadding="1" cellspacing="1" border="1">
     <thead>
-    <tr><td rowspan="1" colspan="3">openInProgressReport</td></tr>
+    <tr><td rowspan="1" colspan="3">ReceiptBatch_openInProgressReport</td></tr>
   </thead><tbody><tr>
       <td>clickAndWait</td>
       <td>xpath=(//a[contains(@id, 'SFAV')]/div/img)[2]</td>
@@ -22,13 +22,8 @@
       <td></td>
     </tr><tr>
       <td>input</td>
-      <td>W72171</td>
+      <td>W72316</td>
       <td>reportNumber</td>
-      <td></td>
-    </tr><tr>
-      <td>assertText</td>
-      <td>xpath=//table[contains(@id, 'ActiveReportsRN')]/tbody/tr[2]/td/table/tbody/tr/td/h2</td>
-      <td>Update Expense Reports</td>
       <td></td>
     </tr><tr>
       <td>storeElementPresent</td>
@@ -37,8 +32,48 @@
       <td></td>
     </tr><tr>
       <td>if</td>
-      <td>reportExists</td>
+      <td>!reportExists</td>
       <td>true</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>xpath=//a[contains(@id, 'QBE_COLLAPSED:ActiveReportsRN.ActiveReportsTbl')]/img</td>
+      <td>reportSearchCollapsed</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>reportSearchCollapsed</td>
+      <td>true</td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>xpath=//a[contains(@id, 'QBE_COLLAPSED:ActiveReportsRN.ActiveReportsTbl')]/img</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>type</td>
+      <td>id=qbe:ActiveReportsRN.ActiveReportsTbl:ReportNumber</td>
+      <td>${reportNumber}</td>
+      <td></td>
+    </tr><tr>
+      <td>sendKeys</td>
+      <td>id=qbe:ActiveReportsRN.ActiveReportsTbl:ReportNumber</td>
+      <td>${KEY_ENTER}</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>xpath=//table[contains(@id,'ActiveReportsRN.ActiveReportsTbl:Content')]/tbody/tr[td[1][normalize-space(.)='${reportNumber}']]</td>
+      <td>reportExists</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
       <td></td>
     </tr><tr>
       <td>clickAndWait</td>
@@ -51,13 +86,13 @@
       <td></td>
       <td></td>
     </tr><tr>
-      <td>endIf</td>
-      <td></td>
+      <td>waitForTitle</td>
+      <td>*Expense Report: Cash and Other Expenses*</td>
       <td></td>
       <td></td>
     </tr><tr>
-      <td></td>
-      <td></td>
+      <td>assertTitle</td>
+      <td>*Expense Report: Cash and Other Expenses*</td>
       <td></td>
       <td></td>
     </tr></tbody></table></body></html>

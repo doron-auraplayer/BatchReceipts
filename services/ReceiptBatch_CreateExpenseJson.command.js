@@ -3,6 +3,12 @@
 // config/Oracle_EBS_iExpense_JSON_Templates.json -> expenseTypes.*.emptyTemplate
 
 var expenseType = ServiceManager.getInput('EXPENSE_TYPE');
+// Optional app scope. The service is shared with other LiveExpense apps, so the
+// attendee and guest editors are only exposed to the exact LiveExpense_AI app.
+// A missing, blank or different APP_NAME keeps the original service output.
+var appName = ServiceManager.getInput('APP_NAME');
+var employeeAttendeeAppName = 'LiveExpense_AI';
+var employeeAttendeeEnabled = appName === employeeAttendeeAppName;
 
 var emptyTemplates = {
     'Airfare': {
@@ -174,6 +180,65 @@ var requiredFields = {
 };
 
 /**************************************************************************
+ * Expense location input mode by expense type. This map is the single
+ * control of which types use the new location LOV; every type not listed
+ * here defaults to the plain text location control. Do not infer this from
+ * requiredFields: expenseLocation is receipt core data and is intentionally
+ * absent from emptyTemplates.
+ **************************************************************************/
+var expenseLocationModes = {
+    'Car Rental': 'lov',
+    'Hotel': 'lov'
+};
+
+var defaultExpenseLocationMode = 'text';
+var expenseLocationServiceName = 'ReceiptBatch_ExpenseLocation';
+
+/**************************************************************************
+ * Verified EBS Vision Operations context for the native LocationName LOV.
+ * Template: Travel. Language: US. Both LOV expense types below use the
+ * fixed lookup switches at the bottom of this block.
+ *
+ * The page never sees a type name or a hardcoded type ID: it receives this
+ * context on the selected expenseType metadata entry and passes the values
+ * straight through to the service. Keep environment changes here only.
+ *
+ * expenseTypeIds are the EBS AP_EXPENSE_REPORT_PARAMS_ALL parameter IDs,
+ * verified for this org/template:
+ *   Car Rental = 10007
+ *   Hotel      = 10006
+ **************************************************************************/
+var expenseLocationEnvironment = {
+    orgId: 204,
+    language: 'US',
+    allSchedules: 'N',
+    merchantLocations: 'N',
+    endDateOffset: 0,
+    expenseTypeIds: {
+        'Car Rental': 10007,
+        'Hotel': 10006
+    }
+};
+
+function expenseLocationContextFor(typeName, mode) {
+    if (mode !== 'lov') {
+        return null;
+    }
+    var typeId = expenseLocationEnvironment.expenseTypeIds[typeName];
+    if (typeof typeId !== 'number' || typeId <= 0) {
+        return null;
+    }
+    return {
+        orgId: expenseLocationEnvironment.orgId,
+        language: expenseLocationEnvironment.language,
+        expenseTypeId: typeId,
+        allSchedules: expenseLocationEnvironment.allSchedules,
+        merchantLocations: expenseLocationEnvironment.merchantLocations,
+        endDateOffset: expenseLocationEnvironment.endDateOffset
+    };
+}
+
+/**************************************************************************
  * Page policy. Owned by the service so the ReceiptDetails page carries no
  * hidden-action list of its own. hiddenSelectors is applied verbatim by the
  * client through $(selector).hide().
@@ -231,6 +296,39 @@ var fieldMetadata = {
 };
 
 /**************************************************************************
+ * LiveExpense_AI attendee and guest editors. LiveExpense_AI gets the native
+ * employee LOV, the canonical Meals employees array and the structured guest
+ * array. Every other app keeps the original metadata and templates
+ * byte-for-byte, including the Entertainment companyAttendees control.
+ **************************************************************************/
+if (employeeAttendeeEnabled) {
+    emptyTemplates['Meals'].employees = [];
+    fieldMetadata.employees = {
+        control: 'employee-lov-list',
+        fieldId: 'AttendeeName',
+        summaryFieldId: 'AttendeeNames',
+        summaryProperty: 'employeeName',
+        service: 'ReceiptBatch_ExpenseAttendee',
+        language: 'US',
+        minSearchLength: 2,
+        maxResults: 50,
+        type: 'array',
+        title: 'Employee Attendees'
+    };
+    emptyTemplates['Meals'].guest = [];
+    fieldMetadata.guest = {
+        control: 'guest-list',
+        fieldId: 'GuestAttendees',
+        nameFieldId: 'GuestName',
+        employerFieldId: 'Employer',
+        addButtonId: 'Add_Guest',
+        type: 'array',
+        title: 'Guests',
+        readOnly: true
+    };
+}
+
+/**************************************************************************
  * Per-type corrections. expenseLocation is LocationName for every type: the
  * designer has no RBLocation field.
  **************************************************************************/
@@ -277,6 +375,9 @@ for (templateName in emptyTemplates) {
     if (Object.prototype.hasOwnProperty.call(emptyTemplates, templateName)) {
         var templateFields = {};
         var fieldName;
+        var locationMode = Object.prototype.hasOwnProperty.call(expenseLocationModes, templateName)
+            ? expenseLocationModes[templateName]
+            : defaultExpenseLocationMode;
 
         for (fieldName in emptyTemplates[templateName]) {
             if (Object.prototype.hasOwnProperty.call(emptyTemplates[templateName], fieldName)) {
@@ -296,6 +397,9 @@ for (templateName in emptyTemplates) {
         expenseTypesMetadata[templateName] = {
             label: templateName,
             category: expenseCategories[templateName],
+            locationMode: locationMode,
+            locationService: locationMode === 'lov' ? expenseLocationServiceName : null,
+            locationContext: expenseLocationContextFor(templateName, locationMode),
             fields: templateFields,
             required: requiredFields[templateName] || [],
             emptyTemplate: emptyTemplates[templateName]

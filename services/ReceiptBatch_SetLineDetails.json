@@ -1,0 +1,361 @@
+{
+  "name": "ReceiptBatch_SetLineDetails",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "LocationName",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "LocationName",
+      "paramValue": "All Other Locations",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "DetailReceiptMissing",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "DetailReceiptMissing",
+      "paramValue": "false",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "CompanyAttendees",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "CompanyAttendees",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ReceiptCurrencyChoice",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "ReceiptCurrencyChoice",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "DetailReceiptAmount",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "DetailReceiptAmount",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "StartDateFormatted",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "StartDateFormatted",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Justification",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "Justification",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ExchRate",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "ExchRate",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "DetailMerchantName",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "DetailMerchantName",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AirTravelType",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "AirTravelType",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AirTicketClass",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "AirTicketClass",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AirFromLocation",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "AirFromLocation",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AirToLocation",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "AirToLocation",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "NumberOfDays",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "NumberOfDays",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "AccEndDateFormatted",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "AccEndDateFormatted",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "MealNumberAttendees",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "MealNumberAttendees",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "MealAttendees",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "MealAttendees",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "attachmentPath",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "attachmentPath",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLineWarningMessageExists",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "CashLineWarningMessageExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLineWarningMessage",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "CashLineWarningMessage",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLineErrorMessageExists",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "CashLineErrorMessageExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLineErrorMessage",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "CashLineErrorMessage",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "errorPopupExists",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "errorPopupExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "currentPageTitle",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "currentPageTitle",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_SetLineDetails"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "ReceiptBatch_SetLineDetails.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": []
+}

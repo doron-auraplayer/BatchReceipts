@@ -115,5 +115,7 @@
   "type": "DB",
   "createdBy": "admin",
   "labels": [],
-  "apps": []
+  "apps": [
+    "LiveExpense_AI"
+  ]
 }

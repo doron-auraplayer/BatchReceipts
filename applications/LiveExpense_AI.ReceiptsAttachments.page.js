@@ -1,12 +1,12 @@
-
 //'NEW,PROCESSING,PROCESSED,READY,ANALYZED_FAILED,AI_FAILED,LINE_CREATED,LINE_FAILED,SUBMITTED'
+
 var statuses = 'NEW,PROCESSING,PROCESSED,READY,ANALYZED_FAILED,AI_FAILED,LINE_FAILED';
 
 var SUPPORTED_FILE_EXTENSIONS = '.pdf,.png,.jpg,.jpeg,.heic';
-var COMPRESSION_FILE_EXTENSIONS = ['jpg', 'jpeg', 'heic'];
+
+var COMPRESSION_FILE_EXTENSIONS = ['jpg', 'jpeg'];
+
 var COMPRESSION_SIZE_THRESHOLD = 350000;
-
-
 
 // ----------------------------------------------------------------------------
 // Page initialization
@@ -133,8 +133,6 @@ function hasCreditReceipt(rowIndex) {
   );
 }
 
-
-
 // ----------------------------------------------------------------------------
 // Receipt actions
 // ----------------------------------------------------------------------------
@@ -154,13 +152,6 @@ function createReceiptReportActions() {
     $actions.append($(this).closest('.button-field-container'));
   });
   $content.addClass('receipt-has-floating-actions');
-}
-
-function updateReceiptCreateReportButton(selectedIds) {
-  var disabled = selectedIds.length === 0;
-  $('#New_Report')
-    .prop('disabled', disabled)
-    .attr('aria-disabled', String(disabled));
 }
 
 function onAddAttachment() {
@@ -185,8 +176,6 @@ function onAddAttachment() {
 
   addAttachmentUsingInput(attachmentInput);
 }
-
-
 
 function Analyze() {
   Storage.set('P_STATUSES', 'NEW');
@@ -387,6 +376,363 @@ function setPreviewDataFromReceiptRow(rowIndex) {
   );
 }
 
+var RECEIPT_STATUS_CLASS_BY_STATUS = {
+  NEW: 'receipt-status-new',
+  PROCESSING: 'receipt-status-processing',
+  PROCESSED: 'receipt-status-processed',
+  FAILED: 'receipt-status-failed',
+  AI_FAILED: 'receipt-status-ai-failed',
+  READY: 'receipt-status-ready',
+  LINE_FAILED: 'receipt-status-line-failed'
+};
+
+var RECEIPT_STATUS_CLASSES = [
+  'receipt-status-new',
+  'receipt-status-processing',
+  'receipt-status-processed',
+  'receipt-status-failed',
+  'receipt-status-ai-failed',
+  'receipt-status-ready',
+  'receipt-status-line-failed'
+];
+
+function applyRowStatusClasses() {
+  $(RECEIPT_STATUS_ROW_SELECTOR).each(function () {
+    styleReceiptRowStatus(this);
+  });
+}
+
+function styleReceiptRowStatus(rowElement) {
+  var $row = $(rowElement);
+  var rowIndex = getRenderedRowDatasetIndex(rowElement);
+  var statusClass;
+
+  RECEIPT_STATUS_CLASSES.forEach(function (className) {
+    $row.removeClass(className);
+  });
+
+  if (rowIndex === null) {
+    return;
+  }
+
+  statusClass = getReceiptRowStatusClass(
+    getReceiptRowStatus(rowIndex)
+  );
+
+  if (statusClass === null) {
+    return;
+  }
+
+  $row.addClass(statusClass);
+}
+
+function getReceiptRowStatusClass(status) {
+  if (
+    !Object.prototype.hasOwnProperty.call(
+      RECEIPT_STATUS_CLASS_BY_STATUS,
+      status
+    )
+  ) {
+    return null;
+  }
+
+  return RECEIPT_STATUS_CLASS_BY_STATUS[status];
+}
+
+// Page lifecycle state remains in Main.
+
+var receiptsAttachmentsPageInitialized = false;
+
+function onTableClick(row, col, rowCells) {
+  console.log('onTableClick called for row:', row, 'col:', col, 'rowCells:', rowCells);
+  Preview(row);
+}
+
+var RECEIPT_TABLE_CLICK_WRAPPED_FLAG = 'receiptTableClickWrapped';
+
+function createReceiptTableClickHandler(generatedTableClick) {
+  var wrappedTableClick = function (row, col, rowCells) {
+    if (typeof generatedTableClick === 'function') {
+      generatedTableClick(row, col, rowCells);
+    }
+
+    Preview(row);
+  };
+
+  wrappedTableClick[RECEIPT_TABLE_CLICK_WRAPPED_FLAG] = true;
+  return wrappedTableClick;
+}
+
+function installReceiptTableClickWrapper() {
+  var currentTableClick = typeof onTableClick === 'function'
+    ? onTableClick
+    : null;
+
+  if (currentTableClick &&
+    currentTableClick[RECEIPT_TABLE_CLICK_WRAPPED_FLAG] === true) {
+    return currentTableClick;
+  }
+
+  onTableClick = createReceiptTableClickHandler(currentTableClick);
+  return onTableClick;
+}
+
+installReceiptTableClickWrapper();
+
+/*
+*       Transactions
+*/
+
+function colorCreditRows() {
+  $('#tableOutput tbody tr').each(function (index) {
+    $(this).toggleClass(
+      'credit-row',
+      hasCreditReceipt(index)
+    );
+  });
+}
+
+// NEW-row status and pending-message visuals remain in Main.
+
+var RECEIPT_ROW_NEW_STATUS = 'NEW';
+
+var RECEIPT_ROW_PENDING_CLASS = 'receipt-pending-value';
+
+var RECEIPT_ROW_PENDING_LABEL = 'New receipt';
+
+var RECEIPT_ROW_PENDING_HINT = 'Click Refresh to analyze';
+
+var RECEIPT_ROW_PENDING_TEXT_STYLE = {
+  color: '#8a8f98',
+  'font-style': 'italic',
+  'font-weight': '400',
+  'font-size': '12px',
+  'line-height': '1.2',
+  'white-space': 'nowrap'
+};
+
+var RECEIPT_ROW_PENDING_ROW_STYLE = {
+  'background-color': '#fbfcfd'
+};
+
+var RECEIPT_ROW_PENDING_ROW_STYLE_KEY = 'background-color';
+
+var RECEIPT_ROW_PENDING_MARKER = 'receipt-pending-row';
+
+var RECEIPT_ROW_PENDING_ATTR = 'data-receipt-pending';
+
+var RECEIPT_ROW_PENDING_ATTR_VALUE = 'true';
+
+var RECEIPT_ROW_CONTENT_SELECTOR = 'input, select, textarea, button, img, a, .status-wrap, .credit-icon';
+
+// ----------------------------------------------------------------------------
+// Payment icon
+// ----------------------------------------------------------------------------
+
+function renderReceiptPaymentIcons() {
+  $('#tableOutput tbody tr').each(function () {
+    var index = getRenderedRowDatasetIndex(this);
+    var $cell = $(this).children('td').first();
+
+    $cell.find('.receipt-payment-icon').remove();
+
+    if (index === null || !$cell.length) {
+      return;
+    }
+
+    var matched = hasCreditReceipt(index);
+
+    $('<span></span>')
+      .addClass('receipt-payment-icon')
+      .attr('title', matched
+        ? 'Matched to credit-card transaction'
+        : 'Cash receipt')
+      .html(matched ? '&#128179;' : ' ')
+      .appendTo($cell);
+  });
+}
+
+// ----------------------------------------------------------------------------
+// 2. A NEW row says so INSIDE its own empty cells
+// ----------------------------------------------------------------------------
+
+function renderExtractionPendingMessage() {
+  $(RECEIPT_STATUS_ROW_SELECTOR).each(function () {
+    var index = getRenderedRowDatasetIndex(this);
+
+    clearExtractionPendingMessage(this);
+
+    if (index === null) {
+      return;
+    }
+
+    if (getReceiptRowStatusForIndex(index) !== RECEIPT_ROW_NEW_STATUS) {
+      return;
+    }
+
+    applyExtractionPendingMessage(this);
+  });
+}
+
+function removeExtractionPendingMessages() {
+  $(RECEIPT_STATUS_ROW_SELECTOR).each(function () {
+    clearExtractionPendingMessage(this);
+  });
+}
+
+function clearExtractionPendingMessage(rowElement) {
+  var $row = $(rowElement);
+
+  $row.find('[' + RECEIPT_ROW_PENDING_ATTR + ']').remove();
+
+  if ($row.hasClass(RECEIPT_ROW_PENDING_MARKER)) {
+    $row.css(RECEIPT_ROW_PENDING_ROW_STYLE_KEY, '');
+    $row.removeClass(RECEIPT_ROW_PENDING_MARKER);
+  }
+}
+
+function applyExtractionPendingMessage(rowElement) {
+  var $row = $(rowElement);
+  var $cells = $row.find('td');
+  var dataCellFrom = getReceiptRowDataCellStart(rowElement, $cells);
+  var written = 0;
+
+  if (dataCellFrom === null) {
+    return;
+  }
+
+  if (hasPendingMessage($row)) {
+    return;
+  }
+
+  $cells.each(function (position) {
+    if (written >= 2 || position < dataCellFrom) {
+      return;
+    }
+
+    if (!isPendingMessageCell($(this))) {
+      return;
+    }
+
+    writePendingMessage(
+      $(this),
+      written === 0
+        ? RECEIPT_ROW_PENDING_LABEL
+        : RECEIPT_ROW_PENDING_HINT
+    );
+
+    written++;
+  });
+
+  if (written === 0) {
+    return;
+  }
+
+  $row.addClass(RECEIPT_ROW_PENDING_MARKER);
+  $row.css(RECEIPT_ROW_PENDING_ROW_STYLE);
+}
+
+function getReceiptRowDataCellStart(rowElement, $cells) {
+  var index = getRenderedRowDatasetIndex(rowElement);
+  var $controls;
+  var position = null;
+
+  if (index === null) {
+    return null;
+  }
+
+  $controls = getReceiptRowSelectControls(rowElement, index);
+
+  if (!$controls.length) {
+    return null;
+  }
+
+  $controls.each(function () {
+    var cell = getReceiptRowSelectCell($(this));
+
+    if (!cell || position !== null) {
+      return;
+    }
+
+    $cells.each(function (cellPosition) {
+      if (this === cell) {
+        position = cellPosition;
+      }
+    });
+  });
+
+  return position === null ? null : position + 1;
+}
+
+function getReceiptRowSelectCell($element) {
+  var node = $element.parent();
+
+  while (node && node.length) {
+    if (node.get(0) === null || node.get(0) === undefined) {
+      return null;
+    }
+
+    if (String(node.get(0).nodeName).toUpperCase() === 'TD') {
+      return node.get(0);
+    }
+
+    node = node.parent();
+  }
+
+  return null;
+}
+
+function writePendingMessage($cell, message) {
+  $('<span></span>')
+    .addClass(RECEIPT_ROW_PENDING_CLASS)
+    .attr(RECEIPT_ROW_PENDING_ATTR, RECEIPT_ROW_PENDING_ATTR_VALUE)
+    .attr('title', message)
+    .css(RECEIPT_ROW_PENDING_TEXT_STYLE)
+    .text(message)
+    .appendTo($cell);
+}
+
+function isPendingMessageCell($cell) {
+  if ($cell.children().length) {
+    return false;
+  }
+
+  return hasReceiptCellHtml($cell.html()) === false;
+}
+
+function hasReceiptCellHtml(html) {
+  if (html === null || html === undefined) {
+    return false;
+  }
+
+  return String(html).replace(/\s+/g, '') !== '';
+}
+
+function hasPendingMessage($row) {
+  return $row.find('[' + RECEIPT_ROW_PENDING_ATTR + ']').length > 0;
+}
+
+function click_New_Report() {
+  var selectedIds = readSelectedReceiptIds();
+
+  if (selectedIds.length === 0) {
+    Popup.ok('New Report', 'Please select receipts for the new report');
+    return;
+  }
+
+  Storage.set('newAiReport', 'true');
+
+  reLoginAndRun( function() {
+    Page.navigate('Report_General');
+  });
+  
+}
+
+function Refresh() {
+  reloadReceiptTable();
+}
+
+/***** TAB: Upload *****/
 // ----------------------------------------------------------------------------
 // Multiple attachment upload
 // ----------------------------------------------------------------------------
@@ -481,21 +827,45 @@ function removeAttachmentInput(attachmentInput) {
   }
 }
 
+function isHeicUploadFile(file) {
+  var fileName = file && file.name
+    ? String(file.name)
+    : '';
+  var fileType = file && file.type
+    ? String(file.type).toLowerCase()
+    : '';
+
+  if (/\.heic$/i.test(fileName)) {
+    return true;
+  }
+
+  return fileName.indexOf('.') === -1 &&
+    fileType === 'image/heic';
+}
+
 function readAndUploadFile(file, successCallback, failureCallback) {
-  var fileReader = new FileReader();
+  var fileReader;
+
+  fileReader = new FileReader();
 
   fileReader.onload = function (loadEvent) {
     var fileExtension = getFileExtension(file.name);
     var fileData = loadEvent.target.result;
+    var isHeicFile = isHeicUploadFile(file);
+    var uploadFileName = file.name;
+
+    if (isHeicFile && fileExtension === '') {
+      uploadFileName += '.heic';
+    }
 
     if (
+      !isHeicFile &&
       file.size > COMPRESSION_SIZE_THRESHOLD &&
       COMPRESSION_FILE_EXTENSIONS.indexOf(fileExtension) !== -1
     ) {
       compressFileForUpload(
         file,
         fileData,
-        fileExtension,
         successCallback,
         failureCallback
       );
@@ -505,7 +875,7 @@ function readAndUploadFile(file, successCallback, failureCallback) {
 
     uploadAttachment(
       fileData,
-      file.name,
+      uploadFileName,
       successCallback,
       failureCallback
     );
@@ -523,7 +893,6 @@ function readAndUploadFile(file, successCallback, failureCallback) {
 function compressFileForUpload(
   file,
   fileData,
-  fileExtension,
   successCallback,
   failureCallback
 ) {
@@ -531,16 +900,6 @@ function compressFileForUpload(
     'Compressing: ' + file.name,
     'COMPRESSING_FILE'
   );
-
-  if (fileExtension === 'heic') {
-    compressHeicFile(
-      file,
-      successCallback,
-      failureCallback
-    );
-
-    return;
-  }
 
   compressImage(
     fileData,
@@ -563,65 +922,6 @@ function compressFileForUpload(
       failureCallback();
     }
   );
-}
-
-function compressHeicFile(
-  file,
-  successCallback,
-  failureCallback
-) {
-  if (typeof heic2any !== 'function') {
-    console.log('heic2any is not available');
-
-    Spinner.stop('COMPRESSING_FILE');
-    failureCallback();
-
-    return;
-  }
-
-  heic2any({
-    blob: file,
-    toType: 'image/jpeg',
-    quality: 0.1
-  })
-    .then(function (conversionResult) {
-      var convertedFileName = file.name.replace(
-        /\.heic$/i,
-        '.jpeg'
-      );
-
-      compressImage(
-        URL.createObjectURL(conversionResult),
-        convertedFileName,
-
-        function (compressedData, compressedFileName) {
-          Spinner.stop('COMPRESSING_FILE');
-
-          uploadAttachment(
-            compressedData,
-            compressedFileName || convertedFileName,
-            successCallback,
-            failureCallback
-          );
-        },
-
-        function () {
-          Spinner.stop('COMPRESSING_FILE');
-          failureCallback();
-        }
-      );
-    })
-
-    .catch(function (error) {
-      console.log(
-        'HEIC conversion failed for:',
-        file.name,
-        error
-      );
-
-      Spinner.stop('COMPRESSING_FILE');
-      failureCallback();
-    });
 }
 
 function compressImage(
@@ -761,6 +1061,7 @@ function getRawBase64(base64Value) {
   );
 }
 
+
 // ----------------------------------------------------------------------------
 // Filename cleanup
 // ----------------------------------------------------------------------------
@@ -775,59 +1076,38 @@ function makeFilenameSafe(value) {
     .trim();
 }
 
+
+/***** TAB: Selection *****/
+// Selection tab.
+// Selection-only top-level nodes extracted from the current Main capture.
+// Node bodies, initializers, and global names are unchanged; order is original.
+
+// ----------------------------------------------------------------------------
+// Create-report button state
+// ----------------------------------------------------------------------------
+
+function updateReceiptCreateReportButton(selectedIds) {
+  var disabled = selectedIds.length === 0;
+  $('#New_Report')
+    .prop('disabled', disabled)
+    .attr('aria-disabled', String(disabled));
+}
+
+// ----------------------------------------------------------------------------
+// Receipt status select prefixes and storage prefix
+// ----------------------------------------------------------------------------
+
 var RECEIPT_STATUS_ROW_SELECTOR = '#tableOutput tbody tr';
+
 var RECEIPT_STATUS_SELECT_PREFIX = 'Select_';
+
 var RECEIPT_STATUS_STORAGE_PREFIX = 'RECEIPTBATCH_STATUS_';
+
 Storage.set("RECEIPT_STATUS_STORAGE_PREFIX", "RECEIPTBATCH_STATUS_")
-var RECEIPT_STATUS_CLASS_BY_STATUS = {
-  NEW: 'receipt-status-new',
-  PROCESSING: 'receipt-status-processing',
-  PROCESSED: 'receipt-status-processed',
-  FAILED: 'receipt-status-failed',
-  AI_FAILED: 'receipt-status-ai-failed',
-  READY: 'receipt-status-ready',
-  LINE_FAILED: 'receipt-status-line-failed'
-};
 
-var RECEIPT_STATUS_CLASSES = [
-  'receipt-status-new',
-  'receipt-status-processing',
-  'receipt-status-processed',
-  'receipt-status-failed',
-  'receipt-status-ai-failed',
-  'receipt-status-ready',
-  'receipt-status-line-failed'
-];
-
-function applyRowStatusClasses() {
-  $(RECEIPT_STATUS_ROW_SELECTOR).each(function () {
-    styleReceiptRowStatus(this);
-  });
-}
-
-function styleReceiptRowStatus(rowElement) {
-  var $row = $(rowElement);
-  var rowIndex = getRenderedRowDatasetIndex(rowElement);
-  var statusClass;
-
-  RECEIPT_STATUS_CLASSES.forEach(function (className) {
-    $row.removeClass(className);
-  });
-
-  if (rowIndex === null) {
-    return;
-  }
-
-  statusClass = getReceiptRowStatusClass(
-    getReceiptRowStatus(rowIndex)
-  );
-
-  if (statusClass === null) {
-    return;
-  }
-
-  $row.addClass(statusClass);
-}
+// ----------------------------------------------------------------------------
+// Row dataset / select-control lookup and status normalization
+// ----------------------------------------------------------------------------
 
 function getRenderedRowDatasetIndex(rowElement) {
   var index = null;
@@ -912,121 +1192,14 @@ function normalizeReceiptRowStatus(status) {
     .toUpperCase();
 }
 
-function getReceiptRowStatusClass(status) {
-  if (
-    !Object.prototype.hasOwnProperty.call(
-      RECEIPT_STATUS_CLASS_BY_STATUS,
-      status
-    )
-  ) {
-    return null;
-  }
-
-  return RECEIPT_STATUS_CLASS_BY_STATUS[status];
-}
-
-var RECEIPT_ROW_SELECTOR = '#tableOutput tbody tr';
-var RECEIPT_ROW_READY_CLASS = 'receipt-row-ready';
-var RECEIPT_ROW_OTHER_CLASS = 'receipt-row-other';
+// ----------------------------------------------------------------------------
+// Selected receipt ID state, reload/snapshot handling, reconciliation,
+// and checkbox handlers
+// ----------------------------------------------------------------------------
 
 var RECEIPT_ROW_SELECT_PREFIX = 'Select_';
+
 var RECEIPT_ROW_STATUS_PREFIX = 'RECEIPTBATCH_STATUS_';
-
-function applyReceiptRowClasses() {
-  $(RECEIPT_ROW_SELECTOR).each(function () {
-    applyReceiptRowClass(this);
-  });
-}
-
-function applyReceiptRowClass(rowElement) {
-  var $row = $(rowElement);
-  var rowIndex = getReceiptRowDatasetIndex(rowElement);
-  var status;
-
-  $row.removeClass(RECEIPT_ROW_READY_CLASS);
-  $row.removeClass(RECEIPT_ROW_OTHER_CLASS);
-
-  if (rowIndex === null) {
-    return;
-  }
-
-  status = getReceiptRowStatusForIndex(rowIndex);
-
-  if (status === '') {
-    return;
-  }
-
-  $row.addClass(
-    status === 'READY' ? RECEIPT_ROW_READY_CLASS : RECEIPT_ROW_OTHER_CLASS
-  );
-}
-
-function getReceiptRowDatasetIndex(rowElement) {
-  var index = null;
-
-  $(rowElement)
-    .find('input')
-    .each(function () {
-      var candidate = getReceiptRowSelectIndex(this);
-
-      if (index === null && candidate !== null) {
-        index = candidate;
-      }
-    });
-
-  return index;
-}
-
-function getReceiptRowSelectIndex(element) {
-  var controlId = getReceiptRowSelectControlId(element);
-  var match;
-
-  if (controlId === null) {
-    return null;
-  }
-
-  match = new RegExp('^' + RECEIPT_ROW_SELECT_PREFIX + '(\\d+)$')
-    .exec(controlId);
-
-  if (!match) {
-    return null;
-  }
-
-  return parseInt(match[1], 10);
-}
-
-function getReceiptRowSelectControlId(element) {
-  var attributeId;
-  var propertyId;
-
-  if (!element) {
-    return null;
-  }
-
-  attributeId = element.getAttribute
-    ? element.getAttribute('id')
-    : null;
-
-  if (hasReceiptRowSelectPrefix(attributeId)) {
-    return String(attributeId);
-  }
-
-  propertyId = element.id;
-
-  if (hasReceiptRowSelectPrefix(propertyId)) {
-    return String(propertyId);
-  }
-
-  return null;
-}
-
-function hasReceiptRowSelectPrefix(value) {
-  return (
-    value !== null &&
-    value !== undefined &&
-    String(value).indexOf(RECEIPT_ROW_SELECT_PREFIX) === 0
-  );
-}
 
 function getReceiptRowStatusForIndex(rowIndex) {
   return normalizeReceiptRowStatus(
@@ -1038,8 +1211,6 @@ var SELECTED_RECEIPT_IDS_STORAGE_KEY = 'SELECTED_RECEIPT_IDS';
 
 var SELECTED_RECEIPT_IDS_SNAPSHOT_STORAGE_KEY =
   'SELECTED_RECEIPT_IDS_SNAPSHOT';
-
-var receiptsAttachmentsPageInitialized = false;
 
 var receiptTableDrawnForCurrentLoad = false;
 
@@ -1637,98 +1808,28 @@ function writeSelectedReceiptIds(ids) {
   return ids;
 }
 
-function onTableClick(row, col, rowCells) {
-  console.log('onTableClick called for row:', row, 'col:', col, 'rowCells:', rowCells);
-  Preview(row);
-}
-
-var RECEIPT_TABLE_CLICK_WRAPPED_FLAG = 'receiptTableClickWrapped';
-
-function createReceiptTableClickHandler(generatedTableClick) {
-  var wrappedTableClick = function (row, col, rowCells) {
-    if (typeof generatedTableClick === 'function') {
-      generatedTableClick(row, col, rowCells);
-    }
-
-    Preview(row);
-  };
-
-  wrappedTableClick[RECEIPT_TABLE_CLICK_WRAPPED_FLAG] = true;
-  return wrappedTableClick;
-}
-
-function installReceiptTableClickWrapper() {
-  var currentTableClick = typeof onTableClick === 'function'
-    ? onTableClick
-    : null;
-
-  if (currentTableClick &&
-    currentTableClick[RECEIPT_TABLE_CLICK_WRAPPED_FLAG] === true) {
-    return currentTableClick;
-  }
-
-  onTableClick = createReceiptTableClickHandler(currentTableClick);
-  return onTableClick;
-}
-
-installReceiptTableClickWrapper();
-
-/*
-*       Transactions
-*/
-function colorCreditRows() {
-  $('#tableOutput tbody tr').each(function (index) {
-    $(this).toggleClass(
-      'credit-row',
-      hasCreditReceipt(index)
-    );
-  });
-}
+// ----------------------------------------------------------------------------
+// READY select gate constants (RECEIPT_ROW_NEW_STATUS stays in Main)
+// ----------------------------------------------------------------------------
 
 var RECEIPT_GATE_CHECKBOX_PREFIX = 'Select_';
 
 var RECEIPT_GATE_STATUS_PREFIX = 'RECEIPTBATCH_STATUS_';
 
 var RECEIPT_ROW_READY_STATUS = 'READY';
-var RECEIPT_ROW_NEW_STATUS = 'NEW';
 
 var RECEIPT_ROW_SELECT_DISABLED_CLASS = 'receipt-select-disabled';
 
 var RECEIPT_ROW_TRUE = 'true';
+
 var RECEIPT_ROW_FALSE = 'false';
 
 var RECEIPT_ROW_SELECT_KEY_PREFIX = 'Select_';
 
-var RECEIPT_ROW_PENDING_CLASS = 'receipt-pending-value';
-
-var RECEIPT_ROW_PENDING_LABEL = 'New receipt';
-var RECEIPT_ROW_PENDING_HINT = 'Click Refresh to analyze';
-
-var RECEIPT_ROW_PENDING_TEXT_STYLE = {
-  color: '#8a8f98',
-  'font-style': 'italic',
-  'font-weight': '400',
-  'font-size': '12px',
-  'line-height': '1.2',
-  'white-space': 'nowrap'
-};
-
-var RECEIPT_ROW_PENDING_ROW_STYLE = {
-  'background-color': '#fbfcfd'
-};
-
-var RECEIPT_ROW_PENDING_ROW_STYLE_KEY = 'background-color';
-
-var RECEIPT_ROW_PENDING_MARKER = 'receipt-pending-row';
-
-var RECEIPT_ROW_PENDING_ATTR = 'data-receipt-pending';
-var RECEIPT_ROW_PENDING_ATTR_VALUE = 'true';
-
-var RECEIPT_ROW_CONTENT_SELECTOR = 'input, select, textarea, button, img, a, .status-wrap, .credit-icon';
-
 // ----------------------------------------------------------------------------
 // 1. Select_<datasetIndex> is USABLE on a READY row, and visibly refused elsewhere
 // ----------------------------------------------------------------------------
+
 function applyReceiptRowGate() {
   $(RECEIPT_STATUS_ROW_SELECTOR).each(function () {
     applyReceiptRowSelectGate(this);
@@ -1870,194 +1971,10 @@ function isReceiptRowReady(rowIndex) {
   return getReceiptRowStatusForIndex(rowIndex) === RECEIPT_ROW_READY_STATUS;
 }
 
-
-// ----------------------------------------------------------------------------
-// Payment icon
-// ----------------------------------------------------------------------------
-function renderReceiptPaymentIcons() {
-  $('#tableOutput tbody tr').each(function () {
-    var index = getRenderedRowDatasetIndex(this);
-    var $cell = $(this).children('td').first();
-
-    $cell.find('.receipt-payment-icon').remove();
-
-    if (index === null || !$cell.length) {
-      return;
-    }
-
-    var matched = hasCreditReceipt(index);
-
-    $('<span></span>')
-      .addClass('receipt-payment-icon')
-      .attr('title', matched
-        ? 'Matched to credit-card transaction'
-        : 'Cash receipt')
-      .html(matched ? '&#128179;' : ' ')
-      .appendTo($cell);
-  });
-}
-// ----------------------------------------------------------------------------
-// 2. A NEW row says so INSIDE its own empty cells
-// ----------------------------------------------------------------------------
-function renderExtractionPendingMessage() {
-  $(RECEIPT_STATUS_ROW_SELECTOR).each(function () {
-    var index = getRenderedRowDatasetIndex(this);
-
-    clearExtractionPendingMessage(this);
-
-    if (index === null) {
-      return;
-    }
-
-    if (getReceiptRowStatusForIndex(index) !== RECEIPT_ROW_NEW_STATUS) {
-      return;
-    }
-
-    applyExtractionPendingMessage(this);
-  });
-}
-
-function removeExtractionPendingMessages() {
-  $(RECEIPT_STATUS_ROW_SELECTOR).each(function () {
-    clearExtractionPendingMessage(this);
-  });
-}
-
-function clearExtractionPendingMessage(rowElement) {
-  var $row = $(rowElement);
-
-  $row.find('[' + RECEIPT_ROW_PENDING_ATTR + ']').remove();
-
-  if ($row.hasClass(RECEIPT_ROW_PENDING_MARKER)) {
-    $row.css(RECEIPT_ROW_PENDING_ROW_STYLE_KEY, '');
-    $row.removeClass(RECEIPT_ROW_PENDING_MARKER);
-  }
-}
-
-function applyExtractionPendingMessage(rowElement) {
-  var $row = $(rowElement);
-  var $cells = $row.find('td');
-  var dataCellFrom = getReceiptRowDataCellStart(rowElement, $cells);
-  var written = 0;
-
-  if (dataCellFrom === null) {
-    return;
-  }
-
-  if (hasPendingMessage($row)) {
-    return;
-  }
-
-  $cells.each(function (position) {
-    if (written >= 2 || position < dataCellFrom) {
-      return;
-    }
-
-    if (!isPendingMessageCell($(this))) {
-      return;
-    }
-
-    writePendingMessage(
-      $(this),
-      written === 0
-        ? RECEIPT_ROW_PENDING_LABEL
-        : RECEIPT_ROW_PENDING_HINT
-    );
-
-    written++;
-  });
-
-  if (written === 0) {
-    return;
-  }
-
-  $row.addClass(RECEIPT_ROW_PENDING_MARKER);
-  $row.css(RECEIPT_ROW_PENDING_ROW_STYLE);
-}
-
-function getReceiptRowDataCellStart(rowElement, $cells) {
-  var index = getRenderedRowDatasetIndex(rowElement);
-  var $controls;
-  var position = null;
-
-  if (index === null) {
-    return null;
-  }
-
-  $controls = getReceiptRowSelectControls(rowElement, index);
-
-  if (!$controls.length) {
-    return null;
-  }
-
-  $controls.each(function () {
-    var cell = getReceiptRowSelectCell($(this));
-
-    if (!cell || position !== null) {
-      return;
-    }
-
-    $cells.each(function (cellPosition) {
-      if (this === cell) {
-        position = cellPosition;
-      }
-    });
-  });
-
-  return position === null ? null : position + 1;
-}
-
-function getReceiptRowSelectCell($element) {
-  var node = $element.parent();
-
-  while (node && node.length) {
-    if (node.get(0) === null || node.get(0) === undefined) {
-      return null;
-    }
-
-    if (String(node.get(0).nodeName).toUpperCase() === 'TD') {
-      return node.get(0);
-    }
-
-    node = node.parent();
-  }
-
-  return null;
-}
-
-function writePendingMessage($cell, message) {
-  $('<span></span>')
-    .addClass(RECEIPT_ROW_PENDING_CLASS)
-    .attr(RECEIPT_ROW_PENDING_ATTR, RECEIPT_ROW_PENDING_ATTR_VALUE)
-    .attr('title', message)
-    .css(RECEIPT_ROW_PENDING_TEXT_STYLE)
-    .text(message)
-    .appendTo($cell);
-}
-
-function isPendingMessageCell($cell) {
-  if ($cell.children().length) {
-    return false;
-  }
-
-  return hasReceiptCellHtml($cell.html()) === false;
-}
-
-function hasReceiptCellHtml(html) {
-  if (html === null || html === undefined) {
-    return false;
-  }
-
-  return String(html).replace(/\s+/g, '') !== '';
-}
-
-function hasPendingMessage($row) {
-  return $row.find('[' + RECEIPT_ROW_PENDING_ATTR + ']').length > 0;
-}
-
 // ----------------------------------------------------------------------------
 // 3. Adding an attachment is refused while a READY receipt is selected
 // ----------------------------------------------------------------------------
+
 function hasSelectedReadyReceipt() {
   if (hasSelectedReadyReceiptInStorage()) {
     return true;
@@ -2221,7 +2138,6 @@ function receiptRowControlIsSelected(rowElement, index) {
   return selected;
 }
 
-
 function hasRenderedSelectedReadyControl() {
   var found = false;
 
@@ -2250,36 +2166,3 @@ function hasRenderedSelectedReadyControl() {
 
   return found;
 }
-
-function hasReceiptCellText(value) {
-  return !(
-    value === null ||
-    value === undefined ||
-    String(value).replace(/\s+/g, '') === ''
-  );
-}
-
-
-
-function click_New_Report() {
-  var selectedIds = readSelectedReceiptIds();
-
-  if (selectedIds.length === 0) {
-    Popup.ok('New Report', 'Please select receipts for the new report');
-    return;
-  }
-
-  Storage.set('newAiReport', 'true');
-
-  reLoginAndRun( function() {
-    Page.navigate('Report_General');
-  });
-  
-}
-
-
-
-function Refresh() {
-  reloadReceiptTable();
-}
-

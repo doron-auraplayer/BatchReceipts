@@ -1,0 +1,249 @@
+{
+  "name": "ReceiptBatch_ExpenseLocation",
+  "description": "",
+  "formUrl": "${env.DB_CONNECTION_STR}",
+  "command": "-- Read-only AuraPlayer DB service for the Oracle EBS iExpense Location LOV.\n-- Source lookup: oracle.apps.ap.oie.server.LocationsVO version LocationsVOImpl.java120.18.12020000.5\n-- Observed context: EBS 12.2.14, org 204 Vision Operations, language code US (locale en_US).\n-- No EBS session, MO context, or profile is initialized here.\n-- Every lookup branch keeps the source status, active, end-date, and effective-date conditions.\n--\n-- Typed inputs below are AuraPlayer/JDBC binds and are intentionally unquoted.\n-- Numeric-semantic inputs use VARCHAR transport plus TO_NUMBER because the\n-- driver rejects blank NUMERIC parameters before the SQL guards run.\n-- Defaults apply to NULL only. Oracle treats empty character strings as NULL,\n-- so NVL defaults apply to empty character inputs as well.\n-- Search simplification: source binds :8 through :12 used generated case variants.\n-- They are replaced by one UPPER(location) LIKE UPPER(params.search_pattern) predicate.\nWITH params AS (\n    SELECT\n        TO_NUMBER(${P_ORG_ID:VARCHAR}) AS org_id,\n        NVL(${P_LANGUAGE:VARCHAR}, 'US') AS language_code,\n        TO_NUMBER(${P_EXPENSE_TYPE_ID:VARCHAR}) AS expense_type_id,\n        ${P_EXPENSE_DATE:VARCHAR} AS canonical_expense_date,\n        NVL(${P_ALL_SCHEDULES:VARCHAR}, 'N') AS all_schedules,\n        NVL(${P_MERCHANT_LOCATIONS:VARCHAR}, 'N') AS merchant_locations,\n        NVL(TO_NUMBER(${P_END_DATE_OFFSET:VARCHAR}), 0) AS end_date_offset,\n        NVL(TRIM(${LocationName:VARCHAR}), '%') || '%' AS search_pattern\n    FROM dual\n)\nSELECT\n    q.location AS LOCATION_NAME,\n    q.location_id AS LOCATION_ID,\n    q.description AS DESCRIPTION,\n    q.country AS COUNTRY\nFROM (\n    SELECT\n        locations.location AS location,\n        locations.location_id AS location_id,\n        locations.description AS description,\n        territories.territory_short_name AS country\n    FROM APPS.AP_POL_LOCATIONS_V locations,\n         APPS.FND_TERRITORIES_TL territories,\n         params\n    WHERE locations.status = 'ACTIVE'\n      AND trunc(sysdate) <= trunc(NVL(locations.end_date + params.end_date_offset, sysdate))\n      AND locations.territory_code = territories.territory_code\n      AND locations.language = params.language_code\n      AND territories.language = params.language_code\n      AND (\n            (\n                ('Y' = params.all_schedules)\n                AND EXISTS (\n                    SELECT /*+ FIRST_ROWS(1) */ 1\n                    FROM APPS.AP_EXPENSE_REPORTS_ALL expTemplates,\n                         APPS.AP_EXPENSE_REPORT_PARAMS_ALL expTypes,\n                         APPS.AP_POL_HEADERS schedules,\n                         APPS.AP_POL_SCHEDULE_OPTIONS scheduleOptions\n                    WHERE expTemplates.org_id = params.org_id\n                      AND expTypes.org_id = params.org_id\n                      AND trunc(sysdate) <= trunc(NVL(expTypes.end_date, sysdate))\n                      AND expTypes.expense_report_id = expTemplates.expense_report_id\n                      AND trunc(sysdate) <= trunc(NVL(expTemplates.inactive_date, sysdate))\n                      AND expTemplates.web_enabled_flag = 'Y'\n                      AND schedules.policy_id = expTypes.company_policy_id\n                      AND schedules.category_code = expTypes.category_code\n                      AND scheduleOptions.policy_id = schedules.policy_id\n                      AND scheduleOptions.option_type = 'LOCATION'\n                      AND scheduleOptions.status = 'ACTIVE'\n                      AND scheduleOptions.location_id = locations.location_id\n                      AND trunc(sysdate) <= trunc(NVL(scheduleOptions.end_date, sysdate))\n                      AND trunc(sysdate) BETWEEN trunc(NVL(schedules.start_date, sysdate))\n                                             AND trunc(NVL(schedules.end_date, sysdate))\n                )\n            )\n            OR (\n                (params.expense_type_id IS NOT NULL)\n                AND EXISTS (\n                    SELECT /*+ FIRST_ROWS(1) */ 1\n                    FROM APPS.AP_EXPENSE_REPORTS_ALL expTemplates,\n                         APPS.AP_EXPENSE_REPORT_PARAMS_ALL expTypes,\n                         APPS.AP_POL_HEADERS schedules,\n                         APPS.AP_POL_SCHEDULE_OPTIONS scheduleOptions,\n                         APPS.AP_POL_SCHEDULE_PERIODS periods,\n                         APPS.AP_POL_LINES lines\n                    WHERE expTypes.parameter_id = params.expense_type_id\n                      AND expTemplates.org_id = params.org_id\n                      AND expTypes.org_id = params.org_id\n                      AND trunc(sysdate) <= trunc(NVL(expTypes.end_date, sysdate))\n                      AND expTypes.expense_report_id = expTemplates.expense_report_id\n                      AND trunc(sysdate) <= trunc(NVL(expTemplates.inactive_date, sysdate))\n                      AND expTemplates.web_enabled_flag = 'Y'\n                      AND schedules.policy_id = expTypes.company_policy_id\n                      AND schedules.category_code = expTypes.category_code\n                      AND scheduleOptions.option_type = 'LOCATION'\n                      AND scheduleOptions.location_id = lines.location_id\n                      AND scheduleOptions.status = 'ACTIVE'\n                      AND trunc(sysdate) <= trunc(NVL(scheduleOptions.end_date, sysdate))\n                      AND scheduleOptions.policy_id = schedules.policy_id\n                      AND trunc(sysdate) BETWEEN trunc(NVL(schedules.start_date, sysdate))\n                                             AND trunc(NVL(schedules.end_date, sysdate))\n                      AND periods.policy_id = schedules.policy_id\n                      AND lines.schedule_period_id = periods.schedule_period_id\n                      AND lines.location_id IS NOT NULL\n                      AND lines.location_id = locations.location_id\n                      AND trunc(NVL(APPS.FND_DATE.CANONICAL_TO_DATE(params.canonical_expense_date), sysdate))\n                          BETWEEN trunc(NVL(lines.effective_start_date, periods.start_date))\n                              AND trunc(NVL(lines.effective_end_date, NVL(periods.end_date, sysdate + 1)))\n                )\n            )\n            OR (\n                ('Y' = params.merchant_locations\n                 AND locations.location_type IN ('CITY', 'COUNTRY'))\n                AND EXISTS (\n                    SELECT 1\n                    FROM APPS.AP_WEB_VAT_SETUP_ALL vat_setup\n                    WHERE vat_setup.enabled_code = 'Y'\n                      AND vat_setup.org_id = params.org_id\n                )\n            )\n      )\n    UNION ALL\n    SELECT\n        locations.location AS location,\n        locations.location_id AS location_id,\n        locations.description AS description,\n        '' AS country\n    FROM APPS.AP_POL_LOCATIONS_V locations,\n         params\n    WHERE locations.undefined_location_flag = 'Y'\n      AND locations.status = 'ACTIVE'\n      AND trunc(sysdate) <= trunc(NVL(locations.end_date + params.end_date_offset, sysdate))\n      AND locations.language = params.language_code\n) q,\nparams\nWHERE params.org_id IS NOT NULL\n  AND UPPER(q.location) LIKE UPPER(params.search_pattern)\nORDER BY q.location ASC,\n         q.location_id ASC\n",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "username",
+        "serviceName": "ReceiptBatch_ExpenseLocation"
+      },
+      "paramLabel": "username",
+      "paramValue": "${env.DB_USER}",
+      "visible": false
+    },
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "password",
+        "serviceName": "ReceiptBatch_ExpenseLocation"
+      },
+      "paramLabel": "password",
+      "paramValue": "${env.DB_PASSWORD}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "P_ORG_ID",
+        "serviceName": "ReceiptBatch_ExpenseLocation"
+      },
+      "paramLabel": "P_ORG_ID",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "P_LANGUAGE",
+        "serviceName": "ReceiptBatch_ExpenseLocation"
+      },
+      "paramLabel": "P_LANGUAGE",
+      "paramValue": "US",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "P_EXPENSE_TYPE_ID",
+        "serviceName": "ReceiptBatch_ExpenseLocation"
+      },
+      "paramLabel": "P_EXPENSE_TYPE_ID",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "P_EXPENSE_DATE",
+        "serviceName": "ReceiptBatch_ExpenseLocation"
+      },
+      "paramLabel": "P_EXPENSE_DATE",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "P_ALL_SCHEDULES",
+        "serviceName": "ReceiptBatch_ExpenseLocation"
+      },
+      "paramLabel": "P_ALL_SCHEDULES",
+      "paramValue": "N",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "P_MERCHANT_LOCATIONS",
+        "serviceName": "ReceiptBatch_ExpenseLocation"
+      },
+      "paramLabel": "P_MERCHANT_LOCATIONS",
+      "paramValue": "N",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "P_END_DATE_OFFSET",
+        "serviceName": "ReceiptBatch_ExpenseLocation"
+      },
+      "paramLabel": "P_END_DATE_OFFSET",
+      "paramValue": "0",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "LocationName",
+        "serviceName": "ReceiptBatch_ExpenseLocation"
+      },
+      "paramLabel": "LocationName",
+      "paramValue": "%",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LOCATION_NAME",
+        "serviceName": "ReceiptBatch_ExpenseLocation"
+      },
+      "paramLabel": "LOCATION_NAME",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LOCATION_ID",
+        "serviceName": "ReceiptBatch_ExpenseLocation"
+      },
+      "paramLabel": "LOCATION_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DESCRIPTION",
+        "serviceName": "ReceiptBatch_ExpenseLocation"
+      },
+      "paramLabel": "DESCRIPTION",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "COUNTRY",
+        "serviceName": "ReceiptBatch_ExpenseLocation"
+      },
+      "paramLabel": "COUNTRY",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_ExpenseLocation"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_ExpenseLocation"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_ExpenseLocation"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@sql",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "DB",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": [
+    "LiveExpense_AI"
+  ]
+}

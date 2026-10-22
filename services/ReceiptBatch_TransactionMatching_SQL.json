@@ -1,0 +1,665 @@
+{
+  "name": "ReceiptBatch_TransactionMatching_SQL",
+  "description": "Read-only SQL preview of transaction-to-receipt match proposals. It performs no writes and is not wired into production matching.",
+  "formUrl": "${env.DB_CONNECTION_STR}",
+  "command": "WITH\nreceipt_source AS (\n    SELECT r.RECEIPT_ID,\n           r.FILE_NAME,\n           r.STATUS,\n           r.REPORT_ID,\n           r.CREDIT_TRANSACTION,\n           r.TOTAL_AMOUNT,\n           r.RECEIPT_DATE,\n           r.MERCHANT,\n           r.EXPENSE_TYPE,\n           r.LOCATION,\n           r.EXPENSE_DATA_JSON\n    FROM   XX_AP_BATCH_RECEIPTS r\n    WHERE  r.EBS_USER_NAME = UPPER(TRIM('${EBS_USER}'))\n),\ntransaction_source AS (\n    SELECT trxns.TRX_ID AS TRANSACTION_ID,\n           trxns.TRANSACTION_AMOUNT AS TRANSACTION_AMOUNT,\n           trxns.FOLIO_TYPE AS TRANSACTION_FOLIO_EXPENSE_TYPE,\n               CASE\n           /* Airfare */\n           WHEN REGEXP_LIKE(\n                    UPPER(NVL(trxns.merchant_name1, '')),\n                    'AIRLINE|AIRWAYS|AIRLINES|AIR FARE|TRAVEL AGENCY|TRAVEL AGENT|LUFTHANSA|DELTA|UNITED|AMERICAN AIR|SOUTHWEST|MEXICANA|USAIRWAY|NORTHWEST|BRITISH AIR|AIR FRANCE|KLM|EL AL'\n                )\n               THEN 'Airfare'\n\n           /* Car Rental */\n           WHEN REGEXP_LIKE(\n                    UPPER(NVL(trxns.merchant_name1, '')),\n                    'RENT[- ]?A[- ]?CAR|RENTAL CAR|CAR RENTAL|AVIS|HERTZ|ENTERPRISE|BUDGET|DOLLAR RENT|NATIONAL CAR|ALAMO|SIXT'\n                )\n               THEN 'Car Rental'\n\n           /* Entertainment */\n           WHEN REGEXP_LIKE(\n                    UPPER(NVL(trxns.merchant_name1, '')),\n                    'CINEMA|MOVIE|THEATER|THEATRE|CONCERT|CLUB|NIGHTCLUB|AMUSEMENT|PARK|DISNEY|MUSEUM|GALLERY|EXHIBITION|CASINO|BOWLING|STADIUM|ARENA|TICKETS|EVENTBRITE|TICKETMASTER'\n                )\n               THEN 'Entertainment'\n\n           /* Hotel */\n           WHEN REGEXP_LIKE(\n                    UPPER(NVL(trxns.merchant_name1, '')),\n                    'HOTEL|MOTEL|INN|LODGE|RESORT|SUITES|MARRIOTT|HYATT|HILTON|HOLIDAY INN|FOUR SEASONS|SHERATON|WESTIN|CONRAD|EMBASSY SUITES|BEST WESTERN|RADISSON|COURTYARD|HAMPTON INN'\n                )\n               THEN 'Hotel'\n\n           /* Meals */\n           WHEN REGEXP_LIKE(\n                    UPPER(NVL(trxns.merchant_name1, '')),\n                    'RESTAURANT|GRILL|CAFE|CAFÉ|BISTRO|BUFFET|PIZZA|BURGER|SUSHI|STEAK|STEAKHOUSE|BBQ|BARBEQUE|DELI|DINER|MCDONALD|STARBUCKS|WENDY|HOOTERS|SUBWAY|TACO|CHILI|OLIVE GARDEN|RED LOBSTER|LOBSTER HOUSE|CHINESE FOOD'\n                )\n               THEN 'Meals'\n\n           /* Taxis */\n           WHEN REGEXP_LIKE(\n                    UPPER(NVL(trxns.merchant_name1, '')),\n                    'TAXI|TAXIS|UBER|LYFT|LIMO|LIMOUSINE|TRANSIT|METRO|RAIL|BAHN|BUS|SHUTTLE'\n                )\n               THEN 'Taxis'\n\n           /* Telephone Calls */\n           WHEN REGEXP_LIKE(\n                    UPPER(NVL(trxns.merchant_name1, '')),\n                    'AT%T|VERIZON|VODAFONE|ORANGE|TELECOM|TELEFONICA|TELEPHONE|PHONE CARD|CALLING CARD|SBC|SPRINT|T-MOBILE|SFR'\n                )\n               THEN 'Telephone Calls'\n\n           /* Default */\n           ELSE 'Miscellaneous'\n       END AS TRANSACTION_EXPENSE_TYPE,\n           TO_CHAR(trxns.TRANSACTION_DATE, 'YYYY-MM-DD') AS TRANSACTION_RECEIPT_DATE,\n           trxns.MERCHANT_NAME1           AS TRANSACTION_MERCHANT,\n           trxns.BILLED_AMOUNT AS TRANSACTION_BILLED_AMOUNT,\n           trxns.BILLED_CURRENCY_CODE AS TRANSACTION_BILLED_CURRENCY,\n           TO_CHAR(trxns.BILLED_DATE, 'YYYY-MM-DD') AS TRANSACTION_BILLED_DATE,\n           trxns.POSTED_AMOUNT AS TRANSACTION_POSTED_AMOUNT,\n           trxns.POSTED_CURRENCY_CODE AS TRANSACTION_POSTED_CURRENCY,\n           TO_CHAR(trxns.POSTED_DATE, 'YYYY-MM-DD') AS TRANSACTION_POSTED_DATE,\n           trxns.CURRENCY_CONVERSION_RATE AS TRANSACTION_EXCHANGE_RATE,\n           trxns.CARD_ID AS TRANSACTION_CARD_ID,\n           trxns.CARD_PROGRAM_ID AS TRANSACTION_CARD_PROGRAM_ID,\n           trxns.MERCHANT_NAME2 AS TRANSACTION_MERCHANT_NAME2,\n           trxns.MERCHANT_CITY AS TRANSACTION_CITY,\n           trxns.MERCHANT_PROVINCE_STATE AS TRANSACTION_STATE,\n           trxns.MERCHANT_COUNTRY AS TRANSACTION_COUNTRY,\n           trxns.REFERENCE_NUMBER AS TRANSACTION_REFERENCE,\n           trxns.DEBIT_FLAG AS TRANSACTION_DEBIT_FLAG,\n           trxns.VALIDATE_CODE AS TRANSACTION_VALIDATE_CODE,\n           trxns.CATEGORY AS TRANSACTION_CATEGORY,\n           trxns.REPORT_HEADER_ID AS TRANSACTION_REPORT_ID,\n           trxns.EXPENSED_AMOUNT AS TRANSACTION_EXPENSED_AMOUNT,\n           TO_CHAR(trxns.TRX_AVAILABLE_DATE, 'YYYY-MM-DD') AS TRANSACTION_AVAILABLE_DATE,\n           trxns.TRX_AVAILABLE_DATE AS TRANSACTION_AVAILABLE_DATE_RAW,\n           trxns.DESCRIPTION AS TRANSACTION_DESCRIPTION,\n           trxns.SIC_CODE AS TRANSACTION_SIC_CODE,\n           COUNT(*) OVER () AS TRANSACTION_TOTAL_COUNT\n    FROM   ap_credit_card_trxns_all trxns\n    JOIN   ap_cards_all cards\n           ON cards.card_id = trxns.card_id\n    JOIN   fnd_user fu\n           ON fu.employee_id = cards.employee_id\n    WHERE  fu.user_name = UPPER(TRIM('${EBS_USER}'))\n),\nlinked_source AS (\n    SELECT DISTINCT\n           LTRIM(TRIM(r.CREDIT_TRANSACTION), '0') AS TRANSACTION_ID\n    FROM   XX_AP_BATCH_RECEIPTS r\n    JOIN   transaction_source t\n           ON TO_CHAR(t.TRANSACTION_ID) = LTRIM(TRIM(r.CREDIT_TRANSACTION), '0')\n    WHERE  TRIM(r.CREDIT_TRANSACTION) IS NOT NULL\n      AND  REGEXP_LIKE(TRIM(r.CREDIT_TRANSACTION), '^0*[1-9][0-9]*$')\n),\nreceipt_normalized AS (\n    SELECT rs.RECEIPT_ID,\n           rs.FILE_NAME,\n           rs.STATUS,\n           rs.REPORT_ID,\n           rs.CREDIT_TRANSACTION,\n           rs.TOTAL_AMOUNT AS RECEIPT_AMOUNT,\n           TO_CHAR(rs.RECEIPT_DATE, 'YYYY-MM-DD') AS RECEIPT_DATE_ISO,\n           rs.RECEIPT_DATE AS RECEIPT_DATE_VALUE,\n           rs.MERCHANT AS RECEIPT_MERCHANT,\n           rs.EXPENSE_TYPE AS RECEIPT_EXPENSE_TYPE,\n           rs.LOCATION AS RECEIPT_LOCATION,\n           TRIM(REGEXP_REPLACE(UPPER(rs.MERCHANT), '[[:space:]]+', ' ')) AS MERCHANT_NORM,\n           TRIM(REGEXP_REPLACE(UPPER(rs.EXPENSE_TYPE), '[[:space:]]+', ' ')) AS EXPENSE_TYPE_NORM,\n           TRIM(REGEXP_REPLACE(UPPER(rs.LOCATION), '[[:space:]]+', ' ')) AS LOCATION_NORM,\n           UPPER(TRIM(rs.STATUS)) AS STATUS_NORM,\n           TRIM(rs.CREDIT_TRANSACTION) AS CREDIT_NORM,\n           TRIM(rs.REPORT_ID) AS REPORT_NORM,\n           TRIM(REGEXP_REPLACE(\n               UPPER(CASE WHEN rs.EXPENSE_DATA_JSON IS JSON THEN\n                   JSON_VALUE(rs.EXPENSE_DATA_JSON,\n                       '$.lines[0].receiptCurrency'\n                       RETURNING VARCHAR2(100) NULL ON ERROR)\n               END),\n               '[[:space:]]+', ' ')) AS CURRENCY_NORMALIZED_TEXT\n    FROM   receipt_source rs\n),\nreceipt_currency AS (\n    SELECT rn.*,\n           CASE\n               WHEN REGEXP_LIKE(rn.CURRENCY_NORMALIZED_TEXT,\n                                '^[A-Z]{3}( - .+)?$')\n               THEN SUBSTR(rn.CURRENCY_NORMALIZED_TEXT, 1, 3)\n               ELSE NULL\n           END AS RECEIPT_CURRENCY\n    FROM   receipt_normalized rn\n),\nreceipt_assessed AS (\n    SELECT rc.*,\n           CASE\n               WHEN rc.CREDIT_NORM IS NOT NULL THEN 'ALREADY_LINKED'\n               WHEN rc.REPORT_ID IS NOT NULL THEN 'IN_REPORT'\n               WHEN NVL(rc.STATUS_NORM, 'X') NOT IN ('PROCESSED', 'READY')\n                   THEN 'NOT_READY'\n               WHEN rc.RECEIPT_CURRENCY IS NULL THEN 'CURRENCY_MISSING'\n               WHEN rc.RECEIPT_AMOUNT IS NULL\n                    OR rc.RECEIPT_AMOUNT = 0\n                    OR rc.RECEIPT_DATE_VALUE IS NULL\n                    OR rc.MERCHANT_NORM IS NULL\n                   THEN 'INCOMPLETE_RECEIPT'\n               ELSE 'ELIGIBLE'\n           END AS ASSESSED_STATUS\n    FROM   receipt_currency rc\n),\neligible_receipts AS (\n    SELECT ra.*\n    FROM   receipt_assessed ra\n    WHERE  ra.ASSESSED_STATUS = 'ELIGIBLE'\n),\ntransaction_normalized AS (\n    SELECT ts.TRANSACTION_ID,\n           ts.TRANSACTION_RECEIPT_DATE,\n           TO_DATE(ts.TRANSACTION_RECEIPT_DATE, 'YYYY-MM-DD') AS TRANSACTION_DATE_VALUE,\n           ts.TRANSACTION_MERCHANT,\n           ts.TRANSACTION_EXPENSE_TYPE,\n           ts.TRANSACTION_BILLED_AMOUNT,\n           ts.TRANSACTION_BILLED_CURRENCY,\n           ts.TRANSACTION_POSTED_AMOUNT,\n           UPPER(TRIM(ts.TRANSACTION_POSTED_CURRENCY)) AS POSTED_CURRENCY_NORM,\n           ts.TRANSACTION_CARD_ID,\n           ts.TRANSACTION_REFERENCE,\n           ts.TRANSACTION_VALIDATE_CODE,\n           ts.TRANSACTION_REPORT_ID,\n           ts.TRANSACTION_EXPENSED_AMOUNT,\n           ts.TRANSACTION_CATEGORY,\n           ts.TRANSACTION_AVAILABLE_DATE,\n           ts.TRANSACTION_CITY,\n           ts.TRANSACTION_STATE,\n           TRIM(REGEXP_REPLACE(UPPER(ts.TRANSACTION_MERCHANT), '[[:space:]]+', ' ')) AS MERCHANT_NORM,\n           TRIM(REGEXP_REPLACE(UPPER(ts.TRANSACTION_EXPENSE_TYPE), '[[:space:]]+', ' ')) AS EXPENSE_TYPE_NORM,\n           TRIM(REGEXP_REPLACE(UPPER(ts.TRANSACTION_CITY), '[[:space:]]+', ' ')) AS CITY_NORM,\n           TRIM(REGEXP_REPLACE(UPPER(ts.TRANSACTION_STATE), '[[:space:]]+', ' ')) AS STATE_NORM,\n           CASE\n               WHEN TRIM(ts.TRANSACTION_CITY) IS NOT NULL\n                    AND TRIM(ts.TRANSACTION_STATE) IS NOT NULL\n                   THEN TRIM(REGEXP_REPLACE(UPPER(ts.TRANSACTION_CITY), '[[:space:]]+', ' '))\n                        || ', '\n                        || TRIM(REGEXP_REPLACE(UPPER(ts.TRANSACTION_STATE), '[[:space:]]+', ' '))\n               WHEN TRIM(ts.TRANSACTION_CITY) IS NOT NULL\n                   THEN TRIM(REGEXP_REPLACE(UPPER(ts.TRANSACTION_CITY), '[[:space:]]+', ' '))\n               ELSE NULL\n           END AS CITY_STATE_NORM,\n           CASE\n               WHEN UPPER(TRIM(ts.TRANSACTION_VALIDATE_CODE)) = 'Y'\n                    AND ts.TRANSACTION_REPORT_ID IS NULL\n                    AND NVL(ts.TRANSACTION_EXPENSED_AMOUNT, 0) = 0\n                    AND (ts.TRANSACTION_CATEGORY IS NULL\n                         OR UPPER(TRIM(ts.TRANSACTION_CATEGORY)) = 'BUSINESS')\n                    AND (ts.TRANSACTION_AVAILABLE_DATE IS NULL\n                         OR ts.TRANSACTION_AVAILABLE_DATE <= TO_CHAR(SYSDATE, 'YYYY-MM-DD'))\n                    AND ts.TRANSACTION_POSTED_AMOUNT IS NOT NULL\n                    AND TRIM(ts.TRANSACTION_POSTED_CURRENCY) IS NOT NULL\n                    AND ts.TRANSACTION_RECEIPT_DATE IS NOT NULL\n                    AND TRIM(ts.TRANSACTION_MERCHANT) IS NOT NULL\n                    AND NOT EXISTS (\n                        SELECT 1\n                        FROM   linked_source ls\n                        WHERE  ls.TRANSACTION_ID = TO_CHAR(ts.TRANSACTION_ID)\n                    )\n                   THEN 'Y'\n               ELSE 'N'\n           END AS ELIGIBLE_FLAG\n    FROM   transaction_source ts\n),\neligible_transactions AS (\n    SELECT tn.*\n    FROM   transaction_normalized tn\n    WHERE  tn.ELIGIBLE_FLAG = 'Y'\n),\npairs AS (\n    SELECT er.RECEIPT_ID,\n           et.TRANSACTION_ID,\n           er.RECEIPT_AMOUNT,\n           er.RECEIPT_CURRENCY,\n           er.RECEIPT_DATE_ISO,\n           er.RECEIPT_MERCHANT,\n           er.RECEIPT_EXPENSE_TYPE,\n           er.RECEIPT_LOCATION,\n           et.TRANSACTION_POSTED_AMOUNT,\n           et.POSTED_CURRENCY_NORM,\n           et.TRANSACTION_RECEIPT_DATE,\n           et.TRANSACTION_MERCHANT,\n           et.TRANSACTION_EXPENSE_TYPE,\n           et.CITY_STATE_NORM,\n           et.TRANSACTION_CARD_ID,\n           et.TRANSACTION_REFERENCE,\n           et.TRANSACTION_BILLED_AMOUNT,\n           et.TRANSACTION_BILLED_CURRENCY,\n           ABS(TRUNC(er.RECEIPT_DATE_VALUE) - et.TRANSACTION_DATE_VALUE) AS DATE_DIFF_DAYS,\n           CASE WHEN er.MERCHANT_NORM = et.MERCHANT_NORM THEN 'Y' ELSE 'N' END AS MERCHANT_MATCH,\n           CASE WHEN er.EXPENSE_TYPE_NORM IS NOT NULL\n                     AND et.EXPENSE_TYPE_NORM IS NOT NULL\n                     AND er.EXPENSE_TYPE_NORM = et.EXPENSE_TYPE_NORM\n                THEN 'Y' ELSE 'N' END AS EXPENSE_TYPE_MATCH,\n           CASE WHEN er.LOCATION_NORM IS NOT NULL\n                     AND et.CITY_STATE_NORM IS NOT NULL\n                     AND (er.LOCATION_NORM = et.CITY_NORM\n                          OR er.LOCATION_NORM = et.CITY_STATE_NORM)\n                THEN 'Y' ELSE 'N' END AS LOCATION_MATCH,\n           40 + 25\n           + CASE WHEN ABS(TRUNC(er.RECEIPT_DATE_VALUE) - et.TRANSACTION_DATE_VALUE) = 0 THEN 15\n                  WHEN ABS(TRUNC(er.RECEIPT_DATE_VALUE) - et.TRANSACTION_DATE_VALUE) = 1 THEN 10\n                  ELSE 5\n             END\n           + CASE WHEN er.MERCHANT_NORM = et.MERCHANT_NORM THEN 10 ELSE 0 END\n           + CASE WHEN er.EXPENSE_TYPE_NORM IS NOT NULL\n                       AND et.EXPENSE_TYPE_NORM IS NOT NULL\n                       AND er.EXPENSE_TYPE_NORM = et.EXPENSE_TYPE_NORM\n                  THEN 5 ELSE 0\n             END\n           + CASE WHEN er.LOCATION_NORM IS NOT NULL\n                       AND et.CITY_STATE_NORM IS NOT NULL\n                       AND (er.LOCATION_NORM = et.CITY_NORM\n                            OR er.LOCATION_NORM = et.CITY_STATE_NORM)\n                  THEN 5 ELSE 0\n             END AS MATCH_SCORE\n    FROM   eligible_receipts er\n    JOIN   eligible_transactions et\n           ON er.RECEIPT_AMOUNT = et.TRANSACTION_POSTED_AMOUNT\n          AND er.RECEIPT_CURRENCY = et.POSTED_CURRENCY_NORM\n          AND ABS(TRUNC(er.RECEIPT_DATE_VALUE) - et.TRANSACTION_DATE_VALUE) <= 3\n),\npair_degrees AS (\n    SELECT p.*,\n           COUNT(*) OVER (PARTITION BY p.RECEIPT_ID) AS RECEIPT_CANDIDATE_COUNT,\n           COUNT(*) OVER (PARTITION BY p.TRANSACTION_ID) AS TRX_RECEIPT_COUNT\n    FROM   pairs p\n),\npair_ranked AS (\n    SELECT pd.*,\n           ROW_NUMBER() OVER (\n               PARTITION BY pd.RECEIPT_ID\n               ORDER BY pd.MATCH_SCORE DESC,\n                        pd.DATE_DIFF_DAYS ASC,\n                        pd.TRANSACTION_ID ASC\n           ) AS CANDIDATE_RANK\n    FROM   pair_degrees pd\n),\npair_rows AS (\n    SELECT pr.RECEIPT_ID,\n           pr.RECEIPT_MERCHANT,\n           pr.RECEIPT_EXPENSE_TYPE,\n           pr.RECEIPT_LOCATION,\n           pr.RECEIPT_AMOUNT,\n           pr.RECEIPT_CURRENCY,\n           pr.RECEIPT_DATE_ISO,\n           pr.TRANSACTION_ID,\n           pr.TRANSACTION_POSTED_AMOUNT,\n           pr.POSTED_CURRENCY_NORM,\n           pr.TRANSACTION_RECEIPT_DATE,\n           pr.TRANSACTION_MERCHANT,\n           pr.TRANSACTION_EXPENSE_TYPE,\n           pr.CITY_STATE_NORM,\n           pr.TRANSACTION_CARD_ID,\n           pr.TRANSACTION_REFERENCE,\n           pr.TRANSACTION_BILLED_AMOUNT,\n           pr.TRANSACTION_BILLED_CURRENCY,\n           pr.DATE_DIFF_DAYS,\n           pr.MERCHANT_MATCH,\n           pr.EXPENSE_TYPE_MATCH,\n           pr.LOCATION_MATCH,\n           pr.MATCH_SCORE,\n           CASE\n               WHEN pr.RECEIPT_CANDIDATE_COUNT > 1\n                    OR pr.TRX_RECEIPT_COUNT > 1\n                   THEN 'AMBIGUOUS'\n               WHEN pr.DATE_DIFF_DAYS = 0\n                    AND pr.MERCHANT_MATCH = 'Y'\n                   THEN 'UNIQUE_EXACT'\n               ELSE 'REVIEW'\n           END AS MATCH_STATUS,\n           CASE\n               WHEN pr.RECEIPT_CANDIDATE_COUNT > 1\n                    AND pr.TRX_RECEIPT_COUNT > 1\n                   THEN 'Receipt has ' || pr.RECEIPT_CANDIDATE_COUNT\n                        || ' candidates and the candidate transaction has '\n                        || pr.TRX_RECEIPT_COUNT\n                        || ' competing receipts. No candidate is selected by sort order.'\n               WHEN pr.RECEIPT_CANDIDATE_COUNT > 1\n                   THEN 'Receipt has ' || pr.RECEIPT_CANDIDATE_COUNT\n                        || ' candidates. No candidate is selected by sort order.'\n               WHEN pr.TRX_RECEIPT_COUNT > 1\n                   THEN 'The candidate transaction has ' || pr.TRX_RECEIPT_COUNT\n                        || ' competing receipts. No candidate is selected by sort order.'\n               WHEN pr.DATE_DIFF_DAYS = 0\n                    AND pr.MERCHANT_MATCH = 'Y'\n                   THEN 'Mutual unique candidate with the same calendar date and exact normalized merchant. Preview only.'\n               ELSE 'Mutual unique candidate but the calendar date or normalized merchant differs. Review required.'\n           END AS MATCH_REASON,\n           pr.RECEIPT_CANDIDATE_COUNT,\n           pr.TRX_RECEIPT_COUNT,\n           pr.CANDIDATE_RANK\n    FROM   pair_ranked pr\n),\nunpaired_rows AS (\n    SELECT ra.RECEIPT_ID,\n           ra.RECEIPT_MERCHANT,\n           ra.RECEIPT_EXPENSE_TYPE,\n           ra.RECEIPT_LOCATION,\n           ra.RECEIPT_AMOUNT,\n           ra.RECEIPT_CURRENCY,\n           ra.RECEIPT_DATE_ISO,\n           CAST(NULL AS NUMBER) AS TRANSACTION_ID,\n           CAST(NULL AS NUMBER) AS TRANSACTION_POSTED_AMOUNT,\n           CAST(NULL AS VARCHAR2(3)) AS POSTED_CURRENCY_NORM,\n           CAST(NULL AS VARCHAR2(10)) AS TRANSACTION_RECEIPT_DATE,\n           CAST(NULL AS VARCHAR2(200)) AS TRANSACTION_MERCHANT,\n           CAST(NULL AS VARCHAR2(100)) AS TRANSACTION_EXPENSE_TYPE,\n           CAST(NULL AS VARCHAR2(400)) AS CITY_STATE_NORM,\n           CAST(NULL AS NUMBER) AS TRANSACTION_CARD_ID,\n           CAST(NULL AS VARCHAR2(100)) AS TRANSACTION_REFERENCE,\n           CAST(NULL AS NUMBER) AS TRANSACTION_BILLED_AMOUNT,\n           CAST(NULL AS VARCHAR2(3)) AS TRANSACTION_BILLED_CURRENCY,\n           CAST(NULL AS NUMBER) AS DATE_DIFF_DAYS,\n           CAST(NULL AS CHAR(1)) AS MERCHANT_MATCH,\n           CAST(NULL AS CHAR(1)) AS EXPENSE_TYPE_MATCH,\n           CAST(NULL AS CHAR(1)) AS LOCATION_MATCH,\n           CAST(NULL AS NUMBER) AS MATCH_SCORE,\n           CASE\n               WHEN ra.ASSESSED_STATUS = 'ELIGIBLE' THEN 'NO_CANDIDATE'\n               ELSE ra.ASSESSED_STATUS\n           END AS MATCH_STATUS,\n           CASE ra.ASSESSED_STATUS\n               WHEN 'ALREADY_LINKED' THEN 'Receipt has a nonblank CREDIT_TRANSACTION. The existing link is preserved and no candidate is proposed.'\n               WHEN 'IN_REPORT' THEN 'Receipt REPORT_ID is not null. The receipt is already in a report and no candidate is proposed.'\n               WHEN 'NOT_READY' THEN 'Receipt status is not PROCESSED or READY. No candidate is proposed.'\n               WHEN 'CURRENCY_MISSING' THEN 'Receipt currency is missing, malformed, or ambiguous. No default or inferred currency is applied.'\n               WHEN 'INCOMPLETE_RECEIPT' THEN 'Receipt amount is zero or null, or the receipt date or merchant is missing. No candidate is proposed.'\n               ELSE 'No eligible transaction matched the exact posted amount, normalized currency, and calendar date within 3 days after eligibility and global reservation checks. Expense type and location are supporting signals only.'\n           END AS MATCH_REASON,\n           0 AS RECEIPT_CANDIDATE_COUNT,\n           0 AS TRX_RECEIPT_COUNT,\n           CAST(NULL AS NUMBER) AS CANDIDATE_RANK\n    FROM   receipt_assessed ra\n    WHERE  ra.ASSESSED_STATUS <> 'ELIGIBLE'\n       OR  NOT EXISTS (\n               SELECT 1\n               FROM   pair_ranked pr\n               WHERE  pr.RECEIPT_ID = ra.RECEIPT_ID\n           )\n),\nresult_rows AS (\n    SELECT * FROM pair_rows\n    UNION ALL\n    SELECT * FROM unpaired_rows\n),\nglobals AS (\n    SELECT (SELECT COUNT(*) FROM receipt_source) AS TOTAL_RECEIPTS,\n           (SELECT COUNT(*) FROM eligible_receipts) AS ELIGIBLE_RECEIPTS,\n           (SELECT COUNT(*) FROM eligible_transactions) AS ELIGIBLE_TRANSACTIONS\n    FROM   DUAL\n),\nfinal_rows AS (\n    SELECT rr.RECEIPT_ID,\n           rs.FILE_NAME AS RECEIPT_FILE_NAME,\n           rs.STATUS AS RECEIPT_STATUS,\n           rs.REPORT_ID AS RECEIPT_REPORT_ID,\n           rs.CREDIT_TRANSACTION AS EXISTING_TRANSACTION_ID,\n           rr.RECEIPT_AMOUNT,\n           rr.RECEIPT_CURRENCY,\n           rr.RECEIPT_DATE_ISO AS RECEIPT_DATE,\n           rr.RECEIPT_MERCHANT,\n           rr.RECEIPT_EXPENSE_TYPE,\n           rr.RECEIPT_LOCATION,\n           rr.TRANSACTION_ID,\n           rr.TRANSACTION_POSTED_AMOUNT AS TRANSACTION_AMOUNT,\n           rr.POSTED_CURRENCY_NORM AS TRANSACTION_CURRENCY,\n           rr.TRANSACTION_RECEIPT_DATE AS TRANSACTION_DATE,\n           rr.TRANSACTION_MERCHANT,\n           rr.TRANSACTION_EXPENSE_TYPE,\n           rr.CITY_STATE_NORM AS TRANSACTION_LOCATION,\n           rr.TRANSACTION_CARD_ID,\n           rr.TRANSACTION_REFERENCE,\n           rr.TRANSACTION_BILLED_AMOUNT AS BILLED_AMOUNT,\n           rr.TRANSACTION_BILLED_CURRENCY AS BILLED_CURRENCY,\n           rr.DATE_DIFF_DAYS,\n           rr.MERCHANT_MATCH,\n           rr.EXPENSE_TYPE_MATCH,\n           rr.LOCATION_MATCH,\n           rr.MATCH_SCORE,\n           CASE\n               WHEN g.TOTAL_RECEIPTS = 0 THEN 'NO_RECEIPTS'\n               ELSE rr.MATCH_STATUS\n           END AS MATCH_STATUS,\n           CASE\n               WHEN g.TOTAL_RECEIPTS = 0\n                   THEN 'No receipts were found for this EBS_USER. One summary row is returned and no receipt or transaction is invented.'\n               ELSE rr.MATCH_REASON\n           END AS MATCH_REASON,\n           rr.RECEIPT_CANDIDATE_COUNT,\n           rr.TRX_RECEIPT_COUNT,\n           rr.CANDIDATE_RANK,\n           g.TOTAL_RECEIPTS,\n           g.ELIGIBLE_RECEIPTS,\n           g.ELIGIBLE_TRANSACTIONS,\n           'Y' AS PREVIEW_ONLY\n    FROM   globals g\n    LEFT JOIN result_rows rr\n           ON 1 = 1\n    LEFT JOIN receipt_source rs\n           ON rs.RECEIPT_ID = rr.RECEIPT_ID\n)\nSELECT f.RECEIPT_ID,\n       f.RECEIPT_FILE_NAME,\n       f.RECEIPT_STATUS,\n       f.RECEIPT_REPORT_ID,\n       f.EXISTING_TRANSACTION_ID,\n       f.RECEIPT_AMOUNT,\n       f.RECEIPT_CURRENCY,\n       f.RECEIPT_DATE,\n       f.RECEIPT_MERCHANT,\n       f.RECEIPT_EXPENSE_TYPE,\n       f.RECEIPT_LOCATION,\n       f.TRANSACTION_ID,\n       f.TRANSACTION_AMOUNT,\n       f.TRANSACTION_CURRENCY,\n       f.TRANSACTION_DATE,\n       f.TRANSACTION_MERCHANT,\n       f.TRANSACTION_EXPENSE_TYPE,\n       f.TRANSACTION_LOCATION,\n       f.TRANSACTION_CARD_ID,\n       f.TRANSACTION_REFERENCE,\n       f.BILLED_AMOUNT,\n       f.BILLED_CURRENCY,\n       f.DATE_DIFF_DAYS,\n       f.MERCHANT_MATCH,\n       f.EXPENSE_TYPE_MATCH,\n       f.LOCATION_MATCH,\n       f.MATCH_SCORE,\n       f.MATCH_STATUS,\n       f.MATCH_REASON,\n       f.RECEIPT_CANDIDATE_COUNT,\n       f.TRX_RECEIPT_COUNT,\n       f.CANDIDATE_RANK,\n       f.TOTAL_RECEIPTS,\n       f.ELIGIBLE_RECEIPTS,\n       f.ELIGIBLE_TRANSACTIONS,\n       COUNT(*) OVER () AS TOTAL_RESULT_ROWS,\n       f.PREVIEW_ONLY\nFROM   final_rows f\n",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "username",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "username",
+      "paramValue": "${env.DB_USER}",
+      "visible": false
+    },
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "password",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "password",
+      "paramValue": "${env.DB_PASSWORD}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "EBS_USER",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "EBS_USER",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPT_ID",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "RECEIPT_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPT_FILE_NAME",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "RECEIPT_FILE_NAME",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPT_STATUS",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "RECEIPT_STATUS",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPT_REPORT_ID",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "RECEIPT_REPORT_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EXISTING_TRANSACTION_ID",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "EXISTING_TRANSACTION_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPT_AMOUNT",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "RECEIPT_AMOUNT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPT_CURRENCY",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "RECEIPT_CURRENCY",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPT_DATE",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "RECEIPT_DATE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPT_MERCHANT",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "RECEIPT_MERCHANT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPT_EXPENSE_TYPE",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "RECEIPT_EXPENSE_TYPE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPT_LOCATION",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "RECEIPT_LOCATION",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_ID",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "TRANSACTION_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_AMOUNT",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "TRANSACTION_AMOUNT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_CURRENCY",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "TRANSACTION_CURRENCY",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_DATE",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "TRANSACTION_DATE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_MERCHANT",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "TRANSACTION_MERCHANT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_EXPENSE_TYPE",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "TRANSACTION_EXPENSE_TYPE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_LOCATION",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "TRANSACTION_LOCATION",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_CARD_ID",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "TRANSACTION_CARD_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_REFERENCE",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "TRANSACTION_REFERENCE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "BILLED_AMOUNT",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "BILLED_AMOUNT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "BILLED_CURRENCY",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "BILLED_CURRENCY",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DATE_DIFF_DAYS",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "DATE_DIFF_DAYS",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "MERCHANT_MATCH",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "MERCHANT_MATCH",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EXPENSE_TYPE_MATCH",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "EXPENSE_TYPE_MATCH",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LOCATION_MATCH",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "LOCATION_MATCH",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "MATCH_SCORE",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "MATCH_SCORE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "MATCH_STATUS",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "MATCH_STATUS",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "MATCH_REASON",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "MATCH_REASON",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPT_CANDIDATE_COUNT",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "RECEIPT_CANDIDATE_COUNT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRX_RECEIPT_COUNT",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "TRX_RECEIPT_COUNT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CANDIDATE_RANK",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "CANDIDATE_RANK",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TOTAL_RECEIPTS",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "TOTAL_RECEIPTS",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ELIGIBLE_RECEIPTS",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "ELIGIBLE_RECEIPTS",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ELIGIBLE_TRANSACTIONS",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "ELIGIBLE_TRANSACTIONS",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TOTAL_RESULT_ROWS",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "TOTAL_RESULT_ROWS",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PREVIEW_ONLY",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "PREVIEW_ONLY",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_TransactionMatching_SQL"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@sql",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 5000,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "DB",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": []
+}

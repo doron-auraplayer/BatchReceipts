@@ -2815,6 +2815,52 @@ function bindViewerCloseEvents(overlaySelector, closeButtonSelector) {
 // Image viewer
 // ----------------------------------------------------------------------------
 
+var HEIC_PREVIEW_FALLBACK_ID = 'dynamicImageHeicFallback';
+
+var HEIC_PREVIEW_FALLBACK_MESSAGE = 'This browser cannot preview the original '
+  + 'HEIC image. Use the Download button above to download the original file.';
+
+function isHeicPreviewImage(url, fileType) {
+  return getFileExtension(url, fileType) === 'heic';
+}
+
+function clearHeicPreviewFallback($stage) {
+  $stage.find('#' + HEIC_PREVIEW_FALLBACK_ID).remove();
+}
+
+function showHeicPreviewFallback($stage) {
+  var fallbackSelector = '#' + HEIC_PREVIEW_FALLBACK_ID;
+
+  if ($stage.find(fallbackSelector).length) {
+    return false;
+  }
+
+  $('<div></div>')
+    .attr('id', HEIC_PREVIEW_FALLBACK_ID)
+    .addClass('attachmentViewerImageFallback')
+    .attr('role', 'status')
+    .css({
+      color: '#ffffff',
+      'font-size': '14px',
+      'line-height': '1.5',
+      padding: '16px',
+      'text-align': 'center'
+    })
+    .text(HEIC_PREVIEW_FALLBACK_MESSAGE)
+    .appendTo($stage);
+
+  return true;
+}
+
+function handleAttachmentImagePreviewError($stage, isHeicImage) {
+  if (isHeicImage) {
+    showHeicPreviewFallback($stage);
+    return;
+  }
+
+  Popup.ok('Preview', 'The image could not be loaded');
+}
+
 function generateReciptImagePreview(link, fileType) {
   var imageUrl = link && link.href ? link.href : link;
   var imageFileType = fileType || getSelectedFileType();
@@ -2822,6 +2868,7 @@ function generateReciptImagePreview(link, fileType) {
   var capabilities = getViewerCapabilities();
   var $image;
   var $stage;
+  var isHeicImage = isHeicPreviewImage(imageUrl, imageFileType);
   var scale = ATTACHMENT_CONFIG.zoom.initial;
   var translateX = 0;
   var translateY = 0;
@@ -2954,8 +3001,12 @@ function generateReciptImagePreview(link, fileType) {
 
   bindAttachmentViewerActionButtons(ATTACHMENT_VIEWER_MODE_PREVIEW);
 
+  $image.on('load', function () {
+    clearHeicPreviewFallback($stage);
+  });
+
   $image.on('error', function () {
-    Popup.ok('Preview', 'The image could not be loaded');
+    handleAttachmentImagePreviewError($stage, isHeicImage);
   });
 
   $image.on('contextmenu', function (event) {

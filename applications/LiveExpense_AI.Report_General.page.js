@@ -72,7 +72,6 @@ function OnPageLoad() {
         showHideFields();
         return;
     }
-
     Storage.remove("reportErrorMessage");
     Storage.remove("ReimbursableColumnHeader");
     
@@ -177,10 +176,15 @@ function createAiReceiptBatchLines() {
                 Storage.set("ReportNumber",reportNumber);
                 //Purpose
                 console.log("reportNumber:",reportNumber);
-                Services.call("Ping_ReceiptBatch_CreateLinesRPA",function(){
-                    Storage.set('newAiReport', 'false');
-                    Page.navigate("InProgressLines.html");
-                });
+                Services.call("ReceiptBatch_update_report_details", 
+                    function(){
+                        Services.call("Ping_ReceiptBatch_CreateLinesRPA",function(){
+                            Storage.set('newAiReport', 'false');
+                            Page.navigate("InProgressLines.html");
+                         });
+                    },
+                    displayReportServiceError("Failed to create report")
+                );
             }else{
                 console.log("Failed to get report number: " + expenseReportMessage );
             }

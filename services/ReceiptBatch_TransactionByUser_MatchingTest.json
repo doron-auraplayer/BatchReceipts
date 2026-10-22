@@ -1,0 +1,545 @@
+{
+  "name": "ReceiptBatch_TransactionByUser_MatchingTest",
+  "description": "Read-only diagnostic service for transaction matching currencies and availability metadata; not connected to production matching.",
+  "formUrl": "${env.DB_CONNECTION_STR}",
+  "command": "-- Read-only diagnostic query only - not connected to production matching.\n-- Raw monetary fields are returned as-is: compare them to EBS before\n-- selecting the matching amount/currency pair.\nSELECT  trxns.TRX_ID AS TRANSACTION_ID,\n        trxns.TRANSACTION_AMOUNT AS TRANSACTION_AMOUNT,\n        trxns.FOLIO_TYPE AS TRANSACTION_FOLIO_EXPENSE_TYPE,\n            CASE\n        /* Airfare */\n        WHEN REGEXP_LIKE(\n                 UPPER(NVL(trxns.merchant_name1, '')),\n                 'AIRLINE|AIRWAYS|AIRLINES|AIR FARE|TRAVEL AGENCY|TRAVEL AGENT|LUFTHANSA|DELTA|UNITED|AMERICAN AIR|SOUTHWEST|MEXICANA|USAIRWAY|NORTHWEST|BRITISH AIR|AIR FRANCE|KLM|EL AL'\n             )\n            THEN 'Airfare'\n\n        /* Car Rental */\n        WHEN REGEXP_LIKE(\n                 UPPER(NVL(trxns.merchant_name1, '')),\n                 'RENT[- ]?A[- ]?CAR|RENTAL CAR|CAR RENTAL|AVIS|HERTZ|ENTERPRISE|BUDGET|DOLLAR RENT|NATIONAL CAR|ALAMO|SIXT'\n             )\n            THEN 'Car Rental'\n\n        /* Entertainment */\n        WHEN REGEXP_LIKE(\n                 UPPER(NVL(trxns.merchant_name1, '')),\n                 'CINEMA|MOVIE|THEATER|THEATRE|CONCERT|CLUB|NIGHTCLUB|AMUSEMENT|PARK|DISNEY|MUSEUM|GALLERY|EXHIBITION|CASINO|BOWLING|STADIUM|ARENA|TICKETS|EVENTBRITE|TICKETMASTER'\n             )\n            THEN 'Entertainment'\n\n        /* Hotel */\n        WHEN REGEXP_LIKE(\n                 UPPER(NVL(trxns.merchant_name1, '')),\n                 'HOTEL|MOTEL|INN|LODGE|RESORT|SUITES|MARRIOTT|HYATT|HILTON|HOLIDAY INN|FOUR SEASONS|SHERATON|WESTIN|CONRAD|EMBASSY SUITES|BEST WESTERN|RADISSON|COURTYARD|HAMPTON INN'\n             )\n            THEN 'Hotel'\n\n        /* Meals */\n        WHEN REGEXP_LIKE(\n                 UPPER(NVL(trxns.merchant_name1, '')),\n                 'RESTAURANT|GRILL|CAFE|CAFÉ|BISTRO|BUFFET|PIZZA|BURGER|SUSHI|STEAK|STEAKHOUSE|BBQ|BARBEQUE|DELI|DINER|MCDONALD|STARBUCKS|WENDY|HOOTERS|SUBWAY|TACO|CHILI|OLIVE GARDEN|RED LOBSTER|LOBSTER HOUSE|CHINESE FOOD'\n             )\n            THEN 'Meals'\n\n        /* Taxis */\n        WHEN REGEXP_LIKE(\n                 UPPER(NVL(trxns.merchant_name1, '')),\n                 'TAXI|TAXIS|UBER|LYFT|LIMO|LIMOUSINE|TRANSIT|METRO|RAIL|BAHN|BUS|SHUTTLE'\n             )\n            THEN 'Taxis'\n\n        /* Telephone Calls */\n        WHEN REGEXP_LIKE(\n                 UPPER(NVL(trxns.merchant_name1, '')),\n                 'AT%T|VERIZON|VODAFONE|ORANGE|TELECOM|TELEFONICA|TELEPHONE|PHONE CARD|CALLING CARD|SBC|SPRINT|T-MOBILE|SFR'\n             )\n            THEN 'Telephone Calls'\n\n        /* Default */\n        ELSE 'Miscellaneous'\n    END AS TRANSACTION_EXPENSE_TYPE,\n        TO_CHAR(trxns.TRANSACTION_DATE, 'YYYY-MM-DD') AS TRANSACTION_RECEIPT_DATE,\n        trxns.MERCHANT_NAME1           AS TRANSACTION_MERCHANT,\n        trxns.BILLED_AMOUNT AS TRANSACTION_BILLED_AMOUNT,\n        trxns.BILLED_CURRENCY_CODE AS TRANSACTION_BILLED_CURRENCY,\n        TO_CHAR(trxns.BILLED_DATE, 'YYYY-MM-DD') AS TRANSACTION_BILLED_DATE,\n        trxns.POSTED_AMOUNT AS TRANSACTION_POSTED_AMOUNT,\n        trxns.POSTED_CURRENCY_CODE AS TRANSACTION_POSTED_CURRENCY,\n        TO_CHAR(trxns.POSTED_DATE, 'YYYY-MM-DD') AS TRANSACTION_POSTED_DATE,\n        trxns.CURRENCY_CONVERSION_RATE AS TRANSACTION_EXCHANGE_RATE,\n        trxns.CARD_ID AS TRANSACTION_CARD_ID,\n        trxns.CARD_PROGRAM_ID AS TRANSACTION_CARD_PROGRAM_ID,\n        trxns.MERCHANT_NAME2 AS TRANSACTION_MERCHANT_NAME2,\n        trxns.MERCHANT_CITY AS TRANSACTION_CITY,\n        trxns.MERCHANT_PROVINCE_STATE AS TRANSACTION_STATE,\n        trxns.MERCHANT_COUNTRY AS TRANSACTION_COUNTRY,\n        trxns.REFERENCE_NUMBER AS TRANSACTION_REFERENCE,\n        trxns.DEBIT_FLAG AS TRANSACTION_DEBIT_FLAG,\n        trxns.VALIDATE_CODE AS TRANSACTION_VALIDATE_CODE,\n        trxns.CATEGORY AS TRANSACTION_CATEGORY,\n        trxns.REPORT_HEADER_ID AS TRANSACTION_REPORT_ID,\n        trxns.EXPENSED_AMOUNT AS TRANSACTION_EXPENSED_AMOUNT,\n        TO_CHAR(trxns.TRX_AVAILABLE_DATE, 'YYYY-MM-DD') AS TRANSACTION_AVAILABLE_DATE,\n        trxns.DESCRIPTION AS TRANSACTION_DESCRIPTION,\n        trxns.SIC_CODE AS TRANSACTION_SIC_CODE,\n        COUNT(*) OVER () AS TRANSACTION_TOTAL_COUNT\nFROM   ap_credit_card_trxns_all trxns\nJOIN   ap_cards_all cards\n       ON cards.card_id = trxns.card_id\nJOIN   fnd_user fu\n       ON fu.employee_id = cards.employee_id\nWHERE   fu.user_name = UPPER('${EBS_USER}')\nORDER BY trxns.TRANSACTION_DATE DESC NULLS LAST, trxns.TRX_ID DESC",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "username",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "username",
+      "paramValue": "${env.DB_USER}",
+      "visible": false
+    },
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "password",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "password",
+      "paramValue": "${env.DB_PASSWORD}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "EBS_USER",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "EBS_USER",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_ID",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_AMOUNT",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_AMOUNT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_FOLIO_EXPENSE_TYPE",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_FOLIO_EXPENSE_TYPE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_EXPENSE_TYPE",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_EXPENSE_TYPE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_RECEIPT_DATE",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_RECEIPT_DATE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_MERCHANT",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_MERCHANT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_BILLED_AMOUNT",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_BILLED_AMOUNT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_BILLED_CURRENCY",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_BILLED_CURRENCY",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_BILLED_DATE",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_BILLED_DATE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_POSTED_AMOUNT",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_POSTED_AMOUNT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_POSTED_CURRENCY",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_POSTED_CURRENCY",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_POSTED_DATE",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_POSTED_DATE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_EXCHANGE_RATE",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_EXCHANGE_RATE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_CARD_ID",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_CARD_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_CARD_PROGRAM_ID",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_CARD_PROGRAM_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_MERCHANT_NAME2",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_MERCHANT_NAME2",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_CITY",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_CITY",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_STATE",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_STATE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_COUNTRY",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_COUNTRY",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_REFERENCE",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_REFERENCE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_DEBIT_FLAG",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_DEBIT_FLAG",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_VALIDATE_CODE",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_VALIDATE_CODE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_CATEGORY",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_CATEGORY",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_REPORT_ID",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_REPORT_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_EXPENSED_AMOUNT",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_EXPENSED_AMOUNT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_AVAILABLE_DATE",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_AVAILABLE_DATE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_DESCRIPTION",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_DESCRIPTION",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_SIC_CODE",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_SIC_CODE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_TOTAL_COUNT",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "TRANSACTION_TOTAL_COUNT",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_TransactionByUser_MatchingTest"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@sql",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 1000,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "DB",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": []
+}

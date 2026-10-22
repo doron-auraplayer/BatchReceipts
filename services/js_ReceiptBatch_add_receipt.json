@@ -134,7 +134,6 @@
     "BATCH_RECEIPTS"
   ],
   "apps": [
-    "AP_BatchReceipts",
-    "LiveExpense"
+    "LiveExpense_AI"
   ]
 }

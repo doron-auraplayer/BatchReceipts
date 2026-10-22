@@ -35,27 +35,7 @@
   box-sizing: border-box;
 }
 
-/* Required-field indicator: the marker beside the label.
-   The page adds the class receipt-required to the EXISTING label of every required,
-   editable field of the selected expense type; the visible ' *' is drawn here by the
-   label's own ::after rule, so no label text is ever rewritten and the platform-generated
-   ReceiptDetails.html is not touched. It is a visual indicator only: the native `required`
-   is never set, so an incomplete DRAFT is still saved exactly as before.
 
-   WHY THIS RULE IS WRITTEN WITH !important. A live AuraPlayer inspection of the receipt
-   form showed the marker never reaching the screen: the live label is rendered inside a
-   <nobr> element, the platform's own `label {white-space: normal}` won over this page sheet,
-   the computed ::after `content` stayed `none` and the asterisk stayed invisible. A rule the
-   framework's own label styling can override is therefore not an indicator at all, so every
-   declaration that decides whether the marker is drawn, and where it sits, is forced:
-   `content`, `display`, `white-space`, the colour/weight that make it read, and the
-   padding/margin that keep it off the caption text.
-
-   The label is kept on ONE line and the pseudo-element is forced inline, so the generated
-   asterisk sits BESIDE the caption instead of wrapping onto a line of its own under it -
-   the defect the live receipt form showed for Receipt Amount and Receipt Currency. The
-   label element itself is made inline-block so the nowrap really constrains its own box
-   rather than the whole container row. */
 #mainForm label.receipt-required {
   display: inline-block !important;
   white-space: nowrap !important;
@@ -77,46 +57,16 @@
   margin-left: 0 !important;
 }
 
-/* The <nobr> a live label is wrapped in must not become a second, competing line box: with
-   it left at its default the asterisk could still be pushed away from the caption. The
-   nobr is only told to keep the one line this marker needs - it never becomes visible and
-   never receives a colour, a border or a size of its own. */
 #mainForm label.receipt-required nobr,
 #mainForm label.receipt-required > nobr {
   white-space: nowrap !important;
 }
 
-/* Required-field control colouring - a MISSING value only.
-   The page adds the class receipt-required-control to the EXISTING `<fieldId>_container`
-   of a required, editable field of the selected expense type WHILE THAT FIELD HAS NO VALUE,
-   and takes it off as soon as a value is entered. The colour therefore means "still
-   missing", not "required": a required field that is already filled is left completely
-   plain, and the asterisk beside its label stays visible the whole time. That container is
-   only a SELECTOR HOOK: the designer draws the label and the grid cell in the very same box,
-   so colouring the container itself would tint the caption and the whole cell as well - and a
-   border of its own would sit on top of the 2-column layout. The container rule below
-   therefore draws nothing at all, and the colour is applied to the actual control: the
-   input/select/textarea the designer rendered, the `.ui-input-text` wrapper the renderer
-   puts around a decorated input, and the AuraPlayer LOV wrapper a required picker is
-   rendered into.
-   A live inspection showed those colours also losing: the input kept the framework's own
-   computed background `rgb(248,248,248)` although this sheet asked for #fffafa, and the
-   wrapper border #c98b86 was far too faint to read. Every declaration that carries the
-   indicator is therefore forced with !important, and the values were raised to a border and
-   a fill that are clearly visible on the form while dark text stays readable on them.
-   Only the BORDER and the FILL move - never a width, a height, a padding or a position - so
-   the box still measures exactly as before. It is scoped to #mainForm AND to containers
-   that carry that class, so an OPTIONAL field - and a required field that is already filled,
-   which never receives the class - keeps the untouched designer look, and the control keeps
-   its value, its text, its focus, its disabled state and its size behaviour. */
+
 #mainForm .receipt-required-control {
   /* No visual style here on purpose: the class is a hook, not a box. */
 }
 
-/* The AuraPlayer LOV/dropdown wrapper of a required picker whose value is still missing: the
-   wrapper is the element the page's own carat styling is applied to. Only its border colour
-   follows the tint; the hidden `.dropdown-container` it holds is deliberately NOT styled, so
-   a closed list is never drawn and a whole row is never tinted. */
 #mainForm .receipt-required-control .lov-arrow,
 #mainForm .receipt-required-control span.lov-arrow {
   border-color: #d1462f !important;
@@ -130,8 +80,7 @@
 #mainForm .receipt-required-control input,
 #mainForm .receipt-required-control select,
 #mainForm .receipt-required-control textarea {
-  /* A wash light enough to keep the control's own dark text readable. It is forced because
-     the framework's own control background otherwise wins, exactly as it did live. */
+
   background-color: #fdf3f1 !important;
   border-color: #d1462f !important;
 }
@@ -159,5 +108,290 @@
   border-color: #c8c8c8 !important;
 }
 
+/* Native LocationName text mode. The SAME designer input stays editable; only the LOV
+   carat and the generated reload trigger are hidden, scoped to the LocationName wrapper.
+   Lov mode removes this class again, so the native widget remains untouched there. */
+#mainForm .receipt-location-text-mode #LocationName_lov_trigger {
+  display: none !important;
+}
+
+#mainForm .receipt-location-text-mode::after,
+#mainForm .receipt-location-text-mode.ui-icon-carat-d::after,
+#mainForm .receipt-location-text-mode.ui-btn-icon-right::after {
+  content: none !important;
+  display: none !important;
+}
+
 /* Focus must stay as visible as it was: the focused control is not repainted here, so the
    designer's own focus ring keeps showing through. */
+
+/* ReceiptDetails employee attendee editor additions only.
+   Every rule is scoped to #mainForm and to the page-owned attendee classes, so
+   the existing ReceiptDetails rules and the designer controls are untouched.
+   These declarations are appended to the live ReceiptDetails page CSS after
+   review. They never style a global selector. */
+
+#mainForm .receipt-attendee-editor {
+  flex: 1 1 100%;
+  margin: 4px 0 10px;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  clear: both;
+}
+
+#mainForm .receipt-attendee-list {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#mainForm .receipt-attendee-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  width: 100%;
+  padding: 6px 8px;
+  margin: 4px 0;
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
+  background: #fafafa;
+  box-sizing: border-box;
+}
+
+#mainForm .receipt-attendee-name {
+  font-weight: 600;
+  color: #222;
+  overflow-wrap: anywhere;
+}
+
+#mainForm .receipt-attendee-detail {
+  color: #555;
+  font-size: 0.9em;
+  overflow-wrap: anywhere;
+}
+
+#mainForm .receipt-attendee-remove {
+  margin-left: auto;
+  padding: 2px 8px;
+  border: 1px solid #b9b9b9;
+  border-radius: 4px;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+}
+
+#mainForm .receipt-attendee-remove:focus,
+#mainForm .receipt-attendee-remove:hover {
+  border-color: #666;
+  background: #f0f0f0;
+}
+
+#mainForm .receipt-attendee-status {
+  display: block;
+  margin: 0;
+  color: #555;
+  font-size: 0.9em;
+  overflow-wrap: anywhere;
+}
+
+#mainForm .receipt-attendee-status:not(:empty) {
+  margin: 4px 0;
+}
+
+#mainForm .receipt-attendee-status-loading {
+  color: #555;
+}
+
+#mainForm .receipt-attendee-status-success {
+  color: #1f5f2b;
+}
+
+#mainForm .receipt-attendee-status-error {
+  color: #a12a20;
+}
+
+#mainForm .receipt-attendee-status-refine {
+  color: #7a5200;
+}
+
+#mainForm .receipt-attendee-status-empty {
+  color: #555;
+}
+
+/* ReceiptDetails guest editor additions only.
+   Native designer controls are bound in page code; only the roster, status and
+   Cancel button are generated. Add_Guest is relocated beside the Employer
+   input, so its small icon-button rule stays id-scoped. */
+
+#mainForm .receipt-guest-editor {
+  flex: 1 1 100%;
+  margin: 4px 0 10px;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  clear: both;
+}
+
+#mainForm .receipt-guest-list {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#mainForm .receipt-guest-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  width: 100%;
+  padding: 6px 8px;
+  margin: 4px 0;
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
+  background: #fafafa;
+  box-sizing: border-box;
+}
+
+#mainForm .receipt-guest-name {
+  font-weight: 600;
+  color: #222;
+  overflow-wrap: anywhere;
+}
+
+#mainForm .receipt-guest-employer {
+  color: #555;
+  font-size: 0.9em;
+  overflow-wrap: anywhere;
+}
+
+#mainForm .receipt-guest-edit,
+#mainForm .receipt-guest-remove,
+#mainForm .receipt-guest-cancel {
+  padding: 2px 8px;
+  border: 1px solid #b9b9b9;
+  border-radius: 4px;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+}
+
+#mainForm .receipt-guest-edit {
+  margin-left: auto;
+}
+
+#mainForm .receipt-guest-edit:focus,
+#mainForm .receipt-guest-edit:hover,
+#mainForm .receipt-guest-remove:focus,
+#mainForm .receipt-guest-remove:hover,
+#mainForm .receipt-guest-cancel:focus,
+#mainForm .receipt-guest-cancel:hover {
+  border-color: #666;
+  background: #f0f0f0;
+}
+
+#mainForm .receipt-guest-status {
+  display: block;
+  margin: 0;
+  color: #555;
+  font-size: 0.9em;
+  overflow-wrap: anywhere;
+}
+
+#mainForm .receipt-guest-status:not(:empty) {
+  margin: 4px 0;
+}
+
+#mainForm .receipt-guest-status-success {
+  color: #1f5f2b;
+}
+
+#mainForm .receipt-guest-status-error {
+  color: #a12a20;
+}
+
+/* Add_Guest is moved out of the shared designer button row into the Employer
+   field. Keep the native input and the reusable button on one line: the input
+   host shrinks, the button keeps its 34x32 size and stays to the right. */
+#mainForm .receipt-guest-employer-field {
+  min-width: 0;
+}
+
+#mainForm .receipt-guest-employer-action {
+  display: flex;
+  flex-wrap: nowrap;
+  /* Top-align the input and the button. The generated button wrapper has 5px
+     padding and the generated theme adds 3px to the input, so both are
+     neutralised below and the row is offset by the Name input's collapsed 3px
+     top margin instead. */
+  align-items: flex-start;
+  margin-top: 3px;
+  gap: 6px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+#mainForm .receipt-guest-employer-action > .ui-input-text,
+#mainForm .receipt-guest-employer-action > input {
+  flex: 1 1 auto;
+  width: auto;
+  max-width: none;
+  min-width: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+#mainForm .receipt-guest-employer-action > .ui-input-text {
+  padding: 0;
+}
+
+#mainForm .receipt-guest-employer-action > .ui-input-text > input {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  /* The generated theme forces a 3px top margin on inputs. Remove it here so
+     the Employer input starts exactly where the action row starts. */
+  margin: 0 !important;
+  box-sizing: border-box;
+}
+
+#mainForm .receipt-guest-employer-action > .receipt-guest-add-wrapper {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0 !important;
+}
+
+/* Only Add_Guest's own span is restyled. The shared button row that originally
+   also held Location_Search, Attachments and Itemize keeps its own layout. */
+span.button-field-container.receipt-guest-add-wrapper {
+  width: auto;
+  max-width: none;
+  flex: 0 0 auto;
+}
+
+#Add_Guest.receipt-guest-add {
+  width: 34px;
+  min-width: 34px;
+  max-width: 34px;
+  height: 32px;
+  min-height: 32px;
+  padding: 0;
+  margin: 0;
+  border-radius: 9px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  line-height: 1;
+}
+
+#Add_Guest.receipt-guest-add i {
+  margin: 0;
+  line-height: 1;
+}

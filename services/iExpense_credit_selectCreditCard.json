@@ -128,6 +128,7 @@
   "createdBy": "admin",
   "labels": [],
   "apps": [
-    "LiveExpense"
+    "LiveExpense",
+    "LiveExpense_AI"
   ]
 }

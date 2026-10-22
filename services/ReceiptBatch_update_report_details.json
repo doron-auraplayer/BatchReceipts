@@ -1,0 +1,143 @@
+{
+  "name": "ReceiptBatch_update_report_details",
+  "description": "",
+  "formUrl": "${env.DB_CONNECTION_STR}",
+  "command": "UPDATE XX_AP_BATCH_RECEIPTS\nSET REPORT_ID = ${ReportNumber:VARCHAR},\n    REPORT_NAME = ${Purpose:VARCHAR},\n    REPORT_CREATE_DATE = SYSDATE\nWHERE EBS_USER_NAME = ${EBS_USER:VARCHAR}\n  AND RECEIPT_ID IN (\n    SELECT ids.RECEIPT_ID\n    FROM JSON_TABLE(\n      ${SELECTED_RECEIPT_IDS:VARCHAR},\n      '$[*]' ERROR ON ERROR\n      COLUMNS (\n        RECEIPT_ID NUMBER PATH '$' ERROR ON ERROR\n      )\n    ) ids\n  )\n",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "username",
+        "serviceName": "ReceiptBatch_update_report_details"
+      },
+      "paramLabel": "username",
+      "paramValue": "${env.DB_USER}",
+      "visible": false
+    },
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "password",
+        "serviceName": "ReceiptBatch_update_report_details"
+      },
+      "paramLabel": "password",
+      "paramValue": "${env.DB_PASSWORD}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "ReportNumber",
+        "serviceName": "ReceiptBatch_update_report_details"
+      },
+      "paramLabel": "ReportNumber",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "Purpose",
+        "serviceName": "ReceiptBatch_update_report_details"
+      },
+      "paramLabel": "Purpose",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "EBS_USER",
+        "serviceName": "ReceiptBatch_update_report_details"
+      },
+      "paramLabel": "EBS_USER",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "SELECTED_RECEIPT_IDS",
+        "serviceName": "ReceiptBatch_update_report_details"
+      },
+      "paramLabel": "SELECTED_RECEIPT_IDS",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_update_report_details"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_update_report_details"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_update_report_details"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@sql",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "DB",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": []
+}

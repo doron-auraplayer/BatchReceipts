@@ -403,7 +403,6 @@
     "BATCH_RECEIPTS"
   ],
   "apps": [
-    "LiveExpense_AI",
-    "LiveExpense_AI_1510"
+    "LiveExpense_AI"
   ]
 }

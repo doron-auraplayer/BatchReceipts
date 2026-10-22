@@ -15,6 +15,17 @@
       "paramLabel": "EXPENSE_TYPE",
       "paramValue": "",
       "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "APP_NAME",
+        "serviceName": "ReceiptBatch_CreateExpenseJson"
+      },
+      "paramLabel": "APP_NAME",
+      "paramValue": "",
+      "visible": true
     }
   ],
   "outputParams": [
@@ -162,6 +173,6 @@
   ],
   "apps": [
     "LiveExpense_AI",
-    "LiveExpense_AI_1510"
+    "LiveExpense_AI_18"
   ]
 }

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>ReceiptBatch_AddMoreLines</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">ReceiptBatch_AddMoreLines</td></tr>
+</thead><tbody>
+<tr>
+  <td>input</td>
+  <td>10</td>
+  <td>index</td>
+  <td></td>
+</tr><tr>
+  <td>//Existing Cash and Other Expenses list page/session required; this partial does not get, login, save, or navigate away.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>assertTitle</td>
+  <td>*Expense Report: Cash and Other Expenses*</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>//Reset the previous call's message before reading this page.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>store</td>
+  <td>javascript{""}</td>
+  <td>AddMoreLinesMessage</td>
+  <td></td>
+</tr><tr>
+  <td>//The expected next line may already exist, so a safe retry must not click Add More Lines again.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeElementPresent</td>
+  <td>//a[contains(@id,'Details:${index}')]/img</td>
+  <td>RequestedLineAvailable</td>
+  <td></td>
+</tr><tr>
+  <td>if</td>
+  <td>!RequestedLineAvailable</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>clickAndWait</td>
+  <td>//a[@title='Add More Lines']</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>assertTitle</td>
+  <td>*Expense Report: Cash and Other Expenses*</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>endIf</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>//Recheck after the click or retry; a blocked Add More Lines remains a failure at the final assert.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeElementPresent</td>
+  <td>//a[contains(@id,'Details:${index}')]/img</td>
+  <td>RequestedLineAvailable</td>
+  <td></td>
+</tr><tr>
+  <td>storeElementPresent</td>
+  <td>//table[@id='FwkErrorBeanId']</td>
+  <td>AddMoreLinesMessageExists</td>
+  <td></td>
+</tr><tr>
+  <td>if</td>
+  <td>AddMoreLinesMessageExists</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeText</td>
+  <td>//table[@id='FwkErrorBeanId']</td>
+  <td>AddMoreLinesMessage</td>
+  <td></td>
+</tr><tr>
+  <td>endIf</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeTitle</td>
+  <td>currentPageTitle</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>//The expected next-line opener is required; failed or blocked expansion must not masquerade as success.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>assertElementPresent</td>
+  <td>//a[contains(@id,'Details:${index}')]/img</td>
+  <td></td>
+  <td></td>
+</tr>
+</tbody></table></body></html>

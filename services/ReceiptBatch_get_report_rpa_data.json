@@ -1,0 +1,455 @@
+{
+  "name": "ReceiptBatch_get_report_rpa_data",
+  "description": "Read-only complete linked receipt/report data for future RPA integration.",
+  "formUrl": "${env.DB_CONNECTION_STR}",
+  "command": "SELECT\n    r.REPORT_ID AS REPORT_NUMBER,\n    MAX(r.REPORT_NAME) OVER () AS REPORT_PURPOSE,\n    TO_CHAR(MAX(r.REPORT_CREATE_DATE) OVER (), 'YYYY-MM-DD\"T\"HH24:MI:SS') AS REPORT_CREATE_DATE,\n    r.RECEIPT_ID AS RECEIPT_ID,\n    r.STATUS AS STATUS,\n    r.EBS_USER_NAME AS EBS_USER_NAME,\n    r.FILE_NAME AS FILE_NAME,\n    r.FILE_TYPE AS FILE_TYPE,\n    r.EXPENSE_TYPE AS EXPENSE_TYPE,\n    r.TOTAL_AMOUNT AS TOTAL_AMOUNT,\n    TO_CHAR(r.RECEIPT_DATE, 'YYYY-MM-DD') AS RECEIPT_DATE,\n    r.MERCHANT AS MERCHANT,\n    r.LOCATION AS LOCATION,\n    r.DEPARTMENT AS DEPARTMENT,\n    r.CREDIT_TRANSACTION AS CREDIT_TRANSACTION,\n    r.EXPENSE_DATA_JSON AS EXPENSE_DATA_JSON,\n    DBMS_LOB.GETLENGTH(r.EXPENSE_DATA_JSON) AS EXPENSE_DATA_JSON_LENGTH,\n    TO_CHAR(r.EXPENSE_DATA_UPDATED_DATE, 'YYYY-MM-DD\"T\"HH24:MI:SS.FF6') AS EXPENSE_DATA_UPDATED_DATE,\n    r.TEMPLATE_NAME AS TEMPLATE_NAME,\n    r.PAYMENT_TYPE AS PAYMENT_TYPE,\n    r.LINE_NUM AS LINE_NUM,\n    r.ERROR_MESSAGE AS ERROR_MESSAGE,\n    COUNT(*) OVER () AS TOTAL_RECEIPTS\nFROM XX_AP_BATCH_RECEIPTS r\nWHERE r.REPORT_ID = '${REPORT_NUMBER}'\nORDER BY r.RECEIPT_ID\n",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "username",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "username",
+      "paramValue": "${env.DB_USER}",
+      "visible": false
+    },
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "password",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "password",
+      "paramValue": "${env.DB_PASSWORD}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "REPORT_NUMBER",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "REPORT_NUMBER",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "REPORT_NUMBER",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "REPORT_NUMBER",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "REPORT_PURPOSE",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "REPORT_PURPOSE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "REPORT_CREATE_DATE",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "REPORT_CREATE_DATE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPT_ID",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "RECEIPT_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "STATUS",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "STATUS",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EBS_USER_NAME",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "EBS_USER_NAME",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "FILE_NAME",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "FILE_NAME",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "FILE_TYPE",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "FILE_TYPE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EXPENSE_TYPE",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "EXPENSE_TYPE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TOTAL_AMOUNT",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "TOTAL_AMOUNT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPT_DATE",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "RECEIPT_DATE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "MERCHANT",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "MERCHANT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LOCATION",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "LOCATION",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "DEPARTMENT",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "DEPARTMENT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CREDIT_TRANSACTION",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "CREDIT_TRANSACTION",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EXPENSE_DATA_JSON",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "EXPENSE_DATA_JSON",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EXPENSE_DATA_JSON_LENGTH",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "EXPENSE_DATA_JSON_LENGTH",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EXPENSE_DATA_UPDATED_DATE",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "EXPENSE_DATA_UPDATED_DATE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TEMPLATE_NAME",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "TEMPLATE_NAME",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PAYMENT_TYPE",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "PAYMENT_TYPE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "LINE_NUM",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "LINE_NUM",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ERROR_MESSAGE",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "ERROR_MESSAGE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TOTAL_RECEIPTS",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "TOTAL_RECEIPTS",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@sql",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 1000,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "DB",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": []
+}

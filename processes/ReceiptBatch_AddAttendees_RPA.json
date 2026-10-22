@@ -1,0 +1,581 @@
+{
+  "name": "ReceiptBatch_AddAttendees_RPA",
+  "description": "",
+  "steps": [
+    {
+      "type": "Service",
+      "name": "iExpense_attendeesEmpTableGetJS",
+      "nickname": "Read Employee Attendees",
+      "keepAlive": true,
+      "throwError": true,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "ItemizedItem",
+          "paramValue": "\"false\"",
+          "valueType": "staticText"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "ReportCreateEmpName",
+          "paramValue": "\"\"",
+          "valueType": "staticText"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "sessionId",
+          "paramValue": "ServiceManager.sessionId",
+          "valueType": "javaScript"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "mock",
+          "paramValue": "\"false\"",
+          "valueType": "staticText"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "AttendiesEmpTableEmpName",
+          "label": "AttendiesEmpTableEmpName",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "rowsTo",
+          "label": "rowsTo",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "AttendiesEmpTableEmpTitle",
+          "label": "AttendiesEmpTableEmpTitle",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "Error",
+          "label": "Error",
+          "visible": true,
+          "inTable": false
+        },
+        {
+          "name": "PopupMessages",
+          "label": "PopupMessages",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "StatusBarMessages",
+          "label": "StatusBarMessages",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "JavaScript",
+      "name": "JavaScript",
+      "nickname": "Prepare Missing Employees",
+      "command": "// Public input normalization for ReceiptBatch_AddAttendees_RPA.\n// Prepend this snippet to the existing \"Prepare Missing Employees\" JavaScript\n// step. It binds the four process inputs to the globals used by that script\n// and by the following attendee and guest loops. It makes no service calls and\n// does not change the existing preparation or loop logic.\n//\n// MealAttendees, MealGuests, and GuestEmployers accept an actual array or a JSON\n// array string. Null, undefined, and blank values become []. Malformed JSON, a\n// non-array JSON value, and every other non-array value fail. Arrays and their\n// objects are used as-is, so every field and the original order are preserved.\n//\n// MealNumberAttendees accepts a number or a nonblank numeric string and must be\n// a nonnegative integer. A missing, blank, invalid, negative, fractional, or\n// nonfinite count fails instead of being invented.\n//\n// GuestEmployers must have exactly one entry per MealGuests entry, in the same\n// order. A length mismatch fails; the array is never padded, filtered, or\n// reordered.\n\nfunction mealInputText(value) {\n    return value === null || value === undefined ? \"\" : String(value).trim();\n}\n\nfunction mealInputFail(message) {\n    throw new Error(\"ReceiptBatch_AddAttendees_RPA inputs: \" + message);\n}\n\nfunction mealInputDescribe(value) {\n    if (value === null) {\n        return \"null\";\n    }\n    if (value === undefined) {\n        return \"undefined\";\n    }\n    if (typeof value === \"string\") {\n        return mealInputText(value) === \"\" ? \"a blank string\" : \"\\\"\" + value + \"\\\"\";\n    }\n    if (Array.isArray(value)) {\n        return \"an array\";\n    }\n    if (typeof value === \"number\" || typeof value === \"boolean\") {\n        return String(value);\n    }\n    return \"a value of type \" + typeof value;\n}\n\nfunction mealInputArray(name, value) {\n    if (value === null || value === undefined) {\n        return [];\n    }\n\n    if (typeof value === \"string\") {\n        if (mealInputText(value) === \"\") {\n            return [];\n        }\n        try {\n            value = JSON.parse(value);\n        } catch (parseFailure) {\n            var parseMessage = parseFailure && parseFailure.message\n                ? String(parseFailure.message)\n                : String(parseFailure);\n            mealInputFail(name + \" must be a JSON array string; \" +\n                \"the value is not valid JSON (\" + parseMessage + \").\");\n        }\n    }\n\n    if (!Array.isArray(value)) {\n        mealInputFail(name + \" must be an array or a JSON array string; \" +\n            \"received \" + mealInputDescribe(value) + \".\");\n    }\n    return value;\n}\n\nfunction mealInputCount(name, value) {\n    var normalized;\n\n    if (typeof value === \"number\") {\n        normalized = value;\n    } else if (typeof value === \"string\" && mealInputText(value) !== \"\") {\n        normalized = Number(mealInputText(value));\n    } else {\n        mealInputFail(name + \" must be a nonnegative integer; received \" +\n            mealInputDescribe(value) + \".\");\n    }\n\n    if (!isFinite(normalized) || normalized < 0 ||\n        Math.floor(normalized) !== normalized) {\n        mealInputFail(name + \" must be a nonnegative integer; received \" +\n            mealInputDescribe(value) + \".\");\n    }\n    return normalized;\n}\n\nvar MealAttendees = mealInputArray(\n    \"MealAttendees\",\n    ServiceManager.getInput(\"MealAttendees\")\n);\nvar MealGuests = mealInputArray(\n    \"MealGuests\",\n    ServiceManager.getInput(\"MealGuests\")\n);\nvar MealNumberAttendees = mealInputCount(\n    \"MealNumberAttendees\",\n    ServiceManager.getInput(\"MealNumberAttendees\")\n);\nvar GuestEmployers = mealInputArray(\n    \"GuestEmployers\",\n    ServiceManager.getInput(\"GuestEmployers\")\n);\n\nif (GuestEmployers.length !== MealGuests.length) {\n    mealInputFail(\"GuestEmployers must contain one employer per guest; \" +\n        \"received \" + GuestEmployers.length + \" employer(s) for \" +\n        MealGuests.length + \" guest(s).\");\n}\n\n// Meal attendee data preparation for ReceiptBatch_CreateLinesRPA.\n// Runs after iExpense_attendeesEmpTableGetJS and before the native attendee\n// loop. It only filters already-normalized inputs and computes the first free\n// EBS row; it never calls a service or changes MealAttendees/MealNumberAttendees.\n\nvar MissingMealAttendees;\nvar MealAttendeeStartIndex;\n\nvar mealAttendeeEbsRawNames = Services.getResponseArray(\n    iExpense_attendeesEmpTableGetJSResponse,\n    \"AttendiesEmpTableEmpName\"\n);\nvar mealAttendeeRowsTo = Services.getResponseValue(\n    iExpense_attendeesEmpTableGetJSResponse,\n    \"rowsTo\"\n);\n\nfunction mealAttendeeFail(message) {\n    throw new Error(\"Meal attendees preparation: \" + message);\n}\n\nfunction mealAttendeeText(value) {\n    return value === null || value === undefined ? \"\" : String(value).trim();\n}\n\nif (mealAttendeeEbsRawNames === null || mealAttendeeEbsRawNames === undefined ||\n    mealAttendeeEbsRawNames === \"\") {\n    mealAttendeeEbsRawNames = [];\n}\nif (!Array.isArray(mealAttendeeEbsRawNames)) {\n    mealAttendeeFail(\"the EBS attendee names must be an array.\");\n}\n\nif (typeof mealAttendeeRowsTo === \"string\" &&\n    mealAttendeeText(mealAttendeeRowsTo) !== \"\") {\n    mealAttendeeRowsTo = Number(mealAttendeeRowsTo);\n}\nif (typeof mealAttendeeRowsTo !== \"number\" || !isFinite(mealAttendeeRowsTo) ||\n    mealAttendeeRowsTo < 0 || Math.floor(mealAttendeeRowsTo) !== mealAttendeeRowsTo) {\n    mealAttendeeFail(\"rowsTo must be a nonnegative integer.\");\n}\nif (mealAttendeeRowsTo === 0) {\n    if (mealAttendeeEbsRawNames.length > 1 ||\n        (mealAttendeeEbsRawNames.length === 1 &&\n         mealAttendeeText(mealAttendeeEbsRawNames[0]) !== \"\")) {\n        mealAttendeeFail(\"rowsTo=0 does not match the returned EBS attendee rows.\");\n    }\n} else if (mealAttendeeRowsTo !== mealAttendeeEbsRawNames.length) {\n    mealAttendeeFail(\"rowsTo=\" + mealAttendeeRowsTo + \" does not match \" +\n        mealAttendeeEbsRawNames.length + \" returned EBS attendee rows.\");\n}\n\nvar mealAttendeeExistingNames = {};\nvar mealAttendeeStartIndex = 0;\nvar mealAttendeeFoundBlank = false;\n\nfor (var mealAttendeeRowIndex = 0;\n        mealAttendeeRowIndex < mealAttendeeEbsRawNames.length;\n        mealAttendeeRowIndex++) {\n    var mealAttendeeRowName = mealAttendeeEbsRawNames[mealAttendeeRowIndex];\n    var mealAttendeeRowNameText = mealAttendeeText(mealAttendeeRowName);\n    if (mealAttendeeRowNameText === \"\") {\n        mealAttendeeFoundBlank = true;\n        continue;\n    }\n    if (mealAttendeeFoundBlank) {\n        mealAttendeeFail(\"a nonblank EBS attendee name follows a blank row at index \" +\n            mealAttendeeRowIndex + \".\");\n    }\n    mealAttendeeStartIndex = mealAttendeeRowIndex + 1;\n    mealAttendeeExistingNames[\n        \"$\" + mealAttendeeRowNameText.toLowerCase()\n    ] = true;\n}\n\nvar mealAttendeeMissing = [];\nfor (var mealAttendeeIndex = 0;\n        mealAttendeeIndex < MealAttendees.length;\n        mealAttendeeIndex++) {\n    var mealAttendee = MealAttendees[mealAttendeeIndex];\n    var mealAttendeeNameKey = \"$\" +\n        mealAttendeeText(mealAttendee.employeeName).toLowerCase();\n    if (!Object.prototype.hasOwnProperty.call(\n            mealAttendeeExistingNames,\n            mealAttendeeNameKey)) {\n        mealAttendeeMissing.push(mealAttendee);\n    }\n}\n\nMissingMealAttendees = mealAttendeeMissing;\nMealAttendeeStartIndex = mealAttendeeStartIndex;\n",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": true,
+          "isJavaScript": false,
+          "name": "MealAttendees",
+          "paramValue": ""
+        },
+        {
+          "visible": true,
+          "isJavaScript": false,
+          "name": "MealGuests",
+          "paramValue": ""
+        },
+        {
+          "visible": true,
+          "isJavaScript": false,
+          "name": "MealNumberAttendees",
+          "paramValue": ""
+        },
+        {
+          "visible": true,
+          "isJavaScript": false,
+          "name": "GuestEmployers",
+          "paramValue": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MealAttendees",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "MealGuests",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "MealNumberAttendees",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "GuestEmployers",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "MissingMealAttendees",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "MealAttendeeStartIndex",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "mealAttendeeEbsRawNames",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "mealAttendeeRowsTo",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "mealAttendeeExistingNames",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "mealAttendeeStartIndex",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "mealAttendeeFoundBlank",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "mealAttendeeRowIndex",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "mealAttendeeRowName",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "mealAttendeeRowNameText",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "mealAttendeeMissing",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "mealAttendeeIndex",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "mealAttendee",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "mealAttendeeNameKey",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Loop",
+      "name": "Start Loop",
+      "nickname": "Loop Meal Attendees",
+      "command": "for (var index_1 = 0; index_1 < MissingMealAttendees.length; index_1++) {",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "LOOP_START"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "array"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "paramValue": "MissingMealAttendees"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "1"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "loopIndex",
+          "paramValue": "1",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Service",
+      "name": "iExpense_employeeEnterName_ebs12211",
+      "nickname": "iExpense_employeeEnterName_ebs12211",
+      "keepAlive": true,
+      "throwError": true,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "AttendeeName",
+          "paramValue": "MissingMealAttendees[index_1].employeeName",
+          "valueType": "javaScript"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "attendeeIndex",
+          "paramValue": "MealAttendeeStartIndex + index_1",
+          "valueType": "javaScript"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "EmployeeSearchButtonExist",
+          "label": "EmployeeSearchButtonExist",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "EmployeeSearchWindowDisplayed",
+          "label": "EmployeeSearchWindowDisplayed",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "ResolvedEmpName",
+          "label": "ResolvedEmpName",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "Error",
+          "label": "Error",
+          "visible": true,
+          "inTable": false
+        },
+        {
+          "name": "PopupMessages",
+          "label": "PopupMessages",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "StatusBarMessages",
+          "label": "StatusBarMessages",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Loop",
+      "name": "End Loop",
+      "nickname": "Loop",
+      "command": "}",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "LOOP_END"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "array"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "1"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false
+        }
+      ],
+      "outputs": [
+        {
+          "name": "loopIndex",
+          "paramValue": "NaN",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Loop",
+      "name": "Start Loop",
+      "nickname": "Loop Meal Guests",
+      "command": "for (var index_2 = 0; index_2 < MealGuests.length; index_2++) {",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "LOOP_START"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "array"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "paramValue": "MealGuests"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "1"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "loopIndex",
+          "paramValue": "2",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Service",
+      "name": "iExpense_attendeesGuestTableAddRow",
+      "nickname": "iExpense_attendeesGuestTableAddRow",
+      "keepAlive": true,
+      "throwError": true,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "GuestName",
+          "paramValue": "MealGuests[index_2].name",
+          "valueType": "javaScript"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "GuestEmployer",
+          "paramValue": "GuestEmployers[index_2]",
+          "valueType": "javaScript"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "guestIndex",
+          "paramValue": "return index_2;",
+          "valueType": "selectValue"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "GuestNewRow",
+          "paramValue": "\"true\"",
+          "valueType": "staticText"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "guestPos",
+          "paramValue": "\"14\"",
+          "valueType": "staticText"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "guestPos_2",
+          "paramValue": "index_2",
+          "valueType": "javaScript"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "Select_By_xpath____select_contains__id___GuestTableRN_GuestType_$_guestPos_________select_contains__id___ChildGuestTableRN_ChildGuestType_$_guestPos____",
+          "paramValue": "\"Private Sector\"",
+          "valueType": "staticText"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "GuestNameExist",
+          "label": "GuestNameExist",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "GuestTypeExists",
+          "label": "GuestTypeExists",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "Error",
+          "label": "Error",
+          "visible": true,
+          "inTable": false
+        },
+        {
+          "name": "PopupMessages",
+          "label": "PopupMessages",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "StatusBarMessages",
+          "label": "StatusBarMessages",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Loop",
+      "name": "End Loop",
+      "nickname": "Loop",
+      "command": "}",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "LOOP_END"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "array"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "1"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false
+        }
+      ],
+      "outputs": [
+        {
+          "name": "loopIndex",
+          "paramValue": "NaN",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    }
+  ],
+  "createdBy": "admin",
+  "labels": [],
+  "isEnabled": true,
+  "authenticationMethod": "None",
+  "isPrivate": false
+}

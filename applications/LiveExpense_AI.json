@@ -57,6 +57,7 @@
     "iExpense_create",
     "iExpense_updReportUpdateDetails",
     "iExpense_saveReportDetails",
+    "ReceiptBatch_update_report_details",
     "Ping_ReceiptBatch_CreateLinesRPA",
     "iExpense_OpenApproverSearchWindow",
     "iExpense_credit_getCreditCards",
@@ -173,6 +174,8 @@
     "ReceiptBatch_delete_receipt",
     "js_ReceiptBatch_add_receipt",
     "ReceiptBatch_CreateExpenseJson",
+    "ReceiptBatch_ExpenseLocation",
+    "ReceiptBatch_ExpenseAttendee",
     "ReceiptBatch_get_expense_data",
     "ReceiptBatch_save_expense_data",
     "ReceiptBatch_get_draft_reports",
@@ -11891,7 +11894,255 @@
         },
         {
           "dataTypeInfo": {
-            "type": "TEXT"
+            "isCombo": true,
+            "isClosedSelection": true,
+            "hasReload": true,
+            "autocompleteThreshold": 2,
+            "service": {
+              "name": "ReceiptBatch_ExpenseLocation",
+              "formUrl": "${env.DB_CONNECTION_STR}",
+              "isEnabled": true,
+              "inputParams": [
+                {
+                  "isRequired": true,
+                  "isCustom": false,
+                  "id": {
+                    "name": "username",
+                    "serviceName": "ReceiptBatch_ExpenseLocation"
+                  },
+                  "paramLabel": "username",
+                  "paramValue": "${env.DB_USER}",
+                  "visible": false
+                },
+                {
+                  "isRequired": true,
+                  "isCustom": false,
+                  "id": {
+                    "name": "password",
+                    "serviceName": "ReceiptBatch_ExpenseLocation"
+                  },
+                  "paramLabel": "password",
+                  "paramValue": "${env.DB_PASSWORD}",
+                  "visible": false
+                },
+                {
+                  "isRequired": false,
+                  "isCustom": true,
+                  "id": {
+                    "name": "P_ORG_ID",
+                    "serviceName": "ReceiptBatch_ExpenseLocation"
+                  },
+                  "paramLabel": "P_ORG_ID",
+                  "paramValue": "",
+                  "visible": true
+                },
+                {
+                  "isRequired": false,
+                  "isCustom": true,
+                  "id": {
+                    "name": "P_LANGUAGE",
+                    "serviceName": "ReceiptBatch_ExpenseLocation"
+                  },
+                  "paramLabel": "P_LANGUAGE",
+                  "paramValue": "US",
+                  "visible": true
+                },
+                {
+                  "isRequired": false,
+                  "isCustom": true,
+                  "id": {
+                    "name": "P_EXPENSE_TYPE_ID",
+                    "serviceName": "ReceiptBatch_ExpenseLocation"
+                  },
+                  "paramLabel": "P_EXPENSE_TYPE_ID",
+                  "paramValue": "",
+                  "visible": true
+                },
+                {
+                  "isRequired": false,
+                  "isCustom": true,
+                  "id": {
+                    "name": "P_EXPENSE_DATE",
+                    "serviceName": "ReceiptBatch_ExpenseLocation"
+                  },
+                  "paramLabel": "P_EXPENSE_DATE",
+                  "paramValue": "",
+                  "visible": true
+                },
+                {
+                  "isRequired": false,
+                  "isCustom": true,
+                  "id": {
+                    "name": "P_ALL_SCHEDULES",
+                    "serviceName": "ReceiptBatch_ExpenseLocation"
+                  },
+                  "paramLabel": "P_ALL_SCHEDULES",
+                  "paramValue": "N",
+                  "visible": true
+                },
+                {
+                  "isRequired": false,
+                  "isCustom": true,
+                  "id": {
+                    "name": "P_MERCHANT_LOCATIONS",
+                    "serviceName": "ReceiptBatch_ExpenseLocation"
+                  },
+                  "paramLabel": "P_MERCHANT_LOCATIONS",
+                  "paramValue": "N",
+                  "visible": true
+                },
+                {
+                  "isRequired": false,
+                  "isCustom": true,
+                  "id": {
+                    "name": "P_END_DATE_OFFSET",
+                    "serviceName": "ReceiptBatch_ExpenseLocation"
+                  },
+                  "paramLabel": "P_END_DATE_OFFSET",
+                  "paramValue": "0",
+                  "visible": true
+                },
+                {
+                  "isRequired": false,
+                  "isCustom": true,
+                  "id": {
+                    "name": "LocationName",
+                    "serviceName": "ReceiptBatch_ExpenseLocation"
+                  },
+                  "paramLabel": "LocationName",
+                  "paramValue": "%",
+                  "visible": true
+                }
+              ],
+              "outputParams": [
+                {
+                  "inTable": true,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "LOCATION_NAME",
+                    "serviceName": "ReceiptBatch_ExpenseLocation"
+                  },
+                  "paramLabel": "LOCATION_NAME",
+                  "visible": true
+                },
+                {
+                  "inTable": true,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "LOCATION_ID",
+                    "serviceName": "ReceiptBatch_ExpenseLocation"
+                  },
+                  "paramLabel": "LOCATION_ID",
+                  "visible": true
+                },
+                {
+                  "inTable": true,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "DESCRIPTION",
+                    "serviceName": "ReceiptBatch_ExpenseLocation"
+                  },
+                  "paramLabel": "DESCRIPTION",
+                  "visible": true
+                },
+                {
+                  "inTable": true,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "COUNTRY",
+                    "serviceName": "ReceiptBatch_ExpenseLocation"
+                  },
+                  "paramLabel": "COUNTRY",
+                  "visible": true
+                },
+                {
+                  "inTable": false,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "EMPTY",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "Error",
+                    "serviceName": "ReceiptBatch_ExpenseLocation"
+                  },
+                  "paramLabel": "Error",
+                  "visible": false
+                },
+                {
+                  "inTable": false,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "PopupMessages",
+                    "serviceName": "ReceiptBatch_ExpenseLocation"
+                  },
+                  "paramLabel": "PopupMessages",
+                  "visible": false
+                },
+                {
+                  "inTable": false,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "StatusBarMessages",
+                    "serviceName": "ReceiptBatch_ExpenseLocation"
+                  },
+                  "paramLabel": "StatusBarMessages",
+                  "visible": false
+                }
+              ],
+              "fileName": "@sql",
+              "isPartial": false,
+              "isPrivate": false,
+              "useLabelsAsKeys": false,
+              "isSingleOutput": false,
+              "hasInputList": false,
+              "isRawResponse": false,
+              "tableHeaderRows": 0,
+              "isTableLooseStructure": false,
+              "numOfRowsInTable": 0,
+              "authenticationMethod": "None",
+              "isJson": false,
+              "isHandlePopups": false,
+              "timeout": 0,
+              "validationResponseCode": 200,
+              "type": "DB",
+              "createdBy": "admin",
+              "lastModified": 1792310377187,
+              "labels": [],
+              "apps": []
+            },
+            "type": "LOV"
           },
           "isSortable": false,
           "inTable": false,
@@ -12074,38 +12325,253 @@
         },
         {
           "dataTypeInfo": {
-            "type": "READONLY"
+            "isCombo": true,
+            "isClosedSelection": true,
+            "hasReload": true,
+            "autocompleteThreshold": 2,
+            "service": {
+              "name": "ReceiptBatch_ExpenseAttendee",
+              "formUrl": "${env.DB_CONNECTION_STR}",
+              "isEnabled": true,
+              "inputParams": [
+                {
+                  "isRequired": true,
+                  "isCustom": false,
+                  "id": {
+                    "name": "username",
+                    "serviceName": "ReceiptBatch_ExpenseAttendee"
+                  },
+                  "paramLabel": "username",
+                  "paramValue": "${env.DB_USER}",
+                  "visible": false
+                },
+                {
+                  "isRequired": true,
+                  "isCustom": false,
+                  "id": {
+                    "name": "password",
+                    "serviceName": "ReceiptBatch_ExpenseAttendee"
+                  },
+                  "paramLabel": "password",
+                  "paramValue": "${env.DB_PASSWORD}",
+                  "visible": false
+                },
+                {
+                  "isRequired": false,
+                  "isCustom": true,
+                  "id": {
+                    "name": "AttendeeName",
+                    "serviceName": "ReceiptBatch_ExpenseAttendee"
+                  },
+                  "paramLabel": "AttendeeName",
+                  "paramValue": "",
+                  "visible": true
+                },
+                {
+                  "isRequired": false,
+                  "isCustom": true,
+                  "id": {
+                    "name": "P_LANGUAGE",
+                    "serviceName": "ReceiptBatch_ExpenseAttendee"
+                  },
+                  "paramLabel": "P_LANGUAGE",
+                  "paramValue": "US",
+                  "visible": true
+                }
+              ],
+              "outputParams": [
+                {
+                  "inTable": true,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "PERSON_ID",
+                    "serviceName": "ReceiptBatch_ExpenseAttendee"
+                  },
+                  "paramLabel": "PERSON_ID",
+                  "visible": false
+                },
+                {
+                  "inTable": true,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "EMPLOYEE_NAME",
+                    "serviceName": "ReceiptBatch_ExpenseAttendee"
+                  },
+                  "paramLabel": "EMPLOYEE_NAME",
+                  "visible": true
+                },
+                {
+                  "inTable": true,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "EMPLOYEE_NUMBER",
+                    "serviceName": "ReceiptBatch_ExpenseAttendee"
+                  },
+                  "paramLabel": "EMPLOYEE_NUMBER",
+                  "visible": true
+                },
+                {
+                  "inTable": true,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "TITLE",
+                    "serviceName": "ReceiptBatch_ExpenseAttendee"
+                  },
+                  "paramLabel": "TITLE",
+                  "visible": true
+                },
+                {
+                  "inTable": true,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "ORGANIZATION_NAME",
+                    "serviceName": "ReceiptBatch_ExpenseAttendee"
+                  },
+                  "paramLabel": "ORGANIZATION_NAME",
+                  "visible": true
+                },
+                {
+                  "inTable": false,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "EMPTY",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "Error",
+                    "serviceName": "ReceiptBatch_ExpenseAttendee"
+                  },
+                  "paramLabel": "Error",
+                  "visible": false
+                },
+                {
+                  "inTable": false,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "PopupMessages",
+                    "serviceName": "ReceiptBatch_ExpenseAttendee"
+                  },
+                  "paramLabel": "PopupMessages",
+                  "visible": false
+                },
+                {
+                  "inTable": false,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "StatusBarMessages",
+                    "serviceName": "ReceiptBatch_ExpenseAttendee"
+                  },
+                  "paramLabel": "StatusBarMessages",
+                  "visible": false
+                }
+              ],
+              "fileName": "@sql",
+              "isPartial": false,
+              "isPrivate": false,
+              "useLabelsAsKeys": false,
+              "isSingleOutput": false,
+              "hasInputList": false,
+              "isRawResponse": false,
+              "tableHeaderRows": 0,
+              "isTableLooseStructure": false,
+              "numOfRowsInTable": 0,
+              "authenticationMethod": "None",
+              "isJson": false,
+              "isHandlePopups": false,
+              "timeout": 0,
+              "validationResponseCode": 200,
+              "type": "DB",
+              "createdBy": "admin",
+              "lastModified": 1792313837469,
+              "labels": [],
+              "apps": []
+            },
+            "type": "LOV"
           },
           "isSortable": false,
           "inTable": false,
           "newLine": true,
-          "required": true,
+          "required": false,
           "custom": true,
           "validationFunction": "NONE",
           "fromInput": false,
           "centred": false,
           "id": {
-            "name": "AttendeeNames"
+            "name": "AttendeeName"
           },
-          "paramLabel": "Attendees (comma-separated)",
+          "paramLabel": "Employee Attendees",
           "visible": true
         },
         {
           "dataTypeInfo": {
-            "type": "READONLY"
+            "type": "TEXT"
           },
           "isSortable": false,
           "inTable": false,
-          "newLine": true,
+          "newLine": false,
           "required": true,
           "custom": true,
           "validationFunction": "NONE",
           "fromInput": false,
           "centred": false,
           "id": {
-            "name": "GuestNames"
+            "name": "GuestName"
           },
-          "paramLabel": "Guests (comma-separated)",
+          "paramLabel": "Guest Attendees",
+          "visible": true
+        },
+        {
+          "dataTypeInfo": {
+            "type": "TEXT"
+          },
+          "isSortable": false,
+          "inTable": false,
+          "newLine": false,
+          "required": false,
+          "custom": true,
+          "validationFunction": "NONE",
+          "fromInput": false,
+          "centred": false,
+          "id": {
+            "name": "Employer"
+          },
+          "paramLabel": "Employer",
           "visible": true
         }
       ],
@@ -12206,6 +12672,26 @@
             "type": "callFunction",
             "attribute": {
               "main": "onToggleItemization"
+            }
+          }
+        },
+        {
+          "event": {
+            "type": "buttonClick",
+            "element": "",
+            "elementId": "Add_Guest",
+            "elementIcon": "fa-plus",
+            "attributes": [
+              "bottom",
+              "25",
+              "false",
+              "false"
+            ]
+          },
+          "action": {
+            "type": "callFunction",
+            "attribute": {
+              "main": "click_Add_Guest"
             }
           }
         }

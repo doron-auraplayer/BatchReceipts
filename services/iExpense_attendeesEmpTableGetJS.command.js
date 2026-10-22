@@ -28,19 +28,46 @@ function removeDuplicates(arr) {
   return result;
 }
 
+function isFalsePaginationFlag(value) {
+    if (value === false) {
+        return true;
+    }
+    return typeof value === "string" && value.toLowerCase() === "false";
+}
+
+function readRowsTo(response, rawNames) {
+    var paginationExists = Services.getResponseValue(response, "paginationExists");
+    if (isFalsePaginationFlag(paginationExists)) {
+        return rawNames ? rawNames.length : 0;
+    }
+
+    var paginationInfo = Services.getResponseValue(response, "AttPaginationInfo");
+    var paginationParts = typeof paginationInfo === "string" ?
+        paginationInfo.split(" ") : [];
+    if (paginationParts.length < 4 ||
+            !/^[0-9]+$/.test(paginationParts[3])) {
+        throw new Error("iExpense_attendeesEmpTableGetJS: paginationExists is not false and AttPaginationInfo is missing or malformed.");
+    }
+
+    return parseInt(paginationParts[3], 10);
+}
+
 var getAttResponse = getAttendies(false);
 var attNames = Services.getResponseArray(getAttResponse, 'AttendiesEmpTableEmpName');
 var attTitles = Services.getResponseArray(getAttResponse, 'AttendiesEmpTableEmpTitle');
-var rowsTo = parseInt(Services.getResponseValue(getAttResponse, "AttPaginationInfo").split(" ")[3]);
+var paginationExists = !isFalsePaginationFlag(
+    Services.getResponseValue(getAttResponse, "paginationExists")
+);
+var rowsTo = readRowsTo(getAttResponse, attNames);
 
-if (rowsTo === 15) {
+if (paginationExists && rowsTo === 15) {
     var prevRowsTo = rowsTo;
     var attNames1;
     var safeCouter = 0;
     while (safeCouter < 10) {
         getAttResponse = getAttendies(true);
         attNames1 = Services.getResponseArray(getAttResponse, 'AttendiesEmpTableEmpName');
-        rowsTo = parseInt(Services.getResponseValue(getAttResponse, "AttPaginationInfo").split(" ")[3]);
+        rowsTo = readRowsTo(getAttResponse, attNames1);
         if (rowsTo === prevRowsTo) {
             break;        
         } else {

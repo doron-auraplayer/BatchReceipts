@@ -1,0 +1,191 @@
+{
+  "name": "ReceiptBatch_SaveLineAndReturn",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ContinueWithWarnings",
+        "serviceName": "ReceiptBatch_SaveLineAndReturn"
+      },
+      "paramLabel": "ContinueWithWarnings",
+      "paramValue": "false",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLineWarningMessageExists",
+        "serviceName": "ReceiptBatch_SaveLineAndReturn"
+      },
+      "paramLabel": "CashLineWarningMessageExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLineWarningMessage",
+        "serviceName": "ReceiptBatch_SaveLineAndReturn"
+      },
+      "paramLabel": "CashLineWarningMessage",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLineErrorMessageExists",
+        "serviceName": "ReceiptBatch_SaveLineAndReturn"
+      },
+      "paramLabel": "CashLineErrorMessageExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLineErrorMessage",
+        "serviceName": "ReceiptBatch_SaveLineAndReturn"
+      },
+      "paramLabel": "CashLineErrorMessage",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "errorPopupExists",
+        "serviceName": "ReceiptBatch_SaveLineAndReturn"
+      },
+      "paramLabel": "errorPopupExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "currentPageTitle",
+        "serviceName": "ReceiptBatch_SaveLineAndReturn"
+      },
+      "paramLabel": "currentPageTitle",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CashLines_ReimbursableColumnHeader",
+        "serviceName": "ReceiptBatch_SaveLineAndReturn"
+      },
+      "paramLabel": "CashLines_ReimbursableColumnHeader",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_SaveLineAndReturn"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_SaveLineAndReturn"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_SaveLineAndReturn"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "ReceiptBatch_SaveLineAndReturn.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": []
+}

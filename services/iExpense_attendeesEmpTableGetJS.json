@@ -163,6 +163,7 @@
   "labels": [],
   "apps": [
     "LiveExpense",
-    "LiveExpenseWithChanges"
+    "LiveExpense_AI",
+    "LiveExpense_AI_18"
   ]
 }

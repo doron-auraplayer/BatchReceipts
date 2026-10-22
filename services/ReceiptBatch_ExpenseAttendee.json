@@ -1,0 +1,196 @@
+{
+  "name": "ReceiptBatch_ExpenseAttendee",
+  "description": "",
+  "formUrl": "${env.DB_CONNECTION_STR}",
+  "command": "WITH params AS (\n    SELECT\n        attendee_name,\n        CASE\n            WHEN LENGTH(attendee_name) >= 2\n                THEN REPLACE(REPLACE(REPLACE(attendee_name, '\\', '\\\\'), '%', '\\%'), '_', '\\_') || '%'\n            ELSE NULL\n        END AS search_pattern,\n        language_code\n    FROM (\n        SELECT\n            TRIM(${AttendeeName:VARCHAR}) AS attendee_name,\n            NVL(NULLIF(TRIM(${P_LANGUAGE:VARCHAR}), ''), 'US') AS language_code\n        FROM dual\n    )\n)\nSELECT\n    q.person_id AS PERSON_ID,\n    q.employee_name AS EMPLOYEE_NAME,\n    q.employee_number AS EMPLOYEE_NUMBER,\n    q.title AS TITLE,\n    q.organization_name AS ORGANIZATION_NAME\nFROM (\n    SELECT\n        p.employee_ID AS person_id,\n        p.FULL_NAME AS employee_name,\n        p.employee_num AS employee_number,\n        pos.NAME AS title,\n        org.NAME AS organization_name\n    FROM APPS.PER_EMPLOYEES_X p,\n         APPS.PER_ASSIGNMENTS_X a,\n         (\n             SELECT\n                 PAP.POSITION_ID,\n                 PFT.NAME\n             FROM APPS.PER_ALL_POSITIONS PAP,\n                  APPS.HR_ALL_POSITIONS_F_TL PFT,\n                  params\n             WHERE DECODE(APPS.HR_SECURITY.VIEW_ALL, 'Y', 'TRUE', APPS.HR_SECURITY.SHOW_RECORD('PER_ALL_POSITIONS', PAP.POSITION_ID)) = 'TRUE'\n               AND DECODE(APPS.hr_general.get_xbg_profile, 'Y', pap.business_group_id, APPS.hr_general.get_business_group_id) = pap.business_group_id\n               AND PAP.POSITION_ID = PFT.POSITION_ID\n               AND PFT.LANGUAGE = params.language_code\n         ) pos,\n         (\n             SELECT\n                 HAO.ORGANIZATION_ID,\n                 HAOTL.NAME\n             FROM APPS.HR_ALL_ORGANIZATION_UNITS HAO,\n                  APPS.HR_ALL_ORGANIZATION_UNITS_TL HAOTL,\n                  params\n             WHERE DECODE(APPS.HR_SECURITY.VIEW_ALL, 'Y', 'TRUE', APPS.HR_SECURITY.SHOW_RECORD('HR_ALL_ORGANIZATION_UNITS', HAOTL.ORGANIZATION_ID)) = 'TRUE'\n               AND DECODE(APPS.hr_general3.get_xbg_profile, 'Y', hao.business_group_id, APPS.hr_general3.get_business_group_id) = hao.business_group_id\n               AND HAO.ORGANIZATION_ID = HAOTL.ORGANIZATION_ID\n               AND HAOTL.LANGUAGE = params.language_code\n         ) org,\n         params\n    WHERE a.assignment_id = p.assignment_id\n      AND a.position_id = pos.position_id(+)\n      AND a.organization_id = org.organization_id\n      AND params.search_pattern IS NOT NULL\n      AND UPPER(p.FULL_NAME) LIKE UPPER(params.search_pattern) ESCAPE '\\'\n    ORDER BY p.FULL_NAME ASC,\n             p.employee_ID ASC\n) q\nWHERE ROWNUM <= 51\n",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "username",
+        "serviceName": "ReceiptBatch_ExpenseAttendee"
+      },
+      "paramLabel": "username",
+      "paramValue": "${env.DB_USER}",
+      "visible": false
+    },
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "password",
+        "serviceName": "ReceiptBatch_ExpenseAttendee"
+      },
+      "paramLabel": "password",
+      "paramValue": "${env.DB_PASSWORD}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "AttendeeName",
+        "serviceName": "ReceiptBatch_ExpenseAttendee"
+      },
+      "paramLabel": "AttendeeName",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "P_LANGUAGE",
+        "serviceName": "ReceiptBatch_ExpenseAttendee"
+      },
+      "paramLabel": "P_LANGUAGE",
+      "paramValue": "US",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PERSON_ID",
+        "serviceName": "ReceiptBatch_ExpenseAttendee"
+      },
+      "paramLabel": "PERSON_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EMPLOYEE_NAME",
+        "serviceName": "ReceiptBatch_ExpenseAttendee"
+      },
+      "paramLabel": "EMPLOYEE_NAME",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "EMPLOYEE_NUMBER",
+        "serviceName": "ReceiptBatch_ExpenseAttendee"
+      },
+      "paramLabel": "EMPLOYEE_NUMBER",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TITLE",
+        "serviceName": "ReceiptBatch_ExpenseAttendee"
+      },
+      "paramLabel": "TITLE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ORGANIZATION_NAME",
+        "serviceName": "ReceiptBatch_ExpenseAttendee"
+      },
+      "paramLabel": "ORGANIZATION_NAME",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_ExpenseAttendee"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_ExpenseAttendee"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_ExpenseAttendee"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@sql",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "DB",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": [
+    "LiveExpense_AI"
+  ]
+}

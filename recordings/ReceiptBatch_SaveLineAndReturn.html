@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>ReceiptBatch_SaveLineAndReturn</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">ReceiptBatch_SaveLineAndReturn</td></tr>
+</thead><tbody>
+<tr>
+  <td>input</td>
+  <td>false</td>
+  <td>ContinueWithWarnings</td>
+  <td></td>
+</tr><tr>
+  <td>assertTitle</td>
+  <td>*: Details for Line *</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>//Existing Details page/session required; this partial service does not get or login.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>//Initialize message values so a previous call cannot leak stale text into this call.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>store</td>
+  <td>javascript{""}</td>
+  <td>CashLineWarningMessage</td>
+  <td></td>
+</tr><tr>
+  <td>store</td>
+  <td>javascript{""}</td>
+  <td>CashLineErrorMessage</td>
+  <td></td>
+</tr><tr>
+  <td>//Warning detection and capture from the current Details page.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeElementPresent</td>
+  <td>//table[@id="FwkErrorBeanId"]//img[contains(@src, "warn")]</td>
+  <td>CashLineWarningMessageExists</td>
+  <td></td>
+</tr><tr>
+  <td>storeElementPresent</td>
+  <td>//table[@id="FwkErrorBeanId"]//img[contains(@src, "error")]</td>
+  <td>CashLineErrorMessageExists</td>
+  <td></td>
+</tr><tr>
+  <td>storeElementPresent</td>
+  <td>id=orapopupcontent</td>
+  <td>errorPopupExists</td>
+  <td></td>
+</tr><tr>
+  <td>if</td>
+  <td>CashLineWarningMessageExists</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeText</td>
+  <td>//table[@id="FwkErrorBeanId"]</td>
+  <td>CashLineWarningMessage</td>
+  <td></td>
+</tr><tr>
+  <td>endIf</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>if</td>
+  <td>CashLineWarningMessageExists &amp;&amp; ContinueWithWarnings != "true"</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeTitle</td>
+  <td>currentPageTitle</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>exitTest</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>endIf</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>//Return to the Cash and Other Expenses table with the fixed ReturnButton id.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>clickAndWait</td>
+  <td>id=ReturnButton</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>//Original popup detection and No-dismissal behavior.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeElementPresent</td>
+  <td>id=orapopupcontent</td>
+  <td>errorPopupExists</td>
+  <td></td>
+</tr><tr>
+  <td>if</td>
+  <td>errorPopupExists</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>clickAndWait</td>
+  <td>//button[@title="No"]</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>endIf</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>//Business error capture and check from the current DOM.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeElementPresent</td>
+  <td>//table[@id="FwkErrorBeanId"]//img[contains(@src, "error")]</td>
+  <td>CashLineErrorMessageExists</td>
+  <td></td>
+</tr><tr>
+  <td>if</td>
+  <td>CashLineErrorMessageExists</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeText</td>
+  <td>//table[@id="FwkErrorBeanId"]</td>
+  <td>CashLineErrorMessage</td>
+  <td></td>
+</tr><tr>
+  <td>endIf</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>if</td>
+  <td>CashLineErrorMessageExists || errorPopupExists</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeTitle</td>
+  <td>currentPageTitle</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>exitTest</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>endIf</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>//Success requires the Cash and Other Expenses list title, not a warning/error exit.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeTitle</td>
+  <td>currentPageTitle</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>waitForTitle</td>
+  <td>*Expense Report: Cash and Other Expenses*</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>assertTitle</td>
+  <td>*Expense Report: Cash and Other Expenses*</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeTitle</td>
+  <td>currentPageTitle</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeText</td>
+  <td>//th[7]/span</td>
+  <td>CashLines_ReimbursableColumnHeader</td>
+  <td></td>
+</tr>
+</tbody></table></body></html>

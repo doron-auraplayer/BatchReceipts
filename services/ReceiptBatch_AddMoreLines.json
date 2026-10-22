@@ -1,0 +1,146 @@
+{
+  "name": "ReceiptBatch_AddMoreLines",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "index",
+        "serviceName": "ReceiptBatch_AddMoreLines"
+      },
+      "paramLabel": "index",
+      "paramValue": "10",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RequestedLineAvailable",
+        "serviceName": "ReceiptBatch_AddMoreLines"
+      },
+      "paramLabel": "RequestedLineAvailable",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AddMoreLinesMessageExists",
+        "serviceName": "ReceiptBatch_AddMoreLines"
+      },
+      "paramLabel": "AddMoreLinesMessageExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AddMoreLinesMessage",
+        "serviceName": "ReceiptBatch_AddMoreLines"
+      },
+      "paramLabel": "AddMoreLinesMessage",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "currentPageTitle",
+        "serviceName": "ReceiptBatch_AddMoreLines"
+      },
+      "paramLabel": "currentPageTitle",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_AddMoreLines"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_AddMoreLines"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_AddMoreLines"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "ReceiptBatch_AddMoreLines.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [],
+  "apps": []
+}
