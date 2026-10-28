@@ -287,8 +287,7 @@ button.ui-btn.TableAddLineBtn {
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
-  height: 100vh !important;
-  max-height: 100vh !important;
+  height: 100dvh !important;
   min-height: 0;
   margin: 0;
   padding-top: env(safe-area-inset-top, 0px);
@@ -297,14 +296,6 @@ button.ui-btn.TableAddLineBtn {
   padding-left: env(safe-area-inset-left, 0px);
   overflow: hidden;
   background-color: rgba(0, 0, 0, .92);
-}
-
-@supports (height: 100dvh) {
-  #dynamicImageOverlay,
-  #dynamicPdfOverlay {
-    height: 100dvh !important;
-    max-height: 100dvh !important;
-  }
 }
 
 #dynamicImageOverlay .attachmentViewerToolbar,
@@ -321,7 +312,7 @@ button.ui-btn.TableAddLineBtn {
 
 #dynamicImageOverlay .attachmentViewerToolbar,
 #dynamicPdfOverlay .attachmentViewerToolbar {
-  max-height: 40vh;
+  max-height: 40dvh;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -346,7 +337,7 @@ button.ui-btn.TableAddLineBtn {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
   gap: 4px 12px;
-  max-height: 30vh;
+  max-height: 30dvh;
   overflow-x: hidden;
   overflow-y: auto;
   color: #ffffff;
@@ -534,6 +525,10 @@ button.ui-btn.TableAddLineBtn {
   color: #9e9e9e;
 }
 
+.attachmentViewerDownloadLink {
+  display: none;
+}
+
 #dynamicImageOverlay .attachmentViewerStage,
 #dynamicPdfOverlay .attachmentViewerStage {
   display: flex;
@@ -564,6 +559,27 @@ button.ui-btn.TableAddLineBtn {
   user-select: none;
   -webkit-user-select: none;
   -webkit-user-drag: none;
+  cursor: grab;
+  transform: translate(
+      var(--attachment-viewer-x, 0px),
+      var(--attachment-viewer-y, 0px)
+    )
+    scale(var(--attachment-viewer-scale, 1));
+  transform-origin: center center;
+}
+
+#dynamicImageOverlay .attachmentViewerImage.attachmentViewerImageDragging,
+#dynamicPdfOverlay .attachmentViewerImage.attachmentViewerImageDragging {
+  cursor: grabbing;
+}
+
+#dynamicImageOverlay .attachmentViewerImageFallback,
+#dynamicPdfOverlay .attachmentViewerImageFallback {
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 16px;
+  text-align: center;
 }
 
 #dynamicImageOverlay .attachmentViewerPdf,
@@ -618,6 +634,7 @@ button.ui-btn.TableAddLineBtn {
   min-width: 0;
   height: 100% !important;
   min-height: 0;
+  overflow: hidden;
   background-color: #ffffff;
   border-left: 1px solid #d8d8d8 !important;
 }
@@ -650,7 +667,7 @@ button.ui-btn.TableAddLineBtn {
     width: 100% !important;
     max-width: 100%;
     min-width: 0 !important;
-    height: 35vh !important;
+    height: 35dvh !important;
     min-height: 180px;
   }
 
@@ -660,7 +677,7 @@ button.ui-btn.TableAddLineBtn {
     width: 100% !important;
     max-width: 100%;
     min-width: 0;
-    height: 60vh !important;
+    height: 60dvh !important;
     min-height: 320px;
     border-left: 0 !important;
     border-top: 1px solid #d8d8d8;
@@ -960,7 +977,7 @@ button.ui-btn.ReviewBtn {
   width: auto !important;
   height: auto !important;
   min-width: 100vw;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* ============================================================================
@@ -991,15 +1008,9 @@ button.ui-btn.ReviewBtn {
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
-  height: calc(100vh - 150px);
+  height: calc(100dvh - 150px);
   min-height: 420px;
   overflow: hidden;
-}
-
-@supports (height: 100dvh) {
-  #mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptListPreviewSplit {
-    height: calc(100dvh - 150px);
-  }
 }
 
 #mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptListPane {
@@ -1078,7 +1089,7 @@ button.ui-btn.ReviewBtn {
   margin: 6px;
   padding: 6px;
   border-radius: 8px;
-  max-height: 28vh;
+  max-height: 28dvh;
 }
 
 #dynamicImageOverlay.receipt-viewer-docked .attachmentViewerToolbarGroup,
@@ -1098,7 +1109,7 @@ button.ui-btn.ReviewBtn {
 #dynamicPdfOverlay.receipt-viewer-docked #receiptMetaPanel.attachmentMetaPanel {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 2px 10px;
-  max-height: 22vh;
+  max-height: 22dvh;
   margin: 6px;
   padding: 8px;
   border-radius: 8px;
@@ -1137,19 +1148,19 @@ button.ui-btn.ReviewBtn {
 
   #mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptListPane {
     height: auto;
-    max-height: 38vh;
+    max-height: 38dvh;
     min-height: 160px;
     overflow-y: auto;
   }
 
   #mainPage.ap-page-inprogresslines.receipt-list-preview-open #receiptPreviewPane {
-    height: 55vh;
+    height: 55dvh;
     min-height: 340px;
   }
 
   #dynamicImageOverlay.receipt-viewer-docked #receiptMetaPanel.attachmentMetaPanel,
   #dynamicPdfOverlay.receipt-viewer-docked #receiptMetaPanel.attachmentMetaPanel {
-    max-height: 26vh;
+    max-height: 26dvh;
   }
 
   /* Phone split view: the docked form and the receipt table share one short top

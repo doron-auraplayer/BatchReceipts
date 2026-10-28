@@ -1,8 +1,8 @@
 //'NEW,PROCESSING,PROCESSED,READY,ANALYZED_FAILED,AI_FAILED,LINE_CREATED,LINE_FAILED,SUBMITTED'
 
-var statuses = 'NEW,PROCESSING,PROCESSED,READY,ANALYZED_FAILED,AI_FAILED,LINE_FAILED';
+var statuses = 'NEW,PROCESSING,PROCESSED,READY,ANALYZED_FAILED,AI_FAILED';
 
-var SUPPORTED_FILE_EXTENSIONS = '.pdf,.png,.jpg,.jpeg,.heic';
+var SUPPORTED_FILE_EXTENSIONS = '.png,.jpg,.jpeg,.heic';
 
 var COMPRESSION_FILE_EXTENSIONS = ['jpg', 'jpeg'];
 
@@ -13,7 +13,8 @@ var COMPRESSION_SIZE_THRESHOLD = 350000;
 // ----------------------------------------------------------------------------
 
 function onLoad() {
-    console.log("onLoad")
+  console.log("onLoad")
+  updateStepInfo("Upload receipts to get started.");
   Table.clear();
   
   Storage.deleteByPrefix('Select_');
@@ -119,6 +120,49 @@ function renderReceiptTableDecorations() {
   applyReceiptRowGate();
   renderExtractionPendingMessage();
   syncSelectedReceiptIdsFromSelection();
+  updateReceiptStepInfoForResults();
+}
+
+var receiptStepInfoUploading = false;
+
+function updateReceiptStepInfoForResults() {
+  var loadedCount;
+  var status;
+  var index;
+
+  if (
+    receiptStepInfoUploading === true ||
+    isReceiptSelectionReloadPending()
+  ) {
+    return;
+  }
+
+  loadedCount = getLoadedReceiptRowCount();
+
+  if (loadedCount === 0) {
+    updateStepInfo('Upload receipts to get started.');
+    return;
+  }
+
+  if (readSelectedReceiptIds().length > 0) {
+    updateStepInfo('Select receipts, then click Create Report.');
+    return;
+  }
+
+  index = 0;
+
+  while (index < loadedCount) {
+    status = getReceiptRowStatusForIndex(index);
+
+    if (status === 'NEW' || status === 'PROCESSING') {
+      updateStepInfo('Receipts are being analyzed. Click Refresh to check their status.');
+      return;
+    }
+
+    index++;
+  }
+
+  updateStepInfo('Review your receipts and select the ones to include in a report.');
 }
 
 function hasCreditReceipt(rowIndex) {
@@ -182,6 +226,7 @@ function Analyze() {
 
   beginIndependentReceiptSelectionReload();
 
+  updateStepInfo('Receipts are being analyzed. Click Refresh to check their status.');
 
   Services.call(
     'Ping_ReceiptBatch_AnalyzeRPA',
@@ -193,6 +238,7 @@ function Analyze() {
       Spinner.stop('REFRESH_RECEIPTS');
 
       onReceiptListFetchFailed();
+
 
       Popup.ok(
         'Refresh',
@@ -288,13 +334,9 @@ function Preview(rowIndex) {
     'js_ReceiptBatch_get_receipt_by_id',
 
     function () {
-      var documentUrl = Storage.get(
-        'RECEIPTBATCH_DOCUMENT_URL'
-      );
+      var documentUrl = Storage.get('RECEIPTBATCH_DOCUMENT_URL');
 
-      var fileType = Storage.get(
-        'RECEIPTBATCH_FILE_TYPE'
-      );
+      var fileType = Storage.get('RECEIPTBATCH_FILE_TYPE');
 
       if (!documentUrl) {
         documentUrl = Storage.get('DOCUMENT_URL');
@@ -305,10 +347,7 @@ function Preview(rowIndex) {
       }
 
       if (!documentUrl) {
-        Popup.ok(
-          'Preview',
-          'No document URL was returned'
-        );
+        Popup.ok('Preview','No document URL was returned');
         return;
       }
 
@@ -316,64 +355,22 @@ function Preview(rowIndex) {
     },
 
     function () {
-      Popup.ok(
-        'Preview',
-        'Failed to load receipt preview'
-      );
+        Popup.ok('Preview','Failed to load receipt preview');
     }
   );
 }
 
 function setPreviewDataFromReceiptRow(rowIndex) {
-  Storage.set(
-    'receipt_ID',
-    Storage.get('RECEIPTBATCH_RECEIPT_ID_' + rowIndex)
-  );
-
-  Storage.set(
-    'RECEIPTBATCH_RECEIPT_ID',
-    Storage.get('RECEIPTBATCH_RECEIPT_ID_' + rowIndex)
-  );
-
-  Storage.set(
-    'RECEIPTBATCH_FILE_TYPE',
-    Storage.get('RECEIPTBATCH_FILE_TYPE_' + rowIndex)
-  );
-
-  Storage.set(
-    'RECEIPTBATCH_STATUS',
-    getReceiptRowStatus(rowIndex)
-  );
-
-  Storage.set(
-    'PreviewExpenseType',
-    Storage.get('RECEIPTBATCH_EXPENSE_TYPE_' + rowIndex)
-  );
-
-  Storage.set(
-    'PreviewAmount',
-    Storage.get('RECEIPTBATCH_TOTAL_AMOUNT_' + rowIndex)
-  );
-
-  Storage.set(
-    'PreviewReceiptDate',
-    Storage.get('RECEIPTBATCH_RECEIPT_DATE_' + rowIndex)
-  );
-
-  Storage.set(
-    'PreviewMerchant',
-    Storage.get('RECEIPTBATCH_MERCHANT_' + rowIndex)
-  );
-
-  Storage.set(
-    'PreviewLocation',
-    Storage.get('RECEIPTBATCH_LOCATION_' + rowIndex)
-  );
-
-  Storage.set(
-    'PreviewDepartment',
-    Storage.get('RECEIPTBATCH_DEPARTMENT_' + rowIndex)
-  );
+  Storage.set('receipt_ID',Storage.get('RECEIPTBATCH_RECEIPT_ID_' + rowIndex));
+  Storage.set('RECEIPTBATCH_RECEIPT_ID',Storage.get('RECEIPTBATCH_RECEIPT_ID_' + rowIndex));
+  Storage.set('RECEIPTBATCH_FILE_TYPE',Storage.get('RECEIPTBATCH_FILE_TYPE_' + rowIndex));
+  Storage.set('RECEIPTBATCH_STATUS',getReceiptRowStatus(rowIndex));
+  Storage.set('PreviewExpenseType',Storage.get('RECEIPTBATCH_EXPENSE_TYPE_' + rowIndex));
+  Storage.set('PreviewAmount',Storage.get('RECEIPTBATCH_TOTAL_AMOUNT_' + rowIndex));
+  Storage.set('PreviewReceiptDate',Storage.get('RECEIPTBATCH_RECEIPT_DATE_' + rowIndex));
+  Storage.set('PreviewMerchant',Storage.get('RECEIPTBATCH_MERCHANT_' + rowIndex));
+  Storage.set('PreviewLocation',Storage.get('RECEIPTBATCH_LOCATION_' + rowIndex));
+  Storage.set('PreviewDepartment',Storage.get('RECEIPTBATCH_DEPARTMENT_' + rowIndex));
 }
 
 var RECEIPT_STATUS_CLASS_BY_STATUS = {
@@ -502,21 +499,6 @@ var RECEIPT_ROW_PENDING_LABEL = 'New receipt';
 
 var RECEIPT_ROW_PENDING_HINT = 'Click Refresh to analyze';
 
-var RECEIPT_ROW_PENDING_TEXT_STYLE = {
-  color: '#8a8f98',
-  'font-style': 'italic',
-  'font-weight': '400',
-  'font-size': '12px',
-  'line-height': '1.2',
-  'white-space': 'nowrap'
-};
-
-var RECEIPT_ROW_PENDING_ROW_STYLE = {
-  'background-color': '#fbfcfd'
-};
-
-var RECEIPT_ROW_PENDING_ROW_STYLE_KEY = 'background-color';
-
 var RECEIPT_ROW_PENDING_MARKER = 'receipt-pending-row';
 
 var RECEIPT_ROW_PENDING_ATTR = 'data-receipt-pending';
@@ -586,7 +568,6 @@ function clearExtractionPendingMessage(rowElement) {
   $row.find('[' + RECEIPT_ROW_PENDING_ATTR + ']').remove();
 
   if ($row.hasClass(RECEIPT_ROW_PENDING_MARKER)) {
-    $row.css(RECEIPT_ROW_PENDING_ROW_STYLE_KEY, '');
     $row.removeClass(RECEIPT_ROW_PENDING_MARKER);
   }
 }
@@ -629,7 +610,6 @@ function applyExtractionPendingMessage(rowElement) {
   }
 
   $row.addClass(RECEIPT_ROW_PENDING_MARKER);
-  $row.css(RECEIPT_ROW_PENDING_ROW_STYLE);
 }
 
 function getReceiptRowDataCellStart(rowElement, $cells) {
@@ -687,7 +667,6 @@ function writePendingMessage($cell, message) {
     .addClass(RECEIPT_ROW_PENDING_CLASS)
     .attr(RECEIPT_ROW_PENDING_ATTR, RECEIPT_ROW_PENDING_ATTR_VALUE)
     .attr('title', message)
-    .css(RECEIPT_ROW_PENDING_TEXT_STYLE)
     .text(message)
     .appendTo($cell);
 }
@@ -732,6 +711,55 @@ function Refresh() {
   reloadReceiptTable();
 }
 
+// Keeps the existing StepInfo label above the receipt table.
+function updateStepInfo(message) {
+  var $label = $('#StepInfo');
+  if (!$label.length) { $label = $('label[for="StepInfo"]'); }
+  var $table = $('#tableOutput');
+  var $labelContainer;
+  var $tableContainer;
+
+  if (!$label.length || !$table.length) {
+    return;
+  }
+
+  $label
+    .text(message == null ? '' : String(message))
+    .attr({
+      role: 'status',
+      'aria-live': 'polite'
+    });
+
+  $labelContainer = $label.closest('.field-container').first();
+  if (!$labelContainer.length) {
+    $labelContainer = $label;
+  }
+
+  $tableContainer = $table
+    .closest('.field-container.table-field-container')
+    .first();
+  if (!$tableContainer.length) {
+    $tableContainer = $('#tableOutput_wrapper');
+  }
+  if (!$tableContainer.length) {
+    $tableContainer = $table;
+  }
+
+  // Never move a container that also contains the table.
+  if (
+    $labelContainer.get(0) === $table.get(0) ||
+    $labelContainer.get(0) === $tableContainer.get(0) ||
+    $.contains($labelContainer.get(0), $table.get(0))
+  ) {
+    return;
+  }
+
+  // Moving an existing node keeps this idempotent across repeated calls.
+  if ($tableContainer.prev().get(0) !== $labelContainer.get(0)) {
+    $tableContainer.before($labelContainer);
+  }
+}
+
 /***** TAB: Upload *****/
 // ----------------------------------------------------------------------------
 // Multiple attachment upload
@@ -739,7 +767,7 @@ function Refresh() {
 
 function addAttachmentUsingInput(attachmentInput) {
   document.body.appendChild(attachmentInput);
-  attachmentInput.style.display = 'none';
+  attachmentInput.className = 'receipt-upload-input';
 
   attachmentInput.addEventListener(
     'change',
@@ -762,6 +790,9 @@ function addAttachmentUsingInput(attachmentInput) {
         'Uploading ' + uploadState.files.length + ' files',
         'UPLOADING_FILES'
       );
+
+      receiptStepInfoUploading = true;
+      updateStepInfo('Uploading receipts. Please wait.');
 
       uploadNextFile(uploadState, attachmentInput);
     }
@@ -797,8 +828,10 @@ function uploadNextFile(uploadState, attachmentInput) {
 }
 
 function finishUploadProcess(uploadState, attachmentInput) {
+  receiptStepInfoUploading = false;
   console.log("finishUploadProcess");
   Spinner.stop('UPLOADING_FILES');
+
   removeAttachmentInput(attachmentInput);
 
   removeExtractionPendingMessages();
@@ -809,14 +842,18 @@ function finishUploadProcess(uploadState, attachmentInput) {
       'The following files failed to upload: '
       + uploadState.failedFiles.join(', ')
     );
+  } else {
+//         Popup.ok(
+//             'Upload complete',
+//             uploadState.files.length === 1
+//                 ? '1 Receipt was uploaded'
+//                 : uploadState.files.length + ' Receipts were uploaded'
+//         );  
   }
 
   // Analyze only after the upload batch has finished saving its receipts.
-  if (uploadState.files.length > uploadState.failedFiles.length) {
-    Analyze();
-  } else {
-    reloadReceiptTable();
-  }
+  console.log("call Analyze");  
+  Analyze();
 }
 
 function removeAttachmentInput(attachmentInput) {
@@ -1076,7 +1113,6 @@ function makeFilenameSafe(value) {
     .trim();
 }
 
-
 /***** TAB: Selection *****/
 // Selection tab.
 // Selection-only top-level nodes extracted from the current Main capture.
@@ -1089,8 +1125,16 @@ function makeFilenameSafe(value) {
 function updateReceiptCreateReportButton(selectedIds) {
   var disabled = selectedIds.length === 0;
   $('#New_Report')
+    .text(selectedIds.length > 0 ? 'Create Report (' + selectedIds.length + ')' : 'Create Report')
     .prop('disabled', disabled)
     .attr('aria-disabled', String(disabled));
+
+  if (
+    typeof updateReceiptStepInfoForResults === 'function' &&
+    !isReceiptSelectionReloadPending()
+  ) {
+    updateReceiptStepInfoForResults();
+  }
 }
 
 // ----------------------------------------------------------------------------
@@ -1301,6 +1345,7 @@ function onReceiptListFetchSucceeded() {
 
   clearSelectedReceiptIdsSnapshot();
   bindReceiptTableDrawHandler();
+  updateReceiptStepInfoForResults();
 }
 
 function onReceiptListFetchFailed() {
@@ -1316,6 +1361,10 @@ function onReceiptListFetchFailed() {
 
   clearSelectedReceiptIdsSnapshot();
   applySelectedReceiptIdsToLoadedRows(readSelectedReceiptIds());
+
+  if (receiptStepInfoUploading !== true) {
+    updateStepInfo('Unable to refresh receipts. Click Refresh to try again.');
+  }
 }
 
 var RECEIPT_ROW_ID_STORAGE_PREFIX = 'RECEIPTBATCH_RECEIPT_ID_';

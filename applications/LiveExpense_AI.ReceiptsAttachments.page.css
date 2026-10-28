@@ -68,11 +68,28 @@
   font-weight: 600;
 }
 
-/* NEW-row pending hint (text styling is inline; layout only here) */
+/* NEW-row pending hint. The doubled pending class keeps the pending tint above
+   every status-row background, including line-failed; removing the marker class
+   restores the normal status styling. */
+#tableOutput tbody tr.receipt-pending-row.receipt-pending-row > td {
+  background-color: #fbfcfd;
+}
+
 #tableOutput tbody .receipt-pending-value {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  color: #8a8f98;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* Temporary file input only exists to trigger the native picker. */
+.receipt-upload-input {
+  display: none;
 }
 
 /* Fixed positions: expand → select/warning → cash/card */
@@ -205,4 +222,55 @@
   opacity: 0.5;
   cursor: not-allowed;
   box-shadow: none;
+}
+
+/* StepInfo banner: pale-yellow strip flush above the receipt table. */
+#StepInfo_container {
+  display: block;
+  box-sizing: border-box;
+  width: 100% !important;
+  max-width: none;
+  padding: 6px 8px;
+  margin: 0 !important;
+  border: 1px solid #d6d9ae;
+  background: #f7f6b2;
+  border-radius: 0;
+  float: none;
+  clear: both;
+}
+
+#StepInfo_container > label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: auto !important;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  color: #004060 !important;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: left;
+  white-space: normal;
+}
+
+#StepInfo_container > label::before {
+  content: '\2713';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 16px;
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #2b8046;
+  border-radius: 50%;
+  background: #2c8a4c;
+  color: #fff !important;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
 }

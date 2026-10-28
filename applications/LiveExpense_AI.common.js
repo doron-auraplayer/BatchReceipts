@@ -937,6 +937,8 @@ function removeAttachmentViewer() {
     return false;
   }
 
+  cleanupHeicPreview();
+
   closeReceiptDetailsBesidePreview();
 
   restoreReceiptListPreviewSplit();
@@ -986,7 +988,8 @@ var ATTACHMENT_CONFIG = {
     'webp',
     'bmp',
     'svg',
-    'heic'
+    'heic',
+    'heif'
   ],
 
   pdfExtension: 'pdf',
@@ -1130,10 +1133,16 @@ function extractFileName(url) {
 }
 
 function normalizeFileType(fileType) {
-  return String(fileType || '')
+  var normalizedType = String(fileType || '')
     .replace('.', '')
     .trim()
     .toLowerCase();
+
+  if (normalizedType.indexOf('image/') === 0) {
+    normalizedType = normalizedType.substring('image/'.length);
+  }
+
+  return normalizedType;
 }
 
 function getFileExtension(url, fileType) {
@@ -1684,6 +1693,16 @@ function getCancelButtonHtml() {
     + '</button>';
 }
 
+function getCcMatchButtonHtml() {
+  return ''
+    + '<button id="ccMatchAttachmentBtn" type="button" '
+    + 'class="attachmentViewerButton" '
+    + 'disabled="disabled" aria-disabled="true" '
+    + 'title="Coming soon">'
+    + 'CC Match'
+    + '</button>';
+}
+
 function getAttachmentViewerActionsHtml(mode, capabilities, url, downloadLabel, downloadName, status) {
   var resolvedMode = resolveAttachmentViewerMode(mode);
 
@@ -1695,9 +1714,10 @@ function getAttachmentViewerActionsHtml(mode, capabilities, url, downloadLabel, 
 
   if (resolvedMode === ATTACHMENT_VIEWER_MODE_EDIT) {
     return ''
-      + getDownloadButtonHtml(url, downloadLabel, 'downloadAttchViewerBtn', downloadName)
       + getSaveButtonHtml()
-      + getCancelButtonHtml();
+      + getDeleteButtonHtml()
+      + getCloseButtonHtml()
+      + getCcMatchButtonHtml();
   }
 
   return ''
@@ -2054,8 +2074,6 @@ function bindDownloadActionButton(buttonId, fallbackName) {
 
 function bindAttachmentViewerActionButtons(mode) {
   if (mode === ATTACHMENT_VIEWER_MODE_EDIT) {
-    bindDownloadActionButton('#downloadAttchViewerBtn', 'attachment');
-
     $('#saveAttachmentEditBtn')
       .off('click.attachmentViewer')
       .on('click.attachmentViewer', function (event) {
@@ -2064,13 +2082,12 @@ function bindAttachmentViewerActionButtons(mode) {
         saveEmbeddedEditorData();
       });
 
-    $('#cancelAttachmentEditBtn')
-      .off('click.attachmentViewer')
-      .on('click.attachmentViewer', function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        cancelAttachmentEditMode();
-      });
+    bindRemoveButton();
+
+    bindViewerCloseEvents(
+      '#' + findAttachmentViewerOverlay().attr('id'),
+      '#closeAttchViewer'
+    );
 
     return;
   }
@@ -2333,46 +2350,17 @@ function openReceiptDetailsBesidePreview() {
     return;
   }
 
-  $overlay.css({
-    display: 'flex',
-    'flex-direction': 'column'
-  });
-
   $stage.wrap(
     '<div id="' + ATTACHMENT_CONFIG.split.paneId + '" '
     + 'class="' + ATTACHMENT_CONFIG.split.paneClass + '"></div>'
   );
 
   $splitPane = $('#' + ATTACHMENT_CONFIG.split.paneId);
-  $splitPane.css({
-    display: 'flex',
-    flex: '1 1 auto',
-    'min-height': '0',
-    width: '100%',
-    overflow: 'hidden'
-  });
-
-  $stage.css({
-    flex: '1 1 50%',
-    width: '50%',
-    'min-width': '0',
-    height: '100%'
-  });
 
   $splitPane.append(
     '<div id="' + ATTACHMENT_CONFIG.split.editableId + '" '
     + 'class="' + ATTACHMENT_CONFIG.split.editableId + '"></div>'
   );
-
-  $('#' + ATTACHMENT_CONFIG.split.editableId).css({
-    flex: '1 1 50%',
-    width: '50%',
-    'min-width': '0',
-    height: '100%',
-    overflow: 'hidden',
-    'background-color': '#ffffff',
-    'border-left': '1px solid #d8d8d8'
-  });
 
   $('#editReceiptDataBtn').hide();
   $('#receiptMetaPanel').hide();
@@ -2420,12 +2408,6 @@ function closeReceiptDetailsBesidePreview() {
   $stage = $splitPane.children('.attachmentViewerStage').first();
 
   if ($stage.length) {
-    $stage.css({
-      flex: '',
-      width: '',
-      'min-width': '',
-      height: ''
-    });
     $stage.unwrap();
   } else {
     $splitPane.remove();
@@ -2778,7 +2760,7 @@ function downloadFile(url, fileName) {
   link.download = fileName || extractFileName(url);
   link.target = '_blank';
   link.rel = 'noopener noreferrer';
-  link.style.display = 'none';
+  link.className = 'attachmentViewerDownloadLink';
 
   document.body.appendChild(link);
   link.click();
@@ -2816,12 +2798,107 @@ function bindViewerCloseEvents(overlaySelector, closeButtonSelector) {
 // ----------------------------------------------------------------------------
 
 var HEIC_PREVIEW_FALLBACK_ID = 'dynamicImageHeicFallback';
+var HEIC_PREVIEW_PENDING_ID = 'dynamicImageHeicPending';
+var HEIC_DECODER_URL =
+  'https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js';
+var HEIC_DECODER_LOAD_TIMEOUT_MS = 15000;
+
+var HEIC_PREVIEW_PENDING_MESSAGE = 'Preparing HEIC preview…';
 
 var HEIC_PREVIEW_FALLBACK_MESSAGE = 'This browser cannot preview the original '
   + 'HEIC image. Use the Download button above to download the original file.';
 
+var heicDecoderLoadPromise = null;
+var heicPreviewRequestSequence = 0;
+var activeHeicPreviewRequest = null;
+
 function isHeicPreviewImage(url, fileType) {
-  return getFileExtension(url, fileType) === 'heic';
+  var extension = getFileExtension(url, fileType);
+
+  return extension === 'heic' || extension === 'heif';
+}
+
+function revokeHeicPreviewObjectUrl(request) {
+  var objectUrl = request && request.objectUrl;
+
+  if (!objectUrl) {
+    return;
+  }
+
+  request.objectUrl = '';
+
+  try {
+    if (typeof URL !== 'undefined' && URL.revokeObjectURL) {
+      URL.revokeObjectURL(objectUrl);
+    }
+  } catch (error) {
+    // A failed revoke must not break closing or replacing the viewer.
+  }
+}
+
+function cleanupHeicPreview() {
+  var request = activeHeicPreviewRequest;
+
+  activeHeicPreviewRequest = null;
+
+  if (!request) {
+    return;
+  }
+
+  request.closed = true;
+  revokeHeicPreviewObjectUrl(request);
+}
+
+function beginHeicPreviewRequest(imageUrl) {
+  var request;
+
+  cleanupHeicPreview();
+
+  heicPreviewRequestSequence += 1;
+
+  request = {
+    id: heicPreviewRequestSequence,
+    url: imageUrl,
+    closed: false,
+    decodeStarted: false,
+    decodedAttempt: false,
+    failed: false,
+    objectUrl: ''
+  };
+
+  activeHeicPreviewRequest = request;
+
+  return request;
+}
+
+function isHeicPreviewRequestActive(request, $stage) {
+  return !!request
+    && request.closed !== true
+    && activeHeicPreviewRequest === request
+    && $stage
+    && $stage.length > 0
+    && $stage.find('#dynamicImage').length > 0;
+}
+
+function clearHeicPreviewPending($stage) {
+  $stage.find('#' + HEIC_PREVIEW_PENDING_ID).remove();
+}
+
+function showHeicPreviewPending($stage) {
+  var pendingSelector = '#' + HEIC_PREVIEW_PENDING_ID;
+
+  if ($stage.find(pendingSelector).length) {
+    return false;
+  }
+
+  $('<div></div>')
+    .attr('id', HEIC_PREVIEW_PENDING_ID)
+    .addClass('attachmentViewerImageFallback')
+    .attr('role', 'status')
+    .text(HEIC_PREVIEW_PENDING_MESSAGE)
+    .appendTo($stage);
+
+  return true;
 }
 
 function clearHeicPreviewFallback($stage) {
@@ -2839,17 +2916,230 @@ function showHeicPreviewFallback($stage) {
     .attr('id', HEIC_PREVIEW_FALLBACK_ID)
     .addClass('attachmentViewerImageFallback')
     .attr('role', 'status')
-    .css({
-      color: '#ffffff',
-      'font-size': '14px',
-      'line-height': '1.5',
-      padding: '16px',
-      'text-align': 'center'
-    })
     .text(HEIC_PREVIEW_FALLBACK_MESSAGE)
     .appendTo($stage);
 
   return true;
+}
+
+function getHeicDecoderFromWindow() {
+  return window && window.heic2any ? window.heic2any : null;
+}
+
+function loadHeicDecoder() {
+  var existingDecoder = getHeicDecoderFromWindow();
+
+  if (existingDecoder) {
+    return Promise.resolve(existingDecoder);
+  }
+
+  if (heicDecoderLoadPromise) {
+    return heicDecoderLoadPromise;
+  }
+
+  heicDecoderLoadPromise = new Promise(function (resolve, reject) {
+    var script = document.createElement('script');
+    var settled = false;
+    var timeoutId = null;
+
+    function finish(error) {
+      var decoder;
+
+      if (settled) {
+        return;
+      }
+
+      settled = true;
+
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+      }
+
+      if (error) {
+        if (script.parentNode) {
+          script.parentNode.removeChild(script);
+        }
+
+        reject(error);
+        return;
+      }
+
+      decoder = getHeicDecoderFromWindow();
+
+      if (!decoder) {
+        reject(new Error('The HEIC decoder did not initialize'));
+        return;
+      }
+
+      resolve(decoder);
+    }
+
+    script.onload = function () {
+      finish(null);
+    };
+
+    script.onerror = function () {
+      finish(new Error('The HEIC decoder could not be loaded'));
+    };
+
+    script.src = HEIC_DECODER_URL;
+    script.async = true;
+
+    timeoutId = setTimeout(function () {
+      finish(new Error('The HEIC decoder timed out'));
+    }, HEIC_DECODER_LOAD_TIMEOUT_MS);
+
+    (document.head || document.body).appendChild(script);
+  }).then(function (decoder) {
+    heicDecoderLoadPromise = null;
+    return decoder;
+  }, function (error) {
+    heicDecoderLoadPromise = null;
+    throw error;
+  });
+
+  return heicDecoderLoadPromise;
+}
+
+function fetchHeicPreviewBlob(imageUrl) {
+  if (typeof fetch !== 'function') {
+    return Promise.reject(new Error('Fetch is not available'));
+  }
+
+  return fetch(imageUrl, {
+    method: 'GET',
+    credentials: 'same-origin'
+  }).then(function (response) {
+    if (!response || response.ok !== true) {
+      throw new Error('The receipt image could not be downloaded');
+    }
+
+    return response.blob();
+  });
+}
+
+function getHeicDecodedBlob(result) {
+  var index;
+
+  if (Array.isArray(result)) {
+    for (index = 0; index < result.length; index += 1) {
+      if (result[index]) {
+        return result[index];
+      }
+    }
+
+    return null;
+  }
+
+  return result || null;
+}
+
+function convertHeicBlobToJpeg(converter, blob) {
+  return Promise.resolve(converter({
+    blob: blob,
+    toType: 'image/jpeg',
+    quality: 0.92
+  }));
+}
+
+function startHeicPreviewDecode(request, $stage, imageUrl) {
+  loadHeicDecoder()
+    .then(function (converter) {
+      if (!isHeicPreviewRequestActive(request, $stage)) {
+        return null;
+      }
+
+      return fetchHeicPreviewBlob(imageUrl).then(function (blob) {
+        if (!isHeicPreviewRequestActive(request, $stage)) {
+          return null;
+        }
+
+        return convertHeicBlobToJpeg(converter, blob);
+      });
+    })
+    .then(function (result) {
+      var decodedBlob;
+      var objectUrl;
+
+      if (!isHeicPreviewRequestActive(request, $stage)) {
+        return;
+      }
+
+      decodedBlob = getHeicDecodedBlob(result);
+
+      if (!decodedBlob) {
+        throw new Error('The HEIC decoder returned no image');
+      }
+
+      revokeHeicPreviewObjectUrl(request);
+      objectUrl = URL.createObjectURL(decodedBlob);
+      request.objectUrl = objectUrl;
+      request.decodedAttempt = true;
+      clearHeicPreviewPending($stage);
+      $stage.find('#dynamicImage').attr('src', objectUrl);
+    })
+    .then(null, function () {
+      if (!isHeicPreviewRequestActive(request, $stage)) {
+        return;
+      }
+
+      request.failed = true;
+      revokeHeicPreviewObjectUrl(request);
+      clearHeicPreviewPending($stage);
+      showHeicPreviewFallback($stage);
+    });
+}
+
+function handleHeicPreviewImageError($stage, isHeicImage) {
+  var request = activeHeicPreviewRequest;
+  var $image;
+
+  if (!isHeicImage || !request) {
+    return false;
+  }
+
+  $image = $stage.find('#dynamicImage');
+
+  if (!$image.length) {
+    return false;
+  }
+
+  if (request.decodedAttempt || request.failed) {
+    revokeHeicPreviewObjectUrl(request);
+    clearHeicPreviewPending($stage);
+    showHeicPreviewFallback($stage);
+    return true;
+  }
+
+  if (request.decodeStarted) {
+    return true;
+  }
+
+  request.decodeStarted = true;
+  showHeicPreviewPending($stage);
+  startHeicPreviewDecode(request, $stage, request.url);
+
+  return true;
+}
+
+function checkAttachmentImagePreviewState($image, $stage, isHeicImage) {
+  var image = $image && $image[0];
+
+  if (!image || image.complete !== true) {
+    return;
+  }
+
+  if (image.naturalWidth > 0) {
+    clearHeicPreviewPending($stage);
+    clearHeicPreviewFallback($stage);
+    return;
+  }
+
+  if (handleHeicPreviewImageError($stage, isHeicImage)) {
+    return;
+  }
+
+  handleAttachmentImagePreviewError($stage, isHeicImage);
 }
 
 function handleAttachmentImagePreviewError($stage, isHeicImage) {
@@ -2954,12 +3244,25 @@ function generateReciptImagePreview(link, fileType) {
   $image = $('#dynamicImage');
   $stage = $('#imageViewerStage');
 
+  if (isHeicImage) {
+    beginHeicPreviewRequest(imageUrl);
+  }
+
+  function setTransformData(name, value) {
+    var image = $image[0];
+
+    if (!image || !image.style
+      || typeof image.style.setProperty !== 'function') {
+      return;
+    }
+
+    image.style.setProperty(name, String(value));
+  }
+
   function applyTransform() {
-    $image.css(
-      'transform',
-      'translate(' + translateX + 'px, ' + translateY + 'px) '
-      + 'scale(' + scale + ')'
-    );
+    setTransformData('--attachment-viewer-x', translateX + 'px');
+    setTransformData('--attachment-viewer-y', translateY + 'px');
+    setTransformData('--attachment-viewer-scale', scale);
   }
 
   function resetTransform() {
@@ -3002,12 +3305,19 @@ function generateReciptImagePreview(link, fileType) {
   bindAttachmentViewerActionButtons(ATTACHMENT_VIEWER_MODE_PREVIEW);
 
   $image.on('load', function () {
+    clearHeicPreviewPending($stage);
     clearHeicPreviewFallback($stage);
   });
 
   $image.on('error', function () {
+    if (handleHeicPreviewImageError($stage, isHeicImage)) {
+      return;
+    }
+
     handleAttachmentImagePreviewError($stage, isHeicImage);
   });
+
+  checkAttachmentImagePreviewState($image, $stage, isHeicImage);
 
   $image.on('contextmenu', function (event) {
     event.preventDefault();
@@ -3064,8 +3374,6 @@ function generateReciptImagePreview(link, fileType) {
       lastTapTime = currentTime;
     });
   } else {
-    $image.css('cursor', 'grab');
-
     $image.on('mousedown.attachmentViewer', function (event) {
       if (scale <= 1) {
         return;
@@ -3076,7 +3384,7 @@ function generateReciptImagePreview(link, fileType) {
       startY = event.clientY;
       startTranslateX = translateX;
       startTranslateY = translateY;
-      $image.css('cursor', 'grabbing');
+      $image.addClass('attachmentViewerImageDragging');
       event.preventDefault();
     });
 
@@ -3092,7 +3400,7 @@ function generateReciptImagePreview(link, fileType) {
 
     $(document).on('mouseup.attachmentViewer', function () {
       isDragging = false;
-      $image.css('cursor', 'grab');
+      $image.removeClass('attachmentViewerImageDragging');
     });
   }
 
@@ -3177,21 +3485,19 @@ function showAttachmentPreview(link, fileType) {
   }
 
   if (isPdfUrl(url, selectedFileType)) {
-    generatePdfPreview(url, selectedFileType); 
+    generatePdfPreview(url, selectedFileType);
     if (getViewerCapabilities().canEdit) {
-        openReceiptDetailsBesidePreview(); 
-        
+      openReceiptDetailsBesidePreview();
     }
     dockAttachmentViewerForSplitLayout();
     return;
   }
 
   if (isImageUrl(url, selectedFileType)) {
-    generateReciptImagePreview(url, selectedFileType); 
-    if (getViewerCapabilities().canEdit && currentPreviewReceiptStatus() !== 'NEW')
-        { 
-            openReceiptDetailsBesidePreview(); 
-        }
+    generateReciptImagePreview(url, selectedFileType);
+    if (getViewerCapabilities().canEdit) {
+      openReceiptDetailsBesidePreview();
+    }
     dockAttachmentViewerForSplitLayout();
     return;
   }

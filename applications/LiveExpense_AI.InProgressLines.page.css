@@ -177,3 +177,90 @@
   cursor: not-allowed;
   box-shadow: none;
 }
+
+/* Completed with every receipt line created: hide only the table, keeping the
+   banner and report controls visible. The second selector is the fallback for
+   when the DataTables wrapper is absent. */
+.in-progress-line-table-container.in-progress-line-all-success > #tableOutput_wrapper,
+.in-progress-line-table-container.in-progress-line-all-success > #tableOutput {
+  display: none !important;
+}
+
+/* Completed with failed receipt lines: compact amber warning banner. The page
+   JavaScript sets this class only for a completed report with failures, so the
+   processing visuals stay untouched. This later rule replaces the green
+   completed check with the amber warning icon. */
+#Loading_container.in-progress-lines-failed {
+  padding: 20px 24px;
+  border-color: #e0b45c;
+  border-radius: 8px;
+  background: #fff8e1;
+}
+
+#Loading_container.in-progress-lines-failed > label {
+  align-items: flex-start;
+  gap: 12px;
+  color: #7a4b00 !important;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+#Loading_container.in-progress-lines-failed > label::before {
+  content: "!";
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  margin-top: 2px;
+  border-color: #a85b00;
+  background: #b26a00;
+  color: #fff;
+  font: 700 20px/1 Arial, sans-serif;
+}
+
+/* Completed with every receipt line added: prominent pale green success panel.
+   The page JavaScript sets this class only for a clean completed report. */
+#Loading_container.in-progress-lines-success {
+  padding: 32px 20px;
+  border-color: #b7d8bb;
+  border-radius: 10px;
+  background: #edf7ee;
+}
+
+#Loading_container.in-progress-lines-success > label {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #1f5b2a !important;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+}
+
+#Loading_container.in-progress-lines-success > label::before {
+  content: "\2713";
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: #2e8548;
+  color: #fff;
+  font: 700 22px/1 Arial, sans-serif;
+}
+
+#Loading_container.in-progress-lines-failed > label > nobr,
+#Loading_container.in-progress-lines-success > label > nobr {
+  font-size: inherit !important;
+  font-weight: inherit;
+  line-height: inherit;
+  white-space: normal;
+}
+
+.in-progress-line-table-container.in-progress-line-failures-only
+  #tableOutput tbody tr.in-progress-line-not-failed {
+  display: none !important;
+}
+
+#Loading_container.in-progress-lines-failed { margin-bottom: 16px !important; }

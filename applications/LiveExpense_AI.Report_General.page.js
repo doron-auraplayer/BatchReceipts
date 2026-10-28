@@ -180,8 +180,14 @@ function createAiReceiptBatchLines() {
                     function(){
                         Services.call("Ping_ReceiptBatch_CreateLinesRPA",function(){
                             Storage.set('newAiReport', 'false');
-                            Page.navigate("InProgressLines.html");
-                         });
+                            Popup.ok(
+                                'Report processing',
+                                'Report ' + reportNumber + ' is now being processed. Please check its status in a few minutes.',
+                                function () {
+                                    Page.navigate("Update_Reports.html");
+                                }
+                            );
+                        });
                     },
                     displayReportServiceError("Failed to create report")
                 );

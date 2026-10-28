@@ -48,6 +48,7 @@
     "iExpense_removeUpdateReport",
     "iExpense_gotoUpdateReport",
     "iExpense_getUpdReports",
+    "ReceiptBatch_get_draft_reports",
     "iExpense_getUpdReportsPrevNext",
     "iExpense_duplicate_update_report",
     "iExpense_getReportCurrencies",
@@ -178,7 +179,6 @@
     "ReceiptBatch_ExpenseAttendee",
     "ReceiptBatch_get_expense_data",
     "ReceiptBatch_save_expense_data",
-    "ReceiptBatch_get_draft_reports",
     "ReceiptBatch_get_draft_report_Data",
     "ReceiptBatch_get_draft_report_lines",
     "ReceiptBatch_DraftReport"
@@ -941,6 +941,24 @@
             },
             "paramLabel": "Report Purpose",
             "visible": true
+          },
+          {
+            "dataTypeInfo": {
+              "type": "READONLY"
+            },
+            "isSortable": false,
+            "inTable": true,
+            "newLine": true,
+            "required": false,
+            "custom": true,
+            "validationFunction": "NONE",
+            "fromInput": false,
+            "centred": false,
+            "id": {
+              "name": "REPORT_LINE_STATUS"
+            },
+            "paramLabel": "Info",
+            "visible": true
           }
         ],
         "type": "table",
@@ -1005,6 +1023,7 @@
         }
       ],
       "javascript": "@inject:LiveExpense_AI.Update_Reports.page.js",
+      "css": "@inject:LiveExpense_AI.Update_Reports.page.css",
       "shouldSkip": false,
       "hasMenu": true,
       "inMenu": true,
@@ -11174,7 +11193,26 @@
     {
       "name": "ReceiptsAttachments.html",
       "title": "Receipts",
-      "params": [],
+      "params": [
+        {
+          "dataTypeInfo": {
+            "type": "LABEL"
+          },
+          "isSortable": false,
+          "inTable": false,
+          "newLine": false,
+          "required": false,
+          "custom": true,
+          "validationFunction": "NONE",
+          "fromInput": false,
+          "centred": false,
+          "id": {
+            "name": "StepInfo"
+          },
+          "paramLabel": "StepInfo",
+          "visible": true
+        }
+      ],
       "multiRecord": {
         "params": [
           {
@@ -11322,7 +11360,7 @@
         {
           "event": {
             "type": "buttonClick",
-            "element": "Upload",
+            "element": "Upload Receipts",
             "elementId": "Add_Attachment",
             "elementIcon": "fa-cloud-upload",
             "attributes": [
@@ -11390,25 +11428,6 @@
               "main": "onTableClick"
             }
           }
-        },
-        {
-          "event": {
-            "type": "buttonClick",
-            "element": "Reports Status",
-            "elementId": "Reports_Status",
-            "attributes": [
-              "bottom",
-              "50",
-              "true",
-              "false"
-            ]
-          },
-          "action": {
-            "type": "navigateToPage",
-            "attribute": {
-              "main": "DraftReports.html"
-            }
-          }
         }
       ],
       "javascript": "@inject:LiveExpense_AI.ReceiptsAttachments.page.js",
@@ -11416,6 +11435,42 @@
       "shouldSkip": false,
       "hasMenu": true,
       "inMenu": true,
+      "centred": false
+    },
+    {
+      "name": "ReceiptsAttachmentsCardsPOC.html",
+      "title": "Receipt Cards POC",
+      "params": [],
+      "multiRecord": {
+        "params": [],
+        "type": "table",
+        "disableDataTables": false,
+        "isSearchable": false,
+        "isAddRows": false,
+        "isResponsive": false,
+        "isHidden": false,
+        "startIndex": 0
+      },
+      "actions": [
+        {
+          "event": {
+            "type": "onLoad",
+            "element": "",
+            "elementId": ""
+          },
+          "action": {
+            "type": "callFunction",
+            "attribute": {
+              "main": "receiptCardsPocOnLoad"
+            }
+          }
+        }
+      ],
+      "javascript": "@inject:LiveExpense_AI.ReceiptsAttachmentsCardsPOC.page.js",
+      "css": "@inject:LiveExpense_AI.ReceiptsAttachmentsCardsPOC.page.css",
+      "shouldSkip": false,
+      "hasMenu": true,
+      "inMenu": false,
       "centred": false
     },
     {
@@ -13037,7 +13092,7 @@
       "css": "@inject:LiveExpense_AI.DraftReports.page.css",
       "shouldSkip": false,
       "hasMenu": true,
-      "inMenu": false,
+      "inMenu": true,
       "centred": false
     },
     {
@@ -13268,7 +13323,7 @@
           "action": {
             "type": "navigateToPage",
             "attribute": {
-              "main": "DraftReports.html"
+              "main": "Update_Reports.html"
             }
           }
         },
@@ -13322,6 +13377,291 @@
       "css": "@inject:LiveExpense_AI.InProgressLines.page.css",
       "shouldSkip": false,
       "hasMenu": true,
+      "inMenu": false,
+      "centred": false
+    },
+    {
+      "name": "InProgressLines_ORIG.html",
+      "title": "Report Lines",
+      "params": [
+        {
+          "dataTypeInfo": {
+            "type": "READONLY"
+          },
+          "isSortable": false,
+          "inTable": false,
+          "newLine": false,
+          "required": false,
+          "custom": false,
+          "validationFunction": "NONE",
+          "fromInput": false,
+          "centred": false,
+          "id": {
+            "name": "REPORT_NUMBER",
+            "serviceName": "ReceiptBatch_get_draft_report_Data"
+          },
+          "paramLabel": "Report Number",
+          "visible": true
+        },
+        {
+          "dataTypeInfo": {
+            "type": "READONLY"
+          },
+          "isSortable": false,
+          "inTable": false,
+          "newLine": false,
+          "required": false,
+          "custom": false,
+          "validationFunction": "NONE",
+          "fromInput": false,
+          "centred": false,
+          "id": {
+            "name": "REPORT_PURPOSE",
+            "serviceName": "ReceiptBatch_get_draft_report_Data"
+          },
+          "paramLabel": "Report Purpose",
+          "visible": true
+        },
+        {
+          "dataTypeInfo": {
+            "type": "READONLY"
+          },
+          "isSortable": false,
+          "inTable": false,
+          "newLine": false,
+          "required": false,
+          "custom": false,
+          "validationFunction": "NONE",
+          "fromInput": false,
+          "centred": false,
+          "id": {
+            "name": "REPORT_CREATE_DATE",
+            "serviceName": "ReceiptBatch_get_draft_report_Data"
+          },
+          "paramLabel": "Report Date",
+          "visible": true
+        },
+        {
+          "dataTypeInfo": {
+            "type": "LABEL"
+          },
+          "isSortable": false,
+          "inTable": false,
+          "newLine": true,
+          "required": false,
+          "custom": true,
+          "validationFunction": "NONE",
+          "fromInput": false,
+          "centred": false,
+          "id": {
+            "name": "Loading"
+          },
+          "paramLabel": "Adding receipt lines to EBS…",
+          "visible": true
+        }
+      ],
+      "multiRecord": {
+        "params": [
+          {
+            "dataTypeInfo": {
+              "format": "%s",
+              "type": "READONLY"
+            },
+            "isSortable": false,
+            "inTable": true,
+            "newLine": false,
+            "required": false,
+            "custom": false,
+            "validationFunction": "NONE",
+            "fromInput": false,
+            "centred": false,
+            "id": {
+              "name": "RECEIPTBATCH_STATUS",
+              "serviceName": "ReceiptBatch_get_draft_report_lines"
+            },
+            "paramLabel": "Status",
+            "visible": true
+          },
+          {
+            "dataTypeInfo": {
+              "format": "%s",
+              "type": "READONLY"
+            },
+            "isSortable": false,
+            "inTable": true,
+            "newLine": false,
+            "required": false,
+            "custom": false,
+            "validationFunction": "NONE",
+            "fromInput": false,
+            "centred": false,
+            "id": {
+              "name": "RECEIPTBATCH_EXPENSE_TYPE",
+              "serviceName": "ReceiptBatch_get_draft_report_lines"
+            },
+            "paramLabel": "Expense Type",
+            "visible": true
+          },
+          {
+            "dataTypeInfo": {
+              "format": "%s",
+              "type": "READONLY"
+            },
+            "isSortable": false,
+            "inTable": true,
+            "newLine": false,
+            "required": false,
+            "custom": false,
+            "validationFunction": "NONE",
+            "fromInput": false,
+            "centred": false,
+            "id": {
+              "name": "RECEIPTBATCH_TOTAL_AMOUNT",
+              "serviceName": "ReceiptBatch_get_draft_report_lines"
+            },
+            "paramLabel": "Total Amount",
+            "visible": true
+          },
+          {
+            "dataTypeInfo": {
+              "format": "%s",
+              "type": "READONLY"
+            },
+            "isSortable": false,
+            "inTable": true,
+            "newLine": false,
+            "required": false,
+            "custom": false,
+            "validationFunction": "NONE",
+            "fromInput": false,
+            "centred": false,
+            "id": {
+              "name": "RECEIPTBATCH_MERCHANT",
+              "serviceName": "ReceiptBatch_get_draft_report_lines"
+            },
+            "paramLabel": "merchant",
+            "visible": true
+          },
+          {
+            "dataTypeInfo": {
+              "format": "%s",
+              "type": "READONLY"
+            },
+            "isSortable": false,
+            "inTable": true,
+            "newLine": false,
+            "required": false,
+            "custom": false,
+            "validationFunction": "NONE",
+            "fromInput": false,
+            "centred": false,
+            "id": {
+              "name": "RECEIPTBATCH_LOCATION",
+              "serviceName": "ReceiptBatch_get_draft_report_lines"
+            },
+            "paramLabel": "Location",
+            "visible": true
+          },
+          {
+            "dataTypeInfo": {
+              "format": "%s",
+              "type": "READONLY"
+            },
+            "isSortable": false,
+            "inTable": true,
+            "newLine": false,
+            "required": false,
+            "custom": false,
+            "validationFunction": "NONE",
+            "fromInput": false,
+            "centred": false,
+            "id": {
+              "name": "RECEIPTBATCH_DEPARTMENT",
+              "serviceName": "ReceiptBatch_get_draft_report_lines"
+            },
+            "paramLabel": "Department",
+            "visible": true
+          }
+        ],
+        "type": "table",
+        "disableDataTables": false,
+        "isSearchable": false,
+        "isAddRows": false,
+        "isResponsive": true,
+        "isHidden": false,
+        "startIndex": 0
+      },
+      "actions": [
+        {
+          "event": {
+            "type": "buttonClick",
+            "element": "Back",
+            "elementId": "Draft_Reports",
+            "elementIcon": "fa-arrow-left",
+            "attributes": [
+              "top",
+              "33",
+              "false",
+              "true"
+            ]
+          },
+          "action": {
+            "type": "navigateToPage",
+            "attribute": {
+              "main": "Update_Reports.html"
+            }
+          }
+        },
+        {
+          "event": {
+            "type": "buttonClick",
+            "element": "Edit Report",
+            "elementId": "EditReport",
+            "attributes": [
+              "top",
+              "33",
+              "false",
+              "false"
+            ]
+          },
+          "action": {
+            "type": "callFunction",
+            "attribute": {
+              "main": "editReport"
+            }
+          }
+        },
+        {
+          "event": {
+            "type": "onLoad",
+            "element": "",
+            "elementId": ""
+          },
+          "action": {
+            "type": "callFunction",
+            "attribute": {
+              "main": "onLoad"
+            }
+          }
+        },
+        {
+          "event": {
+            "type": "tableClick",
+            "element": "",
+            "elementId": ""
+          },
+          "action": {
+            "type": "callFunction",
+            "attribute": {
+              "main": "onTableClick"
+            }
+          }
+        }
+      ],
+      "javascript": "@inject:LiveExpense_AI.InProgressLines_ORIG.page.js",
+      "css": "@inject:LiveExpense_AI.InProgressLines_ORIG.page.css",
+      "shouldSkip": false,
+      "hasMenu": false,
       "inMenu": false,
       "centred": false
     }

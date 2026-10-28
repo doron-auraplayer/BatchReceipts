@@ -139,5 +139,8 @@
   "labels": [
     "BATCH_RECEIPTS"
   ],
-  "apps": []
+  "apps": [
+    "LiveExpense_AI",
+    "LiveExpense_AI_NEW_LOOK"
+  ]
 }

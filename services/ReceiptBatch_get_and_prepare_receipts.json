@@ -19,7 +19,7 @@
   ],
   "outputParams": [
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -30,11 +30,11 @@
         "name": "RECEIPTBATCH_RECEIPT_ID",
         "serviceName": "ReceiptBatch_get_and_prepare_receipts"
       },
-      "paramLabel": "RECEIPTBATCH_RECEIPT_ID",
+      "paramLabel": "",
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -45,11 +45,11 @@
         "name": "RECEIPTBATCH_STATUS",
         "serviceName": "ReceiptBatch_get_and_prepare_receipts"
       },
-      "paramLabel": "RECEIPTBATCH_STATUS",
+      "paramLabel": "",
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -60,11 +60,11 @@
         "name": "RECEIPTBATCH_EBS_USER_NAME",
         "serviceName": "ReceiptBatch_get_and_prepare_receipts"
       },
-      "paramLabel": "RECEIPTBATCH_EBS_USER_NAME",
+      "paramLabel": "",
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -75,11 +75,11 @@
         "name": "RECEIPTBATCH_FILE_NAME",
         "serviceName": "ReceiptBatch_get_and_prepare_receipts"
       },
-      "paramLabel": "RECEIPTBATCH_FILE_NAME",
+      "paramLabel": "",
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -90,11 +90,11 @@
         "name": "RECEIPTBATCH_FILE_TYPE",
         "serviceName": "ReceiptBatch_get_and_prepare_receipts"
       },
-      "paramLabel": "RECEIPTBATCH_FILE_TYPE",
+      "paramLabel": "",
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -105,11 +105,11 @@
         "name": "RECEIPTBATCH_EXPENSE_TYPE",
         "serviceName": "ReceiptBatch_get_and_prepare_receipts"
       },
-      "paramLabel": "RECEIPTBATCH_EXPENSE_TYPE",
+      "paramLabel": "",
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -120,11 +120,11 @@
         "name": "RECEIPTBATCH_TOTAL_AMOUNT",
         "serviceName": "ReceiptBatch_get_and_prepare_receipts"
       },
-      "paramLabel": "RECEIPTBATCH_TOTAL_AMOUNT",
+      "paramLabel": "",
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -135,11 +135,11 @@
         "name": "RECEIPTBATCH_RECEIPT_DATE",
         "serviceName": "ReceiptBatch_get_and_prepare_receipts"
       },
-      "paramLabel": "RECEIPTBATCH_RECEIPT_DATE",
+      "paramLabel": "",
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -150,11 +150,11 @@
         "name": "RECEIPTBATCH_MERCHANT",
         "serviceName": "ReceiptBatch_get_and_prepare_receipts"
       },
-      "paramLabel": "RECEIPTBATCH_MERCHANT",
+      "paramLabel": "",
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -165,11 +165,11 @@
         "name": "RECEIPTBATCH_LOCATION",
         "serviceName": "ReceiptBatch_get_and_prepare_receipts"
       },
-      "paramLabel": "RECEIPTBATCH_LOCATION",
+      "paramLabel": "",
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -180,11 +180,11 @@
         "name": "RECEIPTBATCH_REPORT_ID",
         "serviceName": "ReceiptBatch_get_and_prepare_receipts"
       },
-      "paramLabel": "RECEIPTBATCH_REPORT_ID",
+      "paramLabel": "",
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -195,11 +195,11 @@
         "name": "RECEIPTBATCH_REPORT_NAME",
         "serviceName": "ReceiptBatch_get_and_prepare_receipts"
       },
-      "paramLabel": "RECEIPTBATCH_REPORT_NAME",
+      "paramLabel": "",
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -210,11 +210,11 @@
         "name": "RECEIPTBATCH_REPORT_CREATE_DATE",
         "serviceName": "ReceiptBatch_get_and_prepare_receipts"
       },
-      "paramLabel": "RECEIPTBATCH_REPORT_CREATE_DATE",
+      "paramLabel": "",
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -225,11 +225,11 @@
         "name": "RECEIPTBATCH_DEPARTMENT",
         "serviceName": "ReceiptBatch_get_and_prepare_receipts"
       },
-      "paramLabel": "RECEIPTBATCH_DEPARTMENT",
+      "paramLabel": "",
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -240,11 +240,11 @@
         "name": "RECEIPTBATCH_TEMPLATE_NAME",
         "serviceName": "ReceiptBatch_get_and_prepare_receipts"
       },
-      "paramLabel": "RECEIPTBATCH_TEMPLATE_NAME",
+      "paramLabel": "",
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -255,11 +255,11 @@
         "name": "RECEIPTBATCH_PAYMENT_TYPE",
         "serviceName": "ReceiptBatch_get_and_prepare_receipts"
       },
-      "paramLabel": "RECEIPTBATCH_PAYMENT_TYPE",
+      "paramLabel": "",
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -270,11 +270,11 @@
         "name": "RECEIPTBATCH_LINE_NUM",
         "serviceName": "ReceiptBatch_get_and_prepare_receipts"
       },
-      "paramLabel": "RECEIPTBATCH_LINE_NUM",
+      "paramLabel": "",
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -285,11 +285,11 @@
         "name": "RECEIPTBATCH_CREDIT",
         "serviceName": "ReceiptBatch_get_and_prepare_receipts"
       },
-      "paramLabel": "RECEIPTBATCH_CREDIT",
+      "paramLabel": "",
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -300,7 +300,7 @@
         "name": "RECEIPTBATCH_EXPENSE_DATA_JSON",
         "serviceName": "ReceiptBatch_get_and_prepare_receipts"
       },
-      "paramLabel": "RECEIPTBATCH_EXPENSE_DATA_JSON",
+      "paramLabel": "",
       "visible": true
     },
     {

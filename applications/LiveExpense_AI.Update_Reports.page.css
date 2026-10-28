@@ -1,0 +1,76 @@
+#tableOutput .rpa-report-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  box-sizing: border-box;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: #000;
+  cursor: pointer;
+  line-height: inherit;
+}
+
+#tableOutput .rpa-report-progress .fa.fa-cogs {
+  font-size: 22px;
+  line-height: 1;
+}
+
+#tableOutput .rpa-report-progress,
+#tableOutput .rpa-report-progress:hover,
+#tableOutput .rpa-report-progress:focus,
+#tableOutput .rpa-report-progress:active,
+#tableOutput .rpa-report-progress.ui-focus {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: #000 !important;
+}
+
+#tableOutput thead th[id="*th*REPORT_LINE_STATUS"],
+#tableOutput .update-report-line-status-cell {
+  min-width: 140px;
+}
+
+#tableOutput .update-report-line-status-summary {
+  display: inline-grid;
+  grid-template-columns: max-content max-content;
+  column-gap: 12px;
+  row-gap: 5px;
+  align-items: center;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: left;
+}
+
+#tableOutput .update-report-line-status-label {
+  font-weight: 500;
+  color: #334155;
+}
+
+#tableOutput .update-report-line-status-value {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #334155;
+}
+
+#tableOutput .update-report-line-status-label.update-report-line-status-failed,
+#tableOutput .update-report-line-status-value.update-report-line-status-failed {
+  color: #b42318;
+}
+
+#tableOutput .update-report-line-status-manual {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+#tableOutput .update-report-line-status-processing {
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 500;
+  color: #334155;
+}

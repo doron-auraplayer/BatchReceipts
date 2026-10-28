@@ -2,7 +2,7 @@
   "name": "ReceiptBatch_get_draft_reports",
   "description": "",
   "formUrl": "${env.DB_CONNECTION_STR}",
-  "command": "SELECT\n    r.REPORT_NUMBER,\n    r.REPORT_PURPOSE,\n    TO_CHAR(\n        r.REPORT_CREATE_DATE,\n        'DD-Mon-YYYY',\n        'NLS_DATE_LANGUAGE=English'\n    ) AS REPORT_CREATE_DATE,\n    r.TOTAL_LINES,\n    r.PENDING_LINES,\n    r.CREATED_LINES,\n    r.FAILED_LINES\nFROM (\n    SELECT\n        REPORT_ID AS REPORT_NUMBER,\n        MAX(REPORT_NAME) AS REPORT_PURPOSE,\n        MAX(REPORT_CREATE_DATE) AS REPORT_CREATE_DATE,\n        COUNT(*) AS TOTAL_LINES,\n        SUM(CASE WHEN STATUS = 'READY' THEN 1 ELSE 0 END) AS PENDING_LINES,\n        SUM(CASE WHEN STATUS = 'LINE_CREATED' THEN 1 ELSE 0 END) AS CREATED_LINES,\n        SUM(CASE WHEN STATUS = 'LINE_FAILED' THEN 1 ELSE 0 END) AS FAILED_LINES\n    FROM XX_AP_BATCH_RECEIPTS\n    WHERE REPORT_ID IS NOT NULL\n      AND STATUS IN ('READY', 'LINE_CREATED', 'LINE_FAILED')\n    GROUP BY REPORT_ID\n) r\nORDER BY r.REPORT_CREATE_DATE DESC",
+  "command": "SELECT\n    r.REPORT_NUMBER,\n    r.REPORT_PURPOSE,\n    TO_CHAR(\n        r.REPORT_CREATE_DATE,\n        'DD-Mon-YYYY',\n        'NLS_DATE_LANGUAGE=English'\n    ) AS REPORT_CREATE_DATE,\n    r.TOTAL_LINES,\n    r.PENDING_LINES,\n    r.CREATED_LINES,\n    r.FAILED_LINES\nFROM (\n    SELECT\n        REPORT_ID AS REPORT_NUMBER,\n        MAX(REPORT_NAME) AS REPORT_PURPOSE,\n        MAX(REPORT_CREATE_DATE) AS REPORT_CREATE_DATE,\n        COUNT(*) AS TOTAL_LINES,\n        SUM(CASE WHEN STATUS = 'READY' THEN 1 ELSE 0 END) AS PENDING_LINES,\n        SUM(CASE WHEN STATUS = 'LINE_CREATED' THEN 1 ELSE 0 END) AS CREATED_LINES,\n        SUM(CASE WHEN STATUS = 'LINE_FAILED' THEN 1 ELSE 0 END) AS FAILED_LINES\n    FROM XX_AP_BATCH_RECEIPTS\n    WHERE REPORT_ID IS NOT NULL\n      AND STATUS IN ('READY', 'LINE_CREATED', 'LINE_FAILED')\n      AND EBS_USER_NAME = UPPER('${EBS_USER}')\n    GROUP BY REPORT_ID\n) r\nORDER BY r.REPORT_CREATE_DATE DESC\n",
   "isEnabled": true,
   "inputParams": [
     {
@@ -26,6 +26,17 @@
       "paramLabel": "password",
       "paramValue": "${env.DB_PASSWORD}",
       "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "EBS_USER",
+        "serviceName": "ReceiptBatch_get_draft_reports"
+      },
+      "paramLabel": "EBS_USER",
+      "paramValue": "",
+      "visible": true
     }
   ],
   "outputParams": [
@@ -202,6 +213,6 @@
   ],
   "apps": [
     "LiveExpense_AI",
-    "LiveExpense_AI_14_10"
+    "LiveExpense_AI_NEW_LOOK"
   ]
 }

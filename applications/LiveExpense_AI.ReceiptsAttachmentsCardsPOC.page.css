@@ -1,0 +1,1288 @@
+/*
+ * Receipt Cards styles.
+ *
+ * Every selector is scoped below #receiptCardsPocRoot (the dialog lives inside
+ * that root). Nothing here changes shared AuraPlayer or expense-page styling.
+ */
+
+#receiptCardsPocRoot {
+  --rcpoc-navy: #122b40;
+  --rcpoc-navy-soft: #24445b;
+  --rcpoc-ink: #1b2b38;
+  --rcpoc-muted: #657784;
+  --rcpoc-teal: #0f7c86;
+  --rcpoc-teal-dark: #0a626b;
+  --rcpoc-teal-pale: #e2f3f4;
+  --rcpoc-paper: #ffffff;
+  --rcpoc-canvas: #f3f7f8;
+  --rcpoc-line: #d9e4e8;
+  --rcpoc-line-strong: #c3d3d9;
+  --rcpoc-shadow: 0 18px 44px rgba(18, 43, 64, 0.12);
+  --rcpoc-radius: 16px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 18px 18px 30px;
+  border: 1px solid var(--rcpoc-line);
+  border-radius: 24px;
+  background: linear-gradient(180deg, #fbfdfd 0%, #f3f8f9 100%);
+  box-shadow: 0 14px 34px rgba(18, 43, 64, 0.06);
+  color: var(--rcpoc-ink);
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  line-height: 1.45;
+  text-align: left;
+}
+
+#receiptCardsPocRoot *,
+#receiptCardsPocRoot *::before,
+#receiptCardsPocRoot *::after {
+  box-sizing: border-box;
+}
+
+#receiptCardsPocRoot h1,
+#receiptCardsPocRoot h2,
+#receiptCardsPocRoot h3,
+#receiptCardsPocRoot p,
+#receiptCardsPocRoot dl,
+#receiptCardsPocRoot dd,
+#receiptCardsPocRoot dt {
+  margin: 0;
+}
+
+#receiptCardsPocRoot button,
+#receiptCardsPocRoot input,
+#receiptCardsPocRoot select {
+  font: inherit;
+}
+
+#receiptCardsPocRoot .rcpoc-header {
+  margin-bottom: 18px;
+  padding: 4px 2px 0;
+}
+
+#receiptCardsPocRoot .rcpoc-title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#receiptCardsPocRoot .rcpoc-title {
+  color: var(--rcpoc-navy);
+  font-size: 30px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+}
+
+#receiptCardsPocRoot .rcpoc-subtitle {
+  max-width: 700px;
+  margin-top: 8px;
+  color: var(--rcpoc-muted);
+  font-size: 15px;
+}
+
+#receiptCardsPocRoot .rcpoc-toolbar {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 14px;
+  border: 1px solid var(--rcpoc-line);
+  border-radius: var(--rcpoc-radius);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 8px 22px rgba(18, 43, 64, 0.05);
+}
+
+#receiptCardsPocRoot .rcpoc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+#receiptCardsPocRoot .rcpoc-search-field {
+  flex: 1 1 300px;
+}
+
+#receiptCardsPocRoot .rcpoc-filter-field {
+  flex: 0 1 190px;
+}
+
+#receiptCardsPocRoot .rcpoc-field-label {
+  color: var(--rcpoc-navy-soft);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+#receiptCardsPocRoot .rcpoc-search-input,
+#receiptCardsPocRoot .rcpoc-status-select {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid var(--rcpoc-line-strong);
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--rcpoc-ink);
+  outline: none;
+}
+
+#receiptCardsPocRoot .rcpoc-search-input:focus,
+#receiptCardsPocRoot .rcpoc-status-select:focus {
+  border-color: var(--rcpoc-teal);
+  box-shadow: 0 0 0 3px rgba(15, 124, 134, 0.16);
+}
+
+#receiptCardsPocRoot .rcpoc-toolbar-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-left: auto;
+}
+
+#receiptCardsPocRoot .rcpoc-toolbar-actions .rcpoc-btn {
+  min-height: 44px;
+}
+
+#receiptCardsPocRoot .rcpoc-upload {
+  border-color: #8fb9be;
+  background: #eef9f9;
+  color: var(--rcpoc-teal-dark);
+}
+
+#receiptCardsPocRoot .rcpoc-upload:hover,
+#receiptCardsPocRoot .rcpoc-upload:focus {
+  border-color: var(--rcpoc-teal);
+  background: var(--rcpoc-teal-pale);
+  color: var(--rcpoc-teal-dark);
+}
+
+#receiptCardsPocRoot .rcpoc-btn[disabled] {
+  opacity: 0.58;
+  cursor: not-allowed;
+}
+
+#receiptCardsPocRoot .rcpoc-upload-input {
+  position: fixed;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#receiptCardsPocRoot .rcpoc-upload-state {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--rcpoc-line);
+  border-radius: 10px;
+  background: #f8fbfb;
+}
+
+#receiptCardsPocRoot .rcpoc-upload-state[hidden] {
+  display: none;
+}
+
+#receiptCardsPocRoot .rcpoc-upload-status {
+  margin: 0;
+  color: var(--rcpoc-navy-soft);
+  font-size: 13px;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+
+#receiptCardsPocRoot .rcpoc-upload-progress {
+  width: 100%;
+  max-width: 360px;
+  height: 8px;
+  border: 0;
+  border-radius: 999px;
+  overflow: hidden;
+  accent-color: var(--rcpoc-teal);
+}
+
+#receiptCardsPocRoot .rcpoc-upload-progress[hidden] {
+  display: none;
+}
+
+#receiptCardsPocRoot .rcpoc-upload-errors {
+  min-width: 0;
+}
+
+#receiptCardsPocRoot .rcpoc-upload-error-list {
+  margin: 0;
+  padding-left: 18px;
+  color: #7b3d38;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+#receiptCardsPocRoot .rcpoc-upload-error-item {
+  overflow-wrap: anywhere;
+}
+
+#receiptCardsPocRoot .rcpoc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 9px 16px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--rcpoc-navy);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+#receiptCardsPocRoot .rcpoc-btn-primary {
+  border-color: var(--rcpoc-teal);
+  background: var(--rcpoc-teal);
+  color: #ffffff;
+}
+
+#receiptCardsPocRoot .rcpoc-btn-primary:hover,
+#receiptCardsPocRoot .rcpoc-btn-primary:focus {
+  border-color: var(--rcpoc-teal-dark);
+  background: var(--rcpoc-teal-dark);
+}
+
+#receiptCardsPocRoot .rcpoc-btn-quiet {
+  border-color: var(--rcpoc-line-strong);
+  background: #ffffff;
+  color: var(--rcpoc-navy-soft);
+}
+
+#receiptCardsPocRoot .rcpoc-btn-quiet:hover,
+#receiptCardsPocRoot .rcpoc-btn-quiet:focus {
+  border-color: #8fb9be;
+  background: #f1f9f9;
+  color: var(--rcpoc-teal-dark);
+}
+
+#receiptCardsPocRoot .rcpoc-status {
+  min-height: 20px;
+  margin-top: 10px;
+  color: var(--rcpoc-muted);
+  font-size: 13px;
+}
+
+#receiptCardsPocRoot .rcpoc-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+#receiptCardsPocRoot .rcpoc-body {
+  min-height: 220px;
+}
+
+#receiptCardsPocRoot .rcpoc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+#receiptCardsPocRoot .rcpoc-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--rcpoc-line);
+  border-radius: 18px;
+  background: var(--rcpoc-paper);
+  box-shadow: 0 10px 24px rgba(18, 43, 64, 0.07);
+  transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+}
+
+#receiptCardsPocRoot .rcpoc-card:hover,
+#receiptCardsPocRoot .rcpoc-card:focus-within {
+  transform: translateY(-2px);
+  border-color: #a9c7cc;
+  box-shadow: 0 18px 34px rgba(18, 43, 64, 0.12);
+}
+
+#receiptCardsPocRoot .rcpoc-card-face {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 17px 17px 0 0;
+  background: #eef3f4;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+#receiptCardsPocRoot .rcpoc-card-face:focus {
+  outline: 3px solid rgba(15, 124, 134, 0.42);
+  outline-offset: -3px;
+}
+
+#receiptCardsPocRoot .rcpoc-media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: clamp(330px, 32vw, 420px);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 12%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0) 46%),
+    #e9eff1;
+}
+
+#receiptCardsPocRoot .rcpoc-receipt-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+  object-fit: contain;
+  object-position: center;
+}
+
+#receiptCardsPocRoot .rcpoc-card-top {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  pointer-events: none;
+}
+
+#receiptCardsPocRoot .rcpoc-status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  min-height: 25px;
+  padding: 4px 10px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+#receiptCardsPocRoot .rcpoc-status-pill-new {
+  border-color: #c7d2dc;
+  background: #eef2f6;
+  color: #3e5366;
+}
+
+#receiptCardsPocRoot .rcpoc-status-pill-processing {
+  border-color: #edd29d;
+  background: #fff4db;
+  color: #7a5411;
+}
+
+#receiptCardsPocRoot .rcpoc-status-pill-processed {
+  border-color: #a9d4cf;
+  background: #e5f6f2;
+  color: #12605b;
+}
+
+#receiptCardsPocRoot .rcpoc-status-pill-ready {
+  border-color: #9dc9bb;
+  background: #e2f5eb;
+  color: #176249;
+}
+
+#receiptCardsPocRoot .rcpoc-status-pill-failed {
+  border-color: #e8b6b2;
+  background: #fdeceb;
+  color: #8a2b25;
+}
+
+#receiptCardsPocRoot .rcpoc-status-pill-unknown {
+  border-color: #c9d3da;
+  background: #eef3f6;
+  color: #4f606d;
+}
+
+#receiptCardsPocRoot .rcpoc-overlay {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 54px 16px 16px;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 22, 35, 0) 0%,
+    rgba(8, 22, 35, 0.58) 32%,
+    rgba(8, 22, 35, 0.93) 100%
+  );
+  color: #ffffff;
+}
+
+#receiptCardsPocRoot .rcpoc-amount {
+  color: #ffffff;
+  font-size: clamp(26px, 2.5vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+#receiptCardsPocRoot .rcpoc-amount.is-pending {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+#receiptCardsPocRoot .rcpoc-meta-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+#receiptCardsPocRoot .rcpoc-meta-item {
+  overflow-wrap: anywhere;
+}
+
+#receiptCardsPocRoot .rcpoc-merchant {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+#receiptCardsPocRoot .rcpoc-merchant.is-pending {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+#receiptCardsPocRoot .rcpoc-payment-chip {
+  align-self: flex-start;
+  margin-top: 2px;
+  padding: 4px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+#receiptCardsPocRoot .rcpoc-payment-chip.is-pending {
+  color: rgba(255, 255, 255, 0.86);
+}
+
+#receiptCardsPocRoot .rcpoc-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  min-height: 44px;
+  padding: 9px 14px;
+  border-top: 1px solid var(--rcpoc-line);
+  background: #ffffff;
+}
+
+#receiptCardsPocRoot .rcpoc-doc-note {
+  color: var(--rcpoc-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+#receiptCardsPocRoot .rcpoc-retry-doc {
+  padding: 3px 0;
+  border: 0;
+  background: transparent;
+  color: var(--rcpoc-teal-dark);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#receiptCardsPocRoot .rcpoc-document-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: calc(100% - 28px);
+  height: calc(100% - 28px);
+  margin: 14px;
+  padding: 18px;
+  border: 2px dashed #b9cdd3;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.66);
+  text-align: center;
+}
+
+#receiptCardsPocRoot .rcpoc-document-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 58px;
+  min-height: 48px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: var(--rcpoc-navy);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+#receiptCardsPocRoot .rcpoc-document-title {
+  max-width: 100%;
+  color: var(--rcpoc-navy);
+  font-size: 13px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+#receiptCardsPocRoot .rcpoc-document-detail {
+  max-width: 260px;
+  color: var(--rcpoc-muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+#receiptCardsPocRoot .rcpoc-media-loading {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--rcpoc-navy-soft);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+#receiptCardsPocRoot .rcpoc-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 320px;
+  padding: 36px 22px;
+  border: 1px solid var(--rcpoc-line);
+  border-radius: var(--rcpoc-radius);
+  background: rgba(255, 255, 255, 0.82);
+  text-align: center;
+}
+
+#receiptCardsPocRoot .rcpoc-state-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 74px;
+  min-height: 58px;
+  padding: 8px 14px;
+  border-radius: 14px;
+  background: var(--rcpoc-teal-pale);
+  color: var(--rcpoc-teal-dark);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+#receiptCardsPocRoot .rcpoc-state-error .rcpoc-state-mark {
+  background: #fdeceb;
+  color: #8a2b25;
+}
+
+#receiptCardsPocRoot .rcpoc-state-title {
+  color: var(--rcpoc-navy);
+  font-size: 23px;
+  font-weight: 750;
+  line-height: 1.2;
+}
+
+#receiptCardsPocRoot .rcpoc-state-text {
+  max-width: 590px;
+  color: var(--rcpoc-muted);
+  font-size: 14px;
+}
+
+#receiptCardsPocRoot .rcpoc-error-detail {
+  max-width: 720px;
+  padding: 8px 12px;
+  border: 1px solid #efd2cf;
+  border-radius: 9px;
+  background: #fff7f6;
+  color: #7b3d38;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+#receiptCardsPocRoot .rcpoc-state-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+#receiptCardsPocRoot .rcpoc-skeleton-grid {
+  width: 100%;
+  margin-top: 18px;
+  text-align: left;
+}
+
+#receiptCardsPocRoot .rcpoc-skeleton-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 330px;
+  padding: 12px;
+  border: 1px solid var(--rcpoc-line);
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+#receiptCardsPocRoot .rcpoc-skeleton-image {
+  display: block;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 250px;
+  border-radius: 12px;
+  background: linear-gradient(100deg, #edf2f3 30%, #f7fafb 50%, #edf2f3 70%);
+  background-size: 240% 100%;
+  animation: rcpoc-shimmer 1.3s linear infinite;
+}
+
+#receiptCardsPocRoot .rcpoc-skeleton-line {
+  display: block;
+  width: 100%;
+  height: 12px;
+  border-radius: 999px;
+  background: #edf2f3;
+}
+
+#receiptCardsPocRoot .rcpoc-skeleton-line-short {
+  width: 46%;
+}
+
+#receiptCardsPocRoot .rcpoc-action-loadmore {
+  display: flex;
+  margin: 22px auto 0;
+}
+
+#receiptCardsPocRoot .rcpoc-doc-error-summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 18px auto 0;
+  padding: 10px 14px;
+  border: 1px solid #efd2cf;
+  border-radius: 10px;
+  background: #fff7f6;
+  color: #7b3d38;
+  font-size: 13px;
+}
+
+#receiptCardsPocRoot .rcpoc-footer-note {
+  margin-top: 24px;
+  color: #7d8d97;
+  font-size: 11px;
+  text-align: center;
+}
+
+/* ------------------------------------------------------------------------- */
+/* Preview dialog                                                            */
+/* ------------------------------------------------------------------------- */
+
+#receiptCardsPocRoot .rcpoc-dialog-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-backdrop {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+  overflow-y: auto;
+  background: rgba(7, 19, 30, 0.66);
+  backdrop-filter: blur(2px);
+}
+
+#receiptCardsPocRoot .rcpoc-dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(1120px, 100%);
+  max-height: min(90dvh, 920px);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 36px 90px rgba(0, 0, 0, 0.38);
+  outline: none;
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--rcpoc-line);
+  background: #fbfdfd;
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-title {
+  color: var(--rcpoc-navy);
+  font-size: 23px;
+  font-weight: 750;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-close {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--rcpoc-line-strong);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--rcpoc-navy);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1;
+  cursor: pointer;
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-close:hover,
+#receiptCardsPocRoot .rcpoc-dialog-close:focus {
+  border-color: #8fb9be;
+  background: #eef9f9;
+  color: var(--rcpoc-teal-dark);
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.85fr);
+  min-height: 0;
+  overflow: auto;
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 440px;
+  padding: 18px;
+  background: #eaf0f2;
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-image {
+  display: block;
+  max-width: 100%;
+  max-height: 66dvh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 12px 28px rgba(18, 43, 64, 0.16);
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-pdf {
+  width: 100%;
+  min-height: 560px;
+  height: 66dvh;
+  border: 0;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-loading {
+  padding: 16px 20px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--rcpoc-navy-soft);
+  font-weight: 700;
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 360px;
+  padding: 28px;
+  border: 2px dashed #b9cdd3;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.7);
+  text-align: center;
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-fallback-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  min-height: 54px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: var(--rcpoc-navy);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-fallback-title {
+  max-width: 100%;
+  color: var(--rcpoc-navy);
+  font-size: 15px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-fallback-text {
+  max-width: 420px;
+  color: var(--rcpoc-muted);
+  font-size: 13px;
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-fallback-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-details {
+  min-width: 0;
+  padding: 20px;
+  overflow-y: auto;
+  border-left: 1px solid var(--rcpoc-line);
+  background: #ffffff;
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-details-title {
+  margin-bottom: 12px;
+  color: var(--rcpoc-navy);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+#receiptCardsPocRoot .rcpoc-detail-list {
+  display: flex;
+  flex-direction: column;
+}
+
+#receiptCardsPocRoot .rcpoc-detail-row {
+  display: grid;
+  grid-template-columns: minmax(98px, 0.42fr) minmax(0, 1fr);
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid #edf2f4;
+}
+
+#receiptCardsPocRoot .rcpoc-detail-row:last-child {
+  border-bottom: 0;
+}
+
+#receiptCardsPocRoot .rcpoc-detail-term {
+  color: var(--rcpoc-muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+#receiptCardsPocRoot .rcpoc-detail-value {
+  min-width: 0;
+  color: var(--rcpoc-ink);
+  font-size: 14px;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+
+#receiptCardsPocRoot .rcpoc-detail-value.is-pending {
+  color: #7a6a48;
+  font-style: italic;
+  font-weight: 600;
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-note {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid #e7dcc1;
+  border-radius: 9px;
+  background: #fffaf0;
+  color: #6d5a2f;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+#receiptCardsPocRoot .rcpoc-dialog-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 13px 20px;
+  border-top: 1px solid var(--rcpoc-line);
+  background: #fbfdfd;
+}
+
+#receiptCardsPocRoot .rcpoc-original-link {
+  text-decoration: none;
+}
+
+#receiptCardsPocRoot .rcpoc-card-download {
+  min-height: 40px;
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+#receiptCardsPocRoot .rcpoc-btn:focus-visible,
+#receiptCardsPocRoot .rcpoc-dialog-close:focus-visible,
+#receiptCardsPocRoot .rcpoc-retry-doc:focus-visible {
+  outline: 3px solid rgba(15, 124, 134, 0.42);
+  outline-offset: 2px;
+}
+
+@keyframes rcpoc-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+#receiptCardsPocRoot {
+  @media (max-width: 1020px) {
+    & .rcpoc-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    & .rcpoc-dialog-body {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    & .rcpoc-dialog-details {
+      border-top: 1px solid var(--rcpoc-line);
+      border-left: 0;
+    }
+
+    & .rcpoc-dialog-media {
+      min-height: 340px;
+    }
+
+    & .rcpoc-dialog-pdf {
+      min-height: 420px;
+      height: 48dvh;
+    }
+  }
+
+  @media (max-width: 680px) {
+    & {
+      padding: 10px;
+      border-radius: 14px;
+    }
+
+    & .rcpoc-header {
+      margin-bottom: 12px;
+      padding: 2px 0 0;
+    }
+
+    & .rcpoc-title {
+      font-size: 24px;
+      line-height: 1.15;
+    }
+
+    & .rcpoc-subtitle {
+      margin-top: 6px;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    & .rcpoc-toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      align-items: end;
+      gap: 10px;
+      margin-top: 14px;
+      padding: 10px;
+    }
+
+    & .rcpoc-field,
+    & .rcpoc-field-label {
+      min-width: 0;
+    }
+
+    & .rcpoc-search-field {
+      grid-column: 1 / -1;
+      width: 100%;
+    }
+
+    & .rcpoc-filter-field {
+      grid-column: 1 / -1;
+      width: 100%;
+      min-width: 0;
+    }
+
+    & .rcpoc-toolbar-actions {
+      grid-column: 1 / -1;
+      width: 100%;
+      min-width: 0;
+      margin-left: 0;
+      flex-wrap: wrap;
+    }
+
+    & .rcpoc-toolbar .rcpoc-search-input,
+    & .rcpoc-toolbar .rcpoc-status-select,
+    & .rcpoc-toolbar .rcpoc-btn {
+      min-width: 0;
+      min-height: 44px;
+      font-size: 16px;
+    }
+
+    & .rcpoc-toolbar-actions .rcpoc-btn {
+      flex: 1 1 140px;
+      width: auto;
+      min-width: 0;
+      padding: 10px 14px;
+      white-space: normal;
+    }
+
+    & .rcpoc-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+    }
+
+    & .rcpoc-media {
+      height: clamp(280px, 55dvh, 420px);
+    }
+
+    & .rcpoc-field-label,
+    & .rcpoc-doc-note,
+    & .rcpoc-document-title,
+    & .rcpoc-document-detail,
+    & .rcpoc-merchant,
+    & .rcpoc-meta-item,
+    & .rcpoc-payment-chip,
+    & .rcpoc-dialog-note,
+    & .rcpoc-dialog-fallback-title,
+    & .rcpoc-dialog-fallback-text,
+    & .rcpoc-detail-term,
+    & .rcpoc-detail-value,
+    & .rcpoc-state-text,
+    & .rcpoc-error-detail {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    & .rcpoc-document-detail {
+      max-width: 100%;
+    }
+
+    & .rcpoc-dialog-backdrop {
+      align-items: flex-start;
+      padding:
+        calc(8px + env(safe-area-inset-top, 0px))
+        calc(8px + env(safe-area-inset-right, 0px))
+        calc(8px + env(safe-area-inset-bottom, 0px))
+        calc(8px + env(safe-area-inset-left, 0px));
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    & .rcpoc-dialog {
+      max-height: calc(
+        100dvh - 16px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)
+      );
+      border-radius: 14px;
+    }
+
+    & .rcpoc-dialog-header,
+    & .rcpoc-dialog-footer {
+      flex: 0 0 auto;
+    }
+
+    & .rcpoc-dialog-header {
+      padding: 12px 14px;
+    }
+
+    & .rcpoc-dialog-title {
+      font-size: 20px;
+    }
+
+    & .rcpoc-dialog-close {
+      flex: 0 0 44px;
+      width: 44px;
+      height: 44px;
+      font-size: 30px;
+    }
+
+    & .rcpoc-dialog-body {
+      display: block;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    & .rcpoc-dialog-media {
+      min-height: 0;
+      padding: 10px;
+    }
+
+    & .rcpoc-dialog-image {
+      min-height: 0;
+      max-height: 46dvh;
+    }
+
+    & .rcpoc-dialog-pdf {
+      min-height: 0;
+      height: clamp(240px, 46dvh, 420px);
+    }
+
+    & .rcpoc-dialog-details {
+      padding: 14px;
+      overflow: visible;
+      border-left: 0;
+    }
+
+    & .rcpoc-detail-row {
+      grid-template-columns: minmax(92px, 0.42fr) minmax(0, 1fr);
+    }
+
+    & .rcpoc-dialog-footer {
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 14px;
+    }
+
+    & .rcpoc-dialog-footer .rcpoc-btn {
+      flex: 1 1 auto;
+      min-width: 0;
+      min-height: 44px;
+      max-width: 100%;
+      font-size: 16px;
+      white-space: normal;
+    }
+  }
+
+  @media (max-width: 360px) {
+    & .rcpoc-toolbar {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    & .rcpoc-search-field,
+    & .rcpoc-filter-field,
+    & .rcpoc-toolbar-actions {
+      grid-column: 1 / -1;
+      width: 100%;
+    }
+
+    & .rcpoc-toolbar-actions .rcpoc-btn {
+      flex: 1 1 100%;
+      width: 100%;
+      min-width: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    & .rcpoc-card,
+    & .rcpoc-btn {
+      transition: none;
+    }
+
+    & .rcpoc-skeleton-image {
+      animation: none;
+    }
+  }
+}
+
+#content:has(#receiptCardsPocRoot) {
+  @media (max-width: 680px) {
+    & {
+      box-sizing: border-box;
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      margin: 0;
+      padding: 8px;
+    }
+  }
+}

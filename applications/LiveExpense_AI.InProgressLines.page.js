@@ -17,6 +17,13 @@ var IN_PROGRESS_LINE_STATUS_STATE_CLASSES = [
   'in-progress-line-status-failed'
 ];
 
+var IN_PROGRESS_LINE_STATUS_CREATED = 'LINE_CREATED';
+var IN_PROGRESS_LINE_STATUS_FAILED = 'LINE_FAILED';
+var IN_PROGRESS_LINE_ALL_SUCCESS_CLASS = 'in-progress-line-all-success';
+var IN_PROGRESS_LINE_FAILURES_ONLY_CLASS = 'in-progress-line-failures-only';
+var IN_PROGRESS_LINE_NOT_FAILED_CLASS = 'in-progress-line-not-failed';
+var IN_PROGRESS_LINE_FAILED_FILTER = '^LINE_FAILED$';
+
 // Automatic refresh of the in-progress report header and lines.
 // Set enabled to false to disable the automatic repeats; the initial data load
 // still runs once so the page keeps working normally without polling.
@@ -60,20 +67,55 @@ function inProgressLineAttachLoadingBanner() {
     }
 }
 
-function inProgressLineUpdateLoadingBanner(complete) {
+function inProgressLineUpdateLoadingBanner(complete, failedCount, totalCount) {
     var $loading = $('#Loading_container');
+    var failures = complete && Number(failedCount) > 0 ? Number(failedCount) : 0;
+    var total = Number(totalCount);
+    var failed = failures > 0;
+    var label = 'Adding receipt lines to EBS…';
+
+    total = isFinite(total) && total > 0 ? Math.floor(total) : 0;
+
+    if (complete) {
+        if (failed) {
+            if (total > 0) {
+                label = total === 1
+                    ? '1 of 1 receipt could not be added to EBS.'
+                    : failures + ' of ' + total + ' receipts could not be added to EBS.';
+            } else {
+                label = failures === 1
+                    ? '1 receipt could not be added to EBS.'
+                    : failures + ' receipts could not be added to EBS.';
+            }
+            label += failures === 1
+                ? ' Review the failed receipt below. You can add it manually when approving the report.'
+                : ' Review the failed receipts below. You can add them manually when approving the report.';
+        } else if (total > 0) {
+            label = total === 1
+                ? '1 receipt was added to EBS successfully.'
+                : 'All ' + total + ' receipts were added to EBS successfully.';
+        } else {
+            label = 'All receipt lines were added to EBS successfully.';
+        }
+    } else if (total > 0) {
+        label = total === 1
+            ? 'Adding 1 receipt to EBS…'
+            : 'Adding ' + total + ' receipts to EBS…';
+    }
+
     $('#EditReport')
         .prop('disabled', !complete)
         .attr('aria-disabled', String(!complete));
     $loading.toggleClass('in-progress-lines-complete', complete);
-    $loading.find('label > nobr').text(complete
-        ? 'Receipt lines added to EBS.'
-        : 'Adding receipt lines to EBS…');
+    $loading.toggleClass('in-progress-lines-failed', failed);
+    $loading.toggleClass('in-progress-lines-success', Boolean(complete) && !failed);
+    $loading.find('label > nobr').text(label);
 }
 
 function inProgressLineRefreshStart() {
     var run;
     inProgressLineRefreshStop();
+    inProgressLineResetCompletedView();
     inProgressLineRefreshWarningLogged = false;
     run = {
         reportNumber: inProgressLineRefreshCanonicalReportNumber(),
@@ -115,12 +157,31 @@ function inProgressLineRefreshCanonicalReportNumber() {
 }
 
 function inProgressLineRefreshIsPageCurrent() {
-    var page = String(Page.getCurrentPage()).toLowerCase();
-    if (page === 'inprogresslines.html') {
+    var currentPage = Page.getCurrentPage();
+    var page = String(currentPage === null || currentPage === undefined ? '' : currentPage)
+        .trim()
+        .toLowerCase();
+    var fragmentIndex = page.indexOf('#');
+    var queryIndex;
+
+    // Popup.openPage keeps the old URL and only changes the hash, so the real
+    // page is the fragment after '#', not the index.html before it.
+    if (fragmentIndex !== -1) {
+        page = page.substring(fragmentIndex + 1);
+    }
+
+    // A fragment or URL may still carry query parameters; keep only the page.
+    queryIndex = page.search(/[?&]/);
+    if (queryIndex !== -1) {
+        page = page.substring(0, queryIndex);
+    }
+
+    page = page.substring(page.lastIndexOf('/') + 1).replace(/\.html$/, '');
+    if (page === 'inprogresslines') {
         return true;
     }
     // Opening the side menu keeps the InProgressLines page behind it.
-    return page === 'leftpanel.html'
+    return page === 'leftpanel'
         && $('#mainPage').hasClass('ap-page-inprogresslines');
 }
 
@@ -170,13 +231,18 @@ function inProgressLineRefreshLoadLines(run) {
     Services.call(
         'ReceiptBatch_get_draft_report_lines',
         function (response, serviceName, tableRows) {
+            var completion;
             if (!inProgressLineRefreshIsActive(run)) {
                 return;
             }
-            inProgressLineUpdateLoadingBanner(Boolean(
-                tableRows && tableRows.length > 0
-                && inProgressLineRefreshHasTerminalStatuses()
-            ));
+            // Completion is decided from the full Storage statuses before the
+            // display filter changes which rows DataTables shows.
+            completion = inProgressLineRefreshCompletion(tableRows);
+            inProgressLineUpdateLoadingBanner(
+                completion.completed,
+                completion.failedCount,
+                completion.totalCount
+            );
             Fields.set(
                 'REPORT_CREATE_DATE',
                 formatReceiptDate(Storage.get('REPORT_CREATE_DATE'), 'DD-Mon-YYYY')
@@ -186,9 +252,14 @@ function inProgressLineRefreshLoadLines(run) {
             inProgressLineWaitForStatusTable(function (table) {
                 if (inProgressLineRefreshIsActive(run)) {
                     inProgressLineDecorateStatusColumn(table);
+                    inProgressLineApplyCompletedView(
+                        table,
+                        completion.completed,
+                        completion.failedCount
+                    );
                 }
             });
-            inProgressLineRefreshContinue(run, false, tableRows);
+            inProgressLineRefreshContinue(run, false, completion.completed);
         },
         function () {
             inProgressLineRefreshContinue(run, true);
@@ -197,7 +268,7 @@ function inProgressLineRefreshLoadLines(run) {
     );
 }
 
-function inProgressLineRefreshContinue(run, failed, tableRows) {
+function inProgressLineRefreshContinue(run, failed, completed) {
     if (run !== inProgressLineRefreshCurrentRun) {
         return;
     }
@@ -206,10 +277,7 @@ function inProgressLineRefreshContinue(run, failed, tableRows) {
         inProgressLineRefreshWarningLogged = true;
         console.warn('In-progress line refresh failed; retrying until the timeout is reached.');
     }
-    if (!failed
-        && tableRows
-        && tableRows.length > 0
-        && inProgressLineRefreshHasTerminalStatuses()) {
+    if (!failed && completed) {
         return;
     }
     if (!inProgressLineRefreshIsActive(run)
@@ -227,6 +295,22 @@ function inProgressLineRefreshContinue(run, failed, tableRows) {
     }, IN_PROGRESS_LINE_REFRESH.intervalMs);
 }
 
+function inProgressLineRefreshCompletion(tableRows) {
+    // The total is the full, unfiltered status list, never the rendered rows.
+    var statuses = Storage.getArray('RECEIPTBATCH_STATUS') || [];
+    var completed = Boolean(
+        tableRows
+        && tableRows.length > 0
+        && inProgressLineRefreshHasTerminalStatuses()
+    );
+
+    return {
+        completed: completed,
+        failedCount: completed ? inProgressLineRefreshFailedStatusCount() : 0,
+        totalCount: statuses.length
+    };
+}
+
 function inProgressLineRefreshHasTerminalStatuses() {
     var statuses = Storage.getArray('RECEIPTBATCH_STATUS') || [];
     if (statuses.length === 0) {
@@ -234,14 +318,19 @@ function inProgressLineRefreshHasTerminalStatuses() {
     }
     return statuses.every(function (status) {
         var normalized = inProgressLineNormalizeStatus(status);
-        return normalized === 'LINE_CREATED' || normalized === 'LINE_FAILED';
+        return normalized === IN_PROGRESS_LINE_STATUS_CREATED
+            || normalized === IN_PROGRESS_LINE_STATUS_FAILED;
     });
 }
 
-function inProgressLineWaitForStatusTable(callback, attemptsLeft) {
-    var maxAttempts = attemptsLeft === undefined
-        ? IN_PROGRESS_LINE_STATUS_MAX_ATTEMPTS
-        : attemptsLeft;
+function inProgressLineRefreshFailedStatusCount() {
+    var statuses = Storage.getArray('RECEIPTBATCH_STATUS') || [];
+    return statuses.filter(function (status) {
+        return inProgressLineNormalizeStatus(status) === IN_PROGRESS_LINE_STATUS_FAILED;
+    }).length;
+}
+
+function inProgressLineStatusTableIfReady() {
     var tableElement = $('#tableOutput');
 
     if (
@@ -249,7 +338,20 @@ function inProgressLineWaitForStatusTable(callback, attemptsLeft) {
         $.fn.DataTable &&
         $.fn.DataTable.isDataTable('#tableOutput')
     ) {
-        callback(tableElement.DataTable());
+        return tableElement.DataTable();
+    }
+
+    return null;
+}
+
+function inProgressLineWaitForStatusTable(callback, attemptsLeft) {
+    var maxAttempts = attemptsLeft === undefined
+        ? IN_PROGRESS_LINE_STATUS_MAX_ATTEMPTS
+        : attemptsLeft;
+    var table = inProgressLineStatusTableIfReady();
+
+    if (table !== null) {
+        callback(table);
         return;
     }
 
@@ -261,6 +363,78 @@ function inProgressLineWaitForStatusTable(callback, attemptsLeft) {
     setTimeout(function () {
         inProgressLineWaitForStatusTable(callback, maxAttempts - 1);
     }, IN_PROGRESS_LINE_STATUS_RETRY_MS);
+}
+
+// Completed report display. Completion is detected from the full Storage
+// statuses; the DataTables filter only changes which rows are shown, never the
+// underlying rows or Storage.
+function inProgressLineApplyCompletedView(table, completed, failedCount) {
+    var $container = $('#tableOutput').closest('.in-progress-line-table-container');
+    var allSucceeded = Boolean(completed && !(failedCount > 0));
+    var failuresOnly = Boolean(completed && failedCount > 0);
+    var filter = Boolean(completed && failedCount > 0)
+        ? IN_PROGRESS_LINE_FAILED_FILTER
+        : '';
+    var columnIndex = inProgressLineStatusColumnIndex(table);
+    var column;
+    var currentFilter;
+
+    $container.toggleClass(IN_PROGRESS_LINE_ALL_SUCCESS_CLASS, allSucceeded);
+    $container.toggleClass(IN_PROGRESS_LINE_FAILURES_ONLY_CLASS, failuresOnly);
+
+    if (columnIndex === null) {
+        return;
+    }
+
+    column = table.column(columnIndex);
+    currentFilter = column.search();
+
+    if (currentFilter === undefined || currentFilter === null) {
+        currentFilter = '';
+    }
+
+    if (String(currentFilter) === filter) {
+        return;
+    }
+
+    column.search(filter, filter !== '', false);
+    // One redraw after decoration only. The draw handler never applies the
+    // filter, so normal draws and sorts cannot start a draw recursion.
+    table.draw(false);
+}
+
+function inProgressLineResetCompletedView(table) {
+    var $container = $('#tableOutput').closest('.in-progress-line-table-container');
+    var columnIndex;
+    var column;
+    var currentFilter;
+
+    $container.removeClass(IN_PROGRESS_LINE_ALL_SUCCESS_CLASS);
+    $container.removeClass(IN_PROGRESS_LINE_FAILURES_ONLY_CLASS);
+
+    table = table || inProgressLineStatusTableIfReady();
+
+    if (!table) {
+        return;
+    }
+
+    columnIndex = inProgressLineStatusColumnIndex(table);
+
+    if (columnIndex === null) {
+        return;
+    }
+
+    column = table.column(columnIndex);
+    currentFilter = column.search();
+
+    if (currentFilter === undefined
+        || currentFilter === null
+        || String(currentFilter) === '') {
+        return;
+    }
+
+    column.search('', false, false);
+    table.draw(false);
 }
 
 function inProgressLineDecorateStatusColumn(table) {
@@ -318,6 +492,12 @@ function inProgressLineDecorateStatusCell(table, cell) {
     var $cell = $(cell);
     var rawStatus = table.cell(cell).data();
     var status = inProgressLineNormalizeStatus(rawStatus);
+
+    $cell.closest('tr').toggleClass(
+        IN_PROGRESS_LINE_NOT_FAILED_CLASS,
+        status !== IN_PROGRESS_LINE_STATUS_FAILED
+    );
+
     var definition = inProgressLineStatusDefinition(status);
 
     inProgressLineClearStatusDecoration($cell);
@@ -354,14 +534,14 @@ function inProgressLineStatusDefinition(status) {
         };
     }
 
-    if (status === 'LINE_CREATED') {
+    if (status === IN_PROGRESS_LINE_STATUS_CREATED) {
         return {
             stateClass: 'in-progress-line-status-created',
             label: 'Created'
         };
     }
 
-    if (status === 'LINE_FAILED') {
+    if (status === IN_PROGRESS_LINE_STATUS_FAILED) {
         return {
             stateClass: 'in-progress-line-status-failed',
             label: 'Failed'

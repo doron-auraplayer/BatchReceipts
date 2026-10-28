@@ -53,9 +53,14 @@ var locationFieldState = {
   generation: 0,
   pending: false,
   pendingFingerprint: '',
-  pendingOpen: false
+  pendingOpen: false,
+  pendingBackground: false
 };
 var locationDateElement = null;
+// True once the receipt core has actually been painted. Context-only
+// applyLocationMode calls made by tests/handlers before a full render must not
+// start a lookup, while later type/receipt context changes may revalidate.
+var locationCoreRendered = false;
 
 // ---------- native employee attendee control ----------
 // Metadata is the only source of the employee attendee editor. Only the
@@ -541,6 +546,51 @@ function locationRowsFromResponse(rawResponse) {
   return rows;
 }
 
+function locationRequestIsFullList(request) {
+  return isObject(request) && isObject(request.params)
+    && textOf(request.params.LocationName) === '%';
+}
+
+function locationRowsContainName(rows, name) {
+  var wanted = textOf(name);
+  for (var i = 0; i < rows.length; i += 1) {
+    if (textOf(rows[i].LOCATION_NAME) === wanted) { return true; }
+  }
+  return false;
+}
+
+// A successful authoritative lookup is the only proof that a previously
+// analyzed/selected name is still allowed. Clearing uses the same field
+// helpers as a native blank edit so Storage/value tracking/required state stay
+// consistent; P_LOCATION itself is not written here (Save decides DRAFT).
+function clearCurrentLocationValue() {
+  receiptCore.expenseLocation = '';
+  setReceiptField(locationFieldName, '', false, true);
+  Storage.remove(locationFieldName + 'Exist');
+  updateRequiredMissingState(locationFieldName);
+}
+
+function validateCurrentLocationAgainstRows(rows) {
+  if (locationFieldState.mode !== 'lov') { return; }
+  var current = textOf(receiptCore.expenseLocation);
+  if (isBlank(current)) { return; }
+  if (locationRowsContainName(rows, current)) { return; }
+  clearCurrentLocationValue();
+}
+
+// Background validation for an already populated value. It is intentionally
+// quiet (no dropdown, no failure toast), skips blank values and empty/partial
+// requests, and reuses the pending/loaded fingerprint guards below so core
+// render, type change and date change cannot start duplicate lookups.
+function autoValidateCurrentLocation() {
+  if (locationFieldState.mode !== 'lov') { return; }
+  if (locationBusy()) { return; }
+  if (isBlank(receiptCore.expenseLocation)) { return; }
+  var request = currentLocationRequest();
+  if (request === null || !locationRequestIsFullList(request)) { return; }
+  requestLocationSuggestions(request, false, false, true);
+}
+
 function neutralizeLocationGeneratedHandlers() {
   var input = locationElement();
   if (!input || typeof $ === 'undefined') { return; }
@@ -695,6 +745,7 @@ function handleLocationTextChanged() {
 function handleLocationDateChanged() {
   invalidateLocationSource();
   locationFieldState.fingerprint = locationFingerprintFor(currentLocationControl());
+  autoValidateCurrentLocation();
 }
 
 function bindLocationInputSync(input) {
@@ -758,6 +809,7 @@ function invalidateLocationSource() {
   locationFieldState.pending = false;
   locationFieldState.pendingFingerprint = '';
   locationFieldState.pendingOpen = false;
+  locationFieldState.pendingBackground = false;
   locationFieldState.source = [];
   locationFieldState.sourceFingerprint = '';
   locationFieldState.sourceGeneration = 0;
@@ -768,6 +820,7 @@ function invalidateLocationSource() {
 
 function resetLocationControl() {
   invalidateLocationSource();
+  locationCoreRendered = false;
   locationFieldState.mode = 'text';
   locationFieldState.context = null;
   locationFieldState.service = '';
@@ -800,6 +853,7 @@ function applyLocationMode() {
 
   if (control.mode === 'lov') {
     setLocationLovModeAppearance(locationControlConfigured(control));
+    if (locationCoreRendered) { autoValidateCurrentLocation(); }
     return;
   }
   setLocationTextModeAppearance();
@@ -837,16 +891,19 @@ function openLocationSuggestions(force) {
   requestLocationSuggestions(request, true, force === true);
 }
 
-function requestLocationSuggestions(request, openOnSuccess, force) {
+function requestLocationSuggestions(request, openOnSuccess, force, background) {
   if (locationBusy()) { return; }
   if (locationFieldState.mode !== 'lov') { return; }
   var fingerprint = request.fingerprint;
   if (force !== true && locationFieldState.loadedFingerprint === fingerprint) {
-    if (locationFieldState.source.length) { showNativeLocationSuggestions(); }
+    if (background !== true && locationFieldState.source.length) {
+      showNativeLocationSuggestions();
+    }
     return;
   }
   if (locationFieldState.pending && locationFieldState.pendingFingerprint === fingerprint) {
     if (openOnSuccess === true) { locationFieldState.pendingOpen = true; }
+    if (background !== true) { locationFieldState.pendingBackground = false; }
     return;
   }
 
@@ -855,6 +912,7 @@ function requestLocationSuggestions(request, openOnSuccess, force) {
   locationFieldState.pending = true;
   locationFieldState.pendingFingerprint = fingerprint;
   locationFieldState.pendingOpen = openOnSuccess === true;
+  locationFieldState.pendingBackground = background === true;
   locationFieldState.source = [];
   locationFieldState.sourceFingerprint = '';
   locationFieldState.sourceGeneration = 0;
@@ -871,15 +929,17 @@ function requestLocationSuggestions(request, openOnSuccess, force) {
 
   function failLookup(message) {
     if (!requestIsCurrent()) { return; }
+    var quiet = locationFieldState.pendingBackground === true;
     locationFieldState.pending = false;
     locationFieldState.pendingFingerprint = '';
     locationFieldState.pendingOpen = false;
+    locationFieldState.pendingBackground = false;
     locationFieldState.source = [];
     locationFieldState.sourceFingerprint = '';
     locationFieldState.sourceGeneration = 0;
     locationFieldState.loadedFingerprint = '';
     clearNativeLocationSuggestions();
-    showLocationLookupMessage(message);
+    if (!quiet) { showLocationLookupMessage(message); }
   }
 
   try {
@@ -892,17 +952,26 @@ function requestLocationSuggestions(request, openOnSuccess, force) {
         failLookup('The expense location lookup returned an invalid response. Try again.');
         return;
       }
+      var quiet = locationFieldState.pendingBackground === true;
       locationFieldState.pending = false;
       locationFieldState.pendingFingerprint = '';
+      locationFieldState.pendingBackground = false;
       locationFieldState.source = rows;
       locationFieldState.sourceFingerprint = fingerprint;
       locationFieldState.sourceGeneration = generation;
       locationFieldState.loadedFingerprint = fingerprint;
+      // Only the full-list request may invalidate an existing value. Empty
+      // rows are still a successful authoritative answer: the name is gone.
+      if (locationRequestIsFullList(request)) {
+        validateCurrentLocationAgainstRows(rows);
+      }
       var shouldOpen = locationFieldState.pendingOpen === true;
       locationFieldState.pendingOpen = false;
       if (!rows.length) {
         clearNativeLocationSuggestions();
-        showLocationLookupMessage('No allowed expense locations were found for this expense type and date.');
+        if (!quiet || shouldOpen) {
+          showLocationLookupMessage('No allowed expense locations were found for this expense type and date.');
+        }
         return;
       }
       if (shouldOpen) { showNativeLocationSuggestions(); }
@@ -2673,7 +2742,10 @@ function readReceiptCore() {
     receiptAmount: Storage.get('P_TOTAL_AMOUNT'),
     startDate: Storage.get('P_RECEIPT_DATE'),
     merchantName: Storage.get('P_MERCHANT'),
-    expenseLocation: textOf(Storage.get('P_LOCATION')).trim() || 'All Other Locations',
+    // Keep the analyzed value raw here. The metadata-driven renderer applies
+    // the legacy "All Other Locations" default only for text-mode types, so a
+    // blank analyzed location can never masquerade as a real LOV match.
+    expenseLocation: textOf(Storage.get('P_LOCATION')).trim(),
     department: Storage.get('P_DEPARTMENT'),
     creditTransaction: Storage.get('P_CREDIT_TRANSACTION')
   };
@@ -2695,6 +2767,9 @@ function formatReceiptStartDate(value) {
 }
 
 function renderReceiptCore() {
+  if (currentLocationControl().mode === 'text' && isBlank(receiptCore.expenseLocation)) {
+    receiptCore.expenseLocation = 'All Other Locations';
+  }
   Storage.set('expenseType', textOf(receiptCore.expenseType));
   setReceiptField('StartDate', formatReceiptStartDate(receiptCore.startDate), true, true);
   setReceiptField('DetailReceiptAmount', receiptCore.receiptAmount, false, true);
@@ -2707,6 +2782,8 @@ function renderReceiptCore() {
   Fields.enable('DetailMerchantName');
   Fields.enable('LocationName');
   applyLocationMode();
+  locationCoreRendered = true;
+  autoValidateCurrentLocation();
 }
 
 function clearReceiptCoreFields() {
@@ -2902,6 +2979,7 @@ function handleTemplateResponse(requestedType, previousExtras) {
   receiptCore.expenseType = requestedType;
   renderReceiptLine();
   setExpenseTypeBusy(false);
+  autoValidateCurrentLocation();
   updateSaveAction();
 }
 
@@ -3077,6 +3155,7 @@ function renderReceiptLine() {
 
   refreshRequiredControls();
   renderRequiredMarkers();
+  autoValidateCurrentLocation();
 }
 
 function refreshRequiredControls() {
