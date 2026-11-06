@@ -1,0 +1,166 @@
+{
+  "name": "ReceiptBatch_findCreditExpenseLine",
+  "description": "Finds one unique Credit Card Expenses line across all table pages and returns its numeric Details index; never opens the line.",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "TRANSACTION_DATE",
+        "serviceName": "ReceiptBatch_findCreditExpenseLine"
+      },
+      "paramLabel": "TRANSACTION_DATE",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "TRANSACTION_AMOUNT",
+        "serviceName": "ReceiptBatch_findCreditExpenseLine"
+      },
+      "paramLabel": "TRANSACTION_AMOUNT",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "MERCHANT_NAME",
+        "serviceName": "ReceiptBatch_findCreditExpenseLine"
+      },
+      "paramLabel": "MERCHANT_NAME",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "MAX_PAGES",
+        "serviceName": "ReceiptBatch_findCreditExpenseLine"
+      },
+      "paramLabel": "MAX_PAGES",
+      "paramValue": "100",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CREDIT_LINE_INDEX",
+        "serviceName": "ReceiptBatch_findCreditExpenseLine"
+      },
+      "paramLabel": "CREDIT_LINE_INDEX",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "MATCH_COUNT",
+        "serviceName": "ReceiptBatch_findCreditExpenseLine"
+      },
+      "paramLabel": "MATCH_COUNT",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CURRENT_PAGE_TITLE",
+        "serviceName": "ReceiptBatch_findCreditExpenseLine"
+      },
+      "paramLabel": "CURRENT_PAGE_TITLE",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_findCreditExpenseLine"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_findCreditExpenseLine"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_findCreditExpenseLine"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "ReceiptBatch_findCreditExpenseLine.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": []
+}

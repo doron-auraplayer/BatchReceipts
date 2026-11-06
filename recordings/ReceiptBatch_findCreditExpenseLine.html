@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://ebs12214.sub07141424590.apvcn.oraclevcn.com:8000/" />
+<title>ReceiptBatch_findCreditExpenseLine</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">ReceiptBatch_findCreditExpenseLine</td></tr>
+</thead><tbody>
+<tr>
+  <td>input</td>
+  <td></td>
+  <td>TRANSACTION_DATE</td>
+  <td></td>
+</tr><tr>
+  <td>input</td>
+  <td></td>
+  <td>TRANSACTION_AMOUNT</td>
+  <td></td>
+</tr><tr>
+  <td>input</td>
+  <td></td>
+  <td>MERCHANT_NAME</td>
+  <td></td>
+</tr><tr>
+  <td>input</td>
+  <td>100</td>
+  <td>MAX_PAGES</td>
+  <td></td>
+</tr><tr>
+  <td>//Existing iExpense Credit Card Expenses session only. This partial does not get, log in, open a page, click Details, advance the wizard, save, or return.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>assertTitle</td>
+  <td>*Expense Report: Credit Card Expenses*</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>//Fixed ES5 helper: four ordinary offscreen text inputs plus nonhidden status spans. No raw input is interpolated into code.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>runScript</td>
+  <td>javascript{(function(){var o=document.getElementById('AP_FC_HELPER');if(o&amp;&amp;o.parentNode){o.parentNode.removeChild(o);}var d=document.createElement('div');d.id='AP_FC_HELPER';d.style.position='absolute';d.style.left='-10000px';d.style.top='0';d.style.width='440px';var ns=['TRANSACTION_DATE','TRANSACTION_AMOUNT','MERCHANT_NAME','MAX_PAGES'];var i;for(i=0;i&lt;ns.length;i+=1){var p=document.createElement('input');p.type='text';p.id='AP_FC_INPUT_'+ns[i];p.name='AP_FC_INPUT_'+ns[i];d.appendChild(p);}var ss=['MAX_VALID','MAX_NORM','PAGE_MATCH_COUNT','LINE_INDEX','LINK_COUNT'];for(i=0;i&lt;ss.length;i+=1){var s=document.createElement('span');s.id='AP_FC_'+ss[i];s.appendChild(document.createTextNode(''));d.appendChild(s);}document.body.appendChild(d);return 'ok';})()}</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_TRANSACTION_DATE</td>
+  <td>${TRANSACTION_DATE}</td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_TRANSACTION_AMOUNT</td>
+  <td>${TRANSACTION_AMOUNT}</td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_MERCHANT_NAME</td>
+  <td>${MERCHANT_NAME}</td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_MAX_PAGES</td>
+  <td>${MAX_PAGES}</td>
+  <td></td>
+</tr><tr>
+  <td>//Fixed helper validates MAX_PAGES and counts exact date, amount-including-currency, and merchant matches on this table page.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>runScript</td>
+  <td>javascript{(function(){var n=function(v){return String(v===null||v===undefined?'':v).replace(/^[\s\u00a0]+|[\s\u00a0]+$/g,'').replace(/[\s\u00a0]+/g,' ');};var v=function(id){var e=document.getElementById(id);return e&amp;&amp;e.value!==undefined?String(e.value):'';};var w=function(id,t){var e=document.getElementById(id);if(e){e.textContent=t;e.innerText=t;}};var dt=n(v('AP_FC_INPUT_TRANSACTION_DATE'));var amt=n(v('AP_FC_INPUT_TRANSACTION_AMOUNT'));var mer=n(v('AP_FC_INPUT_MERCHANT_NAME'));var mx=String(v('AP_FC_INPUT_MAX_PAGES')).replace(/^[\s\u00a0]+|[\s\u00a0]+$/g,'');var ok=/^[1-9][0-9]*$/.test(mx)&amp;&amp;parseInt(mx,10)&lt;=1000;w('AP_FC_MAX_VALID',ok?'true':'false');w('AP_FC_MAX_NORM',ok?String(parseInt(mx,10)):'0');var f=function(row,prefix){var tags=['input','span','select','textarea'];var i,j,els,e,id,tag,val;for(i=0;i&lt;tags.length;i+=1){els=row.getElementsByTagName(tags[i]);for(j=0;j&lt;els.length;j+=1){e=els[j];id=String(e.id||'');if(new RegExp('^'+prefix+':[0-9]+$').test(id)){tag=String(e.tagName||'').toLowerCase();if(tag==='input'||tag==='select'||tag==='textarea'){val=n(e.value);}else{val=n(e.textContent);}if(val!==''){return val;}}}}return '';};var table=document.getElementById('List:Content');var rows=[];if(table){if(table.rows&amp;&amp;table.rows.length!==undefined){rows=table.rows;}else if(table.getElementsByTagName){var tb=table.getElementsByTagName('tbody');var par=tb.length?tb[0]:table;var ch=par.childNodes||[];var z;for(z=0;z&lt;ch.length;z+=1){if(ch[z].tagName&amp;&amp;String(ch[z].tagName).toLowerCase()==='tr'){rows.push(ch[z]);}}}}var count=0;var i;for(i=0;i&lt;rows.length;i+=1){if(f(rows[i],'N3:Date')===dt&amp;&amp;f(rows[i],'N3:ReceiptAmount')===amt&amp;&amp;f(rows[i],'N3:Merchant')===mer){count+=1;}}w('AP_FC_PAGE_MATCH_COUNT',String(count));})()}</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeText</td>
+  <td>id=AP_FC_MAX_VALID</td>
+  <td>MAX_PAGES_VALID</td>
+  <td></td>
+</tr><tr>
+  <td>storeText</td>
+  <td>id=AP_FC_MAX_NORM</td>
+  <td>MAX_PAGES_NORM</td>
+  <td></td>
+</tr><tr>
+  <td>storeText</td>
+  <td>id=AP_FC_PAGE_MATCH_COUNT</td>
+  <td>PAGE_MATCH_COUNT</td>
+  <td></td>
+</tr><tr>
+  <td>//MAX_PAGES is validated before any pagination navigation.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>if</td>
+  <td>MAX_PAGES_VALID != "true"</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>throw</td>
+  <td>MAX_PAGES must be a positive integer between 1 and 1000 before any navigation.</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>endIf</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>//Bounded rewind to the first Credit Card Expenses table page using only the scoped List Previous anchor.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeExpression</td>
+  <td>javascript{0}</td>
+  <td>REWIND_STEPS</td>
+  <td></td>
+</tr><tr>
+  <td>storeElementPresent</td>
+  <td>xpath=(//span[@id='List']//a[starts-with(normalize-space(.),'Previous ')])[1]</td>
+  <td>PREVIOUS_PRESENT</td>
+  <td></td>
+</tr><tr>
+  <td>while</td>
+  <td>String(PREVIOUS_PRESENT) == "true" &amp;&amp; parseInt(REWIND_STEPS,10) &lt; parseInt(MAX_PAGES_NORM,10)</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>clickAndWait</td>
+  <td>xpath=(//span[@id='List']//a[starts-with(normalize-space(.),'Previous ')])[1]</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeExpression</td>
+  <td>javascript{parseInt(${REWIND_STEPS},10)+1}</td>
+  <td>REWIND_STEPS</td>
+  <td></td>
+</tr><tr>
+  <td>storeElementPresent</td>
+  <td>xpath=(//span[@id='List']//a[starts-with(normalize-space(.),'Previous ')])[1]</td>
+  <td>PREVIOUS_PRESENT</td>
+  <td></td>
+</tr><tr>
+  <td>endWhile</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>if</td>
+  <td>String(PREVIOUS_PRESENT) == "true"</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>throw</td>
+  <td>MAX_PAGES was reached before the first Credit Card Expenses table page.</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>endIf</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>//Scan every table page and accumulate the exact DOM match count; fail on the page cap before checking uniqueness.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeExpression</td>
+  <td>javascript{0}</td>
+  <td>MATCH_COUNT</td>
+  <td></td>
+</tr><tr>
+  <td>runScript</td>
+  <td>javascript{(function(){var o=document.getElementById('AP_FC_HELPER');if(o&amp;&amp;o.parentNode){o.parentNode.removeChild(o);}var d=document.createElement('div');d.id='AP_FC_HELPER';d.style.position='absolute';d.style.left='-10000px';d.style.top='0';d.style.width='440px';var ns=['TRANSACTION_DATE','TRANSACTION_AMOUNT','MERCHANT_NAME','MAX_PAGES'];var i;for(i=0;i&lt;ns.length;i+=1){var p=document.createElement('input');p.type='text';p.id='AP_FC_INPUT_'+ns[i];p.name='AP_FC_INPUT_'+ns[i];d.appendChild(p);}var ss=['MAX_VALID','MAX_NORM','PAGE_MATCH_COUNT','LINE_INDEX','LINK_COUNT'];for(i=0;i&lt;ss.length;i+=1){var s=document.createElement('span');s.id='AP_FC_'+ss[i];s.appendChild(document.createTextNode(''));d.appendChild(s);}document.body.appendChild(d);return 'ok';})()}</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_TRANSACTION_DATE</td>
+  <td>${TRANSACTION_DATE}</td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_TRANSACTION_AMOUNT</td>
+  <td>${TRANSACTION_AMOUNT}</td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_MERCHANT_NAME</td>
+  <td>${MERCHANT_NAME}</td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_MAX_PAGES</td>
+  <td>${MAX_PAGES}</td>
+  <td></td>
+</tr><tr>
+  <td>runScript</td>
+  <td>javascript{(function(){var n=function(v){return String(v===null||v===undefined?'':v).replace(/^[\s\u00a0]+|[\s\u00a0]+$/g,'').replace(/[\s\u00a0]+/g,' ');};var v=function(id){var e=document.getElementById(id);return e&amp;&amp;e.value!==undefined?String(e.value):'';};var w=function(id,t){var e=document.getElementById(id);if(e){e.textContent=t;e.innerText=t;}};var dt=n(v('AP_FC_INPUT_TRANSACTION_DATE'));var amt=n(v('AP_FC_INPUT_TRANSACTION_AMOUNT'));var mer=n(v('AP_FC_INPUT_MERCHANT_NAME'));var mx=String(v('AP_FC_INPUT_MAX_PAGES')).replace(/^[\s\u00a0]+|[\s\u00a0]+$/g,'');var ok=/^[1-9][0-9]*$/.test(mx)&amp;&amp;parseInt(mx,10)&lt;=1000;w('AP_FC_MAX_VALID',ok?'true':'false');w('AP_FC_MAX_NORM',ok?String(parseInt(mx,10)):'0');var f=function(row,prefix){var tags=['input','span','select','textarea'];var i,j,els,e,id,tag,val;for(i=0;i&lt;tags.length;i+=1){els=row.getElementsByTagName(tags[i]);for(j=0;j&lt;els.length;j+=1){e=els[j];id=String(e.id||'');if(new RegExp('^'+prefix+':[0-9]+$').test(id)){tag=String(e.tagName||'').toLowerCase();if(tag==='input'||tag==='select'||tag==='textarea'){val=n(e.value);}else{val=n(e.textContent);}if(val!==''){return val;}}}}return '';};var table=document.getElementById('List:Content');var rows=[];if(table){if(table.rows&amp;&amp;table.rows.length!==undefined){rows=table.rows;}else if(table.getElementsByTagName){var tb=table.getElementsByTagName('tbody');var par=tb.length?tb[0]:table;var ch=par.childNodes||[];var z;for(z=0;z&lt;ch.length;z+=1){if(ch[z].tagName&amp;&amp;String(ch[z].tagName).toLowerCase()==='tr'){rows.push(ch[z]);}}}}var count=0;var i;for(i=0;i&lt;rows.length;i+=1){if(f(rows[i],'N3:Date')===dt&amp;&amp;f(rows[i],'N3:ReceiptAmount')===amt&amp;&amp;f(rows[i],'N3:Merchant')===mer){count+=1;}}w('AP_FC_PAGE_MATCH_COUNT',String(count));})()}</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeText</td>
+  <td>id=AP_FC_PAGE_MATCH_COUNT</td>
+  <td>PAGE_MATCH_COUNT</td>
+  <td></td>
+</tr><tr>
+  <td>storeExpression</td>
+  <td>javascript{parseInt(${MATCH_COUNT},10)+parseInt(${PAGE_MATCH_COUNT},10)}</td>
+  <td>MATCH_COUNT</td>
+  <td></td>
+</tr><tr>
+  <td>storeExpression</td>
+  <td>javascript{1}</td>
+  <td>PAGES_SCANNED</td>
+  <td></td>
+</tr><tr>
+  <td>storeElementPresent</td>
+  <td>xpath=(//span[@id='List']//a[starts-with(normalize-space(.),'Next ')])[1]</td>
+  <td>NEXT_PRESENT</td>
+  <td></td>
+</tr><tr>
+  <td>while</td>
+  <td>String(NEXT_PRESENT) == "true" &amp;&amp; parseInt(PAGES_SCANNED,10) &lt; parseInt(MAX_PAGES_NORM,10)</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>clickAndWait</td>
+  <td>xpath=(//span[@id='List']//a[starts-with(normalize-space(.),'Next ')])[1]</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeExpression</td>
+  <td>javascript{parseInt(${PAGES_SCANNED},10)+1}</td>
+  <td>PAGES_SCANNED</td>
+  <td></td>
+</tr><tr>
+  <td>runScript</td>
+  <td>javascript{(function(){var o=document.getElementById('AP_FC_HELPER');if(o&amp;&amp;o.parentNode){o.parentNode.removeChild(o);}var d=document.createElement('div');d.id='AP_FC_HELPER';d.style.position='absolute';d.style.left='-10000px';d.style.top='0';d.style.width='440px';var ns=['TRANSACTION_DATE','TRANSACTION_AMOUNT','MERCHANT_NAME','MAX_PAGES'];var i;for(i=0;i&lt;ns.length;i+=1){var p=document.createElement('input');p.type='text';p.id='AP_FC_INPUT_'+ns[i];p.name='AP_FC_INPUT_'+ns[i];d.appendChild(p);}var ss=['MAX_VALID','MAX_NORM','PAGE_MATCH_COUNT','LINE_INDEX','LINK_COUNT'];for(i=0;i&lt;ss.length;i+=1){var s=document.createElement('span');s.id='AP_FC_'+ss[i];s.appendChild(document.createTextNode(''));d.appendChild(s);}document.body.appendChild(d);return 'ok';})()}</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_TRANSACTION_DATE</td>
+  <td>${TRANSACTION_DATE}</td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_TRANSACTION_AMOUNT</td>
+  <td>${TRANSACTION_AMOUNT}</td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_MERCHANT_NAME</td>
+  <td>${MERCHANT_NAME}</td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_MAX_PAGES</td>
+  <td>${MAX_PAGES}</td>
+  <td></td>
+</tr><tr>
+  <td>runScript</td>
+  <td>javascript{(function(){var n=function(v){return String(v===null||v===undefined?'':v).replace(/^[\s\u00a0]+|[\s\u00a0]+$/g,'').replace(/[\s\u00a0]+/g,' ');};var v=function(id){var e=document.getElementById(id);return e&amp;&amp;e.value!==undefined?String(e.value):'';};var w=function(id,t){var e=document.getElementById(id);if(e){e.textContent=t;e.innerText=t;}};var dt=n(v('AP_FC_INPUT_TRANSACTION_DATE'));var amt=n(v('AP_FC_INPUT_TRANSACTION_AMOUNT'));var mer=n(v('AP_FC_INPUT_MERCHANT_NAME'));var mx=String(v('AP_FC_INPUT_MAX_PAGES')).replace(/^[\s\u00a0]+|[\s\u00a0]+$/g,'');var ok=/^[1-9][0-9]*$/.test(mx)&amp;&amp;parseInt(mx,10)&lt;=1000;w('AP_FC_MAX_VALID',ok?'true':'false');w('AP_FC_MAX_NORM',ok?String(parseInt(mx,10)):'0');var f=function(row,prefix){var tags=['input','span','select','textarea'];var i,j,els,e,id,tag,val;for(i=0;i&lt;tags.length;i+=1){els=row.getElementsByTagName(tags[i]);for(j=0;j&lt;els.length;j+=1){e=els[j];id=String(e.id||'');if(new RegExp('^'+prefix+':[0-9]+$').test(id)){tag=String(e.tagName||'').toLowerCase();if(tag==='input'||tag==='select'||tag==='textarea'){val=n(e.value);}else{val=n(e.textContent);}if(val!==''){return val;}}}}return '';};var table=document.getElementById('List:Content');var rows=[];if(table){if(table.rows&amp;&amp;table.rows.length!==undefined){rows=table.rows;}else if(table.getElementsByTagName){var tb=table.getElementsByTagName('tbody');var par=tb.length?tb[0]:table;var ch=par.childNodes||[];var z;for(z=0;z&lt;ch.length;z+=1){if(ch[z].tagName&amp;&amp;String(ch[z].tagName).toLowerCase()==='tr'){rows.push(ch[z]);}}}}var count=0;var i;for(i=0;i&lt;rows.length;i+=1){if(f(rows[i],'N3:Date')===dt&amp;&amp;f(rows[i],'N3:ReceiptAmount')===amt&amp;&amp;f(rows[i],'N3:Merchant')===mer){count+=1;}}w('AP_FC_PAGE_MATCH_COUNT',String(count));})()}</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeText</td>
+  <td>id=AP_FC_PAGE_MATCH_COUNT</td>
+  <td>PAGE_MATCH_COUNT</td>
+  <td></td>
+</tr><tr>
+  <td>storeExpression</td>
+  <td>javascript{parseInt(${MATCH_COUNT},10)+parseInt(${PAGE_MATCH_COUNT},10)}</td>
+  <td>MATCH_COUNT</td>
+  <td></td>
+</tr><tr>
+  <td>storeElementPresent</td>
+  <td>xpath=(//span[@id='List']//a[starts-with(normalize-space(.),'Next ')])[1]</td>
+  <td>NEXT_PRESENT</td>
+  <td></td>
+</tr><tr>
+  <td>endWhile</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>if</td>
+  <td>String(NEXT_PRESENT) == "true"</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>throw</td>
+  <td>MAX_PAGES was reached while another Credit Card Expenses page was available; MATCH_COUNT was not checked.</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>endIf</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>if</td>
+  <td>parseInt(MATCH_COUNT,10) === 0</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>throw</td>
+  <td>No Credit Card Expenses row exactly matches the supplied date, amount including currency, and merchant.</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>endIf</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>if</td>
+  <td>parseInt(MATCH_COUNT,10) &gt; 1</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>throw</td>
+  <td>More than one Credit Card Expenses row exactly matches; refusing an ambiguous line selection.</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>endIf</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>//Rewind again and stop on the single matching page before reading its Details link index.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeExpression</td>
+  <td>javascript{0}</td>
+  <td>REWIND_STEPS</td>
+  <td></td>
+</tr><tr>
+  <td>storeElementPresent</td>
+  <td>xpath=(//span[@id='List']//a[starts-with(normalize-space(.),'Previous ')])[1]</td>
+  <td>PREVIOUS_PRESENT</td>
+  <td></td>
+</tr><tr>
+  <td>while</td>
+  <td>String(PREVIOUS_PRESENT) == "true" &amp;&amp; parseInt(REWIND_STEPS,10) &lt; parseInt(MAX_PAGES_NORM,10)</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>clickAndWait</td>
+  <td>xpath=(//span[@id='List']//a[starts-with(normalize-space(.),'Previous ')])[1]</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeExpression</td>
+  <td>javascript{parseInt(${REWIND_STEPS},10)+1}</td>
+  <td>REWIND_STEPS</td>
+  <td></td>
+</tr><tr>
+  <td>storeElementPresent</td>
+  <td>xpath=(//span[@id='List']//a[starts-with(normalize-space(.),'Previous ')])[1]</td>
+  <td>PREVIOUS_PRESENT</td>
+  <td></td>
+</tr><tr>
+  <td>endWhile</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>if</td>
+  <td>String(PREVIOUS_PRESENT) == "true"</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>throw</td>
+  <td>MAX_PAGES was reached before the first Credit Card Expenses table page during line location.</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>endIf</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>runScript</td>
+  <td>javascript{(function(){var o=document.getElementById('AP_FC_HELPER');if(o&amp;&amp;o.parentNode){o.parentNode.removeChild(o);}var d=document.createElement('div');d.id='AP_FC_HELPER';d.style.position='absolute';d.style.left='-10000px';d.style.top='0';d.style.width='440px';var ns=['TRANSACTION_DATE','TRANSACTION_AMOUNT','MERCHANT_NAME','MAX_PAGES'];var i;for(i=0;i&lt;ns.length;i+=1){var p=document.createElement('input');p.type='text';p.id='AP_FC_INPUT_'+ns[i];p.name='AP_FC_INPUT_'+ns[i];d.appendChild(p);}var ss=['MAX_VALID','MAX_NORM','PAGE_MATCH_COUNT','LINE_INDEX','LINK_COUNT'];for(i=0;i&lt;ss.length;i+=1){var s=document.createElement('span');s.id='AP_FC_'+ss[i];s.appendChild(document.createTextNode(''));d.appendChild(s);}document.body.appendChild(d);return 'ok';})()}</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_TRANSACTION_DATE</td>
+  <td>${TRANSACTION_DATE}</td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_TRANSACTION_AMOUNT</td>
+  <td>${TRANSACTION_AMOUNT}</td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_MERCHANT_NAME</td>
+  <td>${MERCHANT_NAME}</td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_MAX_PAGES</td>
+  <td>${MAX_PAGES}</td>
+  <td></td>
+</tr><tr>
+  <td>runScript</td>
+  <td>javascript{(function(){var n=function(v){return String(v===null||v===undefined?'':v).replace(/^[\s\u00a0]+|[\s\u00a0]+$/g,'').replace(/[\s\u00a0]+/g,' ');};var v=function(id){var e=document.getElementById(id);return e&amp;&amp;e.value!==undefined?String(e.value):'';};var w=function(id,t){var e=document.getElementById(id);if(e){e.textContent=t;e.innerText=t;}};var dt=n(v('AP_FC_INPUT_TRANSACTION_DATE'));var amt=n(v('AP_FC_INPUT_TRANSACTION_AMOUNT'));var mer=n(v('AP_FC_INPUT_MERCHANT_NAME'));var mx=String(v('AP_FC_INPUT_MAX_PAGES')).replace(/^[\s\u00a0]+|[\s\u00a0]+$/g,'');var ok=/^[1-9][0-9]*$/.test(mx)&amp;&amp;parseInt(mx,10)&lt;=1000;w('AP_FC_MAX_VALID',ok?'true':'false');w('AP_FC_MAX_NORM',ok?String(parseInt(mx,10)):'0');var f=function(row,prefix){var tags=['input','span','select','textarea'];var i,j,els,e,id,tag,val;for(i=0;i&lt;tags.length;i+=1){els=row.getElementsByTagName(tags[i]);for(j=0;j&lt;els.length;j+=1){e=els[j];id=String(e.id||'');if(new RegExp('^'+prefix+':[0-9]+$').test(id)){tag=String(e.tagName||'').toLowerCase();if(tag==='input'||tag==='select'||tag==='textarea'){val=n(e.value);}else{val=n(e.textContent);}if(val!==''){return val;}}}}return '';};var table=document.getElementById('List:Content');var rows=[];if(table){if(table.rows&amp;&amp;table.rows.length!==undefined){rows=table.rows;}else if(table.getElementsByTagName){var tb=table.getElementsByTagName('tbody');var par=tb.length?tb[0]:table;var ch=par.childNodes||[];var z;for(z=0;z&lt;ch.length;z+=1){if(ch[z].tagName&amp;&amp;String(ch[z].tagName).toLowerCase()==='tr'){rows.push(ch[z]);}}}}var count=0;var i;for(i=0;i&lt;rows.length;i+=1){if(f(rows[i],'N3:Date')===dt&amp;&amp;f(rows[i],'N3:ReceiptAmount')===amt&amp;&amp;f(rows[i],'N3:Merchant')===mer){count+=1;}}w('AP_FC_PAGE_MATCH_COUNT',String(count));})()}</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeText</td>
+  <td>id=AP_FC_PAGE_MATCH_COUNT</td>
+  <td>PAGE_MATCH_COUNT</td>
+  <td></td>
+</tr><tr>
+  <td>storeExpression</td>
+  <td>javascript{1}</td>
+  <td>PAGES_SCANNED</td>
+  <td></td>
+</tr><tr>
+  <td>storeElementPresent</td>
+  <td>xpath=(//span[@id='List']//a[starts-with(normalize-space(.),'Next ')])[1]</td>
+  <td>NEXT_PRESENT</td>
+  <td></td>
+</tr><tr>
+  <td>while</td>
+  <td>PAGE_MATCH_COUNT != "1" &amp;&amp; String(NEXT_PRESENT) == "true" &amp;&amp; parseInt(PAGES_SCANNED,10) &lt; parseInt(MAX_PAGES_NORM,10)</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>clickAndWait</td>
+  <td>xpath=(//span[@id='List']//a[starts-with(normalize-space(.),'Next ')])[1]</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeExpression</td>
+  <td>javascript{parseInt(${PAGES_SCANNED},10)+1}</td>
+  <td>PAGES_SCANNED</td>
+  <td></td>
+</tr><tr>
+  <td>runScript</td>
+  <td>javascript{(function(){var o=document.getElementById('AP_FC_HELPER');if(o&amp;&amp;o.parentNode){o.parentNode.removeChild(o);}var d=document.createElement('div');d.id='AP_FC_HELPER';d.style.position='absolute';d.style.left='-10000px';d.style.top='0';d.style.width='440px';var ns=['TRANSACTION_DATE','TRANSACTION_AMOUNT','MERCHANT_NAME','MAX_PAGES'];var i;for(i=0;i&lt;ns.length;i+=1){var p=document.createElement('input');p.type='text';p.id='AP_FC_INPUT_'+ns[i];p.name='AP_FC_INPUT_'+ns[i];d.appendChild(p);}var ss=['MAX_VALID','MAX_NORM','PAGE_MATCH_COUNT','LINE_INDEX','LINK_COUNT'];for(i=0;i&lt;ss.length;i+=1){var s=document.createElement('span');s.id='AP_FC_'+ss[i];s.appendChild(document.createTextNode(''));d.appendChild(s);}document.body.appendChild(d);return 'ok';})()}</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_TRANSACTION_DATE</td>
+  <td>${TRANSACTION_DATE}</td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_TRANSACTION_AMOUNT</td>
+  <td>${TRANSACTION_AMOUNT}</td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_MERCHANT_NAME</td>
+  <td>${MERCHANT_NAME}</td>
+  <td></td>
+</tr><tr>
+  <td>type</td>
+  <td>id=AP_FC_INPUT_MAX_PAGES</td>
+  <td>${MAX_PAGES}</td>
+  <td></td>
+</tr><tr>
+  <td>runScript</td>
+  <td>javascript{(function(){var n=function(v){return String(v===null||v===undefined?'':v).replace(/^[\s\u00a0]+|[\s\u00a0]+$/g,'').replace(/[\s\u00a0]+/g,' ');};var v=function(id){var e=document.getElementById(id);return e&amp;&amp;e.value!==undefined?String(e.value):'';};var w=function(id,t){var e=document.getElementById(id);if(e){e.textContent=t;e.innerText=t;}};var dt=n(v('AP_FC_INPUT_TRANSACTION_DATE'));var amt=n(v('AP_FC_INPUT_TRANSACTION_AMOUNT'));var mer=n(v('AP_FC_INPUT_MERCHANT_NAME'));var mx=String(v('AP_FC_INPUT_MAX_PAGES')).replace(/^[\s\u00a0]+|[\s\u00a0]+$/g,'');var ok=/^[1-9][0-9]*$/.test(mx)&amp;&amp;parseInt(mx,10)&lt;=1000;w('AP_FC_MAX_VALID',ok?'true':'false');w('AP_FC_MAX_NORM',ok?String(parseInt(mx,10)):'0');var f=function(row,prefix){var tags=['input','span','select','textarea'];var i,j,els,e,id,tag,val;for(i=0;i&lt;tags.length;i+=1){els=row.getElementsByTagName(tags[i]);for(j=0;j&lt;els.length;j+=1){e=els[j];id=String(e.id||'');if(new RegExp('^'+prefix+':[0-9]+$').test(id)){tag=String(e.tagName||'').toLowerCase();if(tag==='input'||tag==='select'||tag==='textarea'){val=n(e.value);}else{val=n(e.textContent);}if(val!==''){return val;}}}}return '';};var table=document.getElementById('List:Content');var rows=[];if(table){if(table.rows&amp;&amp;table.rows.length!==undefined){rows=table.rows;}else if(table.getElementsByTagName){var tb=table.getElementsByTagName('tbody');var par=tb.length?tb[0]:table;var ch=par.childNodes||[];var z;for(z=0;z&lt;ch.length;z+=1){if(ch[z].tagName&amp;&amp;String(ch[z].tagName).toLowerCase()==='tr'){rows.push(ch[z]);}}}}var count=0;var i;for(i=0;i&lt;rows.length;i+=1){if(f(rows[i],'N3:Date')===dt&amp;&amp;f(rows[i],'N3:ReceiptAmount')===amt&amp;&amp;f(rows[i],'N3:Merchant')===mer){count+=1;}}w('AP_FC_PAGE_MATCH_COUNT',String(count));})()}</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeText</td>
+  <td>id=AP_FC_PAGE_MATCH_COUNT</td>
+  <td>PAGE_MATCH_COUNT</td>
+  <td></td>
+</tr><tr>
+  <td>storeElementPresent</td>
+  <td>xpath=(//span[@id='List']//a[starts-with(normalize-space(.),'Next ')])[1]</td>
+  <td>NEXT_PRESENT</td>
+  <td></td>
+</tr><tr>
+  <td>endWhile</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>if</td>
+  <td>PAGE_MATCH_COUNT != "1"</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>throw</td>
+  <td>The unique matching Credit Card Expenses row could not be located on one table page.</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>endIf</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>//Read the numeric Details link index from the unique row on this page. The link is never clicked.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>runScript</td>
+  <td>javascript{(function(){var n=function(v){return String(v===null||v===undefined?'':v).replace(/^[\s\u00a0]+|[\s\u00a0]+$/g,'').replace(/[\s\u00a0]+/g,' ');};var v=function(id){var e=document.getElementById(id);return e&amp;&amp;e.value!==undefined?String(e.value):'';};var w=function(id,t){var e=document.getElementById(id);if(e){e.textContent=t;e.innerText=t;}};var dt=n(v('AP_FC_INPUT_TRANSACTION_DATE'));var amt=n(v('AP_FC_INPUT_TRANSACTION_AMOUNT'));var mer=n(v('AP_FC_INPUT_MERCHANT_NAME'));var f=function(row,prefix){var tags=['input','span','select','textarea'];var i,j,els,e,id,tag,val;for(i=0;i&lt;tags.length;i+=1){els=row.getElementsByTagName(tags[i]);for(j=0;j&lt;els.length;j+=1){e=els[j];id=String(e.id||'');if(new RegExp('^'+prefix+':[0-9]+$').test(id)){tag=String(e.tagName||'').toLowerCase();if(tag==='input'||tag==='select'||tag==='textarea'){val=n(e.value);}else{val=n(e.textContent);}if(val!==''){return val;}}}}return '';};var table=document.getElementById('List:Content');var rows=[];if(table){if(table.rows&amp;&amp;table.rows.length!==undefined){rows=table.rows;}else if(table.getElementsByTagName){var tb=table.getElementsByTagName('tbody');var par=tb.length?tb[0]:table;var ch=par.childNodes||[];var z;for(z=0;z&lt;ch.length;z+=1){if(ch[z].tagName&amp;&amp;String(ch[z].tagName).toLowerCase()==='tr'){rows.push(ch[z]);}}}}var found=null;var count=0;var i;for(i=0;i&lt;rows.length;i+=1){if(f(rows[i],'N3:Date')===dt&amp;&amp;f(rows[i],'N3:ReceiptAmount')===amt&amp;&amp;f(rows[i],'N3:Merchant')===mer){count+=1;found=rows[i];}}var idx='';var links=0;if(count===1&amp;&amp;found){var as=found.getElementsByTagName('a');var j;for(j=0;j&lt;as.length;j+=1){var m=String(as[j].id||'').match(/^N3:CCDetails:([0-9]+)$/);if(m){links+=1;idx=m[1];}}}w('AP_FC_LINK_COUNT',String(links));w('AP_FC_LINE_INDEX',links===1?idx:'');})()}</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeText</td>
+  <td>id=AP_FC_LINK_COUNT</td>
+  <td>LINK_COUNT</td>
+  <td></td>
+</tr><tr>
+  <td>storeText</td>
+  <td>id=AP_FC_LINE_INDEX</td>
+  <td>CREDIT_LINE_INDEX</td>
+  <td></td>
+</tr><tr>
+  <td>if</td>
+  <td>LINK_COUNT != "1"</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>throw</td>
+  <td>The unique matching row did not expose exactly one numeric N3:CCDetails link; no line was opened.</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>endIf</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>if</td>
+  <td>CREDIT_LINE_INDEX == ""</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>throw</td>
+  <td>The unique matching row did not expose a numeric Credit Card Details line index.</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>endIf</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>storeTitle</td>
+  <td>CURRENT_PAGE_TITLE</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>assertTitle</td>
+  <td>*Expense Report: Credit Card Expenses*</td>
+  <td></td>
+  <td></td>
+</tr><tr>
+  <td>//Stop here. The caller uses CREDIT_LINE_INDEX with the existing native iExpense_credit_openLineDetails service.</td>
+  <td></td>
+  <td></td>
+  <td></td>
+</tr>
+</tbody></table></body></html>

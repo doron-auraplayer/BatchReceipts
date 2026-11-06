@@ -248,28 +248,6 @@ function Analyze() {
   );
 }
 
-function matchAndLoad() {
-  Services.call(
-    'ReceiptBatch_TransactionMatching',
-
-    function () {
-      Spinner.stop('REFRESH_RECEIPTS');
-      reloadReceiptTable(true);
-    },
-
-    function () {
-      Spinner.stop('REFRESH_RECEIPTS');
-
-      onReceiptListFetchFailed();
-
-      Popup.ok(
-        'Refresh',
-        'Failed to match receipts to transactions'
-      );
-    }
-  );
-}
-
 function reloadReceiptTable(preserveCapturedSelection) {
   receiptTableDrawnForCurrentLoad = false;
 

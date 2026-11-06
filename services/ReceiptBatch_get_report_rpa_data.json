@@ -2,7 +2,7 @@
   "name": "ReceiptBatch_get_report_rpa_data",
   "description": "Read-only complete linked receipt/report data for future RPA integration.",
   "formUrl": "${env.DB_CONNECTION_STR}",
-  "command": "SELECT\n    r.REPORT_ID AS REPORT_NUMBER,\n    MAX(r.REPORT_NAME) OVER () AS REPORT_PURPOSE,\n    TO_CHAR(MAX(r.REPORT_CREATE_DATE) OVER (), 'YYYY-MM-DD\"T\"HH24:MI:SS') AS REPORT_CREATE_DATE,\n    r.RECEIPT_ID AS RECEIPT_ID,\n    r.STATUS AS STATUS,\n    r.EBS_USER_NAME AS EBS_USER_NAME,\n    r.FILE_NAME AS FILE_NAME,\n    r.FILE_TYPE AS FILE_TYPE,\n    r.EXPENSE_TYPE AS EXPENSE_TYPE,\n    r.TOTAL_AMOUNT AS TOTAL_AMOUNT,\n    TO_CHAR(r.RECEIPT_DATE, 'YYYY-MM-DD') AS RECEIPT_DATE,\n    r.MERCHANT AS MERCHANT,\n    r.LOCATION AS LOCATION,\n    r.DEPARTMENT AS DEPARTMENT,\n    r.CREDIT_TRANSACTION AS CREDIT_TRANSACTION,\n    r.EXPENSE_DATA_JSON AS EXPENSE_DATA_JSON,\n    DBMS_LOB.GETLENGTH(r.EXPENSE_DATA_JSON) AS EXPENSE_DATA_JSON_LENGTH,\n    TO_CHAR(r.EXPENSE_DATA_UPDATED_DATE, 'YYYY-MM-DD\"T\"HH24:MI:SS.FF6') AS EXPENSE_DATA_UPDATED_DATE,\n    r.TEMPLATE_NAME AS TEMPLATE_NAME,\n    r.PAYMENT_TYPE AS PAYMENT_TYPE,\n    r.LINE_NUM AS LINE_NUM,\n    r.ERROR_MESSAGE AS ERROR_MESSAGE,\n    COUNT(*) OVER () AS TOTAL_RECEIPTS\nFROM XX_AP_BATCH_RECEIPTS r\nWHERE r.REPORT_ID = '${REPORT_NUMBER}'\nORDER BY r.RECEIPT_ID\n",
+  "command": "WITH report_header AS (\n    SELECT MAX(r.REPORT_ID) AS REPORT_NUMBER,\n           MAX(r.REPORT_NAME) AS REPORT_PURPOSE,\n           TO_CHAR(MAX(r.REPORT_CREATE_DATE), 'YYYY-MM-DD\"T\"HH24:MI:SS') AS REPORT_CREATE_DATE,\n           COUNT(*) AS TOTAL_RECEIPTS\n    FROM XX_AP_BATCH_RECEIPTS r\n    WHERE r.REPORT_ID = '${REPORT_NUMBER}'\n),\nreceipt_rows AS (\n    SELECT h.REPORT_NUMBER AS HEADER_REPORT_NUMBER,\n           h.REPORT_PURPOSE AS HEADER_REPORT_PURPOSE,\n           h.REPORT_CREATE_DATE AS HEADER_REPORT_CREATE_DATE,\n           h.TOTAL_RECEIPTS AS HEADER_TOTAL_RECEIPTS,\n           r.*\n    FROM XX_AP_BATCH_RECEIPTS r\n    CROSS JOIN report_header h\n    WHERE r.REPORT_ID = '${REPORT_NUMBER}'\n)\nSELECT h.REPORT_NUMBER AS REPORT_NUMBER,\n       h.REPORT_PURPOSE AS REPORT_PURPOSE,\n       h.REPORT_CREATE_DATE AS REPORT_CREATE_DATE,\n       h.TOTAL_RECEIPTS AS TOTAL_RECEIPTS,\n       (SELECT NVL(JSON_ARRAYAGG(\n                   JSON_OBJECT(\n                       'REPORT_NUMBER' VALUE rr.HEADER_REPORT_NUMBER,\n                       'REPORT_PURPOSE' VALUE rr.HEADER_REPORT_PURPOSE,\n                       'REPORT_CREATE_DATE' VALUE rr.HEADER_REPORT_CREATE_DATE,\n                       'RECEIPT_ID' VALUE rr.RECEIPT_ID,\n                       'STATUS' VALUE rr.STATUS,\n                       'EBS_USER_NAME' VALUE rr.EBS_USER_NAME,\n                       'FILE_NAME' VALUE rr.FILE_NAME,\n                       'FILE_TYPE' VALUE rr.FILE_TYPE,\n                       'EXPENSE_TYPE' VALUE rr.EXPENSE_TYPE,\n                       'TOTAL_AMOUNT' VALUE rr.TOTAL_AMOUNT,\n                       'RECEIPT_DATE' VALUE TO_CHAR(rr.RECEIPT_DATE, 'YYYY-MM-DD'),\n                       'MERCHANT' VALUE rr.MERCHANT,\n                       'LOCATION' VALUE rr.LOCATION,\n                       'DEPARTMENT' VALUE rr.DEPARTMENT,\n                       'CREDIT_TRANSACTION' VALUE rr.CREDIT_TRANSACTION,\n                       'EXPENSE_DATA_JSON' VALUE rr.EXPENSE_DATA_JSON,\n                       'EXPENSE_DATA_JSON_LENGTH' VALUE DBMS_LOB.GETLENGTH(rr.EXPENSE_DATA_JSON),\n                       'EXPENSE_DATA_UPDATED_DATE' VALUE TO_CHAR(rr.EXPENSE_DATA_UPDATED_DATE, 'YYYY-MM-DD\"T\"HH24:MI:SS.FF6'),\n                       'TEMPLATE_NAME' VALUE rr.TEMPLATE_NAME,\n                       'PAYMENT_TYPE' VALUE rr.PAYMENT_TYPE,\n                       'LINE_NUM' VALUE rr.LINE_NUM,\n                       'ERROR_MESSAGE' VALUE rr.ERROR_MESSAGE,\n                       'TOTAL_RECEIPTS' VALUE rr.HEADER_TOTAL_RECEIPTS\n                       NULL ON NULL\n                       RETURNING CLOB\n                   )\n                   ORDER BY rr.RECEIPT_ID\n                   RETURNING CLOB\n               ), TO_CLOB('[]'))\n          FROM receipt_rows rr\n         WHERE rr.CREDIT_TRANSACTION IS NULL\n            OR NOT REGEXP_LIKE(rr.CREDIT_TRANSACTION, '[^[:space:]]')) AS \"REPORT_CASH_RECEIPTS\",\n       (SELECT NVL(JSON_ARRAYAGG(\n                   JSON_OBJECT(\n                       'REPORT_NUMBER' VALUE rr.HEADER_REPORT_NUMBER,\n                       'REPORT_PURPOSE' VALUE rr.HEADER_REPORT_PURPOSE,\n                       'REPORT_CREATE_DATE' VALUE rr.HEADER_REPORT_CREATE_DATE,\n                       'RECEIPT_ID' VALUE rr.RECEIPT_ID,\n                       'STATUS' VALUE rr.STATUS,\n                       'EBS_USER_NAME' VALUE rr.EBS_USER_NAME,\n                       'FILE_NAME' VALUE rr.FILE_NAME,\n                       'FILE_TYPE' VALUE rr.FILE_TYPE,\n                       'EXPENSE_TYPE' VALUE rr.EXPENSE_TYPE,\n                       'TOTAL_AMOUNT' VALUE rr.TOTAL_AMOUNT,\n                       'RECEIPT_DATE' VALUE TO_CHAR(rr.RECEIPT_DATE, 'YYYY-MM-DD'),\n                       'MERCHANT' VALUE rr.MERCHANT,\n                       'LOCATION' VALUE rr.LOCATION,\n                       'DEPARTMENT' VALUE rr.DEPARTMENT,\n                       'CREDIT_TRANSACTION' VALUE rr.CREDIT_TRANSACTION,\n                       'EXPENSE_DATA_JSON' VALUE rr.EXPENSE_DATA_JSON,\n                       'EXPENSE_DATA_JSON_LENGTH' VALUE DBMS_LOB.GETLENGTH(rr.EXPENSE_DATA_JSON),\n                       'EXPENSE_DATA_UPDATED_DATE' VALUE TO_CHAR(rr.EXPENSE_DATA_UPDATED_DATE, 'YYYY-MM-DD\"T\"HH24:MI:SS.FF6'),\n                       'TEMPLATE_NAME' VALUE rr.TEMPLATE_NAME,\n                       'PAYMENT_TYPE' VALUE rr.PAYMENT_TYPE,\n                       'LINE_NUM' VALUE rr.LINE_NUM,\n                       'ERROR_MESSAGE' VALUE rr.ERROR_MESSAGE,\n                       'TOTAL_RECEIPTS' VALUE rr.HEADER_TOTAL_RECEIPTS\n                       NULL ON NULL\n                       RETURNING CLOB\n                   )\n                   ORDER BY rr.RECEIPT_ID\n                   RETURNING CLOB\n               ), TO_CLOB('[]'))\n          FROM receipt_rows rr\n         WHERE REGEXP_LIKE(rr.CREDIT_TRANSACTION, '[^[:space:]]')) AS \"REPORT_CREDIT_RECEIPTS\"\nFROM report_header h\n",
   "isEnabled": true,
   "inputParams": [
     {
@@ -41,7 +41,7 @@
   ],
   "outputParams": [
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -56,7 +56,7 @@
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -71,7 +71,7 @@
       "visible": true
     },
     {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -86,292 +86,7 @@
       "visible": true
     },
     {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "RECEIPT_ID",
-        "serviceName": "ReceiptBatch_get_report_rpa_data"
-      },
-      "paramLabel": "RECEIPT_ID",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "STATUS",
-        "serviceName": "ReceiptBatch_get_report_rpa_data"
-      },
-      "paramLabel": "STATUS",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "EBS_USER_NAME",
-        "serviceName": "ReceiptBatch_get_report_rpa_data"
-      },
-      "paramLabel": "EBS_USER_NAME",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "FILE_NAME",
-        "serviceName": "ReceiptBatch_get_report_rpa_data"
-      },
-      "paramLabel": "FILE_NAME",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "FILE_TYPE",
-        "serviceName": "ReceiptBatch_get_report_rpa_data"
-      },
-      "paramLabel": "FILE_TYPE",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "EXPENSE_TYPE",
-        "serviceName": "ReceiptBatch_get_report_rpa_data"
-      },
-      "paramLabel": "EXPENSE_TYPE",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "TOTAL_AMOUNT",
-        "serviceName": "ReceiptBatch_get_report_rpa_data"
-      },
-      "paramLabel": "TOTAL_AMOUNT",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "RECEIPT_DATE",
-        "serviceName": "ReceiptBatch_get_report_rpa_data"
-      },
-      "paramLabel": "RECEIPT_DATE",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "MERCHANT",
-        "serviceName": "ReceiptBatch_get_report_rpa_data"
-      },
-      "paramLabel": "MERCHANT",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "LOCATION",
-        "serviceName": "ReceiptBatch_get_report_rpa_data"
-      },
-      "paramLabel": "LOCATION",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "DEPARTMENT",
-        "serviceName": "ReceiptBatch_get_report_rpa_data"
-      },
-      "paramLabel": "DEPARTMENT",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "CREDIT_TRANSACTION",
-        "serviceName": "ReceiptBatch_get_report_rpa_data"
-      },
-      "paramLabel": "CREDIT_TRANSACTION",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "EXPENSE_DATA_JSON",
-        "serviceName": "ReceiptBatch_get_report_rpa_data"
-      },
-      "paramLabel": "EXPENSE_DATA_JSON",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "EXPENSE_DATA_JSON_LENGTH",
-        "serviceName": "ReceiptBatch_get_report_rpa_data"
-      },
-      "paramLabel": "EXPENSE_DATA_JSON_LENGTH",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "EXPENSE_DATA_UPDATED_DATE",
-        "serviceName": "ReceiptBatch_get_report_rpa_data"
-      },
-      "paramLabel": "EXPENSE_DATA_UPDATED_DATE",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "TEMPLATE_NAME",
-        "serviceName": "ReceiptBatch_get_report_rpa_data"
-      },
-      "paramLabel": "TEMPLATE_NAME",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "PAYMENT_TYPE",
-        "serviceName": "ReceiptBatch_get_report_rpa_data"
-      },
-      "paramLabel": "PAYMENT_TYPE",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "LINE_NUM",
-        "serviceName": "ReceiptBatch_get_report_rpa_data"
-      },
-      "paramLabel": "LINE_NUM",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "ERROR_MESSAGE",
-        "serviceName": "ReceiptBatch_get_report_rpa_data"
-      },
-      "paramLabel": "ERROR_MESSAGE",
-      "visible": true
-    },
-    {
-      "inTable": true,
+      "inTable": false,
       "newLine": false,
       "required": false,
       "custom": false,
@@ -383,6 +98,36 @@
         "serviceName": "ReceiptBatch_get_report_rpa_data"
       },
       "paramLabel": "TOTAL_RECEIPTS",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "REPORT_CASH_RECEIPTS",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "REPORT_CASH_RECEIPTS",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "REPORT_CREDIT_RECEIPTS",
+        "serviceName": "ReceiptBatch_get_report_rpa_data"
+      },
+      "paramLabel": "REPORT_CREDIT_RECEIPTS",
       "visible": true
     },
     {

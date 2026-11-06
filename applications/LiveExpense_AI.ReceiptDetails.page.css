@@ -395,3 +395,74 @@ span.button-field-container.receipt-guest-add-wrapper {
   margin: 0;
   line-height: 1;
 }
+
+/* Payment Method compact pill. Scoped only to the native PaymentMethod container
+   and its own label, so no other field's layout changes. */
+#PaymentMethod_container {
+  text-align: left;
+  margin: 0 0 6px;
+}
+
+#PaymentMethod_container label[for="PaymentMethod"] {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: flex-start;
+  width: auto !important;
+  max-width: 100% !important;
+  margin: 0;
+  padding: 6px 12px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-shadow: none;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+#PaymentMethod_container.receipt-payment-cash label[for="PaymentMethod"] {
+  background: #ecfdf5;
+  color: #166534 !important;
+  border-color: #bbf7d0;
+}
+
+#PaymentMethod_container.receipt-payment-credit label[for="PaymentMethod"] {
+  background: #eff6ff;
+  color: #1e40af !important;
+  border-color: #bfdbfe;
+}
+
+/* Matched credit receipt read-only controls.
+   Only the three transaction-owned inputs (amount, currency, merchant) get this
+   neutral treatment. Start Date is editable and is deliberately not included.
+   The wrapper rules are needed because the theme and required-field tint paint
+   the native .ui-input-text box, not only its input. */
+#mainForm #DetailReceiptAmount[readonly],
+#mainForm #DetailReceiptAmount:disabled,
+#mainForm #ReceiptCurrencyChoice[readonly],
+#mainForm #ReceiptCurrencyChoice:disabled,
+#mainForm #DetailMerchantName[readonly],
+#mainForm #DetailMerchantName:disabled {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #475569 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  cursor: default !important;
+}
+
+#mainForm #DetailReceiptAmount_container .ui-input-text:has(> input[readonly]),
+#mainForm #DetailReceiptAmount_container .ui-input-text:has(> input:disabled),
+#mainForm #ReceiptCurrencyChoice_container .ui-input-text:has(> input[readonly]),
+#mainForm #ReceiptCurrencyChoice_container .ui-input-text:has(> input:disabled),
+#mainForm #DetailMerchantName_container .ui-input-text:has(> input[readonly]),
+#mainForm #DetailMerchantName_container .ui-input-text:has(> input:disabled) {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  cursor: default !important;
+}

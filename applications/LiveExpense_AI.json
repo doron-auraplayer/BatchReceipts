@@ -38,6 +38,7 @@
     "iExpense_GetAttachments",
     "ReceiptBatch_get_by_userAndStatuses",
     "js_ReceiptBatch_get_receipt_by_id",
+    "ReceiptBatch_TransactionMatching",
     "iExpense_login_with_resps",
     "iExpense_getReports",
     "iExpense_getReportDetailsGeneral",
@@ -171,14 +172,17 @@
     "iExpense_lineItemizedSet",
     "ReceiptBatch_get_and_prepare_receipts",
     "Ping_ReceiptBatch_AnalyzeRPA",
-    "ReceiptBatch_TransactionMatching",
     "ReceiptBatch_delete_receipt",
     "js_ReceiptBatch_add_receipt",
     "ReceiptBatch_CreateExpenseJson",
+    "ReceiptBatch_ReceiptCurrency",
     "ReceiptBatch_ExpenseLocation",
     "ReceiptBatch_ExpenseAttendee",
     "ReceiptBatch_get_expense_data",
     "ReceiptBatch_save_expense_data",
+    "ReceiptBatch_getCreditCards",
+    "ReceiptBatch_getUsedCreditTransactions",
+    "ReceiptBatch_getCreditTransactions",
     "ReceiptBatch_get_draft_report_Data",
     "ReceiptBatch_get_draft_report_lines",
     "ReceiptBatch_DraftReport"
@@ -11438,45 +11442,27 @@
       "centred": false
     },
     {
-      "name": "ReceiptsAttachmentsCardsPOC.html",
-      "title": "Receipt Cards POC",
-      "params": [],
-      "multiRecord": {
-        "params": [],
-        "type": "table",
-        "disableDataTables": false,
-        "isSearchable": false,
-        "isAddRows": false,
-        "isResponsive": false,
-        "isHidden": false,
-        "startIndex": 0
-      },
-      "actions": [
-        {
-          "event": {
-            "type": "onLoad",
-            "element": "",
-            "elementId": ""
-          },
-          "action": {
-            "type": "callFunction",
-            "attribute": {
-              "main": "receiptCardsPocOnLoad"
-            }
-          }
-        }
-      ],
-      "javascript": "@inject:LiveExpense_AI.ReceiptsAttachmentsCardsPOC.page.js",
-      "css": "@inject:LiveExpense_AI.ReceiptsAttachmentsCardsPOC.page.css",
-      "shouldSkip": false,
-      "hasMenu": true,
-      "inMenu": false,
-      "centred": false
-    },
-    {
       "name": "ReceiptDetails.html",
       "title": "Line Details",
       "params": [
+        {
+          "dataTypeInfo": {
+            "type": "LABEL"
+          },
+          "isSortable": false,
+          "inTable": false,
+          "newLine": true,
+          "required": false,
+          "custom": true,
+          "validationFunction": "NONE",
+          "fromInput": false,
+          "centred": false,
+          "id": {
+            "name": "PaymentMethod"
+          },
+          "paramLabel": "Payment Method",
+          "visible": true
+        },
         {
           "dataTypeInfo": {
             "isCombo": true,
@@ -11701,83 +11687,34 @@
             "isClosedSelection": true,
             "hasReload": false,
             "service": {
-              "name": "ReceiptBatch_CreateExpenseJson",
-              "formUrl": "",
+              "name": "ReceiptBatch_ReceiptCurrency",
+              "formUrl": "${env.DB_CONNECTION_STR}",
               "isEnabled": true,
               "inputParams": [
                 {
-                  "isRequired": false,
-                  "isCustom": true,
+                  "isRequired": true,
+                  "isCustom": false,
                   "id": {
-                    "name": "EXPENSE_TYPE",
-                    "serviceName": "ReceiptBatch_CreateExpenseJson"
+                    "name": "username",
+                    "serviceName": "ReceiptBatch_ReceiptCurrency"
                   },
-                  "paramLabel": "EXPENSE_TYPE",
-                  "paramValue": "",
-                  "visible": true
-                }
-              ],
-              "outputParams": [
-                {
-                  "inTable": false,
-                  "newLine": false,
-                  "required": false,
-                  "custom": false,
-                  "validationFunction": "NONE",
-                  "fromInput": false,
-                  "centred": false,
-                  "id": {
-                    "name": "EXPENSE_DATA_JSON",
-                    "serviceName": "ReceiptBatch_CreateExpenseJson"
-                  },
-                  "paramLabel": "EXPENSE_DATA_JSON",
-                  "visible": true
-                },
-                {
-                  "inTable": true,
-                  "newLine": false,
-                  "required": false,
-                  "custom": false,
-                  "validationFunction": "NONE",
-                  "fromInput": false,
-                  "centred": false,
-                  "id": {
-                    "name": "ExpenseType",
-                    "serviceName": "ReceiptBatch_CreateExpenseJson"
-                  },
-                  "paramLabel": "ExpenseType",
+                  "paramLabel": "username",
+                  "paramValue": "${env.DB_USER}",
                   "visible": false
                 },
                 {
-                  "inTable": false,
-                  "newLine": false,
-                  "required": false,
-                  "custom": false,
-                  "validationFunction": "NONE",
-                  "fromInput": false,
-                  "centred": false,
+                  "isRequired": true,
+                  "isCustom": false,
                   "id": {
-                    "name": "EXPENSE_TYPES_JSON",
-                    "serviceName": "ReceiptBatch_CreateExpenseJson"
+                    "name": "password",
+                    "serviceName": "ReceiptBatch_ReceiptCurrency"
                   },
-                  "paramLabel": "EXPENSE_TYPES_JSON",
-                  "visible": true
-                },
-                {
-                  "inTable": false,
-                  "newLine": false,
-                  "required": false,
-                  "custom": false,
-                  "validationFunction": "NONE",
-                  "fromInput": false,
-                  "centred": false,
-                  "id": {
-                    "name": "EXPENSE_METADATA_JSON",
-                    "serviceName": "ReceiptBatch_CreateExpenseJson"
-                  },
-                  "paramLabel": "EXPENSE_METADATA_JSON",
-                  "visible": true
-                },
+                  "paramLabel": "password",
+                  "paramValue": "${env.DB_PASSWORD}",
+                  "visible": false
+                }
+              ],
+              "outputParams": [
                 {
                   "inTable": true,
                   "newLine": false,
@@ -11788,10 +11725,40 @@
                   "centred": false,
                   "id": {
                     "name": "Currency",
-                    "serviceName": "ReceiptBatch_CreateExpenseJson"
+                    "serviceName": "ReceiptBatch_ReceiptCurrency"
                   },
-                  "paramLabel": "",
+                  "paramLabel": "Currency",
                   "visible": true
+                },
+                {
+                  "inTable": true,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "CurrencyCode",
+                    "serviceName": "ReceiptBatch_ReceiptCurrency"
+                  },
+                  "paramLabel": "CurrencyCode",
+                  "visible": false
+                },
+                {
+                  "inTable": true,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "CurrencyName",
+                    "serviceName": "ReceiptBatch_ReceiptCurrency"
+                  },
+                  "paramLabel": "CurrencyName",
+                  "visible": false
                 },
                 {
                   "inTable": false,
@@ -11803,7 +11770,7 @@
                   "centred": false,
                   "id": {
                     "name": "Error",
-                    "serviceName": "ReceiptBatch_CreateExpenseJson"
+                    "serviceName": "ReceiptBatch_ReceiptCurrency"
                   },
                   "paramLabel": "Error",
                   "visible": false
@@ -11818,7 +11785,7 @@
                   "centred": false,
                   "id": {
                     "name": "PopupMessages",
-                    "serviceName": "ReceiptBatch_CreateExpenseJson"
+                    "serviceName": "ReceiptBatch_ReceiptCurrency"
                   },
                   "paramLabel": "PopupMessages",
                   "visible": false
@@ -11833,13 +11800,13 @@
                   "centred": false,
                   "id": {
                     "name": "StatusBarMessages",
-                    "serviceName": "ReceiptBatch_CreateExpenseJson"
+                    "serviceName": "ReceiptBatch_ReceiptCurrency"
                   },
                   "paramLabel": "StatusBarMessages",
                   "visible": false
                 }
               ],
-              "fileName": "@js",
+              "fileName": "@sql",
               "isPartial": false,
               "isPrivate": false,
               "useLabelsAsKeys": false,
@@ -11854,13 +11821,11 @@
               "isHandlePopups": false,
               "timeout": 0,
               "validationResponseCode": 200,
-              "type": "JS",
+              "type": "DB",
               "createdBy": "admin",
-              "lastModified": 1790096402749,
+              "lastModified": 1793272625860,
               "labels": [],
-              "apps": [
-                "LiveExpense_AI"
-              ]
+              "apps": []
             },
             "type": "LOV"
           },
@@ -12759,6 +12724,382 @@
       "centred": false
     },
     {
+      "name": "Credit_Matching.html",
+      "title": "Matching",
+      "params": [
+        {
+          "dataTypeInfo": {
+            "isCombo": false,
+            "isClosedSelection": true,
+            "hasReload": false,
+            "service": {
+              "name": "ReceiptBatch_getCreditCards",
+              "formUrl": "${env.DB_CONNECTION_STR}",
+              "isEnabled": true,
+              "inputParams": [
+                {
+                  "isRequired": true,
+                  "isCustom": false,
+                  "id": {
+                    "name": "username",
+                    "serviceName": "ReceiptBatch_getCreditCards"
+                  },
+                  "paramLabel": "username",
+                  "paramValue": "${env.DB_USER}",
+                  "visible": false
+                },
+                {
+                  "isRequired": true,
+                  "isCustom": false,
+                  "id": {
+                    "name": "password",
+                    "serviceName": "ReceiptBatch_getCreditCards"
+                  },
+                  "paramLabel": "password",
+                  "paramValue": "${env.DB_PASSWORD}",
+                  "visible": false
+                },
+                {
+                  "isRequired": false,
+                  "isCustom": true,
+                  "id": {
+                    "name": "ORG_ID",
+                    "serviceName": "ReceiptBatch_getCreditCards"
+                  },
+                  "paramLabel": "ORG_ID",
+                  "paramValue": "",
+                  "visible": true
+                },
+                {
+                  "isRequired": false,
+                  "isCustom": true,
+                  "id": {
+                    "name": "REPORT_HEADER_ID",
+                    "serviceName": "ReceiptBatch_getCreditCards"
+                  },
+                  "paramLabel": "REPORT_HEADER_ID",
+                  "paramValue": "",
+                  "visible": true
+                },
+                {
+                  "isRequired": false,
+                  "isCustom": true,
+                  "id": {
+                    "name": "SECURITY_GROUP_ID",
+                    "serviceName": "ReceiptBatch_getCreditCards"
+                  },
+                  "paramLabel": "SECURITY_GROUP_ID",
+                  "paramValue": "0",
+                  "visible": true
+                },
+                {
+                  "isRequired": false,
+                  "isCustom": true,
+                  "id": {
+                    "name": "LANGUAGE_CODE",
+                    "serviceName": "ReceiptBatch_getCreditCards"
+                  },
+                  "paramLabel": "LANGUAGE_CODE",
+                  "paramValue": "US",
+                  "visible": true
+                },
+                {
+                  "isRequired": false,
+                  "isCustom": true,
+                  "id": {
+                    "name": "REIMBURSEMENT_CURRENCY",
+                    "serviceName": "ReceiptBatch_getCreditCards"
+                  },
+                  "paramLabel": "REIMBURSEMENT_CURRENCY",
+                  "paramValue": "USD",
+                  "visible": true
+                },
+                {
+                  "isRequired": false,
+                  "isCustom": true,
+                  "id": {
+                    "name": "EBS_USER",
+                    "serviceName": "ReceiptBatch_getCreditCards"
+                  },
+                  "paramLabel": "EBS_USER",
+                  "paramValue": "",
+                  "visible": true
+                }
+              ],
+              "outputParams": [
+                {
+                  "inTable": true,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "CARD_ID",
+                    "serviceName": "ReceiptBatch_getCreditCards"
+                  },
+                  "paramLabel": "CARD_ID",
+                  "visible": true
+                },
+                {
+                  "inTable": true,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "CreditCardList",
+                    "serviceName": "ReceiptBatch_getCreditCards"
+                  },
+                  "paramLabel": "CreditCardList",
+                  "visible": true
+                },
+                {
+                  "inTable": true,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "CARD_PROGRAM_ID",
+                    "serviceName": "ReceiptBatch_getCreditCards"
+                  },
+                  "paramLabel": "CARD_PROGRAM_ID",
+                  "visible": true
+                },
+                {
+                  "inTable": true,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "PAYMENT_DUE_FROM_CODE",
+                    "serviceName": "ReceiptBatch_getCreditCards"
+                  },
+                  "paramLabel": "PAYMENT_DUE_FROM_CODE",
+                  "visible": true
+                },
+                {
+                  "inTable": false,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "EMPTY",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "Error",
+                    "serviceName": "ReceiptBatch_getCreditCards"
+                  },
+                  "paramLabel": "Error",
+                  "visible": false
+                },
+                {
+                  "inTable": false,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "PopupMessages",
+                    "serviceName": "ReceiptBatch_getCreditCards"
+                  },
+                  "paramLabel": "PopupMessages",
+                  "visible": false
+                },
+                {
+                  "inTable": false,
+                  "newLine": false,
+                  "required": false,
+                  "custom": false,
+                  "validationFunction": "NONE",
+                  "fromInput": false,
+                  "centred": false,
+                  "id": {
+                    "name": "StatusBarMessages",
+                    "serviceName": "ReceiptBatch_getCreditCards"
+                  },
+                  "paramLabel": "StatusBarMessages",
+                  "visible": false
+                }
+              ],
+              "fileName": "@sql",
+              "isPartial": false,
+              "isPrivate": false,
+              "useLabelsAsKeys": false,
+              "isSingleOutput": false,
+              "hasInputList": false,
+              "isRawResponse": false,
+              "tableHeaderRows": 0,
+              "isTableLooseStructure": false,
+              "numOfRowsInTable": 0,
+              "authenticationMethod": "None",
+              "isJson": false,
+              "isHandlePopups": false,
+              "timeout": 0,
+              "validationResponseCode": 200,
+              "type": "DB",
+              "createdBy": "admin",
+              "lastModified": 1793197473509,
+              "labels": [],
+              "apps": []
+            },
+            "type": "LOV"
+          },
+          "isSortable": false,
+          "inTable": false,
+          "newLine": true,
+          "required": false,
+          "custom": false,
+          "validationFunction": "NONE",
+          "fromInput": false,
+          "centred": false,
+          "id": {
+            "name": "CreditCardPoplist",
+            "serviceName": "iExpense_credit_selectCreditCard"
+          },
+          "paramLabel": "Current Transactions for Account",
+          "paramValue": "",
+          "visible": true
+        }
+      ],
+      "multiRecord": {
+        "params": [
+          {
+            "dataTypeInfo": {
+              "format": "%s",
+              "type": "READONLY"
+            },
+            "isSortable": false,
+            "inTable": true,
+            "newLine": false,
+            "required": false,
+            "custom": false,
+            "validationFunction": "NONE",
+            "fromInput": false,
+            "centred": false,
+            "id": {
+              "name": "TransactionDate",
+              "serviceName": "ReceiptBatch_getCreditTransactions"
+            },
+            "paramLabel": "Date",
+            "visible": true
+          },
+          {
+            "dataTypeInfo": {
+              "format": "%s",
+              "type": "READONLY"
+            },
+            "isSortable": false,
+            "inTable": true,
+            "newLine": false,
+            "required": false,
+            "custom": false,
+            "validationFunction": "NONE",
+            "fromInput": false,
+            "centred": false,
+            "id": {
+              "name": "TransactionAmount",
+              "serviceName": "ReceiptBatch_getCreditTransactions"
+            },
+            "paramLabel": "Amount",
+            "visible": true
+          },
+          {
+            "dataTypeInfo": {
+              "format": "%s",
+              "type": "READONLY"
+            },
+            "isSortable": false,
+            "inTable": true,
+            "newLine": false,
+            "required": false,
+            "custom": false,
+            "validationFunction": "NONE",
+            "fromInput": false,
+            "centred": false,
+            "id": {
+              "name": "MerchantName",
+              "serviceName": "ReceiptBatch_getCreditTransactions"
+            },
+            "paramLabel": "Name",
+            "visible": true
+          },
+          {
+            "dataTypeInfo": {
+              "format": "%s",
+              "type": "READONLY"
+            },
+            "isSortable": false,
+            "inTable": true,
+            "newLine": false,
+            "required": false,
+            "custom": false,
+            "validationFunction": "NONE",
+            "fromInput": false,
+            "centred": false,
+            "id": {
+              "name": "Location",
+              "serviceName": "ReceiptBatch_getCreditTransactions"
+            },
+            "paramLabel": "Location",
+            "visible": true
+          }
+        ],
+        "type": "table",
+        "disableDataTables": false,
+        "isSearchable": true,
+        "isAddRows": false,
+        "isResponsive": true,
+        "isHidden": false,
+        "startIndex": 0
+      },
+      "actions": [
+        {
+          "event": {
+            "type": "onLoad",
+            "element": "",
+            "elementId": ""
+          },
+          "action": {
+            "type": "callFunction",
+            "attribute": {
+              "main": "onLoad"
+            }
+          }
+        },
+        {
+          "event": {
+            "type": "tableClick",
+            "element": "",
+            "elementId": ""
+          },
+          "action": {
+            "type": "callFunction",
+            "attribute": {
+              "main": "onTableClick"
+            }
+          }
+        }
+      ],
+      "javascript": "@inject:LiveExpense_AI.Credit_Matching.page.js",
+      "css": "@inject:LiveExpense_AI.Credit_Matching.page.css",
+      "shouldSkip": false,
+      "hasMenu": true,
+      "inMenu": false,
+      "centred": false
+    },
+    {
       "name": "ScannedReceiptsSelection.html",
       "title": "Scanned receipts",
       "params": [],
@@ -13375,6 +13716,42 @@
       ],
       "javascript": "@inject:LiveExpense_AI.InProgressLines.page.js",
       "css": "@inject:LiveExpense_AI.InProgressLines.page.css",
+      "shouldSkip": false,
+      "hasMenu": true,
+      "inMenu": false,
+      "centred": false
+    },
+    {
+      "name": "ReceiptsAttachmentsCardsPOC.html",
+      "title": "Receipt Cards POC",
+      "params": [],
+      "multiRecord": {
+        "params": [],
+        "type": "table",
+        "disableDataTables": false,
+        "isSearchable": false,
+        "isAddRows": false,
+        "isResponsive": false,
+        "isHidden": false,
+        "startIndex": 0
+      },
+      "actions": [
+        {
+          "event": {
+            "type": "onLoad",
+            "element": "",
+            "elementId": ""
+          },
+          "action": {
+            "type": "callFunction",
+            "attribute": {
+              "main": "receiptCardsPocOnLoad"
+            }
+          }
+        }
+      ],
+      "javascript": "@inject:LiveExpense_AI.ReceiptsAttachmentsCardsPOC.page.js",
+      "css": "@inject:LiveExpense_AI.ReceiptsAttachmentsCardsPOC.page.css",
       "shouldSkip": false,
       "hasMenu": true,
       "inMenu": false,

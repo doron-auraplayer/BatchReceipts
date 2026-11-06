@@ -1,0 +1,405 @@
+{
+  "name": "ReceiptBatch_getCreditTransactions",
+  "description": "",
+  "formUrl": "${env.DB_CONNECTION_STR}",
+  "command": "-- Read-only mirror of the EBS CreditCardTransactionsVO transaction LOV for receipt matching.\n-- No DML. Numeric service inputs are regex-guarded before TO_NUMBER, and a nonblank\n-- report header that is not numeric deliberately returns no rows.\nWITH params AS (\n    SELECT TO_NUMBER(CASE\n               WHEN REGEXP_LIKE(TRIM('${ORG_ID}'), '^[0-9]+$')\n               THEN TRIM('${ORG_ID}')\n           END) AS org_id,\n           TO_NUMBER(CASE\n               WHEN REGEXP_LIKE(TRIM('${CARD_ID}'), '^[0-9]+$')\n               THEN TRIM('${CARD_ID}')\n           END) AS card_id,\n           TO_NUMBER(CASE\n               WHEN REGEXP_LIKE(TRIM('${REPORT_HEADER_ID}'), '^[0-9]+$')\n               THEN TRIM('${REPORT_HEADER_ID}')\n           END) AS report_header_id,\n           CASE\n               WHEN TRIM('${REPORT_HEADER_ID}') IS NULL\n               OR   REGEXP_LIKE(TRIM('${REPORT_HEADER_ID}'), '^[0-9]+$')\n               THEN 1\n               ELSE 0\n           END AS report_header_id_valid,\n           NVL(NULLIF(TRIM('${REIMBURSEMENT_CURRENCY}'), ''), 'USD') AS currency,\n           TRIM('${PAYMENT_DUE_FROM_CODE}') AS payment_due_from_code\n    FROM   dual\n)\nSELECT TO_CHAR(t.transaction_date, 'DD-Mon-YYYY', 'NLS_DATE_LANGUAGE=English') AS \"TransactionDate\",\n       CASE\n           WHEN t.transaction_amount < 0\n           THEN '<' || TO_CHAR(ABS(t.transaction_amount), 'FM999G999G999G999G990D00', 'NLS_NUMERIC_CHARACTERS=''.,''') || '>'\n           ELSE TO_CHAR(ABS(t.transaction_amount), 'FM999G999G999G999G990D00', 'NLS_NUMERIC_CHARACTERS=''.,''')\n       END || ' ' || t.posted_currency_code AS \"TransactionAmount\",\n       t.merchant_name1 AS \"MerchantName\",\n       AP_WEB_DB_CCARD_PKG.GetLocation(t.merchant_city, t.merchant_province_state) AS \"Location\",\n       TRUNC(SYSDATE - NVL(t.posted_date, t.billed_date)) AS \"AgeDays\",\n       CASE WHEN t.report_header_id IS NOT NULL THEN 'true' ELSE 'false' END AS \"Select\",\n       TO_CHAR(t.trx_id) AS \"TRANSACTION_ID\",\n       TO_CHAR(c.card_id) AS \"CARD_ID\",\n       c.card_program_id AS \"CARD_PROGRAM_ID\",\n       t.payment_due_from_code AS \"PAYMENT_DUE_FROM_CODE\",\n       TO_CHAR(t.transaction_date, 'YYYY-MM-DD') AS \"TRANSACTION_DATE_ISO\",\n       t.transaction_amount AS \"TRANSACTION_AMOUNT\",\n       t.posted_currency_code AS \"POSTED_CURRENCY_CODE\",\n       t.billed_amount AS \"BILLED_AMOUNT\",\n       t.billed_currency_code AS \"BILLED_CURRENCY_CODE\",\n       t.report_header_id AS \"REPORT_HEADER_ID\"\nFROM   ap_credit_card_trxns_all t,\n       ap_cards_all c,\n       ap_card_programs_all cp,\n       params p\nWHERE  c.employee_id = (SELECT fu.employee_id\n                        FROM   fnd_user fu\n                        WHERE  fu.user_name = UPPER(TRIM('${EBS_USER}')))\nAND    t.card_id = c.card_id\nAND    t.card_program_id = c.card_program_id\nAND    cp.card_program_id = c.card_program_id\nAND    c.org_id = p.org_id\nAND    cp.org_id = p.org_id\nAND    t.org_id = p.org_id\nAND    t.validate_code = 'Y'\nAND    t.payment_flag <> 'Y'\nAND    t.billed_amount IS NOT NULL\nAND    t.billed_currency_code = p.currency\nAND    c.card_id = p.card_id\nAND    t.payment_due_from_code = p.payment_due_from_code\nAND    NVL(t.category, 'BUSINESS') NOT IN ('DISPUTED','CREDIT','MATCHED','DEACTIVATED')\nAND    TRUNC(NVL(t.trx_available_date, DATE '1952-01-01')) <= TRUNC(SYSDATE)\nAND    (t.report_header_id IS NULL OR t.report_header_id = p.report_header_id)\nAND    p.report_header_id_valid = 1\nORDER BY \"AgeDays\" DESC, t.trx_id ASC\n",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "username",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "username",
+      "paramValue": "${env.DB_USER}",
+      "visible": false
+    },
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "password",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "password",
+      "paramValue": "${env.DB_PASSWORD}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "ORG_ID",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "ORG_ID",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "CARD_ID",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "CARD_ID",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "REPORT_HEADER_ID",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "REPORT_HEADER_ID",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "REIMBURSEMENT_CURRENCY",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "REIMBURSEMENT_CURRENCY",
+      "paramValue": "USD",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "PAYMENT_DUE_FROM_CODE",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "PAYMENT_DUE_FROM_CODE",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "EBS_USER",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "EBS_USER",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TransactionDate",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "TransactionDate",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TransactionAmount",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "TransactionAmount",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "MerchantName",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "MerchantName",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Location",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "Location",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AgeDays",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "AgeDays",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Select",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "Select",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_ID",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "TRANSACTION_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CARD_ID",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "CARD_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CARD_PROGRAM_ID",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "CARD_PROGRAM_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PAYMENT_DUE_FROM_CODE",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "PAYMENT_DUE_FROM_CODE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_DATE_ISO",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "TRANSACTION_DATE_ISO",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_AMOUNT",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "TRANSACTION_AMOUNT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "POSTED_CURRENCY_CODE",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "POSTED_CURRENCY_CODE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "BILLED_AMOUNT",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "BILLED_AMOUNT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "BILLED_CURRENCY_CODE",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "BILLED_CURRENCY_CODE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "REPORT_HEADER_ID",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "REPORT_HEADER_ID",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_getCreditTransactions"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@sql",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 1000,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "DB",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": []
+}

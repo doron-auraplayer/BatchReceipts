@@ -505,6 +505,29 @@ button.ui-btn.TableAddLineBtn {
   border-color: #6d3134;
 }
 
+#dynamicImageOverlay .attachmentViewerButton.attachmentViewerButtonUnmatch,
+#dynamicPdfOverlay .attachmentViewerButton.attachmentViewerButtonUnmatch {
+  background-color: #b45309;
+  border-color: #92400e;
+  color: #ffffff;
+}
+
+#dynamicImageOverlay .attachmentViewerButton.attachmentViewerButtonUnmatch:hover,
+#dynamicPdfOverlay .attachmentViewerButton.attachmentViewerButtonUnmatch:hover,
+#dynamicImageOverlay .attachmentViewerButton.attachmentViewerButtonUnmatch:active,
+#dynamicPdfOverlay .attachmentViewerButton.attachmentViewerButtonUnmatch:active {
+  background-color: #92400e;
+  border-color: #92400e;
+}
+
+#dynamicImageOverlay .attachmentViewerButton.attachmentViewerButtonUnmatch:focus,
+#dynamicPdfOverlay .attachmentViewerButton.attachmentViewerButtonUnmatch:focus,
+#dynamicImageOverlay .attachmentViewerButton.attachmentViewerButtonUnmatch:focus-visible,
+#dynamicPdfOverlay .attachmentViewerButton.attachmentViewerButtonUnmatch:focus-visible {
+  outline: 3px solid #ffd54f;
+  outline-offset: 2px;
+}
+
 #dynamicImageOverlay .attachmentViewerButton:disabled,
 #dynamicPdfOverlay .attachmentViewerButton:disabled,
 #dynamicImageOverlay .attachmentViewerButton[disabled],
@@ -980,6 +1003,15 @@ button.ui-btn.ReviewBtn {
   min-height: 100dvh;
 }
 
+/* Unmatch confirmation: scoped above the attachment viewer overlay. */
+body.receipt-unmatch-confirmation #popupContainer-popup {
+  z-index: 1000002 !important;
+}
+
+body.receipt-unmatch-confirmation #popupContainer-screen {
+  z-index: 1000001 !important;
+}
+
 /* ============================================================================
    Split preview layout (opt-in per page)
 
@@ -1210,4 +1242,35 @@ button.ui-btn.ReviewBtn {
   height: 18px;
   flex: 0 0 18px;
   pointer-events: none;
+}
+
+/* ============================================================================
+   Credit matching overlay (bounded to the receipt preview stage)
+   ========================================================================= */
+
+.attachmentViewerStage.receipt-credit-matching-open {
+  position: relative;
+}
+
+#dynamicImageOverlay #receiptCreditMatchingPanel,
+#dynamicPdfOverlay #receiptCreditMatchingPanel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  overflow: auto;
+  background-color: #ffffff;
+}
+
+#dynamicImageOverlay #receiptCreditMatchingPanel > iframe,
+#dynamicPdfOverlay #receiptCreditMatchingPanel > iframe {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100%;
+  max-height: 100%;
+  border: 0;
 }

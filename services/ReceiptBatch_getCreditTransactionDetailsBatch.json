@@ -1,0 +1,125 @@
+{
+  "name": "ReceiptBatch_getCreditTransactionDetailsBatch",
+  "description": "Read-only batch metadata lookup for every credit receipt of one report.",
+  "formUrl": "${env.DB_CONNECTION_STR}",
+  "command": "-- Read-only batch metadata lookup for every credit receipt of one report.\n-- REPORT_NUMBER is the report id, escaped for a SQL string literal by the\n-- caller. CREDIT_TRANSACTION is converted with the same regex guard used by\n-- the existing single-transaction lookup; no unguarded TO_NUMBER is used.\n-- No DML, status filter or payment-type filter.\nWITH credit_receipts AS (\n    SELECT r.RECEIPT_ID,\n           r.CREDIT_TRANSACTION AS REQUESTED_TRANSACTION_ID,\n           TO_NUMBER(CASE\n               WHEN REGEXP_LIKE(TRIM(r.CREDIT_TRANSACTION), '^[0-9]+$')\n               THEN TRIM(r.CREDIT_TRANSACTION)\n           END) AS TRANSACTION_ID\n    FROM   XX_AP_BATCH_RECEIPTS r\n    WHERE  r.REPORT_ID = '${REPORT_NUMBER}'\n    AND    REGEXP_LIKE(r.CREDIT_TRANSACTION, '[^[:space:]]')\n)\nSELECT NVL(\n           JSON_ARRAYAGG(\n               JSON_OBJECT(\n                   'RECEIPT_ID' VALUE TO_CHAR(cr.RECEIPT_ID),\n                   'REQUESTED_TRANSACTION_ID' VALUE cr.REQUESTED_TRANSACTION_ID,\n                   'TRANSACTION_ID' VALUE TO_CHAR(t.trx_id),\n                   'CARD_ID' VALUE TO_CHAR(c.card_id),\n                   'CARD_NUMBER' VALUE icc.masked_cc_number,\n                   'CARD_LABEL' VALUE cp.card_program_name || ' ' || icc.masked_cc_number,\n                   'TRANSACTION_DATE' VALUE TO_CHAR(t.transaction_date, 'DD-Mon-YYYY', 'NLS_DATE_LANGUAGE=English'),\n                   'TRANSACTION_DATE_ISO' VALUE TO_CHAR(t.transaction_date, 'YYYY-MM-DD'),\n                   'TRANSACTION_AMOUNT' VALUE CASE\n                       WHEN t.transaction_amount < 0\n                       THEN '<' || TO_CHAR(ABS(t.transaction_amount), 'FM999G999G999G999G990D00', 'NLS_NUMERIC_CHARACTERS=''.,''') || '>'\n                       ELSE TO_CHAR(ABS(t.transaction_amount), 'FM999G999G999G999G990D00', 'NLS_NUMERIC_CHARACTERS=''.,''')\n                   END || ' ' || t.posted_currency_code,\n                   'TRANSACTION_AMOUNT_NUMBER' VALUE t.transaction_amount,\n                   'CURRENCY_CODE' VALUE t.posted_currency_code,\n                   'MERCHANT_NAME' VALUE t.merchant_name1,\n                   'LOCATION' VALUE AP_WEB_DB_CCARD_PKG.GetLocation(t.merchant_city, t.merchant_province_state),\n                   'BILLED_AMOUNT' VALUE t.billed_amount,\n                   'BILLED_CURRENCY_CODE' VALUE t.billed_currency_code,\n                   'PAYMENT_DUE_FROM_CODE' VALUE t.payment_due_from_code\n                   NULL ON NULL\n                   RETURNING CLOB\n               )\n               ORDER BY cr.RECEIPT_ID\n               RETURNING CLOB\n           ),\n           TO_CLOB('[]')\n       ) AS \"CREDIT_TRANSACTIONS\"\nFROM   credit_receipts cr\nJOIN   ap_credit_card_trxns_all t\nON     t.trx_id = cr.TRANSACTION_ID\nJOIN   ap_cards_all c\nON     c.card_id = t.card_id\nAND    c.card_program_id = t.card_program_id\nAND    c.org_id = t.org_id\nJOIN   ap_card_programs_all cp\nON     cp.card_program_id = c.card_program_id\nAND    cp.org_id = c.org_id\nJOIN   iby_creditcard icc\nON     c.card_reference_id = icc.instrid\n",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "username",
+        "serviceName": "ReceiptBatch_getCreditTransactionDetailsBatch"
+      },
+      "paramLabel": "username",
+      "paramValue": "${env.DB_USER}",
+      "visible": false
+    },
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "password",
+        "serviceName": "ReceiptBatch_getCreditTransactionDetailsBatch"
+      },
+      "paramLabel": "password",
+      "paramValue": "${env.DB_PASSWORD}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "REPORT_NUMBER",
+        "serviceName": "ReceiptBatch_getCreditTransactionDetailsBatch"
+      },
+      "paramLabel": "REPORT_NUMBER",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CREDIT_TRANSACTIONS",
+        "serviceName": "ReceiptBatch_getCreditTransactionDetailsBatch"
+      },
+      "paramLabel": "CREDIT_TRANSACTIONS",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_getCreditTransactionDetailsBatch"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_getCreditTransactionDetailsBatch"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_getCreditTransactionDetailsBatch"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@sql",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 1000,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "DB",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": []
+}

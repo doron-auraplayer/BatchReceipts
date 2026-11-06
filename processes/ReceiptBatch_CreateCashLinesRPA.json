@@ -1,0 +1,1183 @@
+{
+  "name": "ReceiptBatch_CreateCashLinesRPA",
+  "description": "Native cash-line child for ReceiptBatch_CreateLinesRPA. Reuses the caller EBS session and runs the original cash loop on trusted service data.",
+  "steps": [
+    {
+      "type": "JavaScript",
+      "name": "JavaScript",
+      "nickname": "Inputs",
+      "command": "var reportNumber = ServiceManager.getInput(\"REPORT_NUMBER\");\nvar ReportPurpose = ServiceManager.getInput(\"REPORT_PURPOSE\");\n\nvar ReportReceipts = ServiceManager.getInput(\"REPORT_CASH_RECEIPTS\");\nif (typeof ReportReceipts === \"string\") {\n    try {\n        ReportReceipts = JSON.parse(ReportReceipts);\n    } catch (parseError) {\n        throw new Error(\n            \"BLOCKER ReceiptBatch_CreateCashLinesRPA step=Inputs report=\" +\n            (reportNumber === null || reportNumber === undefined || String(reportNumber) === \"\" ? \"unknown\" : reportNumber) +\n            \" reason=REPORT_CASH_RECEIPTS is not valid JSON.\"\n        );\n    }\n}\nif (!Array.isArray(ReportReceipts)) {\n    throw new Error(\n        \"BLOCKER ReceiptBatch_CreateCashLinesRPA step=Inputs report=\" +\n        (reportNumber === null || reportNumber === undefined || String(reportNumber) === \"\" ? \"unknown\" : reportNumber) +\n        \" reason=REPORT_CASH_RECEIPTS must be an array or a JSON string containing an array.\"\n    );\n}\n\nvar receiptIdsCount = ReportReceipts.length;\n",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": true,
+          "isJavaScript": false,
+          "name": "REPORT_CASH_RECEIPTS",
+          "paramValue": ""
+        },
+        {
+          "visible": true,
+          "isJavaScript": false,
+          "name": "REPORT_PURPOSE",
+          "paramValue": ""
+        },
+        {
+          "visible": true,
+          "isJavaScript": false,
+          "name": "REPORT_NUMBER",
+          "paramValue": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "reportNumber",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "ReportPurpose",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "ReportReceipts",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "receiptIdsCount",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Loop",
+      "name": "Start Loop",
+      "nickname": "LoopLines",
+      "command": "for (var index_0 = 0; index_0 < Number(receiptIdsCount); index_0++) {",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "LOOP_START"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "iterations"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "paramValue": "receiptIdsCount"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": ""
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "1"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "loopIndex",
+          "paramValue": "0",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "loopList",
+          "paramValue": "FILE_ARRAY_LOOP_0",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Condition",
+      "name": "IF",
+      "nickname": "If more lines needed",
+      "command": "index_0 > 0 && index_0 % 10 === 0 == true",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "IF"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "paramValue": "index_0 > 0 && index_0 % 10 === 0"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "paramValue": "true"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "Service",
+      "name": "ReceiptBatch_AddMoreLines",
+      "nickname": "Add More Lines",
+      "keepAlive": true,
+      "throwError": true,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "index",
+          "paramValue": "return index_0;",
+          "valueType": "selectValue"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "RequestedLineAvailable",
+          "label": "RequestedLineAvailable",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "AddMoreLinesMessageExists",
+          "label": "AddMoreLinesMessageExists",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "AddMoreLinesMessage",
+          "label": "AddMoreLinesMessage",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "currentPageTitle",
+          "label": "currentPageTitle",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "Error",
+          "label": "Error",
+          "visible": true,
+          "inTable": false
+        },
+        {
+          "name": "PopupMessages",
+          "label": "PopupMessages",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "StatusBarMessages",
+          "label": "StatusBarMessages",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Condition",
+      "name": "ELSE",
+      "nickname": "Condition",
+      "command": "",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "ELSE"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "Condition",
+      "name": "END IF",
+      "nickname": "Condition",
+      "command": "",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "END IF"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "JavaScript",
+      "name": "JavaScript",
+      "nickname": "cash Line Parameters",
+      "command": "var currentReceiptId = ReportReceipts[index_0].RECEIPT_ID;",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "currentReceiptId",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Service",
+      "name": "iExpense_cash_openLineDetails",
+      "nickname": "Open Line Details",
+      "keepAlive": true,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "ExpensesTableCashLinePrefix",
+          "paramValue": "\"N77\"",
+          "valueType": "staticText"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "index",
+          "paramValue": "return index_0;",
+          "valueType": "selectValue"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LineTitle",
+          "label": "LineTitle",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "Error",
+          "label": "Error",
+          "visible": true,
+          "inTable": false
+        },
+        {
+          "name": "PopupMessages",
+          "label": "PopupMessages",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "StatusBarMessages",
+          "label": "StatusBarMessages",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Condition",
+      "name": "IFSERVICE",
+      "nickname": "Condition",
+      "command": "iExpense_cash_openLineDetailsError.length == 0",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "IF"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "paramValue": "iExpense_cash_openLineDetailsError.length"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "paramValue": "0"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "Service",
+      "name": "ReceiptBatch_SetReceiptDetailsRPA",
+      "nickname": "Set Receipt Details",
+      "keepAlive": true,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "RECEIPT_JSON",
+          "paramValue": "JSON.stringify(ReportReceipts[index_0])",
+          "valueType": "javaScript"
+        },
+        {
+          "visible": true,
+          "isJavaScript": true,
+          "name": "REPORT_PURPOSE",
+          "paramValue": "ReportPurpose",
+          "valueType": "javaScript"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "LINE_INDEX",
+          "paramValue": "index_0",
+          "valueType": "javaScript"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "RECEIPT_MODE",
+          "paramValue": "\"CASH\"",
+          "valueType": "staticText"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "sessionId",
+          "paramValue": "ServiceManager.sessionId",
+          "valueType": "javaScript"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Error",
+          "label": "Error",
+          "visible": true,
+          "inTable": false
+        },
+        {
+          "name": "PopupMessages",
+          "label": "PopupMessages",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "StatusBarMessages",
+          "label": "StatusBarMessages",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Condition",
+      "name": "IFSERVICE",
+      "nickname": "Condition",
+      "command": "ReceiptBatch_SetReceiptDetailsRPAError.length == 0",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "IF"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "paramValue": "ReceiptBatch_SetReceiptDetailsRPAError.length"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "paramValue": "0"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "Service",
+      "name": "ReceiptBatch_SaveLineAndReturn",
+      "nickname": "Save Line And Return",
+      "keepAlive": true,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "ContinueWithWarnings",
+          "paramValue": "\"true\"",
+          "valueType": "staticText"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CashLineWarningMessageExists",
+          "label": "CashLineWarningMessageExists",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "CashLineWarningMessage",
+          "label": "CashLineWarningMessage",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "CashLineErrorMessageExists",
+          "label": "CashLineErrorMessageExists",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "CashLineErrorMessage",
+          "label": "CashLineErrorMessage",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "errorPopupExists",
+          "label": "errorPopupExists",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "currentPageTitle",
+          "label": "currentPageTitle",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "CashLines_ReimbursableColumnHeader",
+          "label": "CashLines_ReimbursableColumnHeader",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "Error",
+          "label": "Error",
+          "visible": true,
+          "inTable": false
+        },
+        {
+          "name": "PopupMessages",
+          "label": "PopupMessages",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "StatusBarMessages",
+          "label": "StatusBarMessages",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Condition",
+      "name": "IFSERVICE",
+      "nickname": "Condition",
+      "command": "ReceiptBatch_SaveLineAndReturnError.length == 0",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "IF"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "paramValue": "ReceiptBatch_SaveLineAndReturnError.length"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "paramValue": "0"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "Service",
+      "name": "ReceiptBatch_update_receipt_status",
+      "nickname": "ReceiptBatch_update_receipt_status",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": true,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "RECEIPT_ID",
+          "paramValue": "currentReceiptId",
+          "valueType": "javaScript"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "STATUS",
+          "paramValue": "\"LINE_CREATED\"",
+          "valueType": "staticText"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "ERROR_MESSAGE",
+          "paramValue": "\"\"",
+          "valueType": "staticText"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Error",
+          "label": "Error",
+          "visible": true,
+          "inTable": false
+        },
+        {
+          "name": "PopupMessages",
+          "label": "PopupMessages",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "StatusBarMessages",
+          "label": "StatusBarMessages",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Condition",
+      "name": "ELSE",
+      "nickname": "Condition",
+      "command": "",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "ELSE"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "Service",
+      "name": "ReceiptBatch_update_receipt_status",
+      "nickname": "ReceiptBatch_update_receipt_status",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": true,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "RECEIPT_ID",
+          "paramValue": "currentReceiptId",
+          "valueType": "javaScript"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "STATUS",
+          "paramValue": "\"LINE_FAILED\"",
+          "valueType": "staticText"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "ERROR_MESSAGE",
+          "paramValue": "return PROCESS.ReceiptBatch_SaveLineAndReturn.output[\"CashLineErrorMessage\"];",
+          "valueType": "selectValue"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Error",
+          "label": "Error",
+          "visible": true,
+          "inTable": false
+        },
+        {
+          "name": "PopupMessages",
+          "label": "PopupMessages",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "StatusBarMessages",
+          "label": "StatusBarMessages",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Condition",
+      "name": "END IF",
+      "nickname": "Condition",
+      "command": "",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "END IF"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "Condition",
+      "name": "ELSE",
+      "nickname": "Condition",
+      "command": "",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "ELSE"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "Service",
+      "name": "ReceiptBatch_update_receipt_status",
+      "nickname": "update_status",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": true,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "RECEIPT_ID",
+          "paramValue": "currentReceiptId",
+          "valueType": "javaScript"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "STATUS",
+          "paramValue": "\"LINE_FAILED\"",
+          "valueType": "staticText"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "ERROR_MESSAGE",
+          "paramValue": "ReceiptBatch_SetReceiptDetailsRPAError",
+          "valueType": "javaScript"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Error",
+          "label": "Error",
+          "visible": true,
+          "inTable": false
+        },
+        {
+          "name": "PopupMessages",
+          "label": "PopupMessages",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "StatusBarMessages",
+          "label": "StatusBarMessages",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Condition",
+      "name": "END IF",
+      "nickname": "Condition",
+      "command": "",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "END IF"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "Condition",
+      "name": "ELSE",
+      "nickname": "Condition",
+      "command": "",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "ELSE"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "Service",
+      "name": "ReceiptBatch_update_receipt_status",
+      "nickname": "update_Error_openLineDetails",
+      "keepAlive": true,
+      "throwError": true,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "RECEIPT_ID",
+          "paramValue": "currentReceiptId",
+          "valueType": "javaScript"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "STATUS",
+          "paramValue": "\"LINE_FAILED\"",
+          "valueType": "staticText"
+        },
+        {
+          "visible": false,
+          "isJavaScript": true,
+          "name": "ERROR_MESSAGE",
+          "paramValue": "return PROCESS.iExpense_cash_openLineDetails.output[\"Error\"];",
+          "valueType": "selectValue"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Error",
+          "label": "Error",
+          "visible": true,
+          "inTable": false
+        },
+        {
+          "name": "PopupMessages",
+          "label": "PopupMessages",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "StatusBarMessages",
+          "label": "StatusBarMessages",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Condition",
+      "name": "END IF",
+      "nickname": "Condition",
+      "command": "",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "END IF"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "Loop",
+      "name": "End Loop",
+      "nickname": "Loop",
+      "command": "}",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "LOOP_END"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "array"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "1"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false
+        }
+      ],
+      "outputs": [
+        {
+          "name": "loopIndex",
+          "paramValue": "NaN",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "JavaScript",
+      "name": "SubWorkflowOutput",
+      "nickname": "Outputs",
+      "command": "ServiceManager.setOutput(\"CASH_RECEIPTS_PROCESSED\", receiptIdsCount);\nServiceManager.setOutput(\"sessionId\", ServiceManager.sessionId);",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CASH_RECEIPTS_PROCESSED",
+          "visible": true,
+          "inTable": false
+        },
+        {
+          "name": "sessionId",
+          "visible": true,
+          "inTable": false
+        }
+      ]
+    }
+  ],
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "isEnabled": true,
+  "authenticationMethod": "None",
+  "isPrivate": false
+}

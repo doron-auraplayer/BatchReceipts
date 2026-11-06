@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head profile="http://selenium-ide.openqa.org/profiles/test-case">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="selenium.base" href="" />
+    <title>ReceiptBatch_selectCreditTransaction</title>
+    </head>
+    <body>
+    <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+    <tr><td rowspan="1" colspan="3">ReceiptBatch_selectCreditTransaction</td></tr>
+  </thead><tbody><tr>
+      <td>// Inputs: card label, transaction date, amount, merchant, location, and max pages.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>GE Capital Travel MC, Vision Ops XXXXX1234</td>
+      <td>CARD_LABEL</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>25-Aug-2009</td>
+      <td>TRANSACTION_DATE</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>64.41 USD</td>
+      <td>TRANSACTION_AMOUNT</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>Bouchon Bistro @ The V</td>
+      <td>MERCHANT_NAME</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>702-414-6230, NY</td>
+      <td>LOCATION</td>
+      <td></td>
+    </tr><tr>
+      <td>input</td>
+      <td>100</td>
+      <td>MAX_PAGES</td>
+      <td></td>
+    </tr><tr>
+      <td>//Existing iExpense credit-card session only. This partial never gets, logs in, opens a page, saves, returns, or advances the wizard.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>// Page and limit validation: confirm the transactions page and validate MAX_PAGES.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>assertTitle</td>
+      <td>*Expense Report: Credit Card Transactions*</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>!/^[1-9][0-9]*$/.test(String(MAX_PAGES)) || parseInt(MAX_PAGES,10) > 1000</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>throw</td>
+      <td>MAX_PAGES must be a positive integer between 1 and 1000.</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>// Credit-card switch and refresh: select CARD_LABEL and wait for the table refresh.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeSelectedLabel</td>
+      <td>id=CreditCardPoplist</td>
+      <td>CURRENT_CARD</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>String(CURRENT_CARD) != String(CARD_LABEL)</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>runScript</td>
+      <td>(function () {     var marker = document.getElementById('AP_CARD_CHANGE_PENDING');     if (!marker) {         marker = document.createElement('span');         marker.id = 'AP_CARD_CHANGE_PENDING';         document.body.appendChild(marker);     }     marker.textContent = 'pending'; })();</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>selectAndWait</td>
+      <td>id=CreditCardPoplist</td>
+      <td>label=${CARD_LABEL}</td>
+      <td></td>
+    </tr><tr>
+      <td>waitForElementNotPresent</td>
+      <td>id=AP_CARD_CHANGE_PENDING</td>
+      <td>30000</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeSelectedLabel</td>
+      <td>id=CreditCardPoplist</td>
+      <td>SELECTED_CARD_LABEL</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>String(SELECTED_CARD_LABEL) != String(CARD_LABEL)</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>throw</td>
+      <td>The selected credit card did not adopt CARD_LABEL after the table refresh.</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>// Empty-card check: fail when the selected card has no available transactions.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>waitForElementPresent</td>
+      <td>id=AvailableTrxnList:Content</td>
+      <td>30000</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>xpath=//table[@id='AvailableTrxnList:Content']//td[normalize-space(.)='No results found.']</td>
+      <td>CARD_EMPTY</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>String(CARD_EMPTY) == 'true'</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>throw</td>
+      <td>The selected credit card has no available transactions.</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>// Safe XPath prep: build the exact row XPath from quoted transaction inputs without interpolating them into code.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>runScript</td>
+      <td>(function () {     var previous = document.getElementById('AP_MATCH_HELPER');     if (previous) {         if (previous.parentNode) {             previous.parentNode.removeChild(previous);         }     }     var helper = document.createElement('div');     helper.id = 'AP_MATCH_HELPER';     helper.style.position = 'absolute';     helper.style.left = '-10000px';     helper.style.top = '0';     helper.style.width = '420px';     helper.style.height = '120px';     var names = ['TRANSACTION_DATE', 'TRANSACTION_AMOUNT', 'MERCHANT_NAME', 'LOCATION'];     var i;     for (i = 0; i &lt; names.length; i += 1) {         var input = document.createElement('input');         input.type = 'text';         input.id = 'AP_MATCH_INPUT_' + names[i];         input.name = 'AP_MATCH_INPUT_' + names[i];         helper.appendChild(input);     }     var output = document.createElement('span');     output.id = 'AP_MATCH_ROW_XPATH';     helper.appendChild(output);     document.body.appendChild(helper); })();</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>type</td>
+      <td>id=AP_MATCH_INPUT_TRANSACTION_DATE</td>
+      <td>${TRANSACTION_DATE}</td>
+      <td></td>
+    </tr><tr>
+      <td>type</td>
+      <td>id=AP_MATCH_INPUT_TRANSACTION_AMOUNT</td>
+      <td>${TRANSACTION_AMOUNT}</td>
+      <td></td>
+    </tr><tr>
+      <td>type</td>
+      <td>id=AP_MATCH_INPUT_MERCHANT_NAME</td>
+      <td>${MERCHANT_NAME}</td>
+      <td></td>
+    </tr><tr>
+      <td>type</td>
+      <td>id=AP_MATCH_INPUT_LOCATION</td>
+      <td>${LOCATION}</td>
+      <td></td>
+    </tr><tr>
+      <td>runScript</td>
+      <td>(function () {     var read = function (name) {         var input = document.getElementById('AP_MATCH_INPUT_' + name);         if (!input || typeof input.value === 'undefined') {             throw new Error('The safe XPath helper input ' + name + ' was not found.');         }         return String(input.value);     };     var literal = function (value) {         if (value.indexOf("'") === -1) {             return "'" + value + "'";         }         if (value.indexOf('"') === -1) {             return '"' + value + '"';         }         var parts = value.split("'");         var chunks = [];         var i;         for (i = 0; i &lt; parts.length; i += 1) {             chunks.push("'" + parts[i] + "'");         }         return 'concat(' + chunks.join(', "\'", ') + ')';     };     var date = read('TRANSACTION_DATE');     var amount = read('TRANSACTION_AMOUNT');     var merchant = read('MERCHANT_NAME');     var location = read('LOCATION');     var row = "//table[@id='AvailableTrxnList:Content']/tbody/tr[" +         "   .//span[" +         "     starts-with(@id,'AvailableTrxnList:TransactionDate:')" +         "     and normalize-space(.)=normalize-space(" + literal(date) + ")" +         "   ]" +         "   and .//span[" +         "     starts-with(@id,'AvailableTrxnList:ReceiptAmount:')" +         "     and normalize-space(.)=normalize-space(" + literal(amount) + ")" +         "   ]" +         "   and .//span[" +         "     starts-with(@id,'AvailableTrxnList:OieMerchantName:')" +         "     and normalize-space(.)=normalize-space(" + literal(merchant) + ")" +         "   ]" +         "   and .//span[" +         "     starts-with(@id,'AvailableTrxnList:OieLocation:')" +         "     and normalize-space(.)=normalize-space(" + literal(location) + ")" +         "   ]" +         " ]";     var output = document.getElementById('AP_MATCH_ROW_XPATH');     if (!output) {         throw new Error('The safe XPath output span was not found.');     }     output.textContent = row; })();</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>id=AP_MATCH_ROW_XPATH</td>
+      <td>AP_MATCH_ROW_XPATH</td>
+      <td></td>
+    </tr><tr>
+      <td>// Starting range and paging metadata: verify the first range and calculate TOTAL_ROWS.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>xpath=(//div[@id='AvailableTrxnList:ControlBar']//td[not(*) and starts-with(normalize-space(.),'Rows ')])[1]</td>
+      <td>INITIAL_RANGE_TEXT</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>String(INITIAL_RANGE_TEXT).indexOf('Rows 1 to ') != 0</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>throw</td>
+      <td>Start the scan from Rows 1 to the current page end; the table is not at the first row range.</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeAttribute</td>
+      <td>id=AvailableTrxnList:Content@options</td>
+      <td>PAGE_OPTIONS</td>
+      <td></td>
+    </tr><tr>
+      <td>runScript</td>
+      <td>(function () {     var table = document.getElementById('AvailableTrxnList:Content');     if (!table) {         throw new Error('Transaction table was not found.');     }      var options = table.getAttribute('options');     options = options === null || options === undefined ? '' : String(options);      var hasData = false;     var spans = table.getElementsByTagName ? table.getElementsByTagName('span') : [];     var i;     for (i = 0; i < spans.length; i += 1) {         if (String(spans[i].id || '').indexOf('AvailableTrxnList:TransactionDate:') === 0) {             hasData = true;             break;         }     }      var valid = /^\d+,\d+(?::\d+,\d+)*$/.test(options);     var lastStart = NaN;     var lastCount = NaN;     if (valid) {         var segments = options.split(':');         var expectedStart = 1;         for (i = 0; i < segments.length; i += 1) {             var parts = segments[i].split(',');             var start = parseInt(parts[0], 10);             var count = parseInt(parts[1], 10);             if (start !== expectedStart || !isFinite(count) || count < 1) {                 valid = false;                 break;             }             lastStart = start;             lastCount = count;             expectedStart = start + count;         }     }      if (!valid) {         if (hasData) {             throw new Error('AvailableTrxnList paging metadata is missing or invalid.');         }         throw new Error('The selected credit card has no available transactions.');     }      var total = lastStart + lastCount - 1;     if (!isFinite(total) || total < 1) {         throw new Error('Cannot calculate the total row count.');     }      var output = document.getElementById('AP_TOTAL_ROWS');     if (!output) {         output = document.createElement('span');         output.id = 'AP_TOTAL_ROWS';         document.body.appendChild(output);     }      output.textContent = String(total); })();</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>id=AP_TOTAL_ROWS</td>
+      <td>TOTAL_ROWS</td>
+      <td></td>
+    </tr><tr>
+      <td>// Initialize counters: reset PAGE_END and the page scan counter.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeExpression</td>
+      <td>0</td>
+      <td>PAGE_END</td>
+      <td></td>
+    </tr><tr>
+      <td>runScript</td>
+      <td>(function () {     sessionStorage.setItem('AP_RECEIPT_SCAN_COUNT', '0');      var output = document.getElementById('AP_PAGES_SCANNED');     if (!output) {         output = document.createElement('span');         output.id = 'AP_PAGES_SCANNED';         document.body.appendChild(output);     }     output.textContent = '0'; })();</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>id=AP_PAGES_SCANNED</td>
+      <td>PAGES_SCANNED</td>
+      <td></td>
+    </tr><tr>
+      <td>echo</td>
+      <td>PAGE_OPTIONS=${PAGE_OPTIONS}; TOTAL_ROWS=${TOTAL_ROWS}; PAGE_END=${PAGE_END}; PAGES_SCANNED=${PAGES_SCANNED}; MAX_PAGES=${MAX_PAGES}</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>// Search loop and exact row lookup: find the row matching date, amount, merchant, and location.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeExpression</td>
+      <td>false</td>
+      <td>transactionExists</td>
+      <td></td>
+    </tr><tr>
+      <td>while</td>
+      <td>parseInt(PAGE_END,10) < parseInt(TOTAL_ROWS,10) && parseInt(PAGES_SCANNED,10) < parseInt(MAX_PAGES,10) && String(transactionExists) != "true"</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>xpath=${AP_MATCH_ROW_XPATH}</td>
+      <td>transactionExists</td>
+      <td></td>
+    </tr><tr>
+      <td>// Duplicate-row guard: fail when more than one row matches the requested transaction.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>xpath=(${AP_MATCH_ROW_XPATH})[2]</td>
+      <td>transactionDuplicate</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>String(transactionDuplicate)=="true"</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>throw</td>
+      <td>The loaded transaction window contains more than one row matching the requested date, amount, merchant, and location; refusing to continue with an ambiguous match.</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>String(transactionExists) == "true"</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>echo</td>
+      <td>Matching transaction found.</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>else</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>echo</td>
+      <td>No matching transaction found.</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>// Read and validate the loaded range: capture the new range and require forward progress.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeExpression</td>
+      <td>${PAGE_END}</td>
+      <td>PREVIOUS_END</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>xpath=(//div[@id='AvailableTrxnList:ControlBar']//td[not(*) and starts-with(normalize-space(.),'Rows ')])[1]</td>
+      <td>PAGE_RANGE_TEXT</td>
+      <td></td>
+    </tr><tr>
+      <td>runScript</td>
+      <td>(function () {     var bar = document.getElementById('AvailableTrxnList:ControlBar');     var match = bar && bar.textContent.match(/Rows\s+(\d+)\s+to\s+(\d+)/);      if (!match) {         throw new Error('Cannot read the loaded row range.');     }      var output = document.getElementById('AP_PAGE_END');     if (!output) {         output = document.createElement('span');         output.id = 'AP_PAGE_END';         document.body.appendChild(output);     }      output.textContent = match[2]; })();</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>id=AP_PAGE_END</td>
+      <td>PAGE_END</td>
+      <td></td>
+    </tr><tr>
+      <td>echo</td>
+      <td>PREVIOUS_END=${PREVIOUS_END}; PAGE_END=${PAGE_END}</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>!isFinite(parseInt(PAGE_END,10)) || parseInt(PAGE_END,10) <= parseInt(PREVIOUS_END,10)</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>throw</td>
+      <td>The table range is invalid or scrolling did not advance.</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>// Update page counter: increment PAGES_SCANNED for the loop guard.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>runScript</td>
+      <td>(function () {     var saved = sessionStorage.getItem('AP_RECEIPT_SCAN_COUNT');     var count = parseInt(saved, 10);      if (saved === null || !isFinite(count)) {         throw new Error('The scan counter was not initialized.');     }      count += 1;     sessionStorage.setItem('AP_RECEIPT_SCAN_COUNT', String(count));      var output = document.getElementById('AP_PAGES_SCANNED');     if (!output) {         output = document.createElement('span');         output.id = 'AP_PAGES_SCANNED';         document.body.appendChild(output);     }     output.textContent = String(count); })();</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>id=AP_PAGES_SCANNED</td>
+      <td>PAGES_SCANNED</td>
+      <td></td>
+    </tr><tr>
+      <td>echo</td>
+      <td>PAGES_SCANNED=${PAGES_SCANNED}; PAGE_END=${PAGE_END}; TOTAL_ROWS=${TOTAL_ROWS}</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>// Scroll and wait for next range: scroll the table and wait for a new row range.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>parseInt(PAGE_END,10) < parseInt(TOTAL_ROWS,10) && parseInt(PAGES_SCANNED,10) < parseInt(MAX_PAGES,10) && String(transactionExists) != "true"</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>//scrollDownAndWait</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>runScript</td>
+      <td>(function () {     var table = document.getElementById('scrollDiv:AvailableTrxnList');      if (!table) {         throw new Error('Transaction scroll area was not found.');     }      curScrollingTbl = 'AvailableTrxnList';     table.scrollTop = table.scrollHeight;     table.dispatchEvent(new Event('scroll')); })();</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>waitForElementPresent</td>
+      <td>xpath=//div[@id='AvailableTrxnList:ControlBar']//td[not(*) and starts-with(normalize-space(.),'Rows ') and normalize-space(.) != normalize-space('${PAGE_RANGE_TEXT}')]</td>
+      <td>30000</td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endWhile</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>// No-match result: fail when no matching row was found before the end or MAX_PAGES.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>String(transactionExists) != "true"</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>throw</td>
+      <td>No matching transaction was found before the end of the table or MAX_PAGES.</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>// Validate matching checkbox and row: require exactly one matching row and checkbox.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>xpath=${AP_MATCH_ROW_XPATH}//input[@type='checkbox' and starts-with(@name,'AvailableTrxnList:selected:')]</td>
+      <td>TRANSACTION_CHECKBOX_PRESENT</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>xpath=(${AP_MATCH_ROW_XPATH}//input[@type='checkbox' and starts-with(@name,'AvailableTrxnList:selected:')])[2]</td>
+      <td>TRANSACTION_CHECKBOX_DUPLICATE</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>String(TRANSACTION_CHECKBOX_PRESENT)!="true" || String(TRANSACTION_CHECKBOX_DUPLICATE)=="true"</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>throw</td>
+      <td>The matching row must contain exactly one transaction checkbox.</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>xpath=(${AP_MATCH_ROW_XPATH})[2]</td>
+      <td>transactionDuplicate</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>String(transactionDuplicate)=="true"</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>throw</td>
+      <td>The loaded transaction window contains more than one row matching the requested date, amount, merchant, and location; refusing to continue with an ambiguous match.</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>// Check only if not already selected: check the matching row's checkbox when needed.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeChecked</td>
+      <td>xpath=${AP_MATCH_ROW_XPATH}//input[@type='checkbox' and starts-with(@name,'AvailableTrxnList:selected:')]</td>
+      <td>TRANSACTION_CHECKED_BEFORE</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>String(TRANSACTION_CHECKED_BEFORE)!="true"</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>check</td>
+      <td>xpath=${AP_MATCH_ROW_XPATH}//input[@type='checkbox' and starts-with(@name,'AvailableTrxnList:selected:')]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>// Verify selected result: confirm the checkbox is checked and echo success.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeChecked</td>
+      <td>xpath=${AP_MATCH_ROW_XPATH}//input[@type='checkbox' and starts-with(@name,'AvailableTrxnList:selected:')]</td>
+      <td>TRANSACTION_SELECTED</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>String(TRANSACTION_SELECTED)!="true"</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>throw</td>
+      <td>The matching transaction checkbox was not selected.</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>echo</td>
+      <td>Matching transaction selected.</td>
+      <td></td>
+      <td></td>
+    </tr></tbody></table></body></html>

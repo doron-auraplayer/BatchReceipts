@@ -1,6 +1,6 @@
 {
   "name": "ReceiptBatch_openInProgressReport",
-  "description": "",
+  "description": "Opens an in-progress report and can stop on Credit Card Transactions; default false preserves the original cash navigation.",
   "formUrl": "",
   "command": "IE",
   "isEnabled": true,
@@ -14,6 +14,17 @@
       },
       "paramLabel": "reportNumber",
       "paramValue": "W44262",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "StopAtCreditTransactions",
+        "serviceName": "ReceiptBatch_openInProgressReport"
+      },
+      "paramLabel": "StopAtCreditTransactions",
+      "paramValue": "false",
       "visible": true
     }
   ],
@@ -31,6 +42,21 @@
         "serviceName": "ReceiptBatch_openInProgressReport"
       },
       "paramLabel": "reportExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "currentPageTitle",
+        "serviceName": "ReceiptBatch_openInProgressReport"
+      },
+      "paramLabel": "currentPageTitle",
       "visible": true
     },
     {
@@ -96,6 +122,8 @@
   "validationResponseCode": 200,
   "type": "HTML",
   "createdBy": "admin",
-  "labels": [],
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
   "apps": []
 }

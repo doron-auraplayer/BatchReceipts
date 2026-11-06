@@ -155,8 +155,8 @@
     {
       "type": "JavaScript",
       "name": "JavaScript",
-      "nickname": "create  line",
-      "command": "var receipt_id = PROCESS.getProcessingReceipts.output[\"RECEIPT_ID\"][index_1];\nvar blob_file = PROCESS.getProcessingReceipts.output[\"FILE_CONTENT\"][index_1];\n\n// console.log(\"------------ RECEIPT_ID: \", receipt_id);\n// console.log(\"------------ FILE_CONTENT: \", blob_file);\n\n",
+      "nickname": "Prepare receipt",
+      "command": "var receipt_id = PROCESS.getProcessingReceipts.output[\"RECEIPT_ID\"][index_1];\nvar blob_file = PROCESS.getProcessingReceipts.output[\"FILE_CONTENT\"][index_1];",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,
@@ -193,7 +193,7 @@
           "isJavaScript": true,
           "name": "receipt_id",
           "label": "receipt_id",
-          "paramValue": "return PROCESS.getProcessingReceipts.output[\"RECEIPT_ID\"][index_1];"
+          "paramValue": "return receipt_id;"
         },
         {
           "visible": false,

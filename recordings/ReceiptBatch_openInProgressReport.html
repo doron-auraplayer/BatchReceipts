@@ -3,7 +3,7 @@
     <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head profile="http://selenium-ide.openqa.org/profiles/test-case">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="selenium.base" href="" />
+    <link rel="selenium.base" href="http://ebs12214.sub07141424590.apvcn.oraclevcn.com:8000/" />
     <title>ReceiptBatch_openInProgressReport</title>
     </head>
     <body>
@@ -11,13 +11,103 @@
     <thead>
     <tr><td rowspan="1" colspan="3">ReceiptBatch_openInProgressReport</td></tr>
   </thead><tbody><tr>
-      <td>clickAndWait</td>
-      <td>xpath=(//a[contains(@id, 'SFAV')]/div/img)[2]</td>
+      <td>input</td>
+      <td>false</td>
+      <td>StopAtCreditTransactions</td>
       <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>xpath=//table[contains(@id,'ActiveReportsRN.ActiveReportsTbl:Content')]</td>
+      <td>expensesHomeReady</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>!expensesHomeReady</td>
+      <td>true</td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>xpath=//a[@id='OIEHOMEPAGE']</td>
+      <td>expensesHomeTabAvailable</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>expensesHomeTabAvailable</td>
+      <td>true</td>
       <td></td>
     </tr><tr>
       <td>clickAndWait</td>
-      <td>xpath=//div[contains(@id, 'favListContainer0')]/div/div/a/div[2]</td>
+      <td>xpath=//a[@id='OIEHOMEPAGE']</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>else</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>waitForElementPresent</td>
+      <td>xpath=//*[@id='treemenu1']//a[div[normalize-space(.)='iExpenses']]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>xpath=//*[@id='treemenu1']//a[div[normalize-space(.)='iExpenses']][div/img[@alt='Expand']]</td>
+      <td>iExpensesCollapsed</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>iExpensesCollapsed</td>
+      <td>true</td>
+      <td></td>
+    </tr><tr>
+      <td>click</td>
+      <td>xpath=//*[@id='treemenu1']//a[div[normalize-space(.)='iExpenses']][div/img[@alt='Expand']]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>waitForElementPresent</td>
+      <td>xpath=//table[contains(@id,'ActiveReportsRN.ActiveReportsTbl:Content')] | //*[@id='treemenu1']//a[div[normalize-space(.)='Expenses Home']]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>xpath=//table[contains(@id,'ActiveReportsRN.ActiveReportsTbl:Content')]</td>
+      <td>expensesHomeReady</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>!expensesHomeReady</td>
+      <td>true</td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>xpath=//*[@id='treemenu1']//a[div[normalize-space(.)='Expenses Home']]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>waitForElementPresent</td>
+      <td>xpath=//table[contains(@id,'ActiveReportsRN.ActiveReportsTbl:Content')]</td>
       <td></td>
       <td></td>
     </tr><tr>
@@ -83,6 +173,71 @@
     </tr><tr>
       <td>clickAndWait</td>
       <td>//button[@title='Next']</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeTitle</td>
+      <td>currentPageTitle</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>String(StopAtCreditTransactions) == "true"</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>assertTitle</td>
+      <td>*Expense Report: Credit Card Transactions*</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>exitTest</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>currentPageTitle.indexOf("Expense Report: Credit Card Transactions") > -1</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>xpath=(//button[@title='Next'])[1]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeTitle</td>
+      <td>currentPageTitle</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>currentPageTitle.indexOf("Expense Report: Credit Card Expenses") > -1</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>clickAndWait</td>
+      <td>xpath=(//button[@title='Next'])[1]</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeTitle</td>
+      <td>currentPageTitle</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
       <td></td>
       <td></td>
     </tr><tr>

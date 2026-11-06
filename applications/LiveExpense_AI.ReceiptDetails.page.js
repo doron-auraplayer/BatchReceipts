@@ -13,7 +13,23 @@ var receiptLoading = false;
 var loadedReceiptId = '';
 var loadedPStatus = '';
 var saveBusy = false;
+// A staged credit match is form state only: Save persists it through the normal
+// ReceiptBatch_save_expense_data flow. The flag keeps the match-only status
+// rule (incomplete READY -> DRAFT) scoped to the receipt it was staged on.
+var creditMatchStaged = false;
+// Amount, currency and merchant are owned by an approved credit transaction.
+// They stay read-only until the receipt is explicitly unmatched. Start Date is
+// deliberately not controlled: matching copies the transaction date initially,
+// then the user may correct it through the normal Save flow without clearing
+// the credit link.
+var CREDIT_CONTROLLED_FIELDS = [
+  'DetailReceiptAmount',
+  'ReceiptCurrencyChoice',
+  'DetailMerchantName'
+];
 var SAVE_ACTION_FIELDS = ['SaveLineBtn', 'SaveBtn', 'Save'];
+var USED_CREDIT_TRANSACTIONS_SERVICE = 'ReceiptBatch_getUsedCreditTransactions';
+var USED_CREDIT_TRANSACTIONS_NUM_ROWS = 10000;
 var CORE_REQUIRED_FIELDS = {
   expenseType: 'expenseType',
   startDate: 'StartDate',
@@ -348,6 +364,7 @@ function onLoad() {
   loadedReceiptId = '';
   loadedPStatus = '';
   saveBusy = false;
+  creditMatchStaged = false;
 
   clearRequiredMarks();
   clearReceiptCoreFields();
@@ -375,6 +392,201 @@ function own(object, property) {
 }
 
 function propertyOf(value) { return value === null || value === undefined ? '' : textOf(value).trim(); }
+
+// The loaded or staged credit transaction is the single source of truth for
+// the matched state. Storage is only read while loading a receipt, so a failed
+// detach can never be masked by an older saved P_CREDIT_TRANSACTION value.
+function isCreditTransactionMatched() {
+  return !isBlank(receiptCore.creditTransaction);
+}
+
+function creditControlledField(field) {
+  var name = propertyOf(field);
+  if (name === '') { return false; }
+  return CREDIT_CONTROLLED_FIELDS.indexOf(name) !== -1;
+}
+
+function metadataFieldReadOnly(field) {
+  var name = propertyOf(field);
+  if (name === '') { return false; }
+  return Object.keys(receiptFields || {}).some(function (property) {
+    var meta = receiptFields[property] || {};
+    return propertyOf(meta.fieldId) === name && meta.readOnly === true;
+  });
+}
+
+function setCreditControlledFieldLocked(field, locked) {
+  var name = propertyOf(field);
+  var element;
+  var trigger;
+
+  if (name === '') { return; }
+
+  if (locked === true) {
+    Fields.disable(name);
+  } else if (metadataFieldReadOnly(name)) {
+    // Unlocking a credit-specific lock must not override metadata readOnly.
+    Fields.disable(name);
+  } else {
+    Fields.enable(name);
+  }
+
+  element = elementOf(name);
+  if (element) {
+    try {
+      element.readOnly = locked === true;
+      if (typeof element.setAttribute === 'function') {
+        if (locked === true) {
+          element.setAttribute('readonly', 'readonly');
+          element.setAttribute('aria-readonly', 'true');
+        } else {
+          element.removeAttribute('readonly');
+          element.removeAttribute('aria-readonly');
+        }
+      }
+    } catch (ignoredReadOnlyProblem) {
+      // Fields.disable/enable remains the authoritative control state.
+    }
+  }
+
+  // The generated LOV trigger is a separate element on native Aura fields.
+  // Disable it with the input so a currency/date LOV cannot be opened.
+  trigger = elementOf(name + '_lov_trigger');
+  if (trigger) {
+    try {
+      trigger.disabled = locked === true;
+      if (typeof trigger.setAttribute === 'function') {
+        if (locked === true) {
+          trigger.setAttribute('disabled', 'disabled');
+        } else {
+          trigger.removeAttribute('disabled');
+        }
+      }
+    } catch (ignoredTriggerProblem) {
+      // The native trigger may not expose direct DOM properties.
+    }
+  }
+}
+
+function applyCreditTransactionLocks() {
+  var matched = isCreditTransactionMatched();
+  CREDIT_CONTROLLED_FIELDS.forEach(function (field) {
+    setCreditControlledFieldLocked(field, matched);
+  });
+  return matched;
+}
+
+function creditMatchStateForParent() {
+  return {
+    receiptId: loadedReceiptId !== '' ? loadedReceiptId : currentReceiptId(),
+    matched: isCreditTransactionMatched(),
+    ready: loadedReceiptId !== '' && receiptMetadata !== null && receiptLoading !== true,
+    busy: saveBusy === true || receiptLoading === true || expenseTypeBusy === true
+  };
+}
+
+// Notify the parent viewer without polling: every render, load and busy-state
+// change calls this. The parent applies its own active-preview identity guard.
+function notifyParentCreditMatchState() {
+  var parentWindow;
+
+  try {
+    parentWindow = window.parent;
+    if (!parentWindow || parentWindow === window) { return; }
+    if (typeof parentWindow.updateCcMatchAttachmentButton !== 'function') { return; }
+    parentWindow.updateCcMatchAttachmentButton(creditMatchStateForParent());
+  } catch (ignoredParentCreditState) {
+    // A missing or unreachable parent must never affect the receipt editor.
+  }
+}
+
+function closeCreditMatchingBesideDetails() {
+  var parentWindow;
+  var $parent;
+  var $panel;
+  var $stage;
+
+  try {
+    parentWindow = window.parent;
+    if (!parentWindow || parentWindow === window) { return; }
+
+    if (typeof parentWindow.closeCreditMatchingBesidePreview === 'function') {
+      parentWindow.closeCreditMatchingBesidePreview();
+      return;
+    }
+
+    $parent = parentWindow.jQuery || parentWindow.$;
+    if (typeof $parent !== 'function') { return; }
+    $panel = $parent('#receiptCreditMatchingPanel');
+    if (!$panel || !$panel.length) { return; }
+    $stage = typeof $panel.closest === 'function'
+      ? $panel.closest('.attachmentViewerStage')
+      : null;
+    if ($stage && $stage.length && typeof $stage.removeClass === 'function') {
+      $stage.removeClass('receipt-credit-matching-open');
+    }
+    if (typeof $panel.remove === 'function') { $panel.remove(); }
+  } catch (ignoredCloseProblem) {
+    // The unmatch still has to complete when the matching panel is unreachable.
+  }
+}
+
+// Public: detach the matched credit transaction in the live form only. The
+// normal Save action persists the cleared P_CREDIT_TRANSACTION. No service is
+// called and no success popup is shown here.
+function detachCreditTransactionMatch() {
+  var snapshot;
+  var core;
+  var extras;
+
+  if (saveBusy || receiptLoading || expenseTypeBusy || receiptMetadata === null) {
+    notifyParentCreditMatchState();
+    return false;
+  }
+  if (isBlank(loadedReceiptId)) {
+    notifyParentCreditMatchState();
+    return false;
+  }
+  if (activeReceiptIdForCreditMatch() !== loadedReceiptId) {
+    notifyParentCreditMatchState();
+    return false;
+  }
+  if (!isCreditTransactionMatched()) {
+    notifyParentCreditMatchState();
+    return false;
+  }
+  if (guestHasPendingForm()) {
+    notifyParentCreditMatchState();
+    Popup.ok('Receipt Details', saveBlockedReason());
+    return false;
+  }
+
+  snapshot = collectCurrentReceiptValues();
+  if (snapshot === null) {
+    notifyParentCreditMatchState();
+    return false;
+  }
+
+  core = copyOf(snapshot.core);
+  extras = copyOf(snapshot.extras);
+  core.creditTransaction = '';
+  receiptCore = core;
+  receiptLine = extras;
+  // Reuse the staged flag so the next explicit Save sends the empty
+  // P_CREDIT_TRANSACTION through the existing save service.
+  creditMatchStaged = true;
+
+  closeCreditMatchingBesideDetails();
+
+  try {
+    renderReceiptLine(true);
+  } catch (ignoredRenderProblem) {
+    // The staged detach must survive a paint problem; Save still owns it.
+  }
+  applyCreditTransactionLocks();
+  notifyParentCreditMatchState();
+  return true;
+}
 
 function copyOf(value) { return value === undefined ? undefined : JSON.parse(JSON.stringify(value)); }
 
@@ -2743,8 +2955,9 @@ function readReceiptCore() {
     startDate: Storage.get('P_RECEIPT_DATE'),
     merchantName: Storage.get('P_MERCHANT'),
     // Keep the analyzed value raw here. The metadata-driven renderer applies
-    // the legacy "All Other Locations" default only for text-mode types, so a
-    // blank analyzed location can never masquerade as a real LOV match.
+    // the legacy "All Other Locations" default for text and lov types, so a
+    // blank analyzed location can never masquerade as a real LOV match: LOV
+    // validation still runs and clears a value the service does not return.
     expenseLocation: textOf(Storage.get('P_LOCATION')).trim(),
     department: Storage.get('P_DEPARTMENT'),
     creditTransaction: Storage.get('P_CREDIT_TRANSACTION')
@@ -2766,8 +2979,9 @@ function formatReceiptStartDate(value) {
   return text;
 }
 
-function renderReceiptCore() {
-  if (currentLocationControl().mode === 'text' && isBlank(receiptCore.expenseLocation)) {
+function renderReceiptCore(suppressLegacyLocationDefault) {
+  if (suppressLegacyLocationDefault !== true &&
+      isBlank(receiptCore.expenseLocation)) {
     receiptCore.expenseLocation = 'All Other Locations';
   }
   Storage.set('expenseType', textOf(receiptCore.expenseType));
@@ -2775,14 +2989,33 @@ function renderReceiptCore() {
   setReceiptField('DetailReceiptAmount', receiptCore.receiptAmount, false, true);
   setReceiptField('DetailMerchantName', receiptCore.merchantName, false, true);
   setReceiptField('LocationName', receiptCore.expenseLocation, false, true);
+  // Display-only: the live core owns the matched state. A saved match, a
+  // staged match and a staged detach are all represented there, so an older
+  // saved P_CREDIT_TRANSACTION can never override the current form.
+  var paymentMethodIsCash = !isCreditTransactionMatched();
+  $('#PaymentMethod_container label[for="PaymentMethod"]').text('Payment Method: ' + (paymentMethodIsCash ? 'Cash' : 'Credit Card'));
+  var paymentMethodContainer = $('#PaymentMethod_container');
+  if (typeof paymentMethodContainer.toggleClass === 'function') {
+    paymentMethodContainer
+      .toggleClass('receipt-payment-cash', paymentMethodIsCash)
+      .toggleClass('receipt-payment-credit', !paymentMethodIsCash);
+  } else {
+    paymentMethodContainer
+      .removeClass('receipt-payment-cash receipt-payment-credit')
+      .addClass(paymentMethodIsCash ? 'receipt-payment-cash' : 'receipt-payment-credit');
+  }
+  showField('PaymentMethod');
   showField('expenseType');
   Fields.enable('expenseType');
-  Fields.enable('StartDate');
+  // Start Date is editable even for a matched credit receipt, but it must still
+  // honour a metadata readOnly definition just like every other field.
+  if (!metadataFieldReadOnly('StartDate')) { Fields.enable('StartDate'); }
   Fields.enable('DetailReceiptAmount');
   Fields.enable('DetailMerchantName');
   Fields.enable('LocationName');
   applyLocationMode();
   locationCoreRendered = true;
+  applyCreditTransactionLocks();
   autoValidateCurrentLocation();
 }
 
@@ -2792,11 +3025,17 @@ function clearReceiptCoreFields() {
   clearField('DetailReceiptAmount');
   clearField('DetailMerchantName');
   clearField('LocationName');
+  clearField('PaymentMethod');
+  $('#PaymentMethod_container')
+    .removeClass('receipt-payment-cash receipt-payment-credit');
 }
 
 function collectCoreField(property, field, isNumber) {
   var name = propertyOf(field);
   if (name === '' || !elementOf(name)) { return true; }
+  // Disabled controls cannot be edited by the user. A programmatic or stale
+  // value must never overwrite the transaction-owned amount or merchant.
+  if (isCreditTransactionMatched() && creditControlledField(name)) { return true; }
   var value = textOf(Fields.get(name));
   if (value === textOf(renderedFieldValues[name])) { return true; }
   delete renderedFieldValues[name];
@@ -2864,6 +3103,22 @@ function currentReceiptId() {
   return textOf(Storage.get('RECEIPTBATCH_RECEIPT_ID') || Storage.get('receipt_ID'));
 }
 
+// The embedded page owns the stable preview identity. Fall back to the page
+// storage when the editor is opened on its own.
+function activeReceiptIdForCreditMatch() {
+  var receiptId = '';
+
+  try {
+    if (typeof window !== 'undefined' && window && window.parent && window.parent !== window) {
+      receiptId = textOf(window.parent.activePreviewReceiptId).trim();
+    }
+  } catch (ignoredParentReceipt) {
+    receiptId = '';
+  }
+
+  return receiptId !== '' ? receiptId : currentReceiptId();
+}
+
 function loadReceiptData() {
   var receiptId = currentReceiptId();
   if (isBlank(receiptId)) {
@@ -2873,6 +3128,7 @@ function loadReceiptData() {
   clearReceiptResponseKeys();
   loadedReceiptId = '';
   loadedPStatus = '';
+  creditMatchStaged = false;
   receiptLoading = true;
   resetLocationControl();
   resetEmployeeAttendeeEditor();
@@ -2995,6 +3251,7 @@ function reportReceiptProblem(problem, previousExtras) {
   showField('expenseType');
   Fields.enable('expenseType');
   applyLocationMode();
+  applyCreditTransactionLocks();
   updateSaveAction();
   Popup.ok('Receipt Details', message);
 }
@@ -3017,6 +3274,7 @@ function saveActionField() {
 }
 
 function updateSaveAction() {
+  notifyParentCreditMatchState();
     console.log("updateSaveAction");
   var field = saveActionField();
   if (field === '') { return; }
@@ -3140,7 +3398,7 @@ function applyReadOnlyMetadata() {
   });
 }
 
-function renderReceiptLine() {
+function renderReceiptLine(suppressLegacyLocationDefault) {
   if (isBlank(receiptLine.receiptCurrency)) {
       receiptLine.receiptCurrency = 'USD - US dollar';
   }
@@ -3148,7 +3406,7 @@ function renderReceiptLine() {
   storeReceiptLine(receiptLine);
   renderMetadataFields();
   applyReadOnlyMetadata();
-  renderReceiptCore();
+  renderReceiptCore(suppressLegacyLocationDefault);
   storeExpenseType(textOf(receiptCore.expenseType));
   applyEmployeeAttendeeMode();
   applyGuestMode();
@@ -3156,6 +3414,8 @@ function renderReceiptLine() {
   refreshRequiredControls();
   renderRequiredMarkers();
   autoValidateCurrentLocation();
+  applyCreditTransactionLocks();
+  notifyParentCreditMatchState();
 }
 
 function refreshRequiredControls() {
@@ -3232,6 +3492,8 @@ function collectCurrentReceiptLine() {
     if (meta.control === 'display') { return; }
     var field = propertyOf(meta.fieldId);
     if (field === '' || !elementOf(field)) { return; }
+    // Currency is transaction-owned while a credit match is active.
+    if (isCreditTransactionMatched() && creditControlledField(field)) { return; }
     var element = elementOf(field);
     if (element.type === 'checkbox') {
       line[property] = element.checked === true;
@@ -3325,7 +3587,7 @@ function expenseType_lov_item_handler(arrayItem) {
 // ---------- LOV handlers ----------
 
 function ReceiptCurrencyChoice_lov_item_handler(arrayItem) {
-  if (saveBusy) { return; }
+  if (saveBusy || isCreditTransactionMatched()) { return; }
   receiptLine.receiptCurrency = textOf(arrayItem.Currency);
   Fields.setAndStore('Currency', arrayItem['Currency']);
   try {
@@ -3350,6 +3612,8 @@ function AirTicketClass_lov_item_handler(item, label) {
 }
 
 function prepare_iExpense_CurrencyList_lov_request() { return app.iExpenseConfig; }
+
+function prepare_ReceiptBatch_ReceiptCurrency_lov_request() { return {}; }
 
 function prepare_iExpense_getExpenseTypes_lov_request() {
   var inputParams = {};
@@ -3561,6 +3825,7 @@ function handleSaveResponse(input) {
   storeSaveInput(input);
   Storage.remove('P_UPDATED_DATE');
 
+  creditMatchStaged = false;
   loadedPStatus = textOf(input.P_STATUS);
   notifyParentReceiptExpenseDataSaved(input);
   finishSave();
@@ -3611,7 +3876,200 @@ function reportSaveFailure(problem) {
 function finishSave() {
   saveBusy = false;
   Fields.enable('expenseType');
+  // A completed or failed save must not leave transaction-owned fields
+  // editable. finishSave is also the exit path for failed lookups.
+  applyCreditTransactionLocks();
   updateSaveAction();
+}
+
+/**
+ * Normalize a saved CREDIT_TRANSACTION without a Number conversion. Only a
+ * positive digit key can reserve a transaction.
+ */
+function usedCreditTransactionKey(value) {
+  var text = textOf(value).trim();
+
+  if (!/^\d+$/.test(text)) { return ''; }
+  text = text.replace(/^0+/, '');
+  return text === '' ? '' : text;
+}
+
+function receiptDetailsEbsUser() {
+  return textOf(Storage.get('LoggedInUsername')).trim() ||
+    textOf(Storage.get('EBS_USER')).trim();
+}
+
+function usedCreditMapFromResponse(response, currentReceiptId) {
+  var body;
+  var tableArray;
+  var items;
+  var map = {};
+  var index;
+  var item;
+  var key;
+  var receiptId;
+  var current = textOf(currentReceiptId).trim();
+
+  if (!response || typeof response !== 'object' || response.success !== true) {
+    throw new Error('The used credit transaction service did not report success.');
+  }
+
+  body = response.Response;
+  if (!body ||
+      typeof body !== 'object' ||
+      body[USED_CREDIT_TRANSACTIONS_SERVICE + 'Success'] !== true) {
+    throw new Error('The used credit transaction service did not confirm ' +
+      USED_CREDIT_TRANSACTIONS_SERVICE + 'Success.');
+  }
+
+  tableArray = body[USED_CREDIT_TRANSACTIONS_SERVICE + 'TableArray'];
+  if (!tableArray || typeof tableArray !== 'object') {
+    throw new Error('The used credit transaction response is missing its table.');
+  }
+
+  items = tableArray[USED_CREDIT_TRANSACTIONS_SERVICE + 'ArrayItem'];
+  if (items === undefined || items === null) { items = []; }
+  if (!Array.isArray(items)) {
+    throw new Error('The used credit transaction response table is malformed.');
+  }
+  if (items.length >= USED_CREDIT_TRANSACTIONS_NUM_ROWS) {
+    throw new Error('The used credit transaction list reached the row limit.');
+  }
+
+  for (index = 0; index < items.length; index += 1) {
+    item = items[index];
+    if (!item || typeof item !== 'object') {
+      throw new Error('The used credit transaction response contains a malformed row.');
+    }
+    key = usedCreditTransactionKey(item.CREDIT_TRANSACTION);
+    receiptId = textOf(item.RECEIPT_ID).trim();
+    if (key === '' || !/^\d+$/.test(receiptId)) {
+      throw new Error('The used credit transaction response contains an invalid link.');
+    }
+    // The current receipt's own link is always allowed on Save: the service
+    // returns every saved link, so the editor ignores its own saved row here.
+    if (current !== '' && receiptId === current) {
+      continue;
+    }
+    map[key] = receiptId;
+  }
+
+  return map;
+}
+
+function requestUsedCreditForSave(snapshot, callback) {
+  var settled = false;
+
+  function finish(result) {
+    if (settled) { return; }
+    settled = true;
+    callback(result);
+  }
+
+  try {
+    Services.call(
+      USED_CREDIT_TRANSACTIONS_SERVICE,
+      function (response) {
+        try {
+          finish({
+            map: usedCreditMapFromResponse(response, snapshot.receiptId)
+          });
+        } catch (problem) {
+          finish({
+            error: creditMatchErrorMessage(
+              problem,
+              'The used credit transaction response is malformed.'
+            )
+          });
+        }
+      },
+      function (response) {
+        finish({
+          error: creditMatchErrorMessage(
+            response,
+            'Failed to check already matched credit transactions.'
+          )
+        });
+      },
+      {
+        EBS_USER: snapshot.ebsUser,
+        numOfRowsInTable: USED_CREDIT_TRANSACTIONS_NUM_ROWS
+      }
+    );
+  } catch (thrown) {
+    finish({
+      error: creditMatchErrorMessage(
+        thrown,
+        'Failed to check already matched credit transactions.'
+      )
+    });
+  }
+}
+
+/**
+ * Fresh server check immediately before the credit Save. A stale receipt/user/
+ * card callback never authorizes the write, and a failed or malformed response
+ * is handled as unavailable (not as an empty used list).
+ */
+function checkCreditTransactionBeforeSave(transactionId, callback) {
+  var snapshot = {
+    receiptId: textOf(loadedReceiptId).trim(),
+    ebsUser: receiptDetailsEbsUser(),
+    cardId: textOf(Storage.get('CARD_ID')).trim()
+  };
+  var key = usedCreditTransactionKey(transactionId);
+
+  if (!validCreditMatchId(snapshot.receiptId) || snapshot.ebsUser === '' || key === '') {
+    callback({
+      error: 'The current receipt, user or credit transaction is not available. Retry the match.'
+    });
+    return;
+  }
+
+  requestUsedCreditForSave(snapshot, function (result) {
+    var currentCard = textOf(Storage.get('CARD_ID')).trim();
+
+    if (textOf(loadedReceiptId).trim() !== snapshot.receiptId ||
+        activeReceiptIdForCreditMatch() !== snapshot.receiptId ||
+        receiptDetailsEbsUser() !== snapshot.ebsUser ||
+        (snapshot.cardId !== '' && currentCard !== snapshot.cardId)) {
+      callback({
+        stale: true,
+        error: 'The open receipt changed. Select the credit transaction again.'
+      });
+      return;
+    }
+
+    if (result.error) {
+      callback(result);
+      return;
+    }
+
+    callback({
+      map: result.map,
+      used: Object.prototype.hasOwnProperty.call(result.map, key)
+    });
+  });
+}
+
+function submitSaveInput(input) {
+  Storage.remove('P_ERROR');
+  Storage.remove('Error');
+  saveBusy = true;
+
+  Fields.disable('expenseType');
+  applyCreditTransactionLocks();
+  updateSaveAction();
+  try {
+    console.log('[ReceiptDetails] P_RECEIPT_DATE sent:', input.P_RECEIPT_DATE);
+    Services.call('ReceiptBatch_save_expense_data', function () {
+      handleSaveResponse(input);
+    }, function () {
+      reportSaveFailure('Failed to save the expense data.');
+    }, input);
+  } catch (thrown) {
+    reportSaveFailure(thrown);
+  }
 }
 
 function saveExpenseData() {
@@ -3631,24 +4089,437 @@ function saveExpenseData() {
 
   var core = copyOf(snapshot.core);
   var extras = copyOf(snapshot.extras);
-  var input = saveInput(loadedReceiptId, core, extras);
+  var input;
+  // The existing P_RECEIPT_DATE validator rejects a malformed Start Date. Keep
+  // that validation on the edit path instead of letting it escape the handler.
+  try {
+    input = creditMatchStaged
+      ? creditMatchSaveInput(loadedReceiptId, core, extras)
+      : saveInput(loadedReceiptId, core, extras);
+  } catch (dateProblem) {
+    updateSaveAction();
+    var dateMessage = typeof dateProblem === 'string'
+      ? dateProblem
+      : (dateProblem && dateProblem.message) || String(dateProblem);
+    Popup.ok('Receipt Details', dateMessage);
+    return;
+  }
 
   Storage.remove('P_ERROR');
   Storage.remove('Error');
-  saveBusy = true;
 
+  var creditTransaction = textOf(core.creditTransaction).trim();
+  var hasCreditLink = input.P_CREDIT_TRANSACTION !== null &&
+    textOf(input.P_CREDIT_TRANSACTION).trim() !== '' &&
+    creditTransaction !== '';
+
+  // Cash and unmatched receipts bypass the reservation lookup. A credit Save
+  // must verify the transaction again at the moment of writing so a match made
+  // in another batch/tab cannot be submitted from a stale selection.
+  if (!hasCreditLink) {
+    submitSaveInput(input);
+    return;
+  }
+
+  saveBusy = true;
   Fields.disable('expenseType');
+  applyCreditTransactionLocks();
   updateSaveAction();
+
   try {
-    console.log('[ReceiptDetails] P_RECEIPT_DATE sent:', input.P_RECEIPT_DATE);
-    Services.call('ReceiptBatch_save_expense_data', function () {
-      handleSaveResponse(input);
-    }, function () {
-      reportSaveFailure('Failed to save the expense data.');
-    }, input);
+    checkCreditTransactionBeforeSave(creditTransaction, function (result) {
+      if (result.stale) {
+        finishSave();
+        Popup.ok('Receipt Details', result.error);
+        return;
+      }
+
+      if (result.error) {
+        finishSave();
+        Popup.ok(
+          'Receipt Details',
+          'Could not verify whether this credit transaction is already matched. ' +
+          'Check your connection and try again.'
+        );
+        return;
+      }
+
+      if (result.used) {
+        finishSave();
+        Popup.ok(
+          'Receipt Details',
+          'This credit transaction is already matched to another receipt. ' +
+          'Choose a different transaction.'
+        );
+        return;
+      }
+
+      submitSaveInput(input);
+    });
   } catch (thrown) {
     reportSaveFailure(thrown);
   }
+}
+
+// ---------- approved credit transaction match ----------
+
+function validCreditMatchId(value) {
+  return /^\d+$/.test(textOf(value).trim());
+}
+
+function validCreditMatchAmount(value) {
+  if (value === null || value === undefined || textOf(value).trim() === '') { return false; }
+  return isFinite(Number(value));
+}
+
+function validCreditMatchDate(value) {
+  var match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(textOf(value).trim());
+  if (!match) { return false; }
+
+  var year = Number(match[1]);
+  var month = Number(match[2]);
+  var day = Number(match[3]);
+  var date = new Date(Date.UTC(year, month - 1, day));
+
+  return date.getUTCFullYear() === year &&
+    date.getUTCMonth() === month - 1 &&
+    date.getUTCDate() === day;
+}
+
+function creditMatchPayloadProblem(match) {
+  if (!isObject(match)) { return 'The credit transaction match is invalid.'; }
+  if (!validCreditMatchId(match.receiptId)) {
+    return 'The credit transaction match has no valid receipt ID.';
+  }
+  if (!validCreditMatchId(match.transactionId)) {
+    return 'The credit transaction match has no valid transaction ID.';
+  }
+  if (!validCreditMatchAmount(match.amount)) {
+    return 'The credit transaction match has no valid amount.';
+  }
+  if (!validCreditMatchDate(match.date)) {
+    return 'The credit transaction match has no valid date.';
+  }
+  if (!/^[A-Z]{3}$/.test(textOf(match.currency).trim().toUpperCase())) {
+    return 'The credit transaction match has no valid currency.';
+  }
+  return '';
+}
+
+// Currency stays in the extras document. Keep a full label only when its ISO
+// prefix already matches the posted currency; never invent a label.
+function creditMatchCurrency(existing, transactionCurrency) {
+  var code = textOf(transactionCurrency).trim().toUpperCase();
+  var current = textOf(existing).replace(/^\s+|\s+$/g, '');
+
+  if (current.length >= 3 && current.slice(0, 3).toUpperCase() === code) { return current; }
+  return code;
+}
+
+function creditMatchErrorMessage(problem, fallback) {
+  if (typeof problem === 'string' && textOf(problem).trim() !== '') { return problem; }
+
+  if (problem && typeof problem === 'object') {
+    if (typeof problem.message === 'string' && textOf(problem.message).trim() !== '') {
+      return problem.message;
+    }
+
+    var response = problem.Response;
+    if (isObject(response)) {
+      var messageNode = response['ReceiptBatch_save_expense_dataMessage'];
+      if (isObject(messageNode) && textOf(messageNode.Error).trim() !== '') {
+        return textOf(messageNode.Error).trim();
+      }
+      if (textOf(response.Error).trim() !== '') { return textOf(response.Error).trim(); }
+    }
+
+    if (textOf(problem.Error).trim() !== '') { return textOf(problem.Error).trim(); }
+  }
+
+  return fallback;
+}
+
+function reportCreditMatchFailure(onFailure, message) {
+  var text = textOf(message).trim();
+  if (text === '') { text = 'Failed to save the credit transaction match.'; }
+
+  if (typeof onFailure === 'function') {
+    try {
+      onFailure(text);
+      return;
+    } catch (ignoredFailureHandler) {
+      // Fall through to the page popup.
+    }
+  }
+
+  Popup.ok('Receipt Details', text);
+}
+
+// Stage the approved match into the live model. Nothing is written to the
+// database here: the existing Save action persists the staged form and
+// transaction ID once. A preview switch during an async lookup owns the newer
+// model, so the captured receipt identity is re-checked before staging.
+function stageCreditMatch(capturedReceiptId, core, extras, onSuccess, onFailure) {
+  if (loadedReceiptId !== capturedReceiptId ||
+      activeReceiptIdForCreditMatch() !== capturedReceiptId) {
+    finishSave();
+    reportCreditMatchFailure(
+      onFailure,
+      'The open receipt changed. Select the credit transaction again.'
+    );
+    return;
+  }
+
+  try {
+    receiptCore = copyOf(core);
+    receiptLine = copyOf(extras);
+    creditMatchStaged = true;
+  } catch (stageProblem) {
+    finishSave();
+    reportCreditMatchFailure(
+      onFailure,
+      creditMatchErrorMessage(stageProblem, 'Failed to stage the credit transaction match.')
+    );
+    return;
+  }
+
+  try {
+    renderReceiptLine(true);
+  } catch (ignoredRenderProblem) {
+    // The match is staged; rendering must not turn it into a reported failure.
+  }
+
+  finishSave();
+
+  if (typeof onSuccess === 'function') {
+    try {
+      onSuccess();
+    } catch (ignoredSuccessHandler) {
+      // The match is already staged.
+    }
+  }
+}
+
+function creditMatchLocationDate(value) {
+  var match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(textOf(value).trim());
+  if (!match) { return null; }
+  return match[1] + '/' + match[2] + '/' + match[3] + ' 00:00:00';
+}
+
+// The match has no artificial location requirement. The only fallback is a
+// configured default: the receipt field metadata first, then the selected
+// expense type's empty template. No name is fabricated here.
+function creditMatchConfiguredLocationDefault() {
+  var meta = isObject(receiptFields) && own(receiptFields, 'expenseLocation')
+    ? receiptFields.expenseLocation
+    : null;
+  if (isObject(meta) && own(meta, 'defaultValue') && !isBlank(meta.defaultValue)) {
+    return textOf(meta.defaultValue).trim();
+  }
+
+  var entry = currentExpenseTypeEntry();
+  if (isObject(entry) && isObject(entry.emptyTemplate)
+      && own(entry.emptyTemplate, 'expenseLocation')
+      && !isBlank(entry.emptyTemplate.expenseLocation)) {
+    return textOf(entry.emptyTemplate.expenseLocation).trim();
+  }
+
+  return '';
+}
+
+// Text-mode location is free text, so the transaction location is valid as-is.
+function creditMatchTextLocation(match, configuredDefault) {
+  var fromTransaction = textOf(match.location).trim();
+  if (fromTransaction !== '') { return fromTransaction; }
+  return textOf(configuredDefault).trim();
+}
+
+// The matching workflow must not preserve READY when it leaves a required
+// field (usually Location) empty. Normal Save keeps its existing status rules.
+function creditMatchSaveInput(receiptId, core, extras) {
+  var input = saveInput(receiptId, core, extras);
+  if (input.P_STATUS === 'READY' && !requiredFieldsComplete(core, extras)) {
+    input.P_STATUS = 'DRAFT';
+  }
+  return input;
+}
+
+// The lookup is context-driven exactly like the native LOV, but the date comes
+// from the approved transaction (not from the still-rendered receipt date).
+function creditMatchLocationRequest(match) {
+  var control = currentLocationControl();
+  if (control.mode !== 'lov' || !locationControlConfigured(control)) { return null; }
+  var date = creditMatchLocationDate(match.date);
+  if (date === null) { return null; }
+  var context = control.context;
+  return {
+    service: control.service,
+    params: {
+      P_ORG_ID: context.orgId,
+      P_LANGUAGE: context.language,
+      P_EXPENSE_TYPE_ID: context.expenseTypeId,
+      P_EXPENSE_DATE: date,
+      P_ALL_SCHEDULES: context.allSchedules,
+      P_MERCHANT_LOCATIONS: context.merchantLocations,
+      P_END_DATE_OFFSET: context.endDateOffset,
+      LocationName: '%'
+    }
+  };
+}
+
+// Only an exact (case-insensitive, trimmed) match is accepted; city partials
+// and any name the DB did not return are never guessed.
+function canonicalLocationName(rows, wanted) {
+  var target = textOf(wanted).trim().toLowerCase();
+  if (target === '') { return null; }
+  for (var i = 0; i < rows.length; i += 1) {
+    var name = textOf(rows[i].LOCATION_NAME);
+    if (name.trim().toLowerCase() === target) { return name; }
+  }
+  return null;
+}
+
+// A successful lookup authorizes only an exact transaction location or an
+// exact configured default. The existing receipt location and a sole returned
+// row are never substitutes: no match leaves the location empty.
+function resolveCreditMatchLocation(rows, match, configuredDefault) {
+  var fromTransaction = canonicalLocationName(rows, match.location);
+  if (fromTransaction !== null) { return fromTransaction; }
+  var fromDefault = canonicalLocationName(rows, configuredDefault);
+  if (fromDefault !== null) { return fromDefault; }
+  return '';
+}
+
+function requestCreditMatchLocation(request, matching, configuredDefault,
+  capturedReceiptId, core, extras, onSuccess, onFailure) {
+  function fail(message) {
+    finishSave();
+    reportCreditMatchFailure(onFailure, message);
+  }
+
+  try {
+    Services.call(request.service, function (rawResponse) {
+      // A preview switch during the lookup owns the newer model and storage.
+      if (loadedReceiptId !== capturedReceiptId ||
+          activeReceiptIdForCreditMatch() !== capturedReceiptId) {
+        fail('The open receipt changed. Select the credit transaction again.');
+        return;
+      }
+
+      var rows;
+      try {
+        rows = locationRowsFromResponse(rawResponse);
+      } catch (ignoredResponseProblem) {
+        fail('The expense location lookup returned an invalid response. Try again.');
+        return;
+      }
+
+      core.expenseLocation = resolveCreditMatchLocation(
+        rows, matching, configuredDefault
+      );
+      stageCreditMatch(capturedReceiptId, core, extras, onSuccess, onFailure);
+    }, function (response) {
+      fail(creditMatchErrorMessage(
+        response,
+        'Failed to look up the expense location. Check your connection and try again.'
+      ));
+    }, request.params);
+  } catch (thrown) {
+    fail(creditMatchErrorMessage(
+      thrown,
+      'Failed to look up the expense location. Check your connection and try again.'
+    ));
+  }
+}
+
+function applyCreditTransactionMatch(match, onSuccess, onFailure) {
+  var reason = saveBlockedReason();
+  if (reason !== '') {
+    reportCreditMatchFailure(onFailure, reason);
+    return;
+  }
+
+  var payloadProblem = creditMatchPayloadProblem(match);
+  if (payloadProblem !== '') {
+    reportCreditMatchFailure(onFailure, payloadProblem);
+    return;
+  }
+
+  var capturedReceiptId = textOf(match.receiptId).trim();
+  if (loadedReceiptId !== capturedReceiptId) {
+    reportCreditMatchFailure(
+      onFailure,
+      'The open receipt changed. Select the credit transaction again.'
+    );
+    return;
+  }
+  if (activeReceiptIdForCreditMatch() !== capturedReceiptId) {
+    reportCreditMatchFailure(
+      onFailure,
+      'The open receipt changed. Select the credit transaction again.'
+    );
+    return;
+  }
+
+  var snapshot = collectCurrentReceiptValues();
+  if (snapshot === null) {
+    reportCreditMatchFailure(onFailure, 'Check the current receipt values and try again.');
+    return;
+  }
+
+  var core = copyOf(snapshot.core);
+  var extras = copyOf(snapshot.extras);
+
+  core.creditTransaction = textOf(match.transactionId).trim();
+  core.receiptAmount = Number(match.amount);
+  core.startDate = textOf(match.date).trim();
+  if (!isBlank(match.merchant)) { core.merchantName = textOf(match.merchant).trim(); }
+  // The transaction location is acceptable free text in text mode. For
+  // metadata-driven LOV types the DB lookup below canonicalizes it or applies
+  // a configured default; it never falls back to the previous receipt value.
+  extras.receiptCurrency = creditMatchCurrency(extras.receiptCurrency, match.currency);
+
+  var locationControl = currentLocationControl();
+  var configuredDefault = creditMatchConfiguredLocationDefault();
+  var locationRequest = locationControl.mode === 'lov'
+    ? creditMatchLocationRequest(match)
+    : null;
+
+  if (locationControl.mode !== 'lov') {
+    core.expenseLocation = creditMatchTextLocation(match, configuredDefault);
+  }
+
+  // Serialize the lookup and the staged update as one approval operation.
+  saveBusy = true;
+
+  try {
+    Fields.disable('expenseType');
+    updateSaveAction();
+  } catch (ignoredSaveActionProblem) {
+    // The guarded lookup/staging below still has to run.
+  }
+
+  if (locationControl.mode === 'lov') {
+    if (locationRequest === null) {
+      finishSave();
+      reportCreditMatchFailure(onFailure, locationRequestProblemMessage());
+      return;
+    }
+
+    requestCreditMatchLocation(
+      locationRequest,
+      match,
+      configuredDefault,
+      capturedReceiptId,
+      core,
+      extras,
+      onSuccess,
+      onFailure
+    );
+    return;
+  }
+
+  stageCreditMatch(capturedReceiptId, core, extras, onSuccess, onFailure);
 }
 
 // ---------- next-step handlers (no navigation; Save only writes the expense data) ----------
@@ -3695,6 +4566,7 @@ function onCancel() {
     Popup.ok('Receipt Details', 'Please wait for the save to finish.');
     return;
   }
+  creditMatchStaged = false;
   resetEmployeeAttendeeEditor();
   resetGuestEditor();
   resetLocationControl();

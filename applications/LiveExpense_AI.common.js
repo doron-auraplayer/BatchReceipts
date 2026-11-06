@@ -1696,9 +1696,7 @@ function getCancelButtonHtml() {
 function getCcMatchButtonHtml() {
   return ''
     + '<button id="ccMatchAttachmentBtn" type="button" '
-    + 'class="attachmentViewerButton" '
-    + 'disabled="disabled" aria-disabled="true" '
-    + 'title="Coming soon">'
+    + 'class="attachmentViewerButton" disabled="disabled" aria-disabled="true">'
     + 'CC Match'
     + '</button>';
 }
@@ -2083,6 +2081,7 @@ function bindAttachmentViewerActionButtons(mode) {
       });
 
     bindRemoveButton();
+    bindCcMatchButton();
 
     bindViewerCloseEvents(
       '#' + findAttachmentViewerOverlay().attr('id'),
@@ -2161,6 +2160,271 @@ function bindApproveButton() {
     });
 }
 
+function setCcMatchButtonState(matched, unavailable) {
+  var $button = $('#ccMatchAttachmentBtn');
+
+  if (!$button.length) {
+    return false;
+  }
+
+  $button.text(matched ? 'Unmatch Credit Card' : 'CC Match');
+
+  if (matched) {
+    $button.addClass('attachmentViewerButtonUnmatch');
+  } else {
+    $button.removeClass('attachmentViewerButtonUnmatch');
+  }
+
+  if (unavailable) {
+    $button.prop('disabled', true).attr('aria-disabled', 'true');
+  } else {
+    $button.prop('disabled', false).removeAttr('aria-disabled');
+  }
+
+  return true;
+}
+
+function currentPreviewReceiptIdentity() {
+  return String(activePreviewReceiptId === null || activePreviewReceiptId === undefined
+    ? ''
+    : activePreviewReceiptId).trim();
+}
+
+// Ask the embedded editor for its public match state. AuraPlayer compiles the
+// ReceiptDetails page variables into a closure, so the parent must never read
+// them directly. The returned state is validated against this preview identity.
+function getEmbeddedEditorCreditMatchState() {
+  var editorWindow = getEmbeddedEditorWindow();
+  var state;
+  var receiptId;
+
+  if (!editorWindow) {
+    return null;
+  }
+
+  try {
+    if (typeof editorWindow.creditMatchStateForParent !== 'function') {
+      return null;
+    }
+    state = editorWindow.creditMatchStateForParent();
+    if (!state || typeof state !== 'object') {
+      return null;
+    }
+
+    receiptId = String(state.receiptId === null || state.receiptId === undefined
+      ? ''
+      : state.receiptId).trim();
+    if (receiptId === '' || receiptId !== currentPreviewReceiptIdentity()) {
+      return null;
+    }
+    if (typeof state.matched !== 'boolean'
+        || typeof state.ready !== 'boolean'
+        || typeof state.busy !== 'boolean') {
+      return null;
+    }
+
+    return {
+      receiptId: receiptId,
+      matched: state.matched,
+      ready: state.ready,
+      busy: state.busy
+    };
+  } catch (error) {
+    return null;
+  }
+}
+
+function refreshCcMatchAttachmentButton() {
+  var state = getEmbeddedEditorCreditMatchState();
+
+  if (state === null) {
+    return setCcMatchButtonState(false, true);
+  }
+
+  return updateCcMatchAttachmentButton(state);
+}
+
+// Public: called by the embedded ReceiptDetails editor on render/load/busy
+// changes. A message from a stale child for another preview is ignored.
+function updateCcMatchAttachmentButton(state) {
+  var receiptId;
+  var activeReceiptId;
+
+  if (!state || typeof state !== 'object') {
+    return setCcMatchButtonState(false, true);
+  }
+
+  receiptId = String(state.receiptId === null || state.receiptId === undefined
+    ? ''
+    : state.receiptId).trim();
+  activeReceiptId = currentPreviewReceiptIdentity();
+
+  if (receiptId === '' || activeReceiptId === '' || receiptId !== activeReceiptId) {
+    return false;
+  }
+
+  return setCcMatchButtonState(
+    state.matched === true,
+    state.ready !== true || state.busy === true
+  );
+}
+
+function clearUnmatchConfirmationState() {
+  $('body').removeClass('receipt-unmatch-confirmation');
+  $('#popupContainer').removeClass('receipt-unmatch-popup');
+  $('#popupContainer').off('popupafterclose.receiptUnmatchConfirmation');
+}
+
+function handleCcMatchButtonClick() {
+  var editorWindow;
+  var state;
+  var capturedReceiptId;
+  var settled = false;
+
+  editorWindow = getEmbeddedEditorWindow();
+  state = getEmbeddedEditorCreditMatchState();
+
+  if (!editorWindow || state === null || state.ready !== true || state.busy === true) {
+    setCcMatchButtonState(state === null ? false : state.matched, true);
+    return false;
+  }
+
+  if (state.matched === true) {
+    capturedReceiptId = state.receiptId;
+
+    try {
+      Popup.custom(
+        'Unmatch Credit Card',
+        'Unmatch this credit card transaction? The receipt will become a Cash receipt. Click Save to keep this change.',
+        'Unmatch',
+        'Cancel',
+        function () {
+          var currentEditorWindow;
+          var currentState;
+
+          if (settled) {
+            return;
+          }
+          settled = true;
+          clearUnmatchConfirmationState();
+
+          currentEditorWindow = getEmbeddedEditorWindow();
+          currentState = getEmbeddedEditorCreditMatchState();
+
+          if (currentEditorWindow !== editorWindow
+              || currentState === null
+              || currentState.receiptId !== capturedReceiptId
+              || currentState.ready !== true
+              || currentState.busy === true
+              || currentState.matched !== true) {
+            return;
+          }
+
+          if (typeof currentEditorWindow.detachCreditTransactionMatch !== 'function') {
+            Popup.ok('CC Match', 'The receipt editor is not ready yet. Please wait and try again.');
+            return;
+          }
+          try {
+            currentEditorWindow.detachCreditTransactionMatch();
+          } catch (error) {
+            Popup.ok('CC Match', 'The receipt editor could not be reached.');
+            return;
+          }
+          refreshCcMatchAttachmentButton();
+        },
+        function () {
+          if (settled) {
+            return;
+          }
+          settled = true;
+          clearUnmatchConfirmationState();
+        }
+      );
+
+      $('body').addClass('receipt-unmatch-confirmation');
+      $('#popupContainer').addClass('receipt-unmatch-popup');
+      $('#popupContainer')
+        .off('popupafterclose.receiptUnmatchConfirmation')
+        .on('popupafterclose.receiptUnmatchConfirmation', function () {
+          clearUnmatchConfirmationState();
+        });
+      // A duplicate #popupTitle exists in the hidden page-as-popup container, so
+      // the native call can leave the visible popup title empty.
+      $('#popupContainer .ui-title').text('Unmatch Credit Card');
+    } catch (error) {
+      clearUnmatchConfirmationState();
+      Popup.ok('CC Match', 'The receipt editor could not be reached.');
+      return false;
+    }
+
+    return true;
+  }
+
+  openCreditMatchingBesideDetails();
+  return true;
+}
+
+function bindCcMatchButton() {
+  $('#ccMatchAttachmentBtn')
+    .off('click.attachmentViewer')
+    .on('click.attachmentViewer', function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      handleCcMatchButtonClick();
+    });
+
+  refreshCcMatchAttachmentButton();
+}
+
+function closeCreditMatchingBesidePreview() {
+  var $panel = $('#receiptCreditMatchingPanel');
+  var $stage;
+
+  if (!$panel.length) {
+    return false;
+  }
+
+  $stage = typeof $panel.closest === 'function'
+    ? $panel.closest('.attachmentViewerStage')
+    : null;
+  if ($stage && $stage.length) {
+    $stage.removeClass('receipt-credit-matching-open');
+  }
+  $panel.remove();
+
+  return true;
+}
+
+function openCreditMatchingBesideDetails() {
+  var $overlay = findAttachmentViewerOverlay();
+  var $stage = $overlay.find('.attachmentViewerStage').first();
+  var $host;
+
+  if (!$overlay.length || !$stage.length) {
+    Popup.ok('CC Match', 'The receipt preview is not available');
+    return;
+  }
+
+  if ($('#receiptCreditMatchingPanel').length) {
+    return;
+  }
+
+  $stage.addClass('receipt-credit-matching-open');
+
+  $host = $('<div id="receiptCreditMatchingPanel"></div>');
+
+  $stage.append($host);
+
+  Popup.asIframe(
+    'Credit_Matching.html',
+    'receiptCreditMatchingPanel',
+    null,
+    '100%',
+    '100%'
+  );
+}
+
 function bindRemoveButton() {
   $('#removeAttachmentBtn')
     .off('click.attachmentViewer')
@@ -2228,6 +2492,7 @@ function isEmbeddedEditorSaving() {
     return false;
   }
 }
+
 function getEmbeddedEditorSaveFunction() {
   var editorWindow = getEmbeddedEditorWindow();
 
@@ -2275,10 +2540,10 @@ function isEmbeddedEditorFrameLoaded() {
     return false;
   }
 }
+
 function isEmbeddedEditorSaveReady() {
   return getEmbeddedEditorSaveFunction() !== null;
 }
-
 
 var embeddedEditorLoadHandler = null;
 
@@ -2329,6 +2594,7 @@ function waitForEmbeddedEditorLoad(generation, attemptsLeft) {
     waitForEmbeddedEditorLoad(generation, attemptsLeft - 1);
   }, EMBEDDED_EDITOR_LOAD_RETRY_DELAY);
 }
+
 function watchEmbeddedEditorLoad() {
   embeddedEditorLoadBindingGeneration += 1;
   embeddedEditorLoadHandler = null;
@@ -2403,6 +2669,8 @@ function closeReceiptDetailsBesidePreview() {
   }
   embeddedEditorLoadBindingGeneration += 1;
   embeddedEditorLoadHandler = null;
+
+  closeCreditMatchingBesidePreview();
 
   $('#' + ATTACHMENT_CONFIG.split.editableId).remove();
   $stage = $splitPane.children('.attachmentViewerStage').first();
@@ -3692,6 +3960,30 @@ function initReceiptAttachmentViewer(options) {
     loadReceiptBatchesByUser(options.statuses, options.userName);
   }
 }
+
+
+function matchAndLoad() {
+    console.log(" - matchAndLoad")
+  Services.call(
+    'ReceiptBatch_TransactionMatching',
+
+    function () {
+      Spinner.stop('REFRESH_RECEIPTS');
+      reloadReceiptTable(true);
+    },
+
+    function () {
+      Spinner.stop('REFRESH_RECEIPTS');
+      onReceiptListFetchFailed();
+
+      Popup.ok(
+        'Refresh',
+        'Failed to match receipts to transactions'
+      );
+    }
+  );
+}
+
 
 app.isSPA = true;
 app.loginPage = 'Login.html';

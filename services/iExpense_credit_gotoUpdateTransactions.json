@@ -87,17 +87,6 @@
   "labels": [],
   "apps": [
     "LiveExpense",
-    "LiveExpense_DHL",
-    "LiveExpense_Emerson",
-    "LiveExpense_Michelin",
-    "LiveExpense_Powell",
-    "LiveExpense_Rheem",
-    "LiveExpense_Rogers",
-    "LiveExpense_SWN",
-    "LiveExpense_TAQA",
-    "LiveExpense_TAQA_Final",
-    "LiveExpense_United",
-    "LiveExpense_Worthington",
-    "LiveExpense_michelin"
+    "LiveExpense_AI"
   ]
 }

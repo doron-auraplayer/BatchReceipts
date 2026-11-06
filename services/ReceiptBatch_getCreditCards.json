@@ -1,0 +1,225 @@
+{
+  "name": "ReceiptBatch_getCreditCards",
+  "description": "",
+  "formUrl": "${env.DB_CONNECTION_STR}",
+  "command": "-- Read-only mirror of the EBS CreditCardsVO card LOV for the receipt card dropdown.\n-- No DML. The first branch computes the oldest available posted date with an exact,\n-- context-independent port of AP_WEB_DB_CCARD_PKG.GetOldestAvailPostedDate: it\n-- queries ap_credit_card_trxns_all directly, org-scoped through params, instead of\n-- relying on the package's MO-scoped ap_credit_card_trxns session context.\nWITH params AS (\n    SELECT TO_NUMBER(CASE\n               WHEN REGEXP_LIKE(TRIM('${ORG_ID}'), '^[0-9]+$')\n               THEN TRIM('${ORG_ID}')\n           END) AS org_id,\n           TO_NUMBER(CASE\n               WHEN REGEXP_LIKE(TRIM('${REPORT_HEADER_ID}'), '^[0-9]+$')\n               THEN TRIM('${REPORT_HEADER_ID}')\n           END) AS report_header_id,\n           TO_NUMBER(CASE\n               WHEN REGEXP_LIKE(TRIM('${SECURITY_GROUP_ID}'), '^[0-9]+$')\n               THEN TRIM('${SECURITY_GROUP_ID}')\n               ELSE '0'\n           END) AS security_group_id,\n           NVL(NULLIF(TRIM('${LANGUAGE_CODE}'), ''), 'US') AS language_code,\n           NVL(NULLIF(TRIM('${REIMBURSEMENT_CURRENCY}'), ''), 'USD') AS reimb_currency\n    FROM   dual\n)\nSELECT TO_CHAR(card_id) AS \"CARD_ID\",\n       card_program_name || ' ' || card_number AS \"CreditCardList\",\n       card_program_id AS \"CARD_PROGRAM_ID\",\n       payment_due_from_code AS \"PAYMENT_DUE_FROM_CODE\"\nFROM   (\n    SELECT eligible_card.card_program_id,\n           eligible_card.card_program_name,\n           eligible_card.card_number,\n           eligible_card.card_id,\n           eligible_card.displayed_value,\n           eligible_card.payment_due_from_code,\n           eligible_card.payment_due_from,\n           NVL((SELECT MIN(cct.posted_date)\n                FROM   ap_credit_card_trxns_all cct\n                WHERE  cct.org_id = (SELECT org_id FROM params)\n                AND    cct.card_program_id = eligible_card.card_program_id\n                AND    cct.card_id = eligible_card.card_id\n                AND    cct.payment_due_from_code = eligible_card.payment_due_from_code\n                AND    cct.billed_currency_code = (SELECT reimb_currency FROM params)\n                AND    cct.validate_code = 'Y'\n                AND    cct.payment_flag <> 'Y'\n                AND    NVL(cct.category, 'BUSINESS') NOT IN ('DISPUTED','CREDIT','MATCHED','DEACTIVATED')\n                AND    (cct.report_header_id IS NULL OR cct.report_header_id = (SELECT report_header_id FROM params))\n                AND    cct.billed_amount IS NOT NULL),\n               SYSDATE) AS oldest_avail_posted_date\n    FROM   (\n        SELECT DISTINCT cp.card_program_id,\n               cp.card_program_name,\n               icc.masked_cc_number AS card_number,\n               card.card_id,\n               'displayed_value' AS displayed_value,\n               trxn.payment_due_from_code,\n               LV.MEANING AS payment_due_from\n        FROM   ap_card_programs_all cp,\n               ap_cards_all card,\n               ap_credit_card_trxns_all trxn,\n               FND_LOOKUP_VALUES LV,\n               iby_creditcard icc,\n               params p\n        WHERE  card.employee_id = (SELECT fu.employee_id\n                                   FROM   fnd_user fu\n                                   WHERE  fu.user_name = UPPER(TRIM('${EBS_USER}')))\n        AND    card.org_id = p.org_id\n        AND    cp.org_id = p.org_id\n        AND    trxn.org_id = p.org_id\n        AND    card.card_program_id = cp.card_program_id\n        AND    (CASE WHEN AP_WEB_CUST_DFLEX_PKG.CustomCardInactiveBehaviour = '1'\n                     THEN TRUNC(SYSDATE) ELSE TRUNC(card.creation_date) END)\n               BETWEEN TRUNC(NVL(card.creation_date, SYSDATE))\n               AND     TRUNC(NVL(card.inactive_date, SYSDATE))\n        AND    cp.card_type_lookup_code = 'TRAVEL'\n        AND    trxn.card_program_id = card.card_program_id\n        AND    trxn.card_id = card.card_id\n        AND    trxn.validate_code = 'Y'\n        AND    trxn.payment_flag <> 'Y'\n        AND    trxn.billed_amount IS NOT NULL\n        AND    (trxn.report_header_id IS NULL OR trxn.report_header_id = p.report_header_id)\n        AND    LV.lookup_type = 'PAYMENT_DUE_FROM'\n        AND    LV.lookup_code = trxn.payment_due_from_code\n        AND    card.card_reference_id = icc.instrid\n        AND    TRUNC(SYSDATE) BETWEEN TRUNC(NVL(LV.start_date_active, SYSDATE))\n                                  AND TRUNC(NVL(LV.end_date_active, SYSDATE))\n        AND    LV.language = p.language_code\n        AND    LV.view_application_id = 200\n        AND    LV.security_group_id = p.security_group_id\n    ) eligible_card\n    UNION\n    SELECT cp.card_program_id,\n           cp.card_program_name,\n           icc.masked_cc_number AS card_number,\n           card.card_id,\n           'displayed_value' AS displayed_value,\n           cp.payment_due_from_code,\n           LV.MEANING AS payment_due_from,\n           SYSDATE AS oldest_avail_posted_date\n    FROM   ap_card_programs_all cp,\n           ap_cards_all card,\n           FND_LOOKUP_VALUES LV,\n           iby_creditcard icc,\n           params p\n    WHERE  card.employee_id = (SELECT fu.employee_id\n                               FROM   fnd_user fu\n                               WHERE  fu.user_name = UPPER(TRIM('${EBS_USER}')))\n    AND    card.org_id = p.org_id\n    AND    cp.org_id = p.org_id\n    AND    card.card_program_id = cp.card_program_id\n    AND    cp.card_type_lookup_code = 'TRAVEL'\n    AND    LV.lookup_type = 'PAYMENT_DUE_FROM'\n    AND    LV.lookup_code = cp.payment_due_from_code\n    AND    card.card_reference_id = icc.instrid\n    AND    TRUNC(SYSDATE) BETWEEN TRUNC(NVL(LV.start_date_active, SYSDATE))\n                              AND TRUNC(NVL(LV.end_date_active, SYSDATE))\n    AND    LV.language = p.language_code\n    AND    LV.view_application_id = 200\n    AND    LV.security_group_id = p.security_group_id\n    AND    TRUNC(SYSDATE) BETWEEN TRUNC(NVL(card.creation_date, SYSDATE))\n                              AND TRUNC(NVL(card.inactive_date, SYSDATE))\n    AND    NOT EXISTS (\n               SELECT 'Y'\n               FROM   ap_credit_card_trxns_all trxn\n               WHERE  trxn.org_id = p.org_id\n               AND    trxn.card_program_id = card.card_program_id\n               AND    trxn.card_id = card.card_id\n               AND    trxn.validate_code = 'Y'\n               AND    trxn.payment_flag <> 'Y'\n               AND    trxn.billed_amount IS NOT NULL\n               AND    (trxn.report_header_id IS NULL OR trxn.report_header_id = p.report_header_id)\n           )\n) QRSLT\n-- Binary NLS sort keeps card mask ordering independent of the DB session language.\nORDER BY oldest_avail_posted_date, NLSSORT(card_program_name, 'NLS_SORT=BINARY'), NLSSORT(card_number, 'NLS_SORT=BINARY')\n",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "username",
+        "serviceName": "ReceiptBatch_getCreditCards"
+      },
+      "paramLabel": "username",
+      "paramValue": "${env.DB_USER}",
+      "visible": false
+    },
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "password",
+        "serviceName": "ReceiptBatch_getCreditCards"
+      },
+      "paramLabel": "password",
+      "paramValue": "${env.DB_PASSWORD}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "ORG_ID",
+        "serviceName": "ReceiptBatch_getCreditCards"
+      },
+      "paramLabel": "ORG_ID",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "REPORT_HEADER_ID",
+        "serviceName": "ReceiptBatch_getCreditCards"
+      },
+      "paramLabel": "REPORT_HEADER_ID",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "SECURITY_GROUP_ID",
+        "serviceName": "ReceiptBatch_getCreditCards"
+      },
+      "paramLabel": "SECURITY_GROUP_ID",
+      "paramValue": "0",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "LANGUAGE_CODE",
+        "serviceName": "ReceiptBatch_getCreditCards"
+      },
+      "paramLabel": "LANGUAGE_CODE",
+      "paramValue": "US",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "REIMBURSEMENT_CURRENCY",
+        "serviceName": "ReceiptBatch_getCreditCards"
+      },
+      "paramLabel": "REIMBURSEMENT_CURRENCY",
+      "paramValue": "USD",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "EBS_USER",
+        "serviceName": "ReceiptBatch_getCreditCards"
+      },
+      "paramLabel": "EBS_USER",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CARD_ID",
+        "serviceName": "ReceiptBatch_getCreditCards"
+      },
+      "paramLabel": "CARD_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CreditCardList",
+        "serviceName": "ReceiptBatch_getCreditCards"
+      },
+      "paramLabel": "CreditCardList",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CARD_PROGRAM_ID",
+        "serviceName": "ReceiptBatch_getCreditCards"
+      },
+      "paramLabel": "CARD_PROGRAM_ID",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PAYMENT_DUE_FROM_CODE",
+        "serviceName": "ReceiptBatch_getCreditCards"
+      },
+      "paramLabel": "PAYMENT_DUE_FROM_CODE",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_getCreditCards"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_getCreditCards"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_getCreditCards"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@sql",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 1000,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "DB",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": []
+}
