@@ -5,25 +5,39 @@ var previousRange;
 
 var updateReportsPageActive = false;
 var reportProgressGeneration = typeof reportProgressGeneration === 'number' ? reportProgressGeneration : 0;
+var reportRetryRequests = Object.create(null);
+var reportProgressTimer = null;
 var REPORT_PROGRESS_BUTTON_LABEL = 'Report is being processed. View progress';
 
 function removeReport (rowIdToDelete) {
-        if (isProcessingReportAction(rowIdToDelete)) {
-            return;
-        }
+    withIdleReportRow(rowIdToDelete, function () {
         Storage.set("indexLineToRemove", rowIdToDelete);
         Services.call("iExpense_removeUpdateReport", function() {onLoad();});
+    });
 }
 
 function updateReport (rowId) {
-        if (isProcessingReportAction(rowId)) {
+    withIdleReportRow(rowId, function (receiptRows) {
+        var reportNumber = Storage.getFromIndex('UpdateReportNumber', rowId);
+        if (!reportNumber) { return; }
+        var number = normalizeReportNumber(reportNumber);
+        var summary = findReportSummary(number);
+        if (summary && Number(summary.CREATED_LINES) > 0 && !Number(summary.FAILED_LINES) &&
+                receiptRows.length > 0 && receiptRows.every(function (row) {
+            return row && normalizeReportNumber(row.RECEIPTBATCH_STATUS) === 'LINE_CREATED';
+        })) {
+            openReceiptReportStep(rowId, number, 'Expense Allocations', 'ExpenseAllocations.html');
             return;
         }
         Storage.set("indexLineToUpdate", rowId)
         Services.call("iExpense_gotoUpdateReport", function() {
+            Storage.set('ReportNumber', reportNumber);
+            Storage.set('ReportCreationType', summary ? 'RECEIPT' : 'MANUAL');
+            Storage.set('ReportCreationTypeNumber', reportNumber);
             Storage.set("updateMode", "true");
             Page.navigate("Report_General.html");
-        }, displayReportServiceError("Failed to get report details"))
+        }, displayReportServiceError("Failed to get report details"));
+    });
 }
 
 function onGetUpdReportsSuccess(){
@@ -128,6 +142,7 @@ function parseDraftReportSummaries(response, tableRows) {
 function onGetDraftReportsSuccess(response, serviceName, tableRows) {
     rpaReports = parseDraftReportSummaries(response, tableRows);
     loadUpdateReportsTable();
+    scheduleReportProgressRefresh();
 }
 
 function onGetDraftReportsFailure() {
@@ -138,6 +153,9 @@ function onGetDraftReportsFailure() {
 
 function onLoad() {
 
+    clearTimeout(reportProgressTimer);
+    reportProgressTimer = null;
+    Object.keys(reportRetryRequests).forEach(releaseReportRetry);
     updateReportsPageActive = true;
     reportProgressGeneration += 1;
     bindReportProgressPageLeaveHandlers();
@@ -189,19 +207,18 @@ function Edit(rowIndex) {
     updateReport(rowIndex)
 }
 function Delete(rowIndex) {
+    if (isProcessingReportAction(rowIndex)) { return; }
     Popup.okCancel(getTranslationForId("@popup_report_remove_title"), getTranslationForId("@popup_report_remove_message"), function() {
         removeReport(rowIndex)} );
 }
 function Duplicate(rowIndex) {
-    if (isProcessingReportAction(rowIndex)) {
-        return;
-    }
-    Storage.set("duplicateUpdateRepostIndex", rowIndex);
-	Services.call('iExpense_duplicate_update_report', function() {
-	    Storage.set("DuplicateReport", "true");
-	    Page.navigate("Report_General");
-	}, displayReportServiceError("Failed to withdraw report"));
-    
+    withIdleReportRow(rowIndex, function () {
+        Storage.set("duplicateUpdateRepostIndex", rowIndex);
+        Services.call('iExpense_duplicate_update_report', function() {
+            Storage.set("DuplicateReport", "true");
+            Page.navigate("Report_General");
+        }, displayReportServiceError("Failed to withdraw report"));
+    });
 }
 
 function getUpdateReportsTable() {
@@ -288,26 +305,338 @@ function getActionReportNumber(rowId) {
     return normalizeReportNumber(rowId);
 }
 
-function isProcessingReportNumber(reportNumber) {
-    var normalizedReportNumber = normalizeReportNumber(reportNumber);
+function findReportSummary(reportNumber) {
+    return rpaReports.filter(function (report) {
+        return report && normalizeReportNumber(report.REPORT_NUMBER) === reportNumber;
+    })[0];
+}
 
-    if (normalizedReportNumber === '') {
-        return false;
+function isReportPending(reportNumber, summary) {
+    return Boolean(reportRetryRequests[reportNumber] || (summary && Number(summary.PENDING_LINES) > 0));
+}
+
+function isProcessingReportNumber(reportNumber) {
+    var number = normalizeReportNumber(reportNumber);
+    var summary = findReportSummary(number);
+    return isReportPending(number, summary) || Boolean(summary &&
+        Number(summary.FAILED_LINES) > 0 && Storage.get(reportManualEditKey(number)) !== 'true');
+}
+
+function scheduleReportProgressRefresh(delay) {
+    if (reportProgressTimer !== null || !isUpdateReportsPageCurrent()) { return; }
+    if (!Object.keys(reportRetryRequests).length && !rpaReports.some(function (report) {
+        return Number(report.PENDING_LINES) > 0;
+    })) {
+        return;
+    }
+    reportProgressTimer = setTimeout(function () {
+        reportProgressTimer = null;
+        refreshReportProgress();
+    }, delay === undefined ? 4000 : delay);
+}
+
+function releaseReportRetry(number) {
+    var retry = reportRetryRequests[number];
+    delete reportRetryRequests[number];
+    if (retry.release) { retry.release(); }
+}
+
+// Use the same Aura service endpoint and session headers as the SDK without
+// its full-page spinner. A retry should block only its own report row.
+function requestReportServiceInBackground(serviceName, input, timeout) {
+    var transactionId = Metadata.getTransactionId();
+    var appContext = App.getName() + (transactionId === undefined ? '' : ',' + transactionId);
+    return $.ajax({
+        url: getServiceManagerHost() + '/ServiceManager/Macro/ExecMacro/' + serviceName,
+        type: 'POST',
+        headers: generateHeaders(),
+        dataType: 'json',
+        timeout: timeout,
+        data: $.extend({
+            json: true,
+            randomSeed: Math.random() * 1000000,
+            'meta.app': appContext
+        }, input)
+    });
+}
+
+function refreshReportProgress() {
+    var generation = reportProgressGeneration;
+    var user = Storage.get('LoggedInUsername');
+    var settled = false;
+
+    function complete(response) {
+        if (settled) { return; }
+        settled = true;
+        if (generation !== reportProgressGeneration || !isUpdateReportsPageCurrent() ||
+            Storage.get('LoggedInUsername') !== user) { return; }
+        var receivedStatus = response && response.Response && !getResponseNodeValueByName('Error', response);
+        if (receivedStatus) {
+            rpaReports = parseDraftReportSummaries(response);
+        }
+        var retryStateChanged = false;
+        Object.keys(reportRetryRequests).forEach(function (number) {
+            var retry = reportRetryRequests[number];
+            if (retry.starting) { return; }
+            var summary = receivedStatus && findReportSummary(number);
+            var changed = receivedStatus && (!summary || summary.PENDING_LINES > 0 ||
+                summary.FAILED_LINES !== retry.failedLines || summary.CREATED_LINES !== retry.createdLines);
+            if (changed || Date.now() >= retry.waitUntil) {
+                releaseReportRetry(number);
+                retryStateChanged = true;
+            }
+        });
+        if (receivedStatus || retryStateChanged) {
+            applyReportProgressActions();
+            reportStatus();
+        }
+        scheduleReportProgressRefresh();
     }
 
-    for (var i = 0; i < rpaReports.length; i++) {
-        var report = rpaReports[i];
+    try {
+        requestReportServiceInBackground('ReceiptBatch_get_draft_reports', { EBS_USER: user }, Services.getTimeout())
+            .done(complete)
+            .fail(function () { complete(); });
+    } catch (error) {
+        complete();
+    }
+}
 
-        if (report && normalizeReportNumber(report.REPORT_NUMBER) === normalizedReportNumber) {
-            return (Number(report.PENDING_LINES) || 0) > 0;
+function startFailedReportRetry(reportNumber) {
+    var number = normalizeReportNumber(reportNumber);
+    var summary = findReportSummary(number);
+    var user = Storage.get('LoggedInUsername');
+    if (!number || !user || !summary || !Number(summary.FAILED_LINES) ||
+        isReportPending(number, summary) || !isUpdateReportsPageCurrent()) { return; }
+
+    var generation = reportProgressGeneration;
+    var state = {
+        starting: true,
+        failedLines: summary.FAILED_LINES,
+        createdLines: summary.CREATED_LINES,
+        waitUntil: 0
+    };
+    reportRetryRequests[number] = state;
+    applyReportProgressActions();
+    reportStatus();
+
+    var input = { ReportNumber: number, usernameField: user };
+    var password = Storage.get('passwordField');
+    if (password) { input.passwordField = password; }
+
+    var serviceName = 'Ping_ReceiptBatch_CreateLinesRPA';
+    function complete(response, message) {
+        if (!state.starting) { return; }
+        state.starting = false;
+        if (generation !== reportProgressGeneration || !isUpdateReportsPageCurrent() ||
+            Storage.get('LoggedInUsername') !== user || reportRetryRequests[number] !== state) { return; }
+        if (message) {
+            displayReportServiceError(message)(response, serviceName);
+        } else if (response) {
+            Storage.remove(reportManualEditKey(number));
+            // Ping launches the same background RPA for every report. Keep
+            // the row locked until the first job status is visible.
+            state.waitUntil = Date.now() + 12000;
+        }
+        scheduleReportProgressRefresh(0);
+        if (state.waitUntil) {
+            return new Promise(function (resolve) { state.release = resolve; });
         }
     }
 
-    return false;
+    function runRetry() {
+        return requestReportServiceInBackground('ReceiptBatch_get_draft_reports', { EBS_USER: user }, Services.getTimeout())
+            .then(function (response) {
+                if (generation !== reportProgressGeneration || !isUpdateReportsPageCurrent() ||
+                    Storage.get('LoggedInUsername') !== user) {
+                    complete();
+                    return;
+                }
+                if (!response || !response.Response || getResponseNodeValueByName('Error', response)) {
+                    complete(response, 'Could not check the report status.');
+                    return;
+                }
+                var readyToRetry = parseDraftReportSummaries(response).some(function (report) {
+                    return report.REPORT_NUMBER === number && !report.PENDING_LINES && report.FAILED_LINES > 0;
+                });
+                if (!readyToRetry) {
+                    complete();
+                    return;
+                }
+                return requestReportServiceInBackground(serviceName, input, Services.getTimeout())
+                    .then(function (result) {
+                        var succeeded = result && result.Response && !getResponseNodeValueByName('Error', result);
+                        return complete(result, succeeded ? '' : 'Automatic retry could not start.');
+                    }, function (xhr) {
+                        complete(xhr && xhr.responseJSON, 'Automatic retry could not start.');
+                    });
+            }, function (xhr) {
+                complete(xhr && xhr.responseJSON, 'Could not check the report status.');
+            });
+    }
+
+    try {
+        var locks = typeof navigator === 'undefined' ? null : navigator.locks;
+        var request = locks ? locks.request('iExpense:retry:' + normalizeReportNumber(user) + ':' + number,
+            { ifAvailable: true }, function (lock) {
+                if (lock) { return runRetry(); }
+                complete();
+            }) : runRetry();
+        request.then(null, function () { complete(null, 'Automatic retry could not start.'); });
+    } catch (error) {
+        complete(null, 'Automatic retry could not start.');
+    }
+}
+
+// Remember the user's manual-edit choice for this report in the current session.
+function reportManualEditKey(reportNumber) {
+    return 'ReceiptReportManualEdit:' + Storage.get('LoggedInUsername') + ':' + normalizeReportNumber(reportNumber);
+}
+
+function openReceiptReportStep(rowId, number, targetStep, page, onReached) {
+    var generation = reportProgressGeneration;
+    var user = Storage.get('LoggedInUsername');
+    var onError = displayReportServiceError('Failed to open ' + targetStep + '.');
+    Storage.set('indexLineToUpdate', rowId);
+    Storage.set('TARGET_STEP', targetStep);
+
+    Services.call('ReceiptBatch_gotoUpdateReportStep', function (response) {
+        if (generation !== reportProgressGeneration || !isUpdateReportsPageCurrent() ||
+            Storage.get('LoggedInUsername') !== user ||
+            normalizeReportNumber(Storage.getFromIndex('UpdateReportNumber', rowId)) !== number ||
+            isReportPending(number, findReportSummary(number))) { return; }
+        var elements = response && response.Response &&
+            response.Response.ReceiptBatch_gotoUpdateReportStepElements;
+        if (!elements || elements.NAVIGATION_STATUS !== 'REACHED' ||
+            normalizeReportNumber(elements.WizardTitle) !== normalizeReportNumber('Update Expense Report: ' + targetStep)) {
+            onError();
+            return;
+        }
+
+        Storage.set('ReportNumber', number);
+        Storage.set('ReportCreationType', 'RECEIPT');
+        Storage.set('ReportCreationTypeNumber', number);
+        Storage.set('updateMode', 'true');
+        Storage.set('hasCreditLinesStep', String(elements.hasCreditLinesStep) === 'true' ? 'true' : 'false');
+        if (onReached) { onReached(); }
+        Page.navigate(page);
+    }, onError);
+}
+
+function allowReportManualEdit(reportNumber) {
+    var number = normalizeReportNumber(reportNumber);
+    var summary = findReportSummary(number);
+    if (!summary || isReportPending(number, summary) || !(Number(summary.FAILED_LINES) > 0)) { return; }
+
+    var storedReports = Storage.getArray('UpdateReportNumber') || [];
+    var rowId = storedReports.map(normalizeReportNumber).indexOf(number);
+    if (rowId < 0) { return; }
+
+    var onError = displayReportServiceError('Failed to open the report.');
+    var requestGeneration = reportProgressGeneration;
+    Services.callWebServiceWithAllParams(
+        'ReceiptBatch_get_draft_report_lines',
+        undefined,
+        function (response, serviceName, tableRows) {
+            if (requestGeneration !== reportProgressGeneration || !isUpdateReportsPageCurrent()) { return; }
+            if (isReportPending(number, findReportSummary(number))) { return; }
+            if (normalizeReportNumber(Storage.getFromIndex('UpdateReportNumber', rowId)) !== number) { return; }
+
+            var rows = tableRows || [];
+            var hasFailed = false;
+            var hasFailedCredit = false;
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                if (!row) { continue; }
+                var status = normalizeReportNumber(row.RECEIPTBATCH_STATUS);
+                if (status === 'READY') { return; }
+                if (status !== 'LINE_FAILED') { continue; }
+                hasFailed = true;
+                if (normalizeReportNumber(row.RECEIPTBATCH_CREDIT) !== '') {
+                    hasFailedCredit = true;
+                }
+            }
+            if (!hasFailed) { return; }
+
+            var page = hasFailedCredit ? 'Credit_Transactions.html' : 'Cash_Lines.html';
+            var targetStep = hasFailedCredit ? 'Credit Card Transactions' : 'Cash and Other Expenses';
+            Storage.set('Credit', hasFailedCredit ? 'true' : 'false');
+            openReceiptReportStep(rowId, number, targetStep, page, function () {
+                Storage.set(reportManualEditKey(number), 'true');
+            });
+        },
+        onError,
+        true,
+        false,
+        { REPORT_NUMBER: number.replace(/'/g, "''") }
+    );
+}
+
+function showFailedReportChoice($cell, reportNumber, failed) {
+    var buttonStyle = 'font-size:11px!important;line-height:1.2!important;padding:4px 6px!important;' +
+        'min-height:0!important;width:auto!important;margin:4px 3px 0 0!important;';
+    $cell.empty().append($('<div/>', {
+        style: 'font-size:12px!important;line-height:1.3!important;',
+        text: failed + (failed === 1 ? ' receipt failed. ' : ' receipts failed. ') + 'How would you like to continue?'
+    }));
+    $cell.append($('<button/>', {
+        type: 'button', 'class': 'ui-btn ui-mini ui-btn-inline', text: 'Retry',
+        style: buttonStyle
+    }).on('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        startFailedReportRetry(reportNumber);
+    }));
+    $cell.append($('<button/>', {
+        type: 'button', 'class': 'ui-btn ui-mini ui-btn-inline', text: 'Edit manually',
+        style: buttonStyle
+    }).on('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        allowReportManualEdit(reportNumber);
+    }));
 }
 
 function isProcessingReportAction(rowId) {
     return isProcessingReportNumber(getActionReportNumber(rowId));
+}
+
+function withIdleReportRow(rowId, action) {
+    var number = getActionReportNumber(rowId);
+    if (isProcessingReportNumber(number)) { return; }
+    var summary = findReportSummary(number);
+    if (!summary) {
+        action([]);
+        return;
+    }
+
+    var generation = reportProgressGeneration;
+    var user = Storage.get('LoggedInUsername');
+    Services.callWebServiceWithAllParams(
+        'ReceiptBatch_get_draft_report_lines',
+        undefined,
+        function (response, serviceName, tableRows) {
+            if (generation !== reportProgressGeneration || !isUpdateReportsPageCurrent() ||
+                Storage.get('LoggedInUsername') !== user || getActionReportNumber(rowId) !== number ||
+                isProcessingReportNumber(number)) { return; }
+            var rows = Array.isArray(tableRows) ? tableRows : [];
+            var pending = rows.filter(function (row) {
+                return row && normalizeReportNumber(row.RECEIPTBATCH_STATUS) === 'READY';
+            }).length;
+            if (pending) {
+                summary.PENDING_LINES = pending;
+                applyReportProgressActions();
+                reportStatus();
+                scheduleReportProgressRefresh();
+            } else {
+                action(rows);
+            }
+        },
+        displayReportServiceError('Failed to check whether the report is processing.'),
+        true,
+        false,
+        { REPORT_NUMBER: number.replace(/'/g, "''") }
+    );
 }
 
 function createReportProgressButton() {
@@ -455,6 +784,9 @@ function handleUpdateReportsPageLeave(event) {
 
     updateReportsPageActive = false;
     reportProgressGeneration += 1;
+    clearTimeout(reportProgressTimer);
+    reportProgressTimer = null;
+    Object.keys(reportRetryRequests).forEach(releaseReportRetry);
     $('#tableOutput').off('draw.rpaReportProgress');
 }
 
@@ -513,22 +845,6 @@ function reportStatus() {
         return count;
     }
 
-    function findSummary(reportNumber) {
-        if (reportNumber === '') {
-            return null;
-        }
-
-        for (var i = 0; i < rpaReports.length; i++) {
-            var summary = rpaReports[i];
-
-            if (summary && normalizeReportNumber(summary.REPORT_NUMBER) === reportNumber) {
-                return summary;
-            }
-        }
-
-        return null;
-    }
-
     function renderRow(row, rowIndex) {
         var $row = $(row);
         var $cell = table ? $(table.cell(rowIndex, statusColumnIndex).node()) : $row.children('td').eq(statusColumnIndex);
@@ -540,14 +856,16 @@ function reportStatus() {
         var reportNumber = table
             ? normalizeReportNumber($(table.cell(rowIndex, reportColumnIndex).node()).text())
             : normalizeReportNumber($row.children('td').eq(reportColumnIndex).text());
-        var summary = findSummary(reportNumber);
+        var summary = findReportSummary(reportNumber);
 
         $cell.addClass('update-report-line-status-cell');
 
-        if (!summary) {
+        if (isReportPending(reportNumber, summary)) {
+            $cell.html('<span class="update-report-line-status-processing">Report is being processed</span>');
+        } else if (!summary) {
             $cell.html('<span class="update-report-line-status-manual">Manually created</span>');
         } else if (isProcessingReportNumber(reportNumber)) {
-            $cell.html('<span class="update-report-line-status-processing">Report is being processed</span>');
+            showFailedReportChoice($cell, reportNumber, getCount(summary.FAILED_LINES));
         } else {
             var created = getCount(summary.CREATED_LINES);
             var failed = getCount(summary.FAILED_LINES);

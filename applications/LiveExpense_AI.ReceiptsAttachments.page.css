@@ -68,11 +68,11 @@
   font-weight: 600;
 }
 
-/* NEW-row pending hint. The doubled pending class keeps the pending tint above
-   every status-row background, including line-failed; removing the marker class
-   restores the normal status styling. */
-#tableOutput tbody tr.receipt-pending-row.receipt-pending-row > td {
-  background-color: #fbfcfd;
+/* Actual receipt data rows are uniformly white. READY and failure statuses keep
+   their own colors above; the selector is scoped to real tablerow_ rows so
+   responsive detail rows are untouched. */
+#tableOutput tbody tr[id^="tablerow_"]:not(.receipt-status-ready):not(.receipt-status-failed):not(.receipt-status-ai-failed):not(.receipt-status-line-failed):not(.receipt-status-analyzed-failed) > td {
+  background-color: #fff;
 }
 
 #tableOutput tbody .receipt-pending-value {
@@ -87,12 +87,12 @@
   white-space: nowrap;
 }
 
-/* Temporary file input only exists to trigger the native picker. */
+
 .receipt-upload-input {
   display: none;
 }
 
-/* Fixed positions: expand → select/warning → cash/card */
+
 #tableOutput tbody tr[id^="tablerow_"] > td:first-child {
   position: relative;
   box-sizing: border-box;
@@ -166,24 +166,49 @@
   pointer-events: none;
 }
 
-/* NEW/PROCESSING rows show the pending amber ring instead of the warning glyph,
-   reusing the global md-spin keyframes (none declared here); only this ::before
-   is animated. Absolute left/top centre the 14px ring in the 24px x 22px label. */
+/* NEW/PROCESSING rows replace the warning glyph with a gear and put "Processing"
+   immediately below it. The fixed 82px control column is unchanged; only these
+   rows grow taller, so the text cannot reach an adjacent cell. */
+#tableOutput tbody tr.receipt-status-new[id^="tablerow_"] > td:first-child,
+#tableOutput tbody tr.receipt-status-processing[id^="tablerow_"] > td:first-child {
+  height: 58px;
+}
+
+/* The gear inherits the warning/checkbox slot geometry and sizing. */
 #tableOutput tbody tr.receipt-status-new[id^="tablerow_"] > td:first-child label.receipt-select-disabled::before,
 #tableOutput tbody tr.receipt-status-processing[id^="tablerow_"] > td:first-child label.receipt-select-disabled::before {
-  content: "";
+  content: "⚙️";
+  /* The shared AuraPlayer reduced-motion rule sets these on this pseudo-element
+     with !important, so override with !important to keep the label plain. */
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+#tableOutput tbody tr.receipt-status-new[id^="tablerow_"] > td:first-child label.receipt-select-disabled::after,
+#tableOutput tbody tr.receipt-status-processing[id^="tablerow_"] > td:first-child label.receipt-select-disabled::after {
+  content: "Processing";
   position: absolute;
-  inset: auto;
-  left: 5px;
-  top: 4px;
+  top: calc(100% + 2px);
+  left: 50%;
   display: block;
   box-sizing: border-box;
-  width: 14px;
-  height: 14px;
-  border: 2px solid #ffe0b2;
-  border-top-color: #b26a00;
-  border-radius: 50%;
-  animation: md-spin 0.8s linear infinite;
+  width: 76px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  color: #1f2a37;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  animation: none;
+  pointer-events: none;
 }
 
 /* Cash/card */
@@ -196,10 +221,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
+  width: 20px;
   height: 22px;
   margin: 0;
-  font-size: 12px;
+  font-size: 16px;
   line-height: 1;
   pointer-events: none;
 }

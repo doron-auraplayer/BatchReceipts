@@ -7,6 +7,89 @@ if (ReimbCurrency === "") {
 var isCreditLine = Storage.get("isCreditLine") === "true";
 var ExpensesFilteredExpenseTypes = Storage.get("ExpensesFilteredExpenseTypes");
 
+// Preserve only this line's form fields while visiting a child page.
+// Attendee/guest rows and attachments keep their own updated values.
+// Keep these lists and keys in named functions: AuraPlayer's page compiler
+// emits named function declarations but not new top-level variables.
+function lineDetailsFields() {
+  return [
+    'expenseType', 'ReceiptCurrencyChoice', 'ExchRate', 'DetailReceiptAmount', 'StartDate',
+    'DetailDailyRate', 'NumberOfDays', 'Justification', 'LocationName', 'DetailMerchantName',
+    'AirTravelType', 'AirTicketClass', 'AirFromLocation', 'AirToLocation', 'AccEndDate',
+    'CompanyAttendees', 'MealNumberAttendees', 'MealAttendees', 'DetailReimbursAmt',
+    'DetailReceiptMissing'
+  ];
+}
+
+function lineDetailsStorageFields() {
+  return [
+    'ExpenseType', 'ExpTypeInput', 'origExpenseType', 'Currency', 'receiptbatch_id',
+    'SearchLocationButtonExist', 'AttendeesTableExist', 'GuestTableExist'
+  ];
+}
+
+function lineDetailsSavedFieldsKey() {
+  return 'LineDetailsRoundTripState';
+}
+
+function receiptLinePendingKey() {
+  return 'ReceiptLinePendingUpdate';
+}
+
+function lineDetailsContext() {
+  return JSON.stringify([Storage.get('ReportNumber'), Storage.get('index')]);
+}
+
+function saveLineDetailsFields() {
+  var state = { context: lineDetailsContext(), fields: {}, stored: {} };
+  lineDetailsFields().forEach(function (name) {
+    state.fields[name] = Fields.get(name);
+    state.stored[name + 'Exist'] = Storage.get(name + 'Exist');
+  });
+  lineDetailsStorageFields().forEach(function (name) {
+    state.stored[name] = Storage.get(name);
+  });
+  Storage.set(lineDetailsSavedFieldsKey(), JSON.stringify(state));
+}
+
+function clearLineDetailsFields() {
+  Storage.remove(lineDetailsSavedFieldsKey());
+}
+
+function takeLineDetailsFields() {
+  var raw = Storage.get(lineDetailsSavedFieldsKey());
+  clearLineDetailsFields(); // Each saved form is used for one return only.
+  try {
+    var state = JSON.parse(raw);
+    if (state && state.context === lineDetailsContext() &&
+        state.fields && state.stored &&
+        typeof state.fields === 'object' && typeof state.stored === 'object') {
+      var receiptId = Storage.get('receiptbatch_id');
+      if (!receiptId || !state.stored.receiptbatch_id || receiptId === state.stored.receiptbatch_id) {
+        return state;
+      }
+    }
+  } catch (err) { /* No valid saved form: use the normal page values. */ }
+  return null;
+}
+
+function restoreLineDetailsFields(state) {
+  if (!state || state.context !== lineDetailsContext()) { return; }
+  if (!/(^|[#/])LineDetails(?:\.html)?$/i.test(Page.getCurrentPage())) { return; }
+  lineDetailsFields().forEach(function (name) {
+    var value = state.fields[name];
+    if (value !== undefined && (value === null || typeof value !== 'object')) {
+      Fields.set(name, value);
+      Storage.set(name, value == null ? '' : value);
+    }
+    Storage.set(name + 'Exist', state.stored[name + 'Exist']);
+  });
+  lineDetailsStorageFields().forEach(function (name) {
+    Storage.set(name, state.stored[name]);
+  });
+  LDshowFieldsByExpenseType();
+}
+
 function loadItemizationTableCount() {
   //console.log("loadItemizationTableCount");
   if (Storage.get("ItemizationTableExist") === "true") {
@@ -36,7 +119,7 @@ function onLocationChange() {
   }, displayReportServiceError('Failed to select location'));
 }
 
-function loadFieldsByExpenseType(expenseType, CB) {
+function loadFieldsByExpenseType(expenseType, CB, onError) {
   console.log("loadFieldsByExpenseType");
   if (expenseType !== undefined) {
     store("ExpTypeInput", expenseType);
@@ -73,13 +156,12 @@ function loadFieldsByExpenseType(expenseType, CB) {
     // }
 
     Spinner.stop();
-    if (typeof CB === "function") {
-      CB();
-    }
+    if (typeof CB === "function") { CB(); }
   }, function (response) {
     Spinner.stop();
     isInitializingLineDetails = false;
-    displayReportServiceError("Failed to get expense line details");
+    if (typeof onError === "function") { onError(); }
+    displayReportServiceError("Failed to get expense line details")(response);
   });
 }
 
@@ -108,10 +190,20 @@ function expenseType_lov_item_handler(arrayItem) {
 
 function showFieldIfExist(fieldName) {
   //console.log("showFieldIfExist");
-  if (Storage.get(fieldName + 'Exist') == 'true') {
+  var exists = Storage.get(fieldName + 'Exist') == 'true';
+  if (exists) {
     showField(fieldName);
   } else {
     hideField(fieldName);
+  }
+  // MealNumberAttendees keeps its value (possibly 0) and min=1 while hidden.
+  // Disable it only when the Exist flag hides it, so a hidden range underflow
+  // cannot block validation, then re-enable it when it is shown again.
+  if (fieldName === 'MealNumberAttendees') {
+    var attendeeCount = document.getElementById(fieldName);
+    if (attendeeCount) {
+      attendeeCount.disabled = !exists;
+    }
   }
 }
 
@@ -327,7 +419,8 @@ function next_onSuccess() {
     receiptbatchId !== "undefined") {
        addReceiptbatchSubmitted(receiptbatchId);
     }
- 
+  clearLineDetailsFields();
+  Storage.remove("receiptbatch_id");
 }
 
 function save_onSuccess() {
@@ -500,7 +593,9 @@ function onLoad() {
   $("#expenseType").parent().attr("class", "ui-icon-carat-d ui-btn-icon-right")
 
   Storage.remove("ContinueWithWarnings");
-  Storage.remove("receiptbatch_id");
+  // Do not remove receiptbatch_id here. It must survive the initial scanned
+  // receipt approval and child round trips, and is cleared only on a completed
+  // line, a cancelled line, or a true new/edit entry.
   // $("#LineNumber").prop("style", "display: inline-block; width: 35px; height: 20px; position: relative; left: 12px; margin-top: -18px; line-height: 0.5;");
   // $("#LineNumber_container > label").attr("style", "display: inline-block");
   setTimeout(function () { $("#Location_Search").append('<i class="fa fa-search" aria-hidden="true"></i>') }, 0);
@@ -509,6 +604,30 @@ function onLoad() {
   $("#DetailReceiptAmount").change(calculateDailyRateByAmount);
   $("#NumberOfDays").change(calculateDailyRateByAmount);
   $("#DetailDailyRate").change(calculateDailyRateByRate);
+
+  var staleChildReturnFlag = false;
+  ['fromAttachmentsPage', 'fromSelectEmployees', 'fromSelectGuest'].forEach(function (flagName) {
+    var flagValue = Storage.get(flagName);
+    // A leftover "false"/other value must not be treated as a real return or
+    // fall through to the new-line reset.
+    if (flagValue !== "" && flagValue !== "true") {
+      Storage.remove(flagName);
+      staleChildReturnFlag = true;
+    }
+  });
+
+  if (Storage.get("ApproveScannedReceipt") === "true") {
+    // A fresh approval owns this navigation. A stale child return marker must
+    // never restore old fields or suppress the one receipt attachment.
+    Storage.remove("fromSelectLocation");
+    Storage.remove("fromItemization");
+    Storage.remove("fromAttachmentsPage");
+    Storage.remove("fromSelectEmployees");
+    Storage.remove("fromSelectGuest");
+    Storage.remove("LineDetailsUpdate");
+    clearLineDetailsFields();
+    staleChildReturnFlag = false;
+  }
 
   if (Storage.get("fromSelectLocation") == "true") {
     console.log("fromSelectLocation");
@@ -532,25 +651,39 @@ function onLoad() {
   }
   else if (Storage.get("fromAttachmentsPage") === "true") {
     console.log("fromAttachmentsPage");
+    var savedFields = takeLineDetailsFields();
     Storage.remove("fromAttachmentsPage");
     Fields.set("LineNumber", Storage.get("LineTitle").match(/.(\d+)/)[1]);
     Storage.set("LineDetailsUpdate", "true");
     console.log("onLoad(fromAttachmentsPage) - loadFieldsByExpenseType");
-    loadFieldsByExpenseType(undefined, function () {
-    });
+    var restoreFields = function () { restoreLineDetailsFields(savedFields); };
+    loadFieldsByExpenseType(undefined, restoreFields, restoreFields);
   }
-  else if (Storage.get("fromSelectEmployees") == "true" || Storage.get("fromSelectGuest")) {
+  else if (Storage.get("fromSelectEmployees") === "true" || Storage.get("fromSelectGuest") === "true") {
     console.log("fromSelectEmployees");
     // return from employee search window
+    var savedFields = takeLineDetailsFields();
     Storage.remove("fromSelectEmployees");
     Storage.remove("fromSelectGuest");
     // populateField("AttendeeNames", Storage.count("AttendiesEmpTableEmpName"));
     populateField("AttendeeNames", Storage.getArray("AttendiesEmpTableEmpName").join(","));
     // populateField("GuestNames", Storage.count("AttendiesGuestTableName"));
     populateField("GuestNames", Storage.getArray("AttendiesGuestTableName").join(","));
+    restoreLineDetailsFields(savedFields);
+  }
+  else if (staleChildReturnFlag && Storage.get("LineDetailsUpdate") !== "true") {
+    console.log("stale child return flag");
+    // Reject the stale return state, but keep the form values AuraPlayer
+    // restored instead of dropping into the new-line reset branch.
+    clearLineDetailsFields();
+    populateField("AttendeeNames", Storage.getArray("AttendiesEmpTableEmpName").join(","));
+    populateField("GuestNames", Storage.getArray("AttendiesGuestTableName").join(","));
   }
   else if (Storage.get("LineDetailsUpdate") == "true") {
     console.log("LineDetailsUpdate");
+    // A true edit entry is a different line/context.
+    clearLineDetailsFields();
+    Storage.remove("receiptbatch_id");
     // update
     Fields.set("RBLocation", "All Other Locations");
     Fields.set("LocationName", "All Other Locations");
@@ -602,50 +735,66 @@ function onLoad() {
 /*****************************************/  
   else if (Storage.get("ApproveScannedReceipt") == "true") {
     console.log("Approve Scanned Receipt");
+    populateField("AttendeeNames", Storage.getArray("AttendiesEmpTableEmpName").join(","));
+    populateField("GuestNames", Storage.getArray("AttendiesGuestTableName").join(","));
+
+    var approvedReceiptId = Storage.get('ApproveScannedReceipt_ID');
+    if (approvedReceiptId === "" || approvedReceiptId === null || approvedReceiptId === undefined) {
+      approvedReceiptId = Storage.get('RECEIPTBATCH_RECEIPT_ID');
+    }
     Storage.remove("ApproveScannedReceipt");
+    if (approvedReceiptId !== "" && approvedReceiptId !== null && approvedReceiptId !== undefined) {
+      Storage.set("receiptbatch_id", approvedReceiptId);
+    }
+    attachReceiptToLine(approvedReceiptId);
+
     
-    Storage.set("receiptbatch_id", Storage.get("RECEIPTBATCH_RECEIPT_ID"));
-    console.log("receiptbatch_id: ",Storage.get("receiptbatch_id"));
+    // Storage.set("receiptbatch_id", Storage.get("RECEIPTBATCH_RECEIPT_ID"));
+    // console.log("receiptbatch_id: ",Storage.get("receiptbatch_id"));
     
-    Fields.set("RBLocation", "All Other Locations");
-    Fields.set("LocationName", "All Other Locations");
-    Fields.set("LineNumber", Storage.get("LineTitle").match(/.(\d+)/)[1]);
+    // Fields.set("RBLocation", "All Other Locations");
+    // Fields.set("LocationName", "All Other Locations");
+    // Fields.set("LineNumber", Storage.get("LineTitle").match(/.(\d+)/)[1]);
 
-    Storage.deleteByPrefix("AttachmentType");
+    // Storage.deleteByPrefix("AttachmentType");
 
-    clearForm();
-    Fields.clear("attachmentPath_filename");
-    Storage.remove("attachmentPath_filename");
-    Storage.remove("SearchLocationButtonExist");
-    Storage.remove("AttendeesTableExist");
-    Storage.remove("GuestTableExist");
-    Storage.remove("AttachFilePath");
-    Storage.deleteByPrefix("AttendiesGuestTableName");
-    Storage.deleteByPrefix("AttendiesEmpTableEmpName");
-    populateField("AttendeeNames", 0);
-    populateField("GuestNames", 0);
+    // clearForm();
+    // Fields.clear("attachmentPath_filename");
+    // Storage.remove("attachmentPath_filename");
+    // Storage.remove("SearchLocationButtonExist");
+    // Storage.remove("AttendeesTableExist");
+    // Storage.remove("GuestTableExist");
+    // Storage.remove("AttachFilePath");
+    // Storage.deleteByPrefix("AttendiesGuestTableName");
+    // Storage.deleteByPrefix("AttendiesEmpTableEmpName");
+    // populateField("AttendeeNames", 0);
+    // populateField("GuestNames", 0);
 
-    Storage.clear("origExpenseType");
+    // Storage.clear("origExpenseType");
 
-    // Clean old field values
-    iExpenseLineFields.forEach(function (fieldName) {
-      Storage.remove(fieldName);
-      Storage.remove(fieldName + 'Exist');
-    });
+    // // Clean old field values
+    // iExpenseLineFields.forEach(function (fieldName) {
+    //   Storage.remove(fieldName);
+    //   Storage.remove(fieldName + 'Exist');
+    // });
 
-    store("ExpTypeInput", "");
+    // store("ExpTypeInput", "");
 
-    $('#Add_Line').show();
+    // $('#Add_Line').show();
 
-    Fields.clear("expenseType");
+    // Fields.clear("expenseType");
 
 
-    $("#DetailReceiptAmount").prop("step", "0.01");
-    ScannedReceiptUpload();
+    // $("#DetailReceiptAmount").prop("step", "0.01");
+
+    // // Receipt data population will be added in the next step.
 
   }
   else {
     console.log("new report");
+    // A true new-line entry is a different context.
+    clearLineDetailsFields();
+    Storage.remove("receiptbatch_id");
     // new report
     Fields.set("RBLocation", "All Other Locations");
     Fields.set("LocationName", "All Other Locations");
@@ -804,15 +953,76 @@ function onLocationSearch() {
 
 function onClickAttendees() {
   //console.log("onClickAttendees");
+  saveLineDetailsFields();
   Page.navigate("Attendees.html");
 }
 
 function onClickGuests() {
   //console.log("onClickGuests");
+  saveLineDetailsFields();
   Page.navigate("Guests.html");
 }
 
+// The expense line is already saved when this function runs. Keep a pending
+// receipt update so Add Line/Done can retry it without saving a duplicate line.
+// Busy state lives on this named function because AuraPlayer's page compiler
+// emits function declarations but drops new top-level variables.
+function completeReceiptLine(action) {
+  if (completeReceiptLine.lineSaveBusy) { return; }
+  var pendingKey = receiptLinePendingKey();
+  var pending = Storage.get(pendingKey);
+  if (!pending) {
+    var receiptId = Storage.get('receiptbatch_id');
+    if (!receiptId) { continueReceiptLine(action); return; }
+    pending = JSON.stringify({receiptId: receiptId, reportId: Storage.get('ReportNumber'),
+      reportName: Storage.get('Purpose'), user: Storage.get('LoggedInUsername'), action: action});
+    Storage.set(pendingKey, pending);
+  }
+  var receipt = JSON.parse(pending);
+  // A missing report value can be supplied before retrying the saved update.
+  receipt.reportId = receipt.reportId || Storage.get('ReportNumber');
+  receipt.reportName = receipt.reportName || Storage.get('Purpose');
+  receipt.user = receipt.user || Storage.get('LoggedInUsername');
+  Storage.set(pendingKey, JSON.stringify(receipt));
+  if (!receipt.reportId || !receipt.reportName || !receipt.user ||
+      receipt.reportId !== Storage.get('ReportNumber') || receipt.user !== Storage.get('LoggedInUsername')) {
+    Popup.ok('Receipt update pending', 'The expense line was saved. Restore its report and user details, then click Add Line or Done to retry the receipt update.');
+    return;
+  }
+  Storage.set('RLC_RECEIPT_ID', receipt.receiptId);
+  Storage.set('RLC_REPORT_ID', receipt.reportId);
+  Storage.set('RLC_REPORT_NAME', receipt.reportName);
+  Storage.set('RLC_EBS_USER', receipt.user);
+  completeReceiptLine.lineSaveBusy = true;
+  Services.call('ReceiptBatch_lineDetails_created', function () {
+    completeReceiptLine.lineSaveBusy = false;
+    if (!/^\s*1\s+rows?\s+affected[.!]?\s*$/i.test(Storage.get('StatusBarMessages'))) {
+      Popup.ok('Receipt update pending', 'The expense line was saved, but no receipt was updated. Check its report, user and status, then click Add Line or Done to retry.');
+      return;
+    }
+    Storage.remove(pendingKey);
+    addReceiptbatchSubmitted(receipt.receiptId);
+    Storage.remove('receiptbatch_id');
+    clearLineDetailsFields();
+    continueReceiptLine(receipt.action);
+  }, function () {
+    completeReceiptLine.lineSaveBusy = false;
+    Popup.ok('Receipt update failed', 'The expense line was saved, but the receipt could not be updated. Click Add Line or Done to retry only the receipt update.');
+  });
+}
+
+function continueReceiptLine(action) {
+  if (action === 'ADD') {
+    Services.callSync('iExpense_lineDetailsGet', displayReportServiceError('Failed to get expense line details'));
+    save_onSuccess();
+  } else {
+    next_onSuccess();
+  }
+}
+
 function onSaveLine(forItemization) {
+  if (completeReceiptLine.lineSaveBusy) { return; }
+  if (Storage.get(receiptLinePendingKey())) { completeReceiptLine(); return; }
   console.log("onSaveLine");
   // Storage.set("nextButtonId", "ReturnButton");
   Storage.set("nextButtonId", "NewButton");
@@ -828,7 +1038,9 @@ function onSaveLine(forItemization) {
     }
     storeDateFormatted("StartDate", true);
     storeDateFormatted("AccEndDate", true);
+    completeReceiptLine.lineSaveBusy = true;
     Services.call('iExpense_lineDetailsSet', function () {
+      completeReceiptLine.lineSaveBusy = false;
       if (!forItemization) {
         Storage.remove("LineDetailsUpdate");
       }
@@ -845,18 +1057,21 @@ function onSaveLine(forItemization) {
         if (forItemization) {
           Page.navigate("ItemizationLines")
         } else {
-          console.log("onSaveLine - iExpense_lineDetailsGet");
-          Services.callSync("iExpense_lineDetailsGet", displayReportServiceError("Failed to get expense line details"));
-          save_onSuccess();
+          completeReceiptLine('ADD');
           //openDetailedLine();
         }
         // save_onSuccess(); 
       }
-    }, displayReportServiceError("Failed to save expense line", "Update_Reports.html"));
+    }, function (response, serviceName) {
+      completeReceiptLine.lineSaveBusy = false;
+      displayReportServiceError("Failed to save expense line", "Update_Reports.html")(response, serviceName);
+    });
   }
 }
 
 function onNext() {
+  if (completeReceiptLine.lineSaveBusy) { return; }
+  if (Storage.get(receiptLinePendingKey())) { completeReceiptLine(); return; }
   console.log("onNext");
   Storage.set("nextButtonId", "ReturnButton");
   if (validateLine()) {
@@ -865,7 +1080,10 @@ function onNext() {
     Storage.remove("paginationLabel");
     storeDateFormatted("StartDate", true);
     storeDateFormatted("AccEndDate", true);
+    completeReceiptLine.lineSaveBusy = true;
     Services.call('iExpense_lineDetailsSet', function () {
+      completeReceiptLine.lineSaveBusy = false;
+      clearLineDetailsFields();
       if (Storage.get("CashLineErrorMessageExists") === "true") {
         Popup.ok(getTranslationForId("@popup_title_error"), Storage.get("CashLineErrorMessage"))
       } else if (Storage.get("CashLineWarningMessageExists") === "true" && Storage.get("ContinueWithWarnings") != "true") {
@@ -876,9 +1094,12 @@ function onNext() {
           }, function () { })
       } else {
         Storage.remove("ContinueWithWarnings");
-        next_onSuccess();
+        completeReceiptLine('DONE');
       }
-    }, displayReportServiceError("Failed to save expense line", "Update_Reports.html"));
+    }, function (response, serviceName) {
+      completeReceiptLine.lineSaveBusy = false;
+      displayReportServiceError("Failed to save expense line", "Update_Reports.html")(response, serviceName);
+    });
   }
 }
 
@@ -906,6 +1127,8 @@ function onCancel() {
   if (isDirty()) {
     OnCancelPopup(function () {
       Services.call("iExpense_lineDetailsCancel", function () {
+        clearLineDetailsFields();
+        Storage.remove("receiptbatch_id");
         if (isCreditLine) {
           var index = Storage.get('index');
           Storage.set('CashLines_Completed_' + index, false);
@@ -919,6 +1142,8 @@ function onCancel() {
     });
   } else {
     Services.call("iExpense_lineDetailsCancel", function () {
+      clearLineDetailsFields();
+      Storage.remove("receiptbatch_id");
       if (isCreditLine) {
         Page.navigate("Credit_Lines.html");
       } else {
@@ -935,6 +1160,9 @@ function onAttachments() {
     Storage.set("nextButtonId", "");
     storeDateFormatted("StartDate", true);
     storeDateFormatted("AccEndDate", true);
+    // Capture before the asynchronous iExpense_lineDetailsSet call. The
+    // service may rewrite Oracle-backed line values before navigation.
+    saveLineDetailsFields();
     Services.call('iExpense_lineDetailsSet', function () {
       var originPage = "LineDetails";
       Storage.set("AttachmentUpdateMode", "false");
@@ -945,7 +1173,11 @@ function onAttachments() {
         Storage.set("OriginAttachmentsPage", originPage);
         Page.navigate("ExpenseLineAddAttachment.html");
       }
-    }, displayReportServiceError('Failed to set line detailes on adding attachment'));
+    }, function (response, serviceName) {
+      // No child page was opened, so the marker must not survive a save failure.
+      clearLineDetailsFields();
+      displayReportServiceError('Failed to set line detailes on adding attachment')(response, serviceName);
+    });
   }
 }
 
@@ -1231,3 +1463,31 @@ function normalizeDate(val) {
 
 /*****************************************/
 
+
+// Attach after LineDetails loads, using the same main-window service flow as analyzeReceipt.
+function attachReceiptToLine(receiptId) {
+  receiptId = receiptId == null ? '' : String(receiptId).trim();
+  if (!receiptId || receiptId === 'null' || receiptId === 'undefined') {
+    Popup.ok('Receipt Attachment', 'No receipt was selected. Please select the receipt again.');
+    return;
+  }
+  // The app's Services.call wrapper uses Storage inputs for this service.
+  Storage.set('receipt_ID', receiptId);
+  Storage.remove('RECEIPTBATCH_path');
+  Services.call('js_ReceiptBatch_get_receipt_by_id', function () {
+    var path = Storage.get('RECEIPTBATCH_path');
+    if (!path || !String(path).trim()) {
+      Popup.ok('Receipt Attachment', 'No attachment file path was returned for this receipt.');
+      return;
+    }
+    Storage.set('AttachmentUpdateMode', false);
+    Storage.set('AttachName', Storage.get('RECEIPTBATCH_FILE_NAME'));
+    Storage.set('AttachType', 'file');
+    Storage.set('AttachFilePath', path);
+    Services.call('iExpense_AddUpdateAttachment', function () {
+      Storage.set('AttachmentType_0', 'file');
+      configureAttachmentFields();
+      showHideAnalyzeBtn();
+    }, displayReportServiceError('Failed to add receipt attachment'));
+  }, displayReportServiceError('Failed to load receipt attachment'));
+}

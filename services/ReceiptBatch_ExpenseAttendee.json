@@ -189,7 +189,9 @@
   "validationResponseCode": 200,
   "type": "DB",
   "createdBy": "admin",
-  "labels": [],
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
   "apps": [
     "LiveExpense_AI"
   ]

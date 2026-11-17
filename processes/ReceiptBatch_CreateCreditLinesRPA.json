@@ -388,7 +388,7 @@
       "nickname": "Select Credit Transaction",
       "keepAlive": true,
       "throwError": false,
-      "ignoreError": false,
+      "ignoreError": true,
       "isJavaScript": false,
       "isCustom": false,
       "invalid": false,
@@ -424,16 +424,16 @@
         {
           "visible": false,
           "isJavaScript": true,
-          "name": "LOCATION",
-          "paramValue": "return currentCreditTransaction.LOCATION === null || currentCreditTransaction.LOCATION === undefined ? '' : String(currentCreditTransaction.LOCATION);",
-          "valueType": "javaScript"
+          "name": "MAX_PAGES",
+          "paramValue": "100",
+          "valueType": "staticText"
         },
         {
           "visible": false,
           "isJavaScript": true,
-          "name": "MAX_PAGES",
-          "paramValue": "100",
-          "valueType": "staticText"
+          "name": "TRANSACTION_LOCATION",
+          "paramValue": "var receipt = ReportReceipts[currentCreditReceiptIndex]; if (receipt && typeof receipt.TRANSACTION_LOCATION === \"string\") { return receipt.TRANSACTION_LOCATION; } var expenseDocument = receipt && receipt.EXPENSE_DATA_JSON; if (typeof expenseDocument === \"string\") { try { expenseDocument = JSON.parse(expenseDocument); } catch (error) { expenseDocument = null; } } var line = expenseDocument && Array.isArray(expenseDocument.lines) && expenseDocument.lines[0]; if (line && typeof line.transactionLocation === \"string\") { return line.transactionLocation; } var location = currentCreditTransaction.LOCATION; return location === null || location === undefined ? \"\" : String(location);",
+          "valueType": "javaScript"
         }
       ],
       "outputs": [
@@ -444,20 +444,104 @@
           "inTable": false
         },
         {
-          "name": "MATCH_COUNT",
-          "label": "MATCH_COUNT",
-          "visible": false,
-          "inTable": false
-        },
-        {
           "name": "TRANSACTION_SELECTED",
           "label": "TRANSACTION_SELECTED",
           "visible": false,
           "inTable": false
         },
         {
-          "name": "CURRENT_PAGE_TITLE",
-          "label": "CURRENT_PAGE_TITLE",
+          "name": "CURRENT_CARD",
+          "label": "CURRENT_CARD",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "CARD_EMPTY",
+          "label": "CARD_EMPTY",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "INITIAL_RANGE_TEXT",
+          "label": "INITIAL_RANGE_TEXT",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "REWIND_STEPS",
+          "label": "REWIND_STEPS",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "AP_MATCH_ROW_XPATH",
+          "label": "AP_MATCH_ROW_XPATH",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "PAGE_OPTIONS",
+          "label": "PAGE_OPTIONS",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "TOTAL_ROWS",
+          "label": "TOTAL_ROWS",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "PAGE_END",
+          "label": "PAGE_END",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "PAGES_SCANNED",
+          "label": "PAGES_SCANNED",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "transactionExists",
+          "label": "transactionExists",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "transactionDuplicate",
+          "label": "transactionDuplicate",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "PREVIOUS_END",
+          "label": "PREVIOUS_END",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "PAGE_RANGE_TEXT",
+          "label": "PAGE_RANGE_TEXT",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "TRANSACTION_CHECKBOX_PRESENT",
+          "label": "TRANSACTION_CHECKBOX_PRESENT",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "TRANSACTION_CHECKBOX_DUPLICATE",
+          "label": "TRANSACTION_CHECKBOX_DUPLICATE",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "TRANSACTION_CHECKED_BEFORE",
+          "label": "TRANSACTION_CHECKED_BEFORE",
           "visible": false,
           "inTable": false
         },
@@ -483,9 +567,9 @@
     },
     {
       "type": "Condition",
-      "name": "IFSERVICE",
-      "nickname": "Condition",
-      "command": "ReceiptBatch_selectCreditTransactionError.length == 0",
+      "name": "IF",
+      "nickname": "If credit transaction selection succeeded",
+      "command": "Services.getResponseValue(ReceiptBatch_selectCreditTransactionResponse, 'Error').length == 0",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,
@@ -506,7 +590,7 @@
         {
           "visible": false,
           "isJavaScript": true,
-          "paramValue": "ReceiptBatch_selectCreditTransactionError.length"
+          "paramValue": "Services.getResponseValue(ReceiptBatch_selectCreditTransactionResponse, 'Error').length"
         },
         {
           "visible": false,
@@ -555,6 +639,21 @@
         {
           "visible": false,
           "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
           "paramValue": "false"
         }
       ],
@@ -564,7 +663,7 @@
       "type": "JavaScript",
       "name": "JavaScript",
       "nickname": "credit Selection Failure Parameters",
-      "command": "creditSelectionSucceeded[currentCreditReceiptIndex] = false;\ncreditSelectionErrorMessage =\n    ReceiptBatch_selectCreditTransactionError === null ||\n    ReceiptBatch_selectCreditTransactionError === undefined\n        ? \"\"\n        : String(ReceiptBatch_selectCreditTransactionError);\nif (String(creditSelectionErrorMessage).trim() === \"\") {\n    creditSelectionErrorMessage =\n        \"Credit transaction selection failed without an error message.\";\n}\nvar creditSelectionReceipt = ReportReceipts[currentCreditReceiptIndex];\nvar creditSelectionReceiptId = creditSelectionReceipt && creditSelectionReceipt.RECEIPT_ID;\nvar creditSelectionReceiptIdText =\n    creditSelectionReceiptId === null || creditSelectionReceiptId === undefined\n        ? \"\"\n        : String(creditSelectionReceiptId).trim();\nif (!/^[0-9]+$/.test(creditSelectionReceiptIdText)) {\n    throw new Error(\"credit Selection Failure: RECEIPT_ID must be numeric, got '\" +\n        String(creditSelectionReceiptId) + \"'.\");\n}\ncreditSelectionStatusReceiptId = creditSelectionReceiptIdText;\n",
+      "command": "var creditSelectionServiceError = Services.getResponseValue(ReceiptBatch_selectCreditTransactionResponse, 'Error');\ncreditSelectionSucceeded[currentCreditReceiptIndex] = false;\ncreditSelectionErrorMessage =\n    creditSelectionServiceError === null ||\n    creditSelectionServiceError === undefined\n        ? \"\"\n        : String(creditSelectionServiceError);\nif (String(creditSelectionErrorMessage).trim() === \"\") {\n    creditSelectionErrorMessage =\n        \"Credit transaction selection failed without an error message.\";\n}\nvar creditSelectionReceipt = ReportReceipts[currentCreditReceiptIndex];\nvar creditSelectionReceiptId = creditSelectionReceipt && creditSelectionReceipt.RECEIPT_ID;\nvar creditSelectionReceiptIdText =\n    creditSelectionReceiptId === null || creditSelectionReceiptId === undefined\n        ? \"\"\n        : String(creditSelectionReceiptId).trim();\nif (!/^[0-9]+$/.test(creditSelectionReceiptIdText)) {\n    throw new Error(\"credit Selection Failure: RECEIPT_ID must be numeric, got '\" +\n        String(creditSelectionReceiptId) + \"'.\");\n}\ncreditSelectionStatusReceiptId = creditSelectionReceiptIdText;\n",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,
@@ -664,6 +763,21 @@
         {
           "visible": false,
           "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
           "paramValue": "false"
         }
       ],
@@ -723,7 +837,7 @@
       "type": "Condition",
       "name": "IF",
       "nickname": "If card group has a selected transaction",
-      "command": "creditSelectedForCard > 0",
+      "command": "Number(creditSelectedForCard) > Number(0)",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,
@@ -739,17 +853,17 @@
         {
           "visible": false,
           "isJavaScript": false,
-          "paramValue": "equals"
+          "paramValue": "gt"
         },
         {
           "visible": false,
           "isJavaScript": true,
-          "paramValue": "creditSelectedForCard > 0"
+          "paramValue": "creditSelectedForCard"
         },
         {
           "visible": false,
           "isJavaScript": true,
-          "paramValue": "true"
+          "paramValue": "0"
         },
         {
           "visible": false,
@@ -765,7 +879,7 @@
       "nickname": "iExpense_credit_gotoUpdateTransactions",
       "keepAlive": true,
       "throwError": false,
-      "ignoreError": false,
+      "ignoreError": true,
       "isJavaScript": false,
       "isCustom": false,
       "invalid": false,
@@ -799,9 +913,9 @@
     },
     {
       "type": "Condition",
-      "name": "IFSERVICE",
-      "nickname": "Condition",
-      "command": "iExpense_credit_gotoUpdateTransactionsError.length == 0",
+      "name": "IF",
+      "nickname": "If Credit Card Expenses opened",
+      "command": "Services.getResponseValue(iExpense_credit_gotoUpdateTransactionsResponse, 'Error').length == 0",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,
@@ -822,7 +936,7 @@
         {
           "visible": false,
           "isJavaScript": true,
-          "paramValue": "iExpense_credit_gotoUpdateTransactionsError.length"
+          "paramValue": "Services.getResponseValue(iExpense_credit_gotoUpdateTransactionsResponse, 'Error').length"
         },
         {
           "visible": false,
@@ -841,7 +955,7 @@
       "type": "JavaScript",
       "name": "JavaScript",
       "nickname": "credit Wizard Title",
-      "command": "var creditGotoResponse = iExpense_credit_gotoUpdateTransactionsResponse;\nvar creditGotoElements =\n    (creditGotoResponse &&\n     creditGotoResponse.Response &&\n     creditGotoResponse.Response.iExpense_credit_gotoUpdateTransactionsElements) || {};\n\nvar creditWizardTitle = String(creditGotoElements.WizardTitle === null || creditGotoElements.WizardTitle === undefined ? \"\" : creditGotoElements.WizardTitle);\n",
+      "command": "var creditGotoResponse = iExpense_credit_gotoUpdateTransactionsResponse;\nvar creditGotoElements =\n    (creditGotoResponse &&\n     creditGotoResponse.Response &&\n     creditGotoResponse.Response.iExpense_credit_gotoUpdateTransactionsElements) || {};\n\nvar creditWizardTitle = String(creditGotoElements.WizardTitle === null || creditGotoElements.WizardTitle === undefined ? \"\" : creditGotoElements.WizardTitle);\nvar creditWizardTitleForCheck = creditWizardTitle.indexOf(\"Cash\") === -1\n    ? creditWizardTitle : \"\";\n",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,
@@ -871,7 +985,7 @@
       "type": "Condition",
       "name": "IF",
       "nickname": "If invalid credit wizard title",
-      "command": "(creditWizardTitle.indexOf(\"Expense Report: Credit Card Expenses\") === -1 || creditWizardTitle.indexOf(\"Cash\") !== -1) == true",
+      "command": "creditWizardTitleForCheck.indexOf(\"Expense Report: Credit Card Expenses\") == -1",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,
@@ -887,17 +1001,17 @@
         {
           "visible": false,
           "isJavaScript": false,
-          "paramValue": "equals"
+          "paramValue": "notTontains"
         },
         {
           "visible": false,
           "isJavaScript": true,
-          "paramValue": "(creditWizardTitle.indexOf(\"Expense Report: Credit Card Expenses\") === -1 || creditWizardTitle.indexOf(\"Cash\") !== -1)"
+          "paramValue": "creditWizardTitleForCheck"
         },
         {
           "visible": false,
-          "isJavaScript": true,
-          "paramValue": "true"
+          "isJavaScript": false,
+          "paramValue": "Expense Report: Credit Card Expenses"
         },
         {
           "visible": false,
@@ -968,6 +1082,20 @@
       "outputs": []
     },
     {
+      "type": "JavaScript",
+      "name": "JavaScript",
+      "nickname": "credit On Expenses Page",
+      "command": "creditOnTransactionsPage = false;",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [],
+      "outputs": []
+    },
+    {
       "type": "Condition",
       "name": "END IF",
       "nickname": "Condition",
@@ -1008,24 +1136,10 @@
       "outputs": []
     },
     {
-      "type": "JavaScript",
-      "name": "JavaScript",
-      "nickname": "credit On Expenses Page",
-      "command": "creditOnTransactionsPage = false;",
-      "keepAlive": false,
-      "throwError": false,
-      "ignoreError": false,
-      "isJavaScript": false,
-      "isCustom": false,
-      "invalid": false,
-      "inputs": [],
-      "outputs": []
-    },
-    {
       "type": "Condition",
       "name": "IF",
       "nickname": "If another card group",
-      "command": "index_1 + 1 < CreditCardGroups.length == true",
+      "command": "Number(index_1 + 1) < Number(CreditCardGroups.length)",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,
@@ -1041,17 +1155,17 @@
         {
           "visible": false,
           "isJavaScript": false,
-          "paramValue": "equals"
+          "paramValue": "lt"
         },
         {
           "visible": false,
           "isJavaScript": true,
-          "paramValue": "index_1 + 1 < CreditCardGroups.length"
+          "paramValue": "index_1 + 1"
         },
         {
           "visible": false,
           "isJavaScript": true,
-          "paramValue": "true"
+          "paramValue": "CreditCardGroups.length"
         },
         {
           "visible": false,
@@ -1133,7 +1247,7 @@
       "type": "Condition",
       "name": "IF",
       "nickname": "If invalid credit transactions title",
-      "command": "(creditBackTitle.indexOf(\"Expense Report: Credit Card Transactions\") === -1) == true",
+      "command": "creditBackTitle.indexOf(\"Expense Report: Credit Card Transactions\") == -1",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,
@@ -1149,17 +1263,17 @@
         {
           "visible": false,
           "isJavaScript": false,
-          "paramValue": "equals"
+          "paramValue": "notTontains"
         },
         {
           "visible": false,
           "isJavaScript": true,
-          "paramValue": "(creditBackTitle.indexOf(\"Expense Report: Credit Card Transactions\") === -1)"
+          "paramValue": "creditBackTitle"
         },
         {
           "visible": false,
-          "isJavaScript": true,
-          "paramValue": "true"
+          "isJavaScript": false,
+          "paramValue": "Expense Report: Credit Card Transactions"
         },
         {
           "visible": false,
@@ -1407,7 +1521,7 @@
       "type": "Exit",
       "name": "Exit",
       "nickname": "Exit",
-      "command": "iExpense_credit_gotoUpdateTransactionsError",
+      "command": "Services.getResponseValue(iExpense_credit_gotoUpdateTransactionsResponse, 'Error')",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,
@@ -1461,6 +1575,60 @@
           "paramValue": "false"
         }
       ],
+      "outputs": []
+    },
+    {
+      "type": "Condition",
+      "name": "ELSE",
+      "nickname": "Condition",
+      "command": "",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "ELSE"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "JavaScript",
+      "name": "JavaScript",
+      "nickname": "Continue to the next card group",
+      "command": "void 0;",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [],
       "outputs": []
     },
     {
@@ -1557,7 +1725,7 @@
       "type": "Condition",
       "name": "IF",
       "nickname": "If recovery Next is required",
-      "command": "creditTotalSelected > 0 && creditOnTransactionsPage === true",
+      "command": "(creditTotalSelected > 0 && creditOnTransactionsPage === true) == true",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,
@@ -1573,17 +1741,17 @@
         {
           "visible": false,
           "isJavaScript": false,
-          "paramValue": "equals"
+          "paramValue": "isTrue"
         },
         {
           "visible": false,
           "isJavaScript": true,
-          "paramValue": "creditTotalSelected > 0 && creditOnTransactionsPage === true"
+          "paramValue": "(creditTotalSelected > 0 && creditOnTransactionsPage === true)"
         },
         {
           "visible": false,
-          "isJavaScript": true,
-          "paramValue": "true"
+          "isJavaScript": false,
+          "paramValue": ""
         },
         {
           "visible": false,
@@ -1599,7 +1767,7 @@
       "nickname": "Recovery Next to Credit Card Expenses",
       "keepAlive": true,
       "throwError": false,
-      "ignoreError": false,
+      "ignoreError": true,
       "isJavaScript": false,
       "isCustom": false,
       "invalid": false,
@@ -1633,9 +1801,9 @@
     },
     {
       "type": "Condition",
-      "name": "IFSERVICE",
+      "name": "IF",
       "nickname": "If recovery Next succeeded",
-      "command": "iExpense_credit_gotoUpdateTransactionsError.length == 0",
+      "command": "Services.getResponseValue(iExpense_credit_gotoUpdateTransactionsResponse, 'Error').length == 0",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,
@@ -1656,7 +1824,7 @@
         {
           "visible": false,
           "isJavaScript": true,
-          "paramValue": "iExpense_credit_gotoUpdateTransactionsError.length"
+          "paramValue": "Services.getResponseValue(iExpense_credit_gotoUpdateTransactionsResponse, 'Error').length"
         },
         {
           "visible": false,
@@ -1721,7 +1889,7 @@
         {
           "visible": false,
           "isJavaScript": false,
-          "paramValue": "equals"
+          "paramValue": "isTrue"
         },
         {
           "visible": false,
@@ -1730,8 +1898,8 @@
         },
         {
           "visible": false,
-          "isJavaScript": true,
-          "paramValue": "true"
+          "isJavaScript": false,
+          "paramValue": ""
         },
         {
           "visible": false,
@@ -1899,7 +2067,7 @@
       "type": "Exit",
       "name": "Exit",
       "nickname": "Exit",
-      "command": "iExpense_credit_gotoUpdateTransactionsError",
+      "command": "Services.getResponseValue(iExpense_credit_gotoUpdateTransactionsResponse, 'Error')",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,
@@ -1953,6 +2121,60 @@
           "paramValue": "false"
         }
       ],
+      "outputs": []
+    },
+    {
+      "type": "Condition",
+      "name": "ELSE",
+      "nickname": "Condition",
+      "command": "",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "ELSE"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "JavaScript",
+      "name": "JavaScript",
+      "nickname": "Continue without recovery Next",
+      "command": "void 0;",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [],
       "outputs": []
     },
     {
@@ -2057,7 +2279,7 @@
       "type": "Condition",
       "name": "IF",
       "nickname": "If credit selection succeeded",
-      "command": "creditSelectionSucceeded[index_3] === true",
+      "command": "(creditSelectionSucceeded[index_3] === true) == true",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,
@@ -2073,17 +2295,17 @@
         {
           "visible": false,
           "isJavaScript": false,
-          "paramValue": "equals"
+          "paramValue": "isTrue"
         },
         {
           "visible": false,
           "isJavaScript": true,
-          "paramValue": "creditSelectionSucceeded[index_3] === true"
+          "paramValue": "(creditSelectionSucceeded[index_3] === true)"
         },
         {
           "visible": false,
-          "isJavaScript": true,
-          "paramValue": "true"
+          "isJavaScript": false,
+          "paramValue": ""
         },
         {
           "visible": false,
@@ -2320,7 +2542,7 @@
       "nickname": "Set Receipt Details",
       "keepAlive": true,
       "throwError": false,
-      "ignoreError": false,
+      "ignoreError": true,
       "isJavaScript": false,
       "isCustom": false,
       "invalid": false,
@@ -2390,9 +2612,9 @@
     },
     {
       "type": "Condition",
-      "name": "IFSERVICE",
-      "nickname": "Condition",
-      "command": "ReceiptBatch_SetReceiptDetailsRPAError.length == 0",
+      "name": "IF",
+      "nickname": "If receipt details were set",
+      "command": "Services.getResponseValue(ReceiptBatch_SetReceiptDetailsRPAResponse, 'Error').length == 0",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,
@@ -2413,7 +2635,7 @@
         {
           "visible": false,
           "isJavaScript": true,
-          "paramValue": "ReceiptBatch_SetReceiptDetailsRPAError.length"
+          "paramValue": "Services.getResponseValue(ReceiptBatch_SetReceiptDetailsRPAResponse, 'Error').length"
         },
         {
           "visible": false,
@@ -2434,7 +2656,7 @@
       "nickname": "Save Credit Line And Return",
       "keepAlive": true,
       "throwError": false,
-      "ignoreError": false,
+      "ignoreError": true,
       "isJavaScript": false,
       "isCustom": false,
       "invalid": false,
@@ -2506,9 +2728,9 @@
     },
     {
       "type": "Condition",
-      "name": "IFSERVICE",
-      "nickname": "Condition",
-      "command": "ReceiptBatch_SaveCreditLineAndReturnError.length == 0",
+      "name": "IF",
+      "nickname": "If credit line was saved",
+      "command": "Services.getResponseValue(ReceiptBatch_SaveCreditLineAndReturnResponse, 'Error').length == 0",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,
@@ -2529,7 +2751,7 @@
         {
           "visible": false,
           "isJavaScript": true,
-          "paramValue": "ReceiptBatch_SaveCreditLineAndReturnError.length"
+          "paramValue": "Services.getResponseValue(ReceiptBatch_SaveCreditLineAndReturnResponse, 'Error').length"
         },
         {
           "visible": false,
@@ -2825,7 +3047,7 @@
       "type": "Exit",
       "name": "Exit",
       "nickname": "Exit",
-      "command": "ReceiptBatch_SetReceiptDetailsRPAError",
+      "command": "Services.getResponseValue(ReceiptBatch_SetReceiptDetailsRPAResponse, 'Error')",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,
@@ -2879,6 +3101,60 @@
           "paramValue": "false"
         }
       ],
+      "outputs": []
+    },
+    {
+      "type": "Condition",
+      "name": "ELSE",
+      "nickname": "Condition",
+      "command": "",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "ELSE"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "equals"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        },
+        {
+          "visible": false,
+          "isJavaScript": false,
+          "paramValue": "false"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "type": "JavaScript",
+      "name": "JavaScript",
+      "nickname": "Continue to the next receipt",
+      "command": "void 0;",
+      "keepAlive": false,
+      "throwError": false,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [],
       "outputs": []
     },
     {

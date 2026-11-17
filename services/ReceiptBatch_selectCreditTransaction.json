@@ -49,88 +49,12 @@
       "isRequired": false,
       "isCustom": false,
       "id": {
-        "name": "LOCATION",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "LOCATION",
-      "visible": true
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
         "name": "MAX_PAGES",
         "serviceName": "ReceiptBatch_selectCreditTransaction"
       },
       "paramLabel": "MAX_PAGES",
       "paramValue": "100",
       "visible": true
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_CARD_LABEL",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_CARD_LABEL",
-      "paramValue": "${CARD_LABEL}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_TRANSACTION_DATE",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_TRANSACTION_DATE",
-      "paramValue": "${TRANSACTION_DATE}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_TRANSACTION_AMOUNT",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_TRANSACTION_AMOUNT",
-      "paramValue": "${TRANSACTION_AMOUNT}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_MERCHANT_NAME",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_MERCHANT_NAME",
-      "paramValue": "${MERCHANT_NAME}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_LOCATION",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_LOCATION",
-      "paramValue": "${LOCATION}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_MAX_PAGES",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_MAX_PAGES",
-      "paramValue": "${MAX_PAGES}",
-      "visible": false
     },
     {
       "isRequired": false,
@@ -147,340 +71,21 @@
       "isRequired": false,
       "isCustom": false,
       "id": {
-        "name": "By_id__AP_SC_INPUT_CARD_LABEL_2",
+        "name": "TRANSACTION_LOCATION",
         "serviceName": "ReceiptBatch_selectCreditTransaction"
       },
-      "paramLabel": "AP_SC_INPUT_CARD_LABEL_2",
-      "paramValue": "${CARD_LABEL}",
-      "visible": false
+      "paramLabel": "TRANSACTION_LOCATION",
+      "paramValue": "",
+      "visible": true
     },
     {
       "isRequired": false,
       "isCustom": false,
       "id": {
-        "name": "By_id__AP_SC_INPUT_TRANSACTION_DATE_2",
+        "name": "Checkbox_By_xpath__$_AP_MATCH_ROW_XPATH___input__type__checkbox__and_starts_with__name__AvailableTrxnList_selected____",
         "serviceName": "ReceiptBatch_selectCreditTransaction"
       },
-      "paramLabel": "AP_SC_INPUT_TRANSACTION_DATE_2",
-      "paramValue": "${TRANSACTION_DATE}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_TRANSACTION_AMOUNT_2",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_TRANSACTION_AMOUNT_2",
-      "paramValue": "${TRANSACTION_AMOUNT}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_MERCHANT_NAME_2",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_MERCHANT_NAME_2",
-      "paramValue": "${MERCHANT_NAME}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_LOCATION_2",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_LOCATION_2",
-      "paramValue": "${LOCATION}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_MAX_PAGES_2",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_MAX_PAGES_2",
-      "paramValue": "${MAX_PAGES}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_CARD_LABEL_3",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_CARD_LABEL_3",
-      "paramValue": "${CARD_LABEL}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_TRANSACTION_DATE_3",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_TRANSACTION_DATE_3",
-      "paramValue": "${TRANSACTION_DATE}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_TRANSACTION_AMOUNT_3",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_TRANSACTION_AMOUNT_3",
-      "paramValue": "${TRANSACTION_AMOUNT}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_MERCHANT_NAME_3",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_MERCHANT_NAME_3",
-      "paramValue": "${MERCHANT_NAME}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_LOCATION_3",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_LOCATION_3",
-      "paramValue": "${LOCATION}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_MAX_PAGES_3",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_MAX_PAGES_3",
-      "paramValue": "${MAX_PAGES}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_CARD_LABEL_4",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_CARD_LABEL_4",
-      "paramValue": "${CARD_LABEL}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_TRANSACTION_DATE_4",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_TRANSACTION_DATE_4",
-      "paramValue": "${TRANSACTION_DATE}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_TRANSACTION_AMOUNT_4",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_TRANSACTION_AMOUNT_4",
-      "paramValue": "${TRANSACTION_AMOUNT}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_MERCHANT_NAME_4",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_MERCHANT_NAME_4",
-      "paramValue": "${MERCHANT_NAME}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_LOCATION_4",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_LOCATION_4",
-      "paramValue": "${LOCATION}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_MAX_PAGES_4",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_MAX_PAGES_4",
-      "paramValue": "${MAX_PAGES}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_CARD_LABEL_5",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_CARD_LABEL_5",
-      "paramValue": "${CARD_LABEL}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_TRANSACTION_DATE_5",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_TRANSACTION_DATE_5",
-      "paramValue": "${TRANSACTION_DATE}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_TRANSACTION_AMOUNT_5",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_TRANSACTION_AMOUNT_5",
-      "paramValue": "${TRANSACTION_AMOUNT}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_MERCHANT_NAME_5",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_MERCHANT_NAME_5",
-      "paramValue": "${MERCHANT_NAME}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_LOCATION_5",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_LOCATION_5",
-      "paramValue": "${LOCATION}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_MAX_PAGES_5",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_MAX_PAGES_5",
-      "paramValue": "${MAX_PAGES}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_CARD_LABEL_6",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_CARD_LABEL_6",
-      "paramValue": "${CARD_LABEL}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_TRANSACTION_DATE_6",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_TRANSACTION_DATE_6",
-      "paramValue": "${TRANSACTION_DATE}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_TRANSACTION_AMOUNT_6",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_TRANSACTION_AMOUNT_6",
-      "paramValue": "${TRANSACTION_AMOUNT}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_MERCHANT_NAME_6",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_MERCHANT_NAME_6",
-      "paramValue": "${MERCHANT_NAME}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_LOCATION_6",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_LOCATION_6",
-      "paramValue": "${LOCATION}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "By_id__AP_SC_INPUT_MAX_PAGES_6",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "AP_SC_INPUT_MAX_PAGES_6",
-      "paramValue": "${MAX_PAGES}",
-      "visible": false
-    },
-    {
-      "isRequired": false,
-      "isCustom": false,
-      "id": {
-        "name": "Checkbox_By_xpath____input__id__AP_SC_SELECT_TARGET__",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "__input__id__AP_SC_SELECT_TARGET__",
+      "paramLabel": "$_AP_MATCH_ROW_XPATH___input__type__checkbox__and_starts_with__name__AvailableTrxnList_selected____",
       "paramValue": "true",
       "visible": false
     }
@@ -510,21 +115,6 @@
       "fromInput": false,
       "centred": false,
       "id": {
-        "name": "MATCH_COUNT",
-        "serviceName": "ReceiptBatch_selectCreditTransaction"
-      },
-      "paramLabel": "MATCH_COUNT",
-      "visible": true
-    },
-    {
-      "inTable": false,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
         "name": "TRANSACTION_SELECTED",
         "serviceName": "ReceiptBatch_selectCreditTransaction"
       },
@@ -540,10 +130,235 @@
       "fromInput": false,
       "centred": false,
       "id": {
-        "name": "CURRENT_PAGE_TITLE",
+        "name": "CURRENT_CARD",
         "serviceName": "ReceiptBatch_selectCreditTransaction"
       },
-      "paramLabel": "CURRENT_PAGE_TITLE",
+      "paramLabel": "CURRENT_CARD",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "CARD_EMPTY",
+        "serviceName": "ReceiptBatch_selectCreditTransaction"
+      },
+      "paramLabel": "CARD_EMPTY",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "INITIAL_RANGE_TEXT",
+        "serviceName": "ReceiptBatch_selectCreditTransaction"
+      },
+      "paramLabel": "INITIAL_RANGE_TEXT",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "REWIND_STEPS",
+        "serviceName": "ReceiptBatch_selectCreditTransaction"
+      },
+      "paramLabel": "REWIND_STEPS",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "AP_MATCH_ROW_XPATH",
+        "serviceName": "ReceiptBatch_selectCreditTransaction"
+      },
+      "paramLabel": "AP_MATCH_ROW_XPATH",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PAGE_OPTIONS",
+        "serviceName": "ReceiptBatch_selectCreditTransaction"
+      },
+      "paramLabel": "PAGE_OPTIONS",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TOTAL_ROWS",
+        "serviceName": "ReceiptBatch_selectCreditTransaction"
+      },
+      "paramLabel": "TOTAL_ROWS",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PAGE_END",
+        "serviceName": "ReceiptBatch_selectCreditTransaction"
+      },
+      "paramLabel": "PAGE_END",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PAGES_SCANNED",
+        "serviceName": "ReceiptBatch_selectCreditTransaction"
+      },
+      "paramLabel": "PAGES_SCANNED",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "transactionExists",
+        "serviceName": "ReceiptBatch_selectCreditTransaction"
+      },
+      "paramLabel": "transactionExists",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "transactionDuplicate",
+        "serviceName": "ReceiptBatch_selectCreditTransaction"
+      },
+      "paramLabel": "transactionDuplicate",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PREVIOUS_END",
+        "serviceName": "ReceiptBatch_selectCreditTransaction"
+      },
+      "paramLabel": "PREVIOUS_END",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PAGE_RANGE_TEXT",
+        "serviceName": "ReceiptBatch_selectCreditTransaction"
+      },
+      "paramLabel": "PAGE_RANGE_TEXT",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_CHECKBOX_PRESENT",
+        "serviceName": "ReceiptBatch_selectCreditTransaction"
+      },
+      "paramLabel": "TRANSACTION_CHECKBOX_PRESENT",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_CHECKBOX_DUPLICATE",
+        "serviceName": "ReceiptBatch_selectCreditTransaction"
+      },
+      "paramLabel": "TRANSACTION_CHECKBOX_DUPLICATE",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_CHECKED_BEFORE",
+        "serviceName": "ReceiptBatch_selectCreditTransaction"
+      },
+      "paramLabel": "TRANSACTION_CHECKED_BEFORE",
       "visible": true
     },
     {

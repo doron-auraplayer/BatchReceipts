@@ -433,17 +433,24 @@ span.button-field-container.receipt-guest-add-wrapper {
   border-color: #bfdbfe;
 }
 
-/* Matched credit receipt read-only controls.
-   Only the three transaction-owned inputs (amount, currency, merchant) get this
-   neutral treatment. Start Date is editable and is deliberately not included.
-   The wrapper rules are needed because the theme and required-field tint paint
-   the native .ui-input-text box, not only its input. */
+#TransactionLocation_row[hidden] {
+  display: none;
+}
+
+#mainForm #TransactionLocation_container > label {
+  color: #334155 !important;
+  white-space: nowrap;
+  text-shadow: none;
+}
+
+/* Apply the read-only style to both the input and its themed wrapper. */
 #mainForm #DetailReceiptAmount[readonly],
 #mainForm #DetailReceiptAmount:disabled,
 #mainForm #ReceiptCurrencyChoice[readonly],
 #mainForm #ReceiptCurrencyChoice:disabled,
 #mainForm #DetailMerchantName[readonly],
-#mainForm #DetailMerchantName:disabled {
+#mainForm #DetailMerchantName:disabled,
+#mainForm #TransactionLocation[readonly] {
   background-color: #f1f5f9 !important;
   border-color: #cbd5e1 !important;
   color: #475569 !important;
@@ -458,7 +465,8 @@ span.button-field-container.receipt-guest-add-wrapper {
 #mainForm #ReceiptCurrencyChoice_container .ui-input-text:has(> input[readonly]),
 #mainForm #ReceiptCurrencyChoice_container .ui-input-text:has(> input:disabled),
 #mainForm #DetailMerchantName_container .ui-input-text:has(> input[readonly]),
-#mainForm #DetailMerchantName_container .ui-input-text:has(> input:disabled) {
+#mainForm #DetailMerchantName_container .ui-input-text:has(> input:disabled),
+#mainForm #TransactionLocation_container .ui-input-text {
   background-color: #f1f5f9 !important;
   border-color: #cbd5e1 !important;
   opacity: 1 !important;

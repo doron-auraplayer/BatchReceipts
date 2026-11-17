@@ -186,6 +186,8 @@
   "validationResponseCode": 200,
   "type": "HTML",
   "createdBy": "admin",
-  "labels": [],
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
   "apps": []
 }

@@ -38,7 +38,7 @@
     </tr><tr>
       <td>input</td>
       <td>702-414-6230, NY</td>
-      <td>LOCATION</td>
+      <td>TRANSACTION_LOCATION</td>
       <td></td>
     </tr><tr>
       <td>input</td>
@@ -161,13 +161,83 @@
       <td></td>
       <td></td>
     </tr><tr>
+      <td>// Return the selected card to its first visible row range before looking for a transaction.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>xpath=(//div[@id='AvailableTrxnList:ControlBar']//td[not(*) and starts-with(normalize-space(.),'Rows ')])[1]</td>
+      <td>INITIAL_RANGE_TEXT</td>
+      <td></td>
+    </tr><tr>
+      <td>storeExpression</td>
+      <td>0</td>
+      <td>REWIND_STEPS</td>
+      <td></td>
+    </tr><tr>
+      <td>while</td>
+      <td>String(INITIAL_RANGE_TEXT).indexOf('Rows 1 to ') != 0 &amp;&amp; parseInt(REWIND_STEPS,10) &lt; parseInt(MAX_PAGES,10)</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>scrollUpAndWait</td>
+      <td>id=scrollDiv:AvailableTrxnList</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>runScript</td>
+      <td>javascript{triggerPaginationEvent()}</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>waitForPageToLoad</td>
+      <td>8000</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>waitForElementPresent</td>
+      <td>xpath=//div[@id='AvailableTrxnList:ControlBar']//td[not(*) and starts-with(normalize-space(.),'Rows ') and normalize-space(.) != normalize-space('${INITIAL_RANGE_TEXT}')]</td>
+      <td>8000</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>xpath=(//div[@id='AvailableTrxnList:ControlBar']//td[not(*) and starts-with(normalize-space(.),'Rows ')])[1]</td>
+      <td>INITIAL_RANGE_TEXT</td>
+      <td></td>
+    </tr><tr>
+      <td>storeExpression</td>
+      <td>javascript{parseInt(${REWIND_STEPS},10)+1}</td>
+      <td>REWIND_STEPS</td>
+      <td></td>
+    </tr><tr>
+      <td>endWhile</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>String(INITIAL_RANGE_TEXT).indexOf('Rows 1 to ') != 0</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>throw</td>
+      <td>The credit-card transaction table did not return to row 1 before MAX_PAGES was reached.</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
       <td>// Safe XPath prep: build the exact row XPath from quoted transaction inputs without interpolating them into code.</td>
       <td></td>
       <td></td>
       <td></td>
     </tr><tr>
       <td>runScript</td>
-      <td>(function () {     var previous = document.getElementById('AP_MATCH_HELPER');     if (previous) {         if (previous.parentNode) {             previous.parentNode.removeChild(previous);         }     }     var helper = document.createElement('div');     helper.id = 'AP_MATCH_HELPER';     helper.style.position = 'absolute';     helper.style.left = '-10000px';     helper.style.top = '0';     helper.style.width = '420px';     helper.style.height = '120px';     var names = ['TRANSACTION_DATE', 'TRANSACTION_AMOUNT', 'MERCHANT_NAME', 'LOCATION'];     var i;     for (i = 0; i &lt; names.length; i += 1) {         var input = document.createElement('input');         input.type = 'text';         input.id = 'AP_MATCH_INPUT_' + names[i];         input.name = 'AP_MATCH_INPUT_' + names[i];         helper.appendChild(input);     }     var output = document.createElement('span');     output.id = 'AP_MATCH_ROW_XPATH';     helper.appendChild(output);     document.body.appendChild(helper); })();</td>
+      <td>(function () {     var previous = document.getElementById('AP_MATCH_HELPER');     if (previous) {         if (previous.parentNode) {             previous.parentNode.removeChild(previous);         }     }     var helper = document.createElement('div');     helper.id = 'AP_MATCH_HELPER';     helper.style.position = 'absolute';     helper.style.left = '-10000px';     helper.style.top = '0';     helper.style.width = '420px';     helper.style.height = '120px';     var names = ['TRANSACTION_DATE', 'TRANSACTION_AMOUNT', 'MERCHANT_NAME', 'TRANSACTION_LOCATION'];     var i;     for (i = 0; i &lt; names.length; i += 1) {         var input = document.createElement('input');         input.type = 'text';         input.id = 'AP_MATCH_INPUT_' + names[i];         input.name = 'AP_MATCH_INPUT_' + names[i];         helper.appendChild(input);     }     var output = document.createElement('span');     output.id = 'AP_MATCH_ROW_XPATH';     helper.appendChild(output);     document.body.appendChild(helper); })();</td>
       <td></td>
       <td></td>
     </tr><tr>
@@ -187,12 +257,12 @@
       <td></td>
     </tr><tr>
       <td>type</td>
-      <td>id=AP_MATCH_INPUT_LOCATION</td>
-      <td>${LOCATION}</td>
+      <td>id=AP_MATCH_INPUT_TRANSACTION_LOCATION</td>
+      <td>${TRANSACTION_LOCATION}</td>
       <td></td>
     </tr><tr>
       <td>runScript</td>
-      <td>(function () {     var read = function (name) {         var input = document.getElementById('AP_MATCH_INPUT_' + name);         if (!input || typeof input.value === 'undefined') {             throw new Error('The safe XPath helper input ' + name + ' was not found.');         }         return String(input.value);     };     var literal = function (value) {         if (value.indexOf("'") === -1) {             return "'" + value + "'";         }         if (value.indexOf('"') === -1) {             return '"' + value + '"';         }         var parts = value.split("'");         var chunks = [];         var i;         for (i = 0; i &lt; parts.length; i += 1) {             chunks.push("'" + parts[i] + "'");         }         return 'concat(' + chunks.join(', "\'", ') + ')';     };     var date = read('TRANSACTION_DATE');     var amount = read('TRANSACTION_AMOUNT');     var merchant = read('MERCHANT_NAME');     var location = read('LOCATION');     var row = "//table[@id='AvailableTrxnList:Content']/tbody/tr[" +         "   .//span[" +         "     starts-with(@id,'AvailableTrxnList:TransactionDate:')" +         "     and normalize-space(.)=normalize-space(" + literal(date) + ")" +         "   ]" +         "   and .//span[" +         "     starts-with(@id,'AvailableTrxnList:ReceiptAmount:')" +         "     and normalize-space(.)=normalize-space(" + literal(amount) + ")" +         "   ]" +         "   and .//span[" +         "     starts-with(@id,'AvailableTrxnList:OieMerchantName:')" +         "     and normalize-space(.)=normalize-space(" + literal(merchant) + ")" +         "   ]" +         "   and .//span[" +         "     starts-with(@id,'AvailableTrxnList:OieLocation:')" +         "     and normalize-space(.)=normalize-space(" + literal(location) + ")" +         "   ]" +         " ]";     var output = document.getElementById('AP_MATCH_ROW_XPATH');     if (!output) {         throw new Error('The safe XPath output span was not found.');     }     output.textContent = row; })();</td>
+      <td>(function () {     var read = function (name) {         var input = document.getElementById('AP_MATCH_INPUT_' + name);         if (!input || typeof input.value === 'undefined') {             throw new Error('The safe XPath helper input ' + name + ' was not found.');         }         return String(input.value);     };     var literal = function (value) {         if (value.indexOf("'") === -1) {             return "'" + value + "'";         }         if (value.indexOf('"') === -1) {             return '"' + value + '"';         }         var parts = value.split("'");         var chunks = [];         var i;         for (i = 0; i &lt; parts.length; i += 1) {             chunks.push("'" + parts[i] + "'");         }         return 'concat(' + chunks.join(', "\'", ') + ')';     };     var date = read('TRANSACTION_DATE');     var amount = read('TRANSACTION_AMOUNT');     var merchant = read('MERCHANT_NAME');     var location = read('TRANSACTION_LOCATION');     var row = "//table[@id='AvailableTrxnList:Content']/tbody/tr[" +         "   .//span[" +         "     starts-with(@id,'AvailableTrxnList:TransactionDate:')" +         "     and normalize-space(.)=normalize-space(" + literal(date) + ")" +         "   ]" +         "   and .//span[" +         "     starts-with(@id,'AvailableTrxnList:ReceiptAmount:')" +         "     and normalize-space(.)=normalize-space(" + literal(amount) + ")" +         "   ]" +         "   and .//span[" +         "     starts-with(@id,'AvailableTrxnList:OieMerchantName:')" +         "     and normalize-space(.)=normalize-space(" + literal(merchant) + ")" +         "   ]" +         "   and .//span[" +         "     starts-with(@id,'AvailableTrxnList:OieLocation:')" +         "     and normalize-space(.)=normalize-space(" + literal(location) + ")" +         "   ]" +         " ]";     var output = document.getElementById('AP_MATCH_ROW_XPATH');     if (!output) {         throw new Error('The safe XPath output span was not found.');     }     output.textContent = row; })();</td>
       <td></td>
       <td></td>
     </tr><tr>
@@ -201,27 +271,7 @@
       <td>AP_MATCH_ROW_XPATH</td>
       <td></td>
     </tr><tr>
-      <td>// Starting range and paging metadata: verify the first range and calculate TOTAL_ROWS.</td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr><tr>
-      <td>storeText</td>
-      <td>xpath=(//div[@id='AvailableTrxnList:ControlBar']//td[not(*) and starts-with(normalize-space(.),'Rows ')])[1]</td>
-      <td>INITIAL_RANGE_TEXT</td>
-      <td></td>
-    </tr><tr>
-      <td>if</td>
-      <td>String(INITIAL_RANGE_TEXT).indexOf('Rows 1 to ') != 0</td>
-      <td></td>
-      <td></td>
-    </tr><tr>
-      <td>throw</td>
-      <td>Start the scan from Rows 1 to the current page end; the table is not at the first row range.</td>
-      <td></td>
-      <td></td>
-    </tr><tr>
-      <td>endIf</td>
+      <td>// Paging metadata: calculate TOTAL_ROWS.</td>
       <td></td>
       <td></td>
       <td></td>
@@ -411,13 +461,8 @@
       <td></td>
       <td></td>
     </tr><tr>
-      <td>//scrollDownAndWait</td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr><tr>
-      <td>runScript</td>
-      <td>(function () {     var table = document.getElementById('scrollDiv:AvailableTrxnList');      if (!table) {         throw new Error('Transaction scroll area was not found.');     }      curScrollingTbl = 'AvailableTrxnList';     table.scrollTop = table.scrollHeight;     table.dispatchEvent(new Event('scroll')); })();</td>
+      <td>scrollDownAndWait</td>
+      <td>id=scrollDiv:AvailableTrxnList</td>
       <td></td>
       <td></td>
     </tr><tr>
@@ -436,7 +481,82 @@
       <td></td>
       <td></td>
     </tr><tr>
-      <td>// No-match result: fail when no matching row was found before the end or MAX_PAGES.</td>
+      <td>// If no transaction matched, return to row 1 before reporting the failure.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>String(transactionExists) != "true"</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>xpath=(//div[@id='AvailableTrxnList:ControlBar']//td[not(*) and starts-with(normalize-space(.),'Rows ')])[1]</td>
+      <td>INITIAL_RANGE_TEXT</td>
+      <td></td>
+    </tr><tr>
+      <td>storeExpression</td>
+      <td>0</td>
+      <td>REWIND_STEPS</td>
+      <td></td>
+    </tr><tr>
+      <td>while</td>
+      <td>String(INITIAL_RANGE_TEXT).indexOf('Rows 1 to ') != 0 &amp;&amp; parseInt(REWIND_STEPS,10) &lt; parseInt(MAX_PAGES,10)</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>scrollUpAndWait</td>
+      <td>id=scrollDiv:AvailableTrxnList</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>runScript</td>
+      <td>javascript{triggerPaginationEvent()}</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>waitForPageToLoad</td>
+      <td>8000</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>waitForElementPresent</td>
+      <td>xpath=//div[@id='AvailableTrxnList:ControlBar']//td[not(*) and starts-with(normalize-space(.),'Rows ') and normalize-space(.) != normalize-space('${INITIAL_RANGE_TEXT}')]</td>
+      <td>8000</td>
+      <td></td>
+    </tr><tr>
+      <td>storeText</td>
+      <td>xpath=(//div[@id='AvailableTrxnList:ControlBar']//td[not(*) and starts-with(normalize-space(.),'Rows ')])[1]</td>
+      <td>INITIAL_RANGE_TEXT</td>
+      <td></td>
+    </tr><tr>
+      <td>storeExpression</td>
+      <td>javascript{parseInt(${REWIND_STEPS},10)+1}</td>
+      <td>REWIND_STEPS</td>
+      <td></td>
+    </tr><tr>
+      <td>endWhile</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>String(transactionExists) != "true" &amp;&amp; String(INITIAL_RANGE_TEXT).indexOf('Rows 1 to ') != 0</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>throw</td>
+      <td>No matching transaction was found, and the table did not return to row 1 before MAX_PAGES was reached.</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
       <td></td>
       <td></td>
       <td></td>

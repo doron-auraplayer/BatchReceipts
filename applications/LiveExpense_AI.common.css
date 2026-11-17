@@ -272,6 +272,58 @@ button.ui-btn.TableAddLineBtn {
 }
 
 
+
+@keyframes receipt-analysis-dots-sequence {
+  0%,
+  15% {
+    background-color: #90caf9;
+    box-shadow: 7px 0 0 0 #90caf9, 14px 0 0 0 #90caf9;
+  }
+  30% {
+    background-color: #1565c0;
+    box-shadow: 7px 0 0 0 #90caf9, 14px 0 0 0 #90caf9;
+  }
+  45% {
+    background-color: #90caf9;
+    box-shadow: 7px 0 0 0 #1565c0, 14px 0 0 0 #90caf9;
+  }
+  60% {
+    background-color: #90caf9;
+    box-shadow: 7px 0 0 0 #90caf9, 14px 0 0 0 #1565c0;
+  }
+  75%,
+  100% {
+    background-color: #90caf9;
+    box-shadow: 7px 0 0 0 #90caf9, 14px 0 0 0 #90caf9;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ap-page-receiptsattachments #tableOutput tbody tr.receipt-status-new[id^="tablerow_"] > td:first-child label.receipt-select-disabled::before,
+  .ap-page-receiptsattachments #tableOutput tbody tr.receipt-status-processing[id^="tablerow_"] > td:first-child label.receipt-select-disabled::before {
+    animation: none !important;
+    background-color: #1565c0 !important;
+    box-shadow: 7px 0 0 0 #1565c0, 14px 0 0 0 #1565c0 !important;
+  }
+}
+
+/* DataTables sorting icons. The vendor CSS references ../images/sort_*.png,
+   but the generated app serves those files from res/images/. The disabled
+   variants are not shipped, so they reuse their directional icon. */
+table.dataTable thead .sorting {
+  background-image: url('../res/images/sort_both.png');
+}
+
+table.dataTable thead .sorting_asc,
+table.dataTable thead .sorting_asc_disabled {
+  background-image: url('../res/images/sort_asc.png');
+}
+
+table.dataTable thead .sorting_desc,
+table.dataTable thead .sorting_desc_disabled {
+  background-image: url('../res/images/sort_desc.png');
+}
+
 /***** TAB: ReceiptBatch *****/
 #dynamicImageOverlay,
 #dynamicPdfOverlay {
@@ -1273,4 +1325,16 @@ body.receipt-unmatch-confirmation #popupContainer-screen {
   max-width: 100%;
   max-height: 100%;
   border: 0;
+}
+
+/* Global (app-level) opt-in viewer rule for ReceiptLineSelection.html.
+   AuraPlayer prefixes every per-page CSS selector with its page scope
+   (.ap-page-receiptlineselection). The shared #dynamicImageOverlay and
+   #dynamicPdfOverlay are body-level, outside #mainPage, so a per-page rule
+   cannot match them. This file is appended verbatim to the app CSS and is
+   active only while the page's onLoad body class is present; native cleanup
+   removes that class. Close, zoom and data preview are untouched. */
+body.receipt-line-selection-no-download #dynamicImageOverlay .attachmentViewerButtonDownload,
+body.receipt-line-selection-no-download #dynamicPdfOverlay .attachmentViewerButtonDownload {
+  display: none !important;
 }

@@ -355,6 +355,7 @@ var RECEIPT_STATUS_CLASS_BY_STATUS = {
   NEW: 'receipt-status-new',
   PROCESSING: 'receipt-status-processing',
   PROCESSED: 'receipt-status-processed',
+  ANALYZED_FAILED: 'receipt-status-analyzed-failed',
   FAILED: 'receipt-status-failed',
   AI_FAILED: 'receipt-status-ai-failed',
   READY: 'receipt-status-ready',
@@ -365,6 +366,7 @@ var RECEIPT_STATUS_CLASSES = [
   'receipt-status-new',
   'receipt-status-processing',
   'receipt-status-processed',
+  'receipt-status-analyzed-failed',
   'receipt-status-failed',
   'receipt-status-ai-failed',
   'receipt-status-ready',
@@ -686,7 +688,10 @@ function click_New_Report() {
 }
 
 function Refresh() {
-  reloadReceiptTable();
+  Storage.set('EBS_USER', Storage.get('LoggedInUsername'));
+  beginIndependentReceiptSelectionReload();
+  Spinner.start('Matching receipts', 'REFRESH_RECEIPTS');
+  matchAndLoad();
 }
 
 // Keeps the existing StepInfo label above the receipt table.
@@ -764,11 +769,6 @@ function addAttachmentUsingInput(attachmentInput) {
         failedFiles: []
       };
 
-      Spinner.start(
-        'Uploading ' + uploadState.files.length + ' files',
-        'UPLOADING_FILES'
-      );
-
       receiptStepInfoUploading = true;
       updateStepInfo('Uploading receipts. Please wait.');
 
@@ -791,6 +791,11 @@ function uploadNextFile(uploadState, attachmentInput) {
   file = uploadState.files[uploadState.currentIndex];
   uploadState.currentIndex++;
 
+  Spinner.start(
+    'Uploading file ' + uploadState.currentIndex + ' of ' + uploadState.files.length,
+    uploadState.currentIndex === 1 ? 'UPLOADING_FILES' : undefined
+  );
+
   readAndUploadFile(
     file,
 
@@ -809,6 +814,8 @@ function finishUploadProcess(uploadState, attachmentInput) {
   receiptStepInfoUploading = false;
   console.log("finishUploadProcess");
   Spinner.stop('UPLOADING_FILES');
+  Popup.toast(
+      "Files uploaded successfully! Analysis is in progress. You can safely close this window.",7000);
 
   removeAttachmentInput(attachmentInput);
 
@@ -911,10 +918,7 @@ function compressFileForUpload(
   successCallback,
   failureCallback
 ) {
-  Spinner.start(
-    'Compressing: ' + file.name,
-    'COMPRESSING_FILE'
-  );
+  Spinner.start(null, 'COMPRESSING_FILE');
 
   compressImage(
     fileData,

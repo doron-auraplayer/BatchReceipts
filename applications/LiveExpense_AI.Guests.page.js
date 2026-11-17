@@ -102,6 +102,7 @@ function onCancel() {
         Storage.clear("GuestsCommingFrom");
         goToPage = "ItemizedLine.html";
     }
+    Storage.set("fromSelectGuest", "true");
     Page.navigate(goToPage);
 }
 

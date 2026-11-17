@@ -17,15 +17,13 @@
           "visible": true,
           "isJavaScript": false,
           "name": "EBS_USER",
-          "label": "EBS_USER",
-          "paramValue": ""
+          "paramValue": "operations"
         },
         {
           "visible": true,
           "isJavaScript": false,
           "name": "P_STATUSES",
-          "label": "P_STATUSES",
-          "paramValue": ""
+          "paramValue": "welcome1"
         }
       ],
       "outputs": [
@@ -64,8 +62,7 @@
           "visible": true,
           "isJavaScript": false,
           "name": "EBS_USER",
-          "label": "EBS_USER",
-          "paramValue": ""
+          "paramValue": "operations"
         }
       ],
       "outputs": [
@@ -192,14 +189,12 @@
           "visible": false,
           "isJavaScript": true,
           "name": "receipt_id",
-          "label": "receipt_id",
           "paramValue": "return receipt_id;"
         },
         {
           "visible": false,
           "isJavaScript": true,
           "name": "blob_file",
-          "label": "blob_file",
           "paramValue": "return blob_file;"
         }
       ],

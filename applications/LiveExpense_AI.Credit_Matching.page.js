@@ -481,7 +481,8 @@ function approveCreditMatching(match) {
     }
 
     editor = getCreditMatchingEditorWindow();
-    if (!editor || typeof editor.applyCreditTransactionMatch !== "function") {
+    if (!editor || typeof editor.applyCreditTransactionMatch !== "function" ||
+        typeof editor.saveApprovedCreditMatch !== "function") {
         creditApprovalPending = false;
         Popup.ok(
             "Error",
@@ -490,32 +491,32 @@ function approveCreditMatching(match) {
         return;
     }
 
-    try {
-        editor.applyCreditTransactionMatch(
-            match,
-            function () {
-                creditApprovalPending = false;
-                closeCreditMatchingPanel();
-            },
-            function (problem) {
-                creditApprovalPending = false;
-                Popup.ok(
-                    "Error",
-                    creditMatchingFailureText(problem, "Failed to save the credit transaction match.")
-                );
-            }
-        );
-    } catch (error) {
+    function fail(problem) {
         creditApprovalPending = false;
         Popup.ok(
             "Error",
-            creditMatchingFailureText(error, "Failed to save the credit transaction match.")
+            creditMatchingFailureText(problem, "Failed to save the credit transaction match.")
         );
+    }
+    try {
+        editor.applyCreditTransactionMatch(match, function () {
+            try {
+                editor.saveApprovedCreditMatch(function () {
+                    creditApprovalPending = false;
+                    closeCreditMatchingPanel();
+                }, fail);
+            } catch (error) {
+                fail(error);
+            }
+        }, fail);
+    } catch (error) {
+        fail(error);
     }
 }
 
 function showCreditMatchingApproval(match) {
     creditApprovalPending = true;
+    var decided = false;
 
     try {
         Popup.custom(
@@ -524,9 +525,13 @@ function showCreditMatchingApproval(match) {
             "Approve",
             "Cancel",
             function () {
+                if (decided) { return; }
+                decided = true;
                 approveCreditMatching(match);
             },
             function () {
+                if (decided) { return; }
+                decided = true;
                 creditApprovalPending = false;
             }
         );

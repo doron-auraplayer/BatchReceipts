@@ -1,0 +1,200 @@
+/* Page-scoped styling for ReceiptLineSelection.html only. */
+
+/* READY rows use the established ReceiptsAttachments palette: #a5d6a7 fill,
+   #1f2a37 text and 600 weight. Applying the fill to every cell keeps the whole
+   row green when the theme applies its hover or sorted-column backgrounds. */
+#tableOutput tbody tr.receipt-line-ready > td {
+  background-color: #a5d6a7;
+  color: #1f2a37;
+  font-weight: 600;
+}
+
+/* LINE_FAILED/FAILED rows use the established light-red fill with the existing
+   readable text colour. Applying the fill to every cell keeps the whole row
+   red on hover and while a sorted column applies its own cell shading. */
+#tableOutput tbody tr.receipt-line-failed > td {
+  background-color: #fde8e8;
+  color: #7f1d1d;
+  font-weight: 600;
+}
+
+/* The theme's hover/selected/sorted-column rules target the row or a single
+   cell. Re-assert the state fills so they cannot break up the full-row colour;
+   the selected outline stays on the cells and is never replaced. */
+#tableOutput tbody tr.receipt-line-ready:hover > td,
+#tableOutput tbody tr.receipt-line-ready.selected > td,
+#tableOutput tbody tr.receipt-line-ready > td.sorting_1,
+#tableOutput tbody tr.receipt-line-ready > td.sorting_2,
+#tableOutput tbody tr.receipt-line-ready > td.sorting_3 {
+  background-color: #a5d6a7;
+  color: #1f2a37;
+}
+
+#tableOutput tbody tr.receipt-line-failed:hover > td,
+#tableOutput tbody tr.receipt-line-failed.selected > td,
+#tableOutput tbody tr.receipt-line-failed > td.sorting_1,
+#tableOutput tbody tr.receipt-line-failed > td.sorting_2,
+#tableOutput tbody tr.receipt-line-failed > td.sorting_3 {
+  background-color: #fde8e8;
+  color: #7f1d1d;
+}
+
+/* Selection is an inset outline rather than a background colour. A selected
+   READY row keeps its green fill and a selected failed row keeps the light-red
+   failure background. */
+#tableOutput tbody tr.receipt-line-selected > td {
+  box-shadow: inset 0 0 0 2px #1d4ed8;
+}
+
+#tableOutput tbody tr.receipt-line-failed.receipt-line-selected > td {
+  background-color: #fde8e8;
+  box-shadow: inset 0 0 0 2px #b91c1c;
+}
+
+/* StepInfo banner: pale-yellow strip flush above the receipt table. */
+#StepInfo_container {
+  display: block;
+  box-sizing: border-box;
+  width: 100% !important;
+  max-width: none;
+  padding: 6px 8px;
+  margin: 0 !important;
+  border: 1px solid #d6d9ae;
+  background: #f7f6b2;
+  border-radius: 0;
+  float: none;
+  clear: both;
+}
+
+#StepInfo_container > label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: auto !important;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  color: #004060 !important;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: left;
+  white-space: normal;
+}
+
+#StepInfo_container > label::before {
+  content: '\26a0\fe0f';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 20px;
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* Ready-only results replace the warning triangle with a readable green check.
+   The green applies only while every eligible displayed row is READY. */
+#StepInfo_container.receipt-line-step-info-ready > label::before {
+  content: '\2713';
+  color: #15803d;
+  font-family: "Segoe UI Symbol", "Noto Sans Symbols", "Apple Symbols", sans-serif;
+  font-weight: 700;
+}
+
+/* Inline failed-only mode is mounted inside the Cash Lines page. The original
+   native #tableOutput and its columns/actions stay visible; only unrelated page
+   chrome is hidden. Normal popup mode never gets this body class. */
+body.receipt-line-selection-inline #StepInfo_container,
+body.receipt-line-selection-inline #sidebar,
+body.receipt-line-selection-inline #menu,
+body.receipt-line-selection-inline .ui-header,
+body.receipt-line-selection-inline #pageTitle {
+  display: none !important;
+}
+
+body.receipt-line-selection-inline {
+  max-width: 100%;
+  min-height: 100vh;
+  margin: 0;
+}
+
+/* Inline failed-only mode fills the host iframe. AuraPlayer sets an inline 15px
+   page padding, the layout adds a 15px form bottom margin and each table-field
+   span has 5px padding. Clear those insets only for this mode. */
+body.receipt-line-selection-inline div[data-role="page"] {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh !important;
+  padding: 0 !important;
+}
+
+body.receipt-line-selection-inline [id="mainForm"] {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 !important;
+  padding: 0;
+}
+
+/* Both table-field spans are shown; zeroing their padding removes the empty
+   spacer without hiding either one. The span owning the real table is then
+   sized to its content below instead of the viewport. */
+body.receipt-line-selection-inline .field-container.table-field-container {
+  box-sizing: border-box;
+  width: 100% !important;
+  max-width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* The real table field is content-height, not viewport-height. The page runtime
+   fits the host iframe around all content through the first four rendered rows
+   (or the natural field when shorter), bounded by the parent viewport. Any
+   additional rows stay in the table and scroll vertically inside the frame. */
+body.receipt-line-selection-inline .field-container.table-field-container:has([id="tableOutput"]) {
+  display: block;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+}
+
+/* DataTables can leave a pixel width/height on its wrapper and table. Keep the
+   native table display and force both to the field width while removing any
+   fixed height so the wrapper keeps only its natural content height. */
+body.receipt-line-selection-inline [id="tableOutput_wrapper"],
+body.receipt-line-selection-inline [id="tableOutput"] {
+  box-sizing: border-box;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+}
+
+.receipt-line-selection-inline {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  color: #1f2a37;
+  font-size: 13px;
+}
+
+.receipt-line-selection-inline-message {
+  box-sizing: border-box;
+  margin: 0 0 8px;
+  padding: 7px 10px;
+  border: 1px solid #e0b4b4;
+  border-radius: 4px;
+  background: #fff7f7;
+  color: #7f1d1d;
+  font-weight: 600;
+  line-height: 1.35;
+}

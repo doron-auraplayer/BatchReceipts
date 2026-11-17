@@ -4,6 +4,45 @@
   "steps": [
     {
       "type": "Service",
+      "name": "ReceiptBatch_update_retry_report_status",
+      "nickname": "ReceiptBatch_update_retry_report_status",
+      "keepAlive": false,
+      "throwError": true,
+      "ignoreError": false,
+      "isJavaScript": false,
+      "isCustom": false,
+      "invalid": false,
+      "inputs": [
+        {
+          "visible": true,
+          "isJavaScript": false,
+          "name": "REPORT_NUMBER",
+          "paramValue": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Error",
+          "label": "Error",
+          "visible": true,
+          "inTable": false
+        },
+        {
+          "name": "PopupMessages",
+          "label": "PopupMessages",
+          "visible": false,
+          "inTable": false
+        },
+        {
+          "name": "StatusBarMessages",
+          "label": "StatusBarMessages",
+          "visible": false,
+          "inTable": false
+        }
+      ]
+    },
+    {
+      "type": "Service",
       "name": "ReceiptBatch_get_report_rpa_data",
       "nickname": "Get report data",
       "keepAlive": false,
@@ -81,7 +120,7 @@
       "type": "JavaScript",
       "name": "JavaScript",
       "nickname": "Load report data",
-      "command": "ServiceManager.sessionId = null;\nvar reportNumber = ServiceManager.getInput(\"REPORT_NUMBER\");\n\nvar receiptBatchReportElements = ReceiptBatch_get_report_rpa_dataResponse.Response.ReceiptBatch_get_report_rpa_dataElements;\nvar ReportPurpose = receiptBatchReportElements.REPORT_PURPOSE;\n\nvar ReportCashReceipts = receiptBatchReportElements.REPORT_CASH_RECEIPTS;\nvar cashReceiptIdsCount = ReportCashReceipts.length;\n\nvar ReportCreditReceipts = receiptBatchReportElements.REPORT_CREDIT_RECEIPTS;\nvar creditReceiptIdsCount = ReportCreditReceipts.length;\n",
+      "command": "ServiceManager.sessionId = null;\nvar reportNumber = ServiceManager.getInput(\"REPORT_NUMBER\");\n\nvar receiptBatchReportElements = ReceiptBatch_get_report_rpa_dataResponse.Response.ReceiptBatch_get_report_rpa_dataElements;\nvar ReportPurpose = receiptBatchReportElements.REPORT_PURPOSE;\n\nfunction reportArray(value) {\n    if (typeof value === \"string\") {\n        value = JSON.parse(value);\n    }\n    if (!Array.isArray(value)) {\n        throw new Error(\"The report data service did not return a receipt array.\");\n    }\n    return value;\n}\n\nfunction isReadyReportReceipt(row) {\n    return row && String(row.STATUS).toUpperCase() === \"READY\";\n}\n\nvar ReportCashReceipts = reportArray(receiptBatchReportElements.REPORT_CASH_RECEIPTS)\n    .filter(isReadyReportReceipt);\nvar cashReceiptIdsCount = ReportCashReceipts.length;\n\nvar ReportCreditReceipts = reportArray(receiptBatchReportElements.REPORT_CREDIT_RECEIPTS)\n    .filter(isReadyReportReceipt);\nvar creditReceiptIdsCount = ReportCreditReceipts.length;\n",
       "keepAlive": false,
       "throwError": false,
       "ignoreError": false,

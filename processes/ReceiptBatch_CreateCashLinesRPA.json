@@ -460,6 +460,12 @@
       ],
       "outputs": [
         {
+          "name": "SET_LINE_DETAILS_RESPONSE",
+          "label": "SET_LINE_DETAILS_RESPONSE",
+          "visible": false,
+          "inTable": false
+        },
+        {
           "name": "Error",
           "label": "Error",
           "visible": true,

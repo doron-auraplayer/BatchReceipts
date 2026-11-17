@@ -1,18 +1,23 @@
-var selectedReceiptIds = ServiceManager.getInput("SELECTED_RECEIPT_IDS");
-if (typeof selectedReceiptIds !== "string") {
-    selectedReceiptIds = JSON.stringify(selectedReceiptIds);
+// Starts the ReceiptBatch_CreateLinesRPA process.
+// ReportNumber remains the caller-facing input name for existing app
+// compatibility; the RPA process receives it as REPORT_NUMBER.
+
+var reportNumber = ServiceManager.getInput("ReportNumber");
+
+if (reportNumber === null || reportNumber === undefined) {
+    reportNumber = "";
+} else {
+    reportNumber = String(reportNumber).trim();
+}
+
+if (reportNumber === "") {
+    throw new Error("ReportNumber is required to start ReceiptBatch_CreateLinesRPA.");
 }
 
 Services.callAsync("ReceiptBatch_CreateLinesRPA", {
-    "itemizedExpenseTypes": ServiceManager.getInput("itemizedExpenseTypes"),
-    "ExpensesTableCashLinePrefix": ServiceManager.getInput("ExpensesTableCashLinePrefix"),
-    "HomePageTitle": ServiceManager.getInput("HomePageTitle"),
-    "passwordField": ServiceManager.getInput("passwordField"),
+    "REPORT_NUMBER": reportNumber,
     "usernameField": ServiceManager.getInput("usernameField"),
-    "RespName": ServiceManager.getInput("RespName"),
-    "FunctionId": ServiceManager.getInput("FunctionId"),
-    "REPORT_NUMBER": ServiceManager.getInput("ReportNumber"),
-    "REPORT_PURPOSE": ServiceManager.getInput("Purpose"),
-    "SELECTED_RECEIPT_IDS": selectedReceiptIds
+    "passwordField": ServiceManager.getInput("passwordField")
 });
+
 return {};

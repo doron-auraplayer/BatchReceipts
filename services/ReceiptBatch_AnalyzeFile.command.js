@@ -1,12 +1,3 @@
-// ReceiptBatch_AnalyzeFile: one AI call, then one typed write-back. The five core
-// values live only in the SQL columns; the expense JSON carries extras only.
-//
-// Flow: required receipt-id guard -> mandatory PROCESSING write -> AI analysis ->
-// optional typed expense JSON -> mandatory final update. An AI failure writes the
-// best-effort AI_FAILED status and rethrows. The template call is best effort: any
-// template problem only leaves EXPENSE_DATA_JSON blank and the flow still reaches
-// the final update. A failure of the final update writes the best-effort FAILED
-// status and rethrows.
 
 var receiptId = ServiceManager.getInput('receipt_id');
 var blobFile = ServiceManager.getInput('blob_file');
@@ -112,12 +103,6 @@ if (receiptIdNumber === null) {
 
 log('start receipt_id=' + receiptIdNumber);
 
-// ---- initial status --------------------------------------------------------
-// The first workflow step after the guard: mark the receipt PROCESSING before any
-// AI work. This write is mandatory: an exception OR a non-empty service Error
-// fails the workflow, so the AI service is never called and the error propagates
-// unchanged. No AI_FAILED or FAILED status is written here, so this write can
-// never mask the failure it reports.
 var initialStatusResponse;
 
 try {
@@ -135,11 +120,8 @@ try {
 
 log('status PROCESSING written');
 
-// ---- AI analysis -----------------------------------------------------------
-// The AI call may throw, not merely answer with an Error value; both paths write
-// AI_FAILED and rethrow. There is no retry.
 try {
-    var analysisResponse = Services.call('IExpense_AnalyzeReceipt',
+    var analysisResponse = Services.call('IExpense_AnalyzeReceipt_ORIG',
         {"ReceiptContent": blobFile, "keepAlive": false});
 
     if (getServiceError(analysisResponse).length !== 0) {
@@ -244,16 +226,7 @@ function mergeAiExtras(line) {
     return line;
 }
 
-// ---- the expense document --------------------------------------------------
-// Only a real AI type produces a template call; an absent or blank type keeps the
-// final update with a blank EXPENSE_TYPE and a blank EXPENSE_DATA_JSON.
-//
-// The template call is best effort. A throw, a non-empty service Error, a missing
-// or malformed EXPENSE_DATA_JSON (including a JSON document that is not exactly
-// one plain line object) and an unsupported-type rejection all simply leave
-// EXPENSE_DATA_JSON blank. None of them writes FAILED and none of them rethrows:
-// the core AI values are already in hand, so the receipt still finishes PROCESSED
-// with no expense template attached.
+
 var expenseDataJson = '';
 
 if (expenseType === '') {

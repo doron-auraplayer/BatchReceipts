@@ -57,7 +57,16 @@ function normalizeDate(val) {
   if (val === null || val === undefined) {
     return "";
   }
-  return String(val).trim();
+  var text = String(val).trim();
+  var match = /^(\d{1,2})-([A-Za-z]{3})-(\d{4})$/.exec(text);
+  if (match) {
+    var month = 'jan feb mar apr may jun jul aug sep oct nov dec'.split(' ').indexOf(match[2].toLowerCase()) + 1;
+    if (!month) { return ''; }
+    text = match[3] + '-' + ('0' + month).slice(-2) + '-' + ('0' + match[1]).slice(-2);
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(text)) { return ''; }
+  var date = new Date(text + 'T00:00:00Z');
+  return isFinite(date.getTime()) && date.toISOString().slice(0, 10) === text ? text : '';
 }
 
 /**********************************************************************/

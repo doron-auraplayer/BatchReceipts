@@ -1,0 +1,209 @@
+{
+  "name": "ReceiptBatch_save_incomplete_credit_match",
+  "description": "",
+  "formUrl": "${env.DB_CONNECTION_STR}",
+  "command": "UPDATE XX_AP_BATCH_RECEIPTS receipt\nSET STATUS = 'PROCESSED',\n    EXPENSE_TYPE = ${P_EXPENSE_TYPE:VARCHAR},\n    TOTAL_AMOUNT = ${P_TOTAL_AMOUNT:NUMERIC},\n    RECEIPT_DATE = TO_DATE(${P_RECEIPT_DATE:VARCHAR}, 'YYYY-MM-DD'),\n    MERCHANT = ${P_MERCHANT:VARCHAR},\n    LOCATION = ${P_LOCATION:VARCHAR},\n    DEPARTMENT = ${P_DEPARTMENT:VARCHAR},\n    EXPENSE_DATA_JSON = ${P_EXPENSE_DATA_JSON:CLOB},\n    EXPENSE_DATA_UPDATED_DATE = SYSTIMESTAMP,\n    CREDIT_TRANSACTION = ${P_CREDIT_TRANSACTION:VARCHAR}\nWHERE receipt.RECEIPT_ID = ${P_RECEIPT_ID:NUMERIC}\n  AND receipt.EBS_USER_NAME = UPPER(TRIM(${P_EBS_USER:VARCHAR}))\n  AND receipt.STATUS IN ('PROCESSED', 'DRAFT', 'READY')\n  AND receipt.REPORT_ID IS NULL\n  AND EXISTS (\n      SELECT 1\n      FROM AP_CREDIT_CARD_TRXNS_ALL trx\n      JOIN AP_CARDS_ALL card ON card.CARD_ID = trx.CARD_ID\n        AND card.CARD_PROGRAM_ID = trx.CARD_PROGRAM_ID\n        AND card.ORG_ID = trx.ORG_ID\n      JOIN FND_USER ebs_user ON ebs_user.EMPLOYEE_ID = card.EMPLOYEE_ID\n      WHERE ebs_user.USER_NAME = receipt.EBS_USER_NAME\n        AND trx.TRX_ID = TO_NUMBER(CASE\n            WHEN REGEXP_LIKE(${P_CREDIT_TRANSACTION:VARCHAR}, '^[0-9]+$')\n            THEN ${P_CREDIT_TRANSACTION:VARCHAR}\n        END)\n        AND trx.REPORT_HEADER_ID IS NULL\n  )\n  AND NOT EXISTS (\n      SELECT 1\n      FROM XX_AP_BATCH_RECEIPTS other\n      WHERE other.RECEIPT_ID <> receipt.RECEIPT_ID\n        AND other.EBS_USER_NAME = receipt.EBS_USER_NAME\n        AND other.CREDIT_TRANSACTION = ${P_CREDIT_TRANSACTION:VARCHAR}\n  )\n",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "username",
+        "serviceName": "ReceiptBatch_save_incomplete_credit_match"
+      },
+      "paramLabel": "username",
+      "paramValue": "${env.DB_USER}",
+      "visible": false
+    },
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "password",
+        "serviceName": "ReceiptBatch_save_incomplete_credit_match"
+      },
+      "paramLabel": "password",
+      "paramValue": "${env.DB_PASSWORD}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "P_EXPENSE_TYPE",
+        "serviceName": "ReceiptBatch_save_incomplete_credit_match"
+      },
+      "paramLabel": "P_EXPENSE_TYPE",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "P_TOTAL_AMOUNT",
+        "serviceName": "ReceiptBatch_save_incomplete_credit_match"
+      },
+      "paramLabel": "P_TOTAL_AMOUNT",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "P_RECEIPT_DATE",
+        "serviceName": "ReceiptBatch_save_incomplete_credit_match"
+      },
+      "paramLabel": "P_RECEIPT_DATE",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "P_MERCHANT",
+        "serviceName": "ReceiptBatch_save_incomplete_credit_match"
+      },
+      "paramLabel": "P_MERCHANT",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "P_LOCATION",
+        "serviceName": "ReceiptBatch_save_incomplete_credit_match"
+      },
+      "paramLabel": "P_LOCATION",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "P_DEPARTMENT",
+        "serviceName": "ReceiptBatch_save_incomplete_credit_match"
+      },
+      "paramLabel": "P_DEPARTMENT",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "P_EXPENSE_DATA_JSON",
+        "serviceName": "ReceiptBatch_save_incomplete_credit_match"
+      },
+      "paramLabel": "P_EXPENSE_DATA_JSON",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "P_CREDIT_TRANSACTION",
+        "serviceName": "ReceiptBatch_save_incomplete_credit_match"
+      },
+      "paramLabel": "P_CREDIT_TRANSACTION",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "P_RECEIPT_ID",
+        "serviceName": "ReceiptBatch_save_incomplete_credit_match"
+      },
+      "paramLabel": "P_RECEIPT_ID",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "P_EBS_USER",
+        "serviceName": "ReceiptBatch_save_incomplete_credit_match"
+      },
+      "paramLabel": "P_EBS_USER",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_save_incomplete_credit_match"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_save_incomplete_credit_match"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_save_incomplete_credit_match"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@sql",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "DB",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": []
+}

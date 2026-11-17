@@ -1,0 +1,145 @@
+{
+  "name": "ReceiptBatch_lineDetails_created",
+  "description": "",
+  "formUrl": "${env.DB_CONNECTION_STR}",
+  "command": "UPDATE XX_AP_BATCH_RECEIPTS\r\nSET STATUS = 'LINE_CREATED',\r\n    ERROR_MESSAGE = NULL,\r\n    REPORT_ID = ${RLC_REPORT_ID:VARCHAR},\r\n    REPORT_NAME = ${RLC_REPORT_NAME:VARCHAR},\r\n    REPORT_CREATE_DATE = NVL(REPORT_CREATE_DATE, SYSDATE)\r\nWHERE RECEIPT_ID = TO_NUMBER(${RLC_RECEIPT_ID:VARCHAR})\r\n  AND EBS_USER_NAME = UPPER(TRIM(${RLC_EBS_USER:VARCHAR}))\r\n",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "username",
+        "serviceName": "ReceiptBatch_lineDetails_created"
+      },
+      "paramLabel": "username",
+      "paramValue": "${env.DB_USER}",
+      "visible": false
+    },
+    {
+      "isRequired": true,
+      "isCustom": false,
+      "id": {
+        "name": "password",
+        "serviceName": "ReceiptBatch_lineDetails_created"
+      },
+      "paramLabel": "password",
+      "paramValue": "${env.DB_PASSWORD}",
+      "visible": false
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "RLC_REPORT_ID",
+        "serviceName": "ReceiptBatch_lineDetails_created"
+      },
+      "paramLabel": "RLC_REPORT_ID",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "RLC_REPORT_NAME",
+        "serviceName": "ReceiptBatch_lineDetails_created"
+      },
+      "paramLabel": "RLC_REPORT_NAME",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "RLC_RECEIPT_ID",
+        "serviceName": "ReceiptBatch_lineDetails_created"
+      },
+      "paramLabel": "RLC_RECEIPT_ID",
+      "paramValue": "",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": true,
+      "id": {
+        "name": "RLC_EBS_USER",
+        "serviceName": "ReceiptBatch_lineDetails_created"
+      },
+      "paramLabel": "RLC_EBS_USER",
+      "paramValue": "",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_lineDetails_created"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_lineDetails_created"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_lineDetails_created"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "@sql",
+  "isPartial": false,
+  "isPrivate": false,
+  "useLabelsAsKeys": false,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": 0,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "DB",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": [
+    "LiveExpense_AI"
+  ]
+}

@@ -2295,7 +2295,7 @@ function handleCcMatchButtonClick() {
     try {
       Popup.custom(
         'Unmatch Credit Card',
-        'Unmatch this credit card transaction? The receipt will become a Cash receipt. Click Save to keep this change.',
+        'Unmatch this credit card transaction? The receipt will become a Cash receipt and the transaction will be available to match again.',
         'Unmatch',
         'Cancel',
         function () {
@@ -3985,5 +3985,7 @@ function matchAndLoad() {
 }
 
 
+app.isSPA = true;
+app.loginPage = 'Login.html';
 app.isSPA = true;
 app.loginPage = 'Login.html';

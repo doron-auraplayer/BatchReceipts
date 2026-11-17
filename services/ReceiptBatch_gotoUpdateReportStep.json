@@ -1,0 +1,168 @@
+{
+  "name": "ReceiptBatch_gotoUpdateReportStep",
+  "description": "",
+  "formUrl": "",
+  "command": "IE",
+  "isEnabled": true,
+  "inputParams": [
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "indexLineToUpdate",
+        "serviceName": "ReceiptBatch_gotoUpdateReportStep"
+      },
+      "paramLabel": "indexLineToUpdate",
+      "paramValue": "0",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "ExpensesTableUpdateReportPrefix",
+        "serviceName": "ReceiptBatch_gotoUpdateReportStep"
+      },
+      "paramLabel": "ExpensesTableUpdateReportPrefix",
+      "paramValue": "N12",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "Credit",
+        "serviceName": "ReceiptBatch_gotoUpdateReportStep"
+      },
+      "paramLabel": "Credit",
+      "paramValue": "true",
+      "visible": true
+    },
+    {
+      "isRequired": false,
+      "isCustom": false,
+      "id": {
+        "name": "TARGET_STEP",
+        "serviceName": "ReceiptBatch_gotoUpdateReportStep"
+      },
+      "paramLabel": "TARGET_STEP",
+      "paramValue": "Expense Allocations",
+      "visible": true
+    }
+  ],
+  "outputParams": [
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "NAVIGATION_STATUS",
+        "serviceName": "ReceiptBatch_gotoUpdateReportStep"
+      },
+      "paramLabel": "NAVIGATION_STATUS",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "WizardTitle",
+        "serviceName": "ReceiptBatch_gotoUpdateReportStep"
+      },
+      "paramLabel": "WizardTitle",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "hasCreditLinesStep",
+        "serviceName": "ReceiptBatch_gotoUpdateReportStep"
+      },
+      "paramLabel": "hasCreditLinesStep",
+      "visible": true
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "EMPTY",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Error",
+        "serviceName": "ReceiptBatch_gotoUpdateReportStep"
+      },
+      "paramLabel": "Error",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "PopupMessages",
+        "serviceName": "ReceiptBatch_gotoUpdateReportStep"
+      },
+      "paramLabel": "PopupMessages",
+      "visible": false
+    },
+    {
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "StatusBarMessages",
+        "serviceName": "ReceiptBatch_gotoUpdateReportStep"
+      },
+      "paramLabel": "StatusBarMessages",
+      "visible": false
+    }
+  ],
+  "fileName": "ReceiptBatch_gotoUpdateReportStep.html",
+  "isPartial": true,
+  "isPrivate": false,
+  "useLabelsAsKeys": true,
+  "isSingleOutput": false,
+  "hasInputList": false,
+  "isRawResponse": false,
+  "tableHeaderRows": -1,
+  "isTableLooseStructure": false,
+  "numOfRowsInTable": 200,
+  "authenticationMethod": "None",
+  "isJson": true,
+  "isHandlePopups": false,
+  "timeout": 0,
+  "validationResponseCode": 200,
+  "type": "HTML",
+  "createdBy": "admin",
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
+  "apps": [
+    "LiveExpense_AI"
+  ]
+}

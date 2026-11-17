@@ -1,8 +1,3 @@
-// ============================================================================
-// InProgressLines.html
-// Status column as icons. JavaScript only: no colours, no sizes, no glyphs.
-// The icon itself is drawn by the page CSS ::before of the status span.
-// ============================================================================
 
 var IN_PROGRESS_LINE_STATUS_HEADER_ID = '*th*RECEIPTBATCH_STATUS';
 var IN_PROGRESS_LINE_STATUS_MAX_ATTEMPTS = 20;
@@ -17,16 +12,14 @@ var IN_PROGRESS_LINE_STATUS_STATE_CLASSES = [
   'in-progress-line-status-failed'
 ];
 
-// Automatic refresh of the in-progress report header and lines.
-// Set enabled to false to disable the automatic repeats; the initial data load
-// still runs once so the page keeps working normally without polling.
+
 var IN_PROGRESS_LINE_REFRESH = {
     enabled: true,
     intervalMs: 5000,
     timeoutMs: 10 * 60 * 1000
 };
 
-// Current polling run; null when there is no active run for this page.
+
 var inProgressLineRefreshCurrentRun = null;
 var inProgressLineRefreshWarningLogged = false;
 

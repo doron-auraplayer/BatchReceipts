@@ -23,35 +23,15 @@ function setNextPrevButtons() {
 }
 
 function onGetTransactionSuccess() {
-  if (Table.countRows() > 0) {
-    transactionsMatching(function () {
-      renderMatchedColumn();
-      bindMatchedClick();
-
-      var table = $('#tableOutput').DataTable();
-      table.off('draw.matched').on('draw.matched', function () {
-        renderMatchedColumn();
-      });
-
-      addActionListeners();
-      setNextPrevButtons();
-    });
-  }
+  // Receipt matching and matched-receipt preview are temporarily disabled.
+  setNextPrevButtons();
 }
 
 function onLoad() {
-  configureReceiptViewer({
-    allowApprove: false,
-    showData: false,
-    allowEdit: false
-  });
-    
     Storage.set("hasCreditLinesStep", true); //so in Cash_Lines we will know where to get back
 
     Table.setColumn('Select_0', false);
     Storage.deleteByPrefix('Select_');  // otherwise array size of 'Select_*' might be different than returned data
-    Storage.deleteByPrefix('MatchReciptId_');
-    Storage.deleteByPrefix('Match_');
     
     $("#Next_").text(getTranslationForId("Next"));
 
@@ -160,29 +140,14 @@ function CreditCardPoplist_lov_item_handler(arrayItem) {
     Table.clear();
     Table.setColumn('Select_0', false);
     Storage.deleteByPrefix('Select_');  // otherwise array size of 'Select_*' might be different than returned data
-    Storage.deleteByPrefix('MatchReciptId_');
-    Storage.deleteByPrefix('Match_');
     
 	Services.call("iExpense_credit_selectCreditCard", function() {
 	    var hasTransactions = Storage.get("hasTransactions").toLowerCase() === 'true';
 	    if (hasTransactions) {
-            Services.call('iExpense_credit_getTransactions', function() {
-                transactionsMatching(function () {
-                    renderMatchedColumn();
-                    addActionListeners();
-                    setNextPrevButtons();
-                });    
-            }, displayReportServiceError("Failed to get credit transactions"));	    
+            Services.call('iExpense_credit_getTransactions', function() { setNextPrevButtons(); }, displayReportServiceError("Failed to get credit transactions"));	    
 	    }
 	    else {
-	        Popup.ok("Information", "No transactions available.");
-	       // Popup.custom(getTranslationForId("@popup_title_no_transaction"), getTranslationForId("@popup_message_no_transactions1"), 
-	       //     getTranslationForId("@popup_message_change_card"),getTranslationForId("@popup_message_no_transactions_button_next"), function() {}, function() {
-        //     	Services.call('iExpense_credit_next', function() {
-    	   //         store("hasCreditLines", false); //so in Cash_Lines we will know we can skip immediatly to next
-        //             Page.navigate('Cash_Lines.html');
-        //     	});
-	       // })
+	        Popup.custom(getTranslationForId("@popup_title_no_transaction"), getTranslationForId("@popup_message_no_transactions1"), getTranslationForId("@popup_message_change_card"),getTranslationForId("@popup_message_no_transactions_button_next"), function() {}, function() { Services.call('iExpense_credit_next', function() { store("hasCreditLines", false); Page.navigate('Cash_Lines.html'); }); });
 	    }
 	},  displayReportServiceError("Failed to get credit cards list"));
 }
@@ -200,14 +165,6 @@ function onNext() {
 	Storage.set('moveNext', 'true');
     var selection = Table.getColumn('Select_0');
     Storage.set('selection', selection);
-    /**************************************/
-    for (var tIdx = 0; tIdx < selection.length; tIdx++) {
-        if (selection[tIdx]) {
-            Storage.set("selectedReciptId_" + tIdx, RECEIPTSBATCH_RECEIPT_ID[tIdx]);
-        }
-    }
-    
-    /**********************************/
 	Services.call('iExpense_credit_markTransactions', function() {
     	Services.call('iExpense_getCreditTransNextPrev', onGetTransactionSuccess, displayReportServiceError("Failed to fetch next transactions"));
 	}, displayReportServiceError("Failed to mark transactions"));
@@ -230,6 +187,8 @@ function onBack() {
             Page.navigate("Report_General.html");
 	    } , displayReportServiceError("Failed to to press back button"));
 }
+
+
 
 
 

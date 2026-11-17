@@ -1,8 +1,4 @@
-// ============================================================================
-// InProgressLines.html
-// Status column as icons. JavaScript only: no colours, no sizes, no glyphs.
-// The icon itself is drawn by the page CSS ::before of the status span.
-// ============================================================================
+
 
 var IN_PROGRESS_LINE_STATUS_HEADER_ID = '*th*RECEIPTBATCH_STATUS';
 var IN_PROGRESS_LINE_STATUS_MAX_ATTEMPTS = 20;
@@ -600,6 +596,8 @@ function editReport() {
             function () {
                 Storage.set('updateMode', 'true');
                 Storage.set('draftAiReport', 'true');
+                Storage.set('ReportCreationType', 'RECEIPT');
+                Storage.set('ReportCreationTypeNumber', Storage.get('ReportNumber'));
                 Page.navigate('Report_General.html');
             },
             displayReportServiceError('Failed to get report details')
