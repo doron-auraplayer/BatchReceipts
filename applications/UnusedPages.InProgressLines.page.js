@@ -595,7 +595,6 @@ function editReport() {
             'ReceiptBatch_DraftReport',
             function () {
                 Storage.set('updateMode', 'true');
-                Storage.set('draftAiReport', 'true');
                 Storage.set('ReportCreationType', 'RECEIPT');
                 Storage.set('ReportCreationTypeNumber', Storage.get('ReportNumber'));
                 Page.navigate('Report_General.html');

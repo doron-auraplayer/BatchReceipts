@@ -2,7 +2,7 @@
   "name": "ReceiptBatch_get_draft_report_lines",
   "description": "",
   "formUrl": "${env.DB_CONNECTION_STR}",
-  "command": "SELECT\n    RECEIPT_ID AS ReceiptBatch_RECEIPT_ID,\n    TO_CHAR(\n        RECEIPT_DATE,\n        'DD-Mon-YYYY',\n        'NLS_DATE_LANGUAGE=English'\n    ) AS ReceiptBatch_RECEIPT_DATE,\n    TO_CHAR(RECEIPT_DATE, 'YYYY-MM-DD')\n        AS ReceiptBatch_RECEIPT_DATE_ISO,\n    STATUS AS ReceiptBatch_STATUS,\n    EBS_USER_NAME AS ReceiptBatch_EBS_USER_NAME,\n    FILE_NAME AS ReceiptBatch_FILE_NAME,\n    FILE_TYPE AS ReceiptBatch_FILE_TYPE,\n    EXPENSE_TYPE AS ReceiptBatch_EXPENSE_TYPE,\n    TOTAL_AMOUNT AS ReceiptBatch_TOTAL_AMOUNT,\n    MERCHANT AS ReceiptBatch_MERCHANT,\n    LOCATION AS ReceiptBatch_LOCATION,\n    CREDIT_TRANSACTION AS ReceiptBatch_CREDIT\nFROM XX_AP_BATCH_RECEIPTS\nWHERE REPORT_ID = '${REPORT_NUMBER}'\nORDER BY RECEIPT_ID",
+  "command": "SELECT\n    r.RECEIPT_ID AS ReceiptBatch_RECEIPT_ID,\n    TO_CHAR(r.RECEIPT_DATE, 'DD-Mon-YYYY', 'NLS_DATE_LANGUAGE=English') AS ReceiptBatch_RECEIPT_DATE,\n    TO_CHAR(r.RECEIPT_DATE, 'YYYY-MM-DD') AS ReceiptBatch_RECEIPT_DATE_ISO,\n    r.STATUS AS ReceiptBatch_STATUS,\n    r.EBS_USER_NAME AS ReceiptBatch_EBS_USER_NAME,\n    r.FILE_NAME AS ReceiptBatch_FILE_NAME,\n    r.FILE_TYPE AS ReceiptBatch_FILE_TYPE,\n    r.EXPENSE_TYPE AS ReceiptBatch_EXPENSE_TYPE,\n    r.TOTAL_AMOUNT AS ReceiptBatch_TOTAL_AMOUNT,\n    r.MERCHANT AS ReceiptBatch_MERCHANT,\n    r.LOCATION AS ReceiptBatch_LOCATION,\n    r.CREDIT_TRANSACTION AS ReceiptBatch_CREDIT,\n    r.ERROR_MESSAGE AS ReceiptBatch_ERROR_MESSAGE,\n    r.PAYMENT_TYPE AS ReceiptBatch_PAYMENT_TYPE,\n    JSON_VALUE(r.EXPENSE_DATA_JSON, '$.lines[0].receiptCurrency' RETURNING VARCHAR2(100) NULL ON ERROR) AS ReceiptBatch_CURRENCY,\n    TRIM(cp.card_program_name || ' ' || icc.masked_cc_number) AS ReceiptBatch_CARD_ACCOUNT,\n    TO_CHAR(t.transaction_date, 'DD-Mon-YYYY', 'NLS_DATE_LANGUAGE=English') AS ReceiptBatch_TRANSACTION_DATE,\n    t.transaction_amount AS ReceiptBatch_TRANSACTION_AMOUNT,\n    t.posted_currency_code AS ReceiptBatch_TRANSACTION_CURRENCY\nFROM XX_AP_BATCH_RECEIPTS r\nLEFT JOIN ap_credit_card_trxns_all t\n    ON t.trx_id = TO_NUMBER(CASE\n        WHEN REGEXP_LIKE(TRIM(r.CREDIT_TRANSACTION), '^[0-9]+$')\n        THEN TRIM(r.CREDIT_TRANSACTION)\n    END)\nLEFT JOIN ap_cards_all c\n    ON c.card_id = t.card_id\n    AND c.card_program_id = t.card_program_id\n    AND c.org_id = t.org_id\nLEFT JOIN ap_card_programs_all cp\n    ON cp.card_program_id = c.card_program_id\n    AND cp.org_id = c.org_id\nLEFT JOIN iby_creditcard icc\n    ON icc.instrid = c.card_reference_id\nWHERE r.REPORT_ID = '${REPORT_NUMBER}'\nORDER BY r.RECEIPT_ID\n",
   "isEnabled": true,
   "inputParams": [
     {
@@ -221,6 +221,111 @@
       "visible": true
     },
     {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_ERROR_MESSAGE",
+        "serviceName": "ReceiptBatch_get_draft_report_lines"
+      },
+      "paramLabel": "RECEIPTBATCH_ERROR_MESSAGE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_PAYMENT_TYPE",
+        "serviceName": "ReceiptBatch_get_draft_report_lines"
+      },
+      "paramLabel": "RECEIPTBATCH_PAYMENT_TYPE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_CURRENCY",
+        "serviceName": "ReceiptBatch_get_draft_report_lines"
+      },
+      "paramLabel": "RECEIPTBATCH_CURRENCY",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_CARD_ACCOUNT",
+        "serviceName": "ReceiptBatch_get_draft_report_lines"
+      },
+      "paramLabel": "RECEIPTBATCH_CARD_ACCOUNT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_TRANSACTION_DATE",
+        "serviceName": "ReceiptBatch_get_draft_report_lines"
+      },
+      "paramLabel": "RECEIPTBATCH_TRANSACTION_DATE",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_TRANSACTION_AMOUNT",
+        "serviceName": "ReceiptBatch_get_draft_report_lines"
+      },
+      "paramLabel": "RECEIPTBATCH_TRANSACTION_AMOUNT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "RECEIPTBATCH_TRANSACTION_CURRENCY",
+        "serviceName": "ReceiptBatch_get_draft_report_lines"
+      },
+      "paramLabel": "RECEIPTBATCH_TRANSACTION_CURRENCY",
+      "visible": true
+    },
+    {
       "inTable": false,
       "newLine": false,
       "required": false,
@@ -287,6 +392,6 @@
     "BATCH_RECEIPTS"
   ],
   "apps": [
-    "LiveExpense_AI"
+    "UnusedPages"
   ]
 }

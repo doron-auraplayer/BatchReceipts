@@ -4,7 +4,6 @@ var statuses = 'LINE_CREATED,LINE_FAILED,SUBMITTED';
 function onLoad() {
     $('#Refresh').closest('.button-field-container').addClass('draft-refresh-control');
     Table.clear();
-    Storage.set('draftAiReport', 'false');
     Services.call('ReceiptBatch_get_draft_reports',reportStatus);
 }
 

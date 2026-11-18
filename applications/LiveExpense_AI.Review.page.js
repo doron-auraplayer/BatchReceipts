@@ -1,3 +1,5 @@
+var reviewSubmissionConfirmed = false;
+
 function iExpense_finish_onFailure() {
 	var reportErrorFunc = displayReportServiceError("Failed to submit report");
 	reportErrorFunc();
@@ -10,7 +12,6 @@ function iExpense_reviewAndFinish_onFailure() {
 }
 
 function OnCancel() {
-    Storage.set('draftAiReport', 'false');
     var updateMode = Storage.get("updateMode").toLowerCase() === 'true';
     updateMode ? Page.navigate("Update_Reports.html") : Page.navigate("Reports.html");
 }
@@ -89,7 +90,6 @@ function singleLine() { return true; }
 
 function onSave() {
     if (!validate()) return;
-    Storage.set('draftAiReport', 'false');
     
 	Services.call("iExpense_saveReportReview", function() {
     	Popup.ok(getTranslationForId("@popup_report_saved_title"), getTranslationForId("@popup_report_saved_message"), function(){});
@@ -101,7 +101,13 @@ function onSave() {
 }
 
 function onSubmit() {
-    if (!validate()) return;
+    if (reviewSubmissionConfirmed || !validate()) return;
+
+    var submittedReportNumber = String(Storage.get("ReportNumber") || "").trim();
+    var isReceiptReport =
+        Storage.get("ReportCreationType") === "RECEIPT" &&
+        submittedReportNumber !== "" &&
+        String(Storage.get("ReportCreationTypeNumber") || "").trim() === submittedReportNumber;
 
     Services.call("iExpense_reviewAndFinish", function () {
         var reportTitleRes =
@@ -119,22 +125,22 @@ function onSubmit() {
             return;
         }
 
+        reviewSubmissionConfirmed = true;
+        $("#Submit").prop("disabled", true);
+
         var msg = getTranslationForId(
             "@Report_submitted_message",
             num.trim()
         );
 
         Popup.ok("", msg, function () {
-            var isDraftAiReport =
-                String(Storage.get("draftAiReport")).toLowerCase() === "true";
-
-            if (isDraftAiReport) {
+            if (isReceiptReport) {
                 Storage.set("STATUS", "SUBMITTED");
+                Storage.set("ReportNumber", submittedReportNumber);
                 Services.call(
                     "ReceiptBatch_update_report_status",
 
                     function () {
-                        Storage.set("draftAiReport", "false");
                         Page.navigate("Reports.html");
                     },
 

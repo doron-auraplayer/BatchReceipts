@@ -782,6 +782,8 @@ function handleUpdateReportsPageLeave(event) {
         return;
     }
 
+    closeReportMessages();
+
     updateReportsPageActive = false;
     reportProgressGeneration += 1;
     clearTimeout(reportProgressTimer);
@@ -885,6 +887,12 @@ function reportStatus() {
             $cell.html(summaryHtml);
         }
 
+        if (summary && !isReportPending(reportNumber, summary)) {
+            $('<button type="button" class="report-messages-link"><span class="fa fa-exclamation-triangle" aria-hidden="true"></span><span>Report Errors</span></button>')
+                .on('click', function () { openReportMessages(reportNumber, this); })
+                .appendTo($cell);
+        }
+
         if (table) {
             table.cell(rowIndex, statusColumnIndex).invalidate('dom');
         }
@@ -912,4 +920,48 @@ function reportStatus() {
         .each(function(rowIndex) {
             renderRow(this, rowIndex);
         });
+}
+
+
+function closeReportMessages() {
+    var context = window.reportMessagesContext;
+    if (!context) { return; }
+    window.reportMessagesContext = null;
+    $('#reportMessagesOverlay').remove();
+    Popup.closePage();
+    document.body.style.overflow = context.previousOverflow;
+    $(document).off('keydown.reportMessagesHost');
+    if (context.opener && document.documentElement.contains(context.opener)) { context.opener.focus(); }
+}
+
+function openReportMessages(reportNumber, opener) {
+    var number = normalizeReportNumber(reportNumber);
+    if (!number || !isUpdateReportsPageCurrent()) { return; }
+    closeReportMessages();
+    window.reportMessagesContext = {
+        reportNumber: number, opener: opener, previousOverflow: document.body.style.overflow
+    };
+    window.closeReportMessages = closeReportMessages;
+    if (!$('#reportMessagesHostStyles').length) {
+        $('<style id="reportMessagesHostStyles"></style>').text(
+            '#reportMessagesOverlay{position:fixed;inset:0;z-index:11000;background:rgba(15,23,42,.48);display:flex;align-items:center;justify-content:center;padding:12px}' +
+            '#reportMessagesFrameHost{width:min(640px,100%);height:min(620px,calc(100vh - 24px));height:min(620px,calc(100dvh - 24px));min-width:0;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 16px 60px #0004}' +
+            '#reportMessagesFrameHost iframe{display:block;border:0;width:100%!important;height:100%!important;max-width:100%}'
+        ).appendTo('head');
+    }
+    var overlay = $('<div id="reportMessagesOverlay" role="dialog" aria-modal="true" aria-label="Report messages"></div>').appendTo('body');
+    var host = $('<div id="reportMessagesFrameHost"></div>').appendTo(overlay);
+    document.body.style.overflow = 'hidden';
+    overlay.on('click', function (event) { if (event.target === overlay[0]) { closeReportMessages(); } });
+    $(document).on('keydown.reportMessagesHost', function (event) { if (event.key === 'Escape') { closeReportMessages(); } });
+    if (typeof host[0].moveBefore === 'function') {
+        Popup.asIframe('ReportMessages.html', 'reportMessagesFrameHost', null, '100%', '100%');
+    } else {
+        // Older mobile browsers cannot move an initialized iframe without reloading it.
+        overlay.remove();
+        var context = window.reportMessagesContext;
+        Popup.openPage('ReportMessages.html', function () {
+            if (window.reportMessagesContext === context) { closeReportMessages(); }
+        }, '85%', '96%');
+    }
 }

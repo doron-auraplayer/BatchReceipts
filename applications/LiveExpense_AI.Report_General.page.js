@@ -177,7 +177,6 @@ console.log("Failed to get report number: " + expenseReportMessage );
 function OnCancel() {
 OnCancelPopup(function() {
 Storage.set('newAiReport', 'false');
-Storage.set("draftAiReport", "false");
 Page.navigate(updateMode?"Update_Reports.html":"Reports.html");
 });
 }
