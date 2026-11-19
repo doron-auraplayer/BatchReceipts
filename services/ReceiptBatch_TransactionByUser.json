@@ -2,7 +2,7 @@
   "name": "ReceiptBatch_TransactionByUser",
   "description": "",
   "formUrl": "${env.DB_CONNECTION_STR}",
-  "command": "SELECT  trxns.TRX_ID AS TRANSACTION_ID,\r\n        trxns.TRANSACTION_AMOUNT AS TRANSACTION_AMOUNT,\r\n        trxns.FOLIO_TYPE AS TRANSACTION_FOLIO_EXPENSE_TYPE,\r\n            CASE\r\n        /* Airfare */\r\n        WHEN REGEXP_LIKE(\r\n                 UPPER(NVL(trxns.merchant_name1, '')),\r\n                 'AIRLINE|AIRWAYS|AIRLINES|AIR FARE|TRAVEL AGENCY|TRAVEL AGENT|LUFTHANSA|DELTA|UNITED|AMERICAN AIR|SOUTHWEST|MEXICANA|USAIRWAY|NORTHWEST|BRITISH AIR|AIR FRANCE|KLM|EL AL'\r\n             )\r\n            THEN 'Airfare'\r\n\r\n        /* Car Rental */\r\n        WHEN REGEXP_LIKE(\r\n                 UPPER(NVL(trxns.merchant_name1, '')),\r\n                 'RENT[- ]?A[- ]?CAR|RENTAL CAR|CAR RENTAL|AVIS|HERTZ|ENTERPRISE|BUDGET|DOLLAR RENT|NATIONAL CAR|ALAMO|SIXT'\r\n             )\r\n            THEN 'Car Rental'\r\n\r\n        /* Entertainment */\r\n        WHEN REGEXP_LIKE(\r\n                 UPPER(NVL(trxns.merchant_name1, '')),\r\n                 'CINEMA|MOVIE|THEATER|THEATRE|CONCERT|CLUB|NIGHTCLUB|AMUSEMENT|PARK|DISNEY|MUSEUM|GALLERY|EXHIBITION|CASINO|BOWLING|STADIUM|ARENA|TICKETS|EVENTBRITE|TICKETMASTER'\r\n             )\r\n            THEN 'Entertainment'\r\n\r\n        /* Hotel */\r\n        WHEN REGEXP_LIKE(\r\n                 UPPER(NVL(trxns.merchant_name1, '')),\r\n                 'HOTEL|MOTEL|INN|LODGE|RESORT|SUITES|MARRIOTT|HYATT|HILTON|HOLIDAY INN|FOUR SEASONS|SHERATON|WESTIN|CONRAD|EMBASSY SUITES|BEST WESTERN|RADISSON|COURTYARD|HAMPTON INN'\r\n             )\r\n            THEN 'Hotel'\r\n\r\n        /* Meals */\r\n        WHEN REGEXP_LIKE(\r\n                 UPPER(NVL(trxns.merchant_name1, '')),\r\n                 'RESTAURANT|GRILL|CAFE|CAFÉ|BISTRO|BUFFET|PIZZA|BURGER|SUSHI|STEAK|STEAKHOUSE|BBQ|BARBEQUE|DELI|DINER|MCDONALD|STARBUCKS|WENDY|HOOTERS|SUBWAY|TACO|CHILI|OLIVE GARDEN|RED LOBSTER|LOBSTER HOUSE|CHINESE FOOD'\r\n             )\r\n            THEN 'Meals'\r\n\r\n        /* Taxis */\r\n        WHEN REGEXP_LIKE(\r\n                 UPPER(NVL(trxns.merchant_name1, '')),\r\n                 'TAXI|TAXIS|UBER|LYFT|LIMO|LIMOUSINE|TRANSIT|METRO|RAIL|BAHN|BUS|SHUTTLE'\r\n             )\r\n            THEN 'Taxis'\r\n\r\n        /* Telephone Calls */\r\n        WHEN REGEXP_LIKE(\r\n                 UPPER(NVL(trxns.merchant_name1, '')),\r\n                 'AT%T|VERIZON|VODAFONE|ORANGE|TELECOM|TELEFONICA|TELEPHONE|PHONE CARD|CALLING CARD|SBC|SPRINT|T-MOBILE|SFR'\r\n             )\r\n            THEN 'Telephone Calls'\r\n\r\n        /* Default */\r\n        ELSE 'Miscellaneous'\r\n    END AS TRANSACTION_EXPENSE_TYPE,\r\n        TO_CHAR(trxns.TRANSACTION_DATE, 'YYYY-MM-DD') AS TRANSACTION_RECEIPT_DATE,\r\n        trxns.MERCHANT_NAME1           AS TRANSACTION_MERCHANT\r\nFROM   ap_credit_card_trxns_all trxns\r\nJOIN   ap_cards_all cards\r\n       ON cards.card_id = trxns.card_id\r\n       AND cards.card_program_id = trxns.card_program_id\r\n       AND cards.org_id = trxns.org_id\r\nJOIN   fnd_user fu\r\n       ON fu.employee_id = cards.employee_id\r\nWHERE   fu.user_name = UPPER('${EBS_USER}')",
+  "command": "SELECT trxns.TRX_ID AS TRANSACTION_ID,\n       TO_CHAR(trxns.TRANSACTION_DATE, 'YYYY-MM-DD') AS TRANSACTION_RECEIPT_DATE,\n       trxns.TRANSACTION_AMOUNT AS TRANSACTION_AMOUNT,\n       trxns.MERCHANT_NAME1 AS TRANSACTION_MERCHANT,\n       AP_WEB_DB_CCARD_PKG.GetLocation(trxns.MERCHANT_CITY, trxns.MERCHANT_PROVINCE_STATE) AS TRANSACTION_LOCATION,\n       CASE WHEN EXISTS (\n           SELECT 1\n           FROM XX_AP_BATCH_RECEIPTS receipt\n           WHERE receipt.EBS_USER_NAME = fu.USER_NAME\n             AND LTRIM(TRIM(receipt.CREDIT_TRANSACTION), '0') = TO_CHAR(trxns.TRX_ID)\n       ) THEN 'Y' ELSE 'N' END AS TRANSACTION_LINKED,\n       COUNT(*) OVER () AS TRANSACTION_TOTAL_COUNT\nFROM AP_CREDIT_CARD_TRXNS_ALL trxns\nJOIN AP_CARDS_ALL cards\n  ON cards.CARD_ID = trxns.CARD_ID\n AND cards.CARD_PROGRAM_ID = trxns.CARD_PROGRAM_ID\n AND cards.ORG_ID = trxns.ORG_ID\nJOIN FND_USER fu ON fu.EMPLOYEE_ID = cards.EMPLOYEE_ID\nWHERE fu.USER_NAME = UPPER(TRIM(${EBS_USER:VARCHAR}))\n  AND trxns.REPORT_HEADER_ID IS NULL\n  AND NVL(trxns.EXPENSED_AMOUNT, 0) = 0\n  AND trxns.TRANSACTION_DATE IS NOT NULL\n  AND trxns.TRANSACTION_AMOUNT IS NOT NULL\nORDER BY trxns.TRANSACTION_DATE DESC, trxns.TRX_ID DESC\n",
   "isEnabled": true,
   "inputParams": [
     {
@@ -79,51 +79,6 @@
       "fromInput": false,
       "centred": false,
       "id": {
-        "name": "TRANSACTION_FOLIO_EXPENSE_TYPE",
-        "serviceName": "ReceiptBatch_TransactionByUser"
-      },
-      "paramLabel": "TRANSACTION_FOLIO_EXPENSE_TYPE",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "TRANSACTION_EXPENSE_TYPE",
-        "serviceName": "ReceiptBatch_TransactionByUser"
-      },
-      "paramLabel": "TRANSACTION_EXPENSE_TYPE",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
-        "name": "TRANSACTION_TOTAL_AMOUNT",
-        "serviceName": "ReceiptBatch_TransactionByUser"
-      },
-      "paramLabel": "TRANSACTION_TOTAL_AMOUNT",
-      "visible": true
-    },
-    {
-      "inTable": true,
-      "newLine": false,
-      "required": false,
-      "custom": false,
-      "validationFunction": "NONE",
-      "fromInput": false,
-      "centred": false,
-      "id": {
         "name": "TRANSACTION_RECEIPT_DATE",
         "serviceName": "ReceiptBatch_TransactionByUser"
       },
@@ -143,6 +98,51 @@
         "serviceName": "ReceiptBatch_TransactionByUser"
       },
       "paramLabel": "TRANSACTION_MERCHANT",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_LOCATION",
+        "serviceName": "ReceiptBatch_TransactionByUser"
+      },
+      "paramLabel": "TRANSACTION_LOCATION",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_LINKED",
+        "serviceName": "ReceiptBatch_TransactionByUser"
+      },
+      "paramLabel": "TRANSACTION_LINKED",
+      "visible": true
+    },
+    {
+      "inTable": true,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TRANSACTION_TOTAL_COUNT",
+        "serviceName": "ReceiptBatch_TransactionByUser"
+      },
+      "paramLabel": "TRANSACTION_TOTAL_COUNT",
       "visible": true
     },
     {

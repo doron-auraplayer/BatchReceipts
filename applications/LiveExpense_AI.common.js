@@ -2281,6 +2281,10 @@ function handleCcMatchButtonClick() {
   var capturedReceiptId;
   var settled = false;
 
+  if (closeCreditMatchingBesidePreview()) {
+    return true;
+  }
+
   editorWindow = getEmbeddedEditorWindow();
   state = getEmbeddedEditorCreditMatchState();
 
@@ -3985,6 +3989,8 @@ function matchAndLoad() {
 }
 
 
+app.isSPA = true;
+app.loginPage = 'Login.html';
 app.isSPA = true;
 app.loginPage = 'Login.html';
 app.isSPA = true;

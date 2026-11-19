@@ -13073,7 +13073,7 @@
       "javascript": "@inject:LiveExpense_AI.Credit_Matching.page.js",
       "css": "@inject:LiveExpense_AI.Credit_Matching.page.css",
       "shouldSkip": false,
-      "hasMenu": true,
+      "hasMenu": false,
       "inMenu": false,
       "centred": false
     },
@@ -13242,7 +13242,7 @@
       "javascript": "@inject:LiveExpense_AI.ScannedReceiptsSelection.page.js",
       "css": "",
       "shouldSkip": false,
-      "hasMenu": true,
+      "hasMenu": false,
       "inMenu": false,
       "centred": false
     },
@@ -13430,7 +13430,7 @@
       "javascript": "@inject:LiveExpense_AI.ReceiptLineSelection.page.js",
       "css": "@inject:LiveExpense_AI.ReceiptLineSelection.page.css",
       "shouldSkip": false,
-      "hasMenu": true,
+      "hasMenu": false,
       "inMenu": false,
       "centred": false
     },
@@ -13451,8 +13451,8 @@
       "actions": [],
       "javascript": "@inject:LiveExpense_AI.ReportMessages.page.js",
       "shouldSkip": false,
-      "hasMenu": true,
-      "inMenu": true,
+      "hasMenu": false,
+      "inMenu": false,
       "centred": false
     }
   ],

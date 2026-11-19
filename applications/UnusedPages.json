@@ -1,9 +1,9 @@
 {
   "name": "UnusedPages",
   "serviceNames": [
+    "ReceiptBatch_DraftReport",
     "ReceiptBatch_get_draft_report_Data",
     "ReceiptBatch_get_draft_report_lines",
-    "ReceiptBatch_DraftReport",
     "ReceiptBatch_get_draft_reports"
   ],
   "keepAlive": [],

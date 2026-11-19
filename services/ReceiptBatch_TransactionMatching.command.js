@@ -1,209 +1,192 @@
-var user = ServiceManager.getInput("EBS_USER");
+// Automatic card matching for receipt batches. The expense category belongs
+// to the receipt and is independent of the transaction match.
+var LOOKUP_LIMIT = 500;
+var user = text(ServiceManager.getInput('EBS_USER')).toUpperCase();
 
-var transactionsResponse = Services.call("ReceiptBatch_TransactionByUser", {
-  "EBS_USER": user
-});
-
-var error = ServiceManager.getResponseValue(transactionsResponse, "Error");
-if (error && error.length !== 0) {
-  throw error;
+function text(value) {
+  var result = value === undefined || value === null ? '' : String(value).trim();
+  return /^(?:\.?null|undefined)$/i.test(result) ? '' : result;
 }
 
-var batchResponse = Services.call("ReceiptBatch_get_by_userAndStatuses", {
-  "EBS_USER": user,
-  "ReceiptBatch_statuses": "PROCESSED,READY"
-});
-
-error = ServiceManager.getResponseValue(batchResponse, "Error");
-if (error && error.length !== 0) {
-  throw error;
+function normalizedText(value) {
+  return text(value).replace(/\s+/g, ' ').toLowerCase();
 }
 
-var TRANSACTION_IDS = ServiceManager.getResponseArray(transactionsResponse, "TRANSACTION_ID") || [];
-var TRANSACTION_AMOUNTS = ServiceManager.getResponseArray(transactionsResponse, "TRANSACTION_AMOUNT") || [];
-var TRANSACTION_EXPENSE_TYPES = ServiceManager.getResponseArray(transactionsResponse, "TRANSACTION_EXPENSE_TYPE") || [];
-var TRANSACTION_RECEIPT_DATES = ServiceManager.getResponseArray(transactionsResponse, "TRANSACTION_RECEIPT_DATE") || [];
-var TRANSACTION_MERCHANTS = ServiceManager.getResponseArray(transactionsResponse, "TRANSACTION_MERCHANT") || [];
+function normalizedLocation(value) {
+  return normalizedText(value).replace(/\s*,\s*/g, ',');
+}
 
-var RECEIPTBATCH_RECEIPT_IDS = ServiceManager.getResponseArray(batchResponse, "RECEIPTBATCH_RECEIPT_ID") || [];
-var RECEIPTBATCH_TOTAL_AMOUNTS = ServiceManager.getResponseArray(batchResponse, "RECEIPTBATCH_TOTAL_AMOUNT") || [];
-var RECEIPTBATCH_EXPENSE_TYPES = ServiceManager.getResponseArray(batchResponse, "RECEIPTBATCH_EXPENSE_TYPE") || [];
-var RECEIPTBATCH_RECEIPT_DATES = ServiceManager.getResponseArray(batchResponse, "RECEIPTBATCH_RECEIPT_DATE") || [];
-var RECEIPTBATCH_MERCHANTS = ServiceManager.getResponseArray(batchResponse, "RECEIPTBATCH_MERCHANT") || [];
-
-/**********************************************************************/
-
-function normalizeText(txt) {
-  if (txt === null || txt === undefined) {
-    return "";
+function normalizeDate(value) {
+  var dateText = text(value);
+  var display = /^(\d{1,2})-([A-Za-z]{3})-(\d{4})$/.exec(dateText);
+  if (display) {
+    var month = 'jan feb mar apr may jun jul aug sep oct nov dec'.split(' ')
+      .indexOf(display[2].toLowerCase()) + 1;
+    if (!month) {
+      return '';
+    }
+    dateText = display[3] + '-' + ('0' + month).slice(-2) + '-' + ('0' + display[1]).slice(-2);
   }
-  return String(txt).trim().toLowerCase();
+  if (!/^(?!0000)\d{4}-\d{2}-\d{2}$/.test(dateText)) {
+    return '';
+  }
+  var date = new Date(dateText + 'T00:00:00Z');
+  return isFinite(date.getTime()) && date.toISOString().slice(0, 10) === dateText ? dateText : '';
 }
 
-function normalizeAmount(val) {
-  if (val === null || val === undefined || String(val).trim() === "") {
-    return null;
+// Compare signed decimals exactly, without converting them to floating point.
+function normalizeAmount(value) {
+  var match = /^([+-]?)(\d{1,3}(?:,\d{3})+|\d+)(?:\.(\d+))?$/.exec(text(value));
+  if (!match) {
+    return '';
+  }
+  var whole = match[2].replace(/,/g, '').replace(/^0+(?=\d)/, '');
+  var fraction = (match[3] || '').replace(/0+$/, '');
+  var sign = match[1] === '-' && (whole !== '0' || fraction) ? '-' : '';
+  return sign + whole + (fraction ? '.' + fraction : '');
+}
+
+function receiptKey(date, amount) {
+  var day = normalizeDate(date);
+  var total = normalizeAmount(amount);
+  return day && total ? day + '|' + total : '';
+}
+
+// Code Assist table outputs are column arrays, with the same index per row.
+function readColumns(response, fields) {
+  var columns = {};
+  var count;
+  for (var field = 0; field < fields.length; field++) {
+    var name = fields[field];
+    var values = ServiceManager.getResponseArray(response, name) || [];
+    if (field === 0) {
+      count = values.length;
+    } else if (values.length !== count) {
+      throw new Error('Matching response columns are not aligned: ' + name);
+    }
+    columns[name] = values;
+  }
+  return columns;
+}
+
+function resolveCandidate(candidates, merchant, location) {
+  if (candidates.length > 1) {
+    candidates = candidates.filter(function (transaction) {
+      return merchant !== '' && transaction.merchant === merchant;
+    });
+  }
+  if (candidates.length > 1) {
+    candidates = candidates.filter(function (transaction) {
+      return location !== '' && transaction.location === location;
+    });
+  }
+  return candidates.length === 1 ? candidates[0] : null;
+}
+
+function matchReceipts() {
+  if (user === '') {
+    throw new Error('EBS_USER is required for receipt matching');
   }
 
-  var num = Number(String(val).replace(/,/g, "").trim());
-  if (isNaN(num)) {
-    return null;
+  var receiptResponse = Services.call('ReceiptBatch_get_by_userAndStatuses', {
+    'EBS_USER': user,
+    'ReceiptBatch_statuses': 'PROCESSED,READY',
+    'numOfRowsInTable': String(LOOKUP_LIMIT + 1)
+  });
+  var error = text(ServiceManager.getResponseValue(receiptResponse, 'Error'));
+  if (error && error !== '[]') {
+    throw new Error('ReceiptBatch_get_by_userAndStatuses: ' + error);
+  }
+  var receipts = readColumns(receiptResponse, [
+    'RECEIPTBATCH_RECEIPT_ID', 'RECEIPTBATCH_RECEIPT_DATE', 'RECEIPTBATCH_TOTAL_AMOUNT',
+    'RECEIPTBATCH_MERCHANT', 'RECEIPTBATCH_LOCATION', 'RECEIPTBATCH_CREDIT'
+  ]);
+  var pending = [];
+  var receiptIds = receipts.RECEIPTBATCH_RECEIPT_ID;
+  for (var r = 0; r < receiptIds.length; r++) {
+    var receiptId = text(receiptIds[r]);
+    var key = receiptKey(receipts.RECEIPTBATCH_RECEIPT_DATE[r], receipts.RECEIPTBATCH_TOTAL_AMOUNT[r]);
+    if (/^[1-9]\d*$/.test(receiptId) && key && !text(receipts.RECEIPTBATCH_CREDIT[r])) {
+      pending.push({
+        id: receiptId,
+        key: key,
+        merchant: normalizedText(receipts.RECEIPTBATCH_MERCHANT[r]),
+        location: normalizedLocation(receipts.RECEIPTBATCH_LOCATION[r])
+      });
+    }
+  }
+  if (pending.length === 0) {
+    return;
+  }
+  if (receiptIds.length > LOOKUP_LIMIT) {
+    console.log('ReceiptBatch_TransactionMatching skipped: receipt list exceeds the lookup limit');
+    return;
   }
 
-  return num;
-}
-
-function normalizeDate(val) {
-  if (val === null || val === undefined) {
-    return "";
+  var transactionResponse = Services.call('ReceiptBatch_TransactionByUser', {
+    'EBS_USER': user,
+    'numOfRowsInTable': String(LOOKUP_LIMIT)
+  });
+  error = text(ServiceManager.getResponseValue(transactionResponse, 'Error'));
+  if (error && error !== '[]') {
+    throw new Error('ReceiptBatch_TransactionByUser: ' + error);
   }
-  var text = String(val).trim();
-  var match = /^(\d{1,2})-([A-Za-z]{3})-(\d{4})$/.exec(text);
-  if (match) {
-    var month = 'jan feb mar apr may jun jul aug sep oct nov dec'.split(' ').indexOf(match[2].toLowerCase()) + 1;
-    if (!month) { return ''; }
-    text = match[3] + '-' + ('0' + month).slice(-2) + '-' + ('0' + match[1]).slice(-2);
+  var transactions = readColumns(transactionResponse, [
+    'TRANSACTION_ID', 'TRANSACTION_RECEIPT_DATE', 'TRANSACTION_AMOUNT',
+    'TRANSACTION_MERCHANT', 'TRANSACTION_LOCATION', 'TRANSACTION_LINKED', 'TRANSACTION_TOTAL_COUNT'
+  ]);
+  var transactionIds = transactions.TRANSACTION_ID;
+  if (transactionIds.length > 0 && Number(transactions.TRANSACTION_TOTAL_COUNT[0]) !== transactionIds.length) {
+    console.log('ReceiptBatch_TransactionMatching skipped: transaction list was truncated');
+    return;
   }
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(text)) { return ''; }
-  var date = new Date(text + 'T00:00:00Z');
-  return isFinite(date.getTime()) && date.toISOString().slice(0, 10) === text ? text : '';
-}
 
-/**********************************************************************/
-/* Normalize transaction arrays */
-
-for (var i = 0; i < TRANSACTION_AMOUNTS.length; i++) {
-  TRANSACTION_AMOUNTS[i] = normalizeAmount(TRANSACTION_AMOUNTS[i]);
-}
-
-for (var i = 0; i < TRANSACTION_EXPENSE_TYPES.length; i++) {
-  TRANSACTION_EXPENSE_TYPES[i] = normalizeText(TRANSACTION_EXPENSE_TYPES[i]);
-}
-
-for (var i = 0; i < TRANSACTION_RECEIPT_DATES.length; i++) {
-  TRANSACTION_RECEIPT_DATES[i] = normalizeDate(TRANSACTION_RECEIPT_DATES[i]);
-}
-
-for (var i = 0; i < TRANSACTION_MERCHANTS.length; i++) {
-  TRANSACTION_MERCHANTS[i] = normalizeText(TRANSACTION_MERCHANTS[i]);
-}
-
-/* Normalize receipt batch arrays */
-
-for (var i = 0; i < RECEIPTBATCH_TOTAL_AMOUNTS.length; i++) {
-  RECEIPTBATCH_TOTAL_AMOUNTS[i] = normalizeAmount(RECEIPTBATCH_TOTAL_AMOUNTS[i]);
-}
-
-for (var i = 0; i < RECEIPTBATCH_EXPENSE_TYPES.length; i++) {
-  RECEIPTBATCH_EXPENSE_TYPES[i] = normalizeText(RECEIPTBATCH_EXPENSE_TYPES[i]);
-}
-
-for (var i = 0; i < RECEIPTBATCH_RECEIPT_DATES.length; i++) {
-  RECEIPTBATCH_RECEIPT_DATES[i] = normalizeDate(RECEIPTBATCH_RECEIPT_DATES[i]);
-}
-
-for (var i = 0; i < RECEIPTBATCH_MERCHANTS.length; i++) {
-  RECEIPTBATCH_MERCHANTS[i] = normalizeText(RECEIPTBATCH_MERCHANTS[i]);
-}
-
-/**********************************************************************/
-/* Optional validation */
-
-if (
-  TRANSACTION_IDS.length !== TRANSACTION_AMOUNTS.length ||
-  TRANSACTION_IDS.length !== TRANSACTION_EXPENSE_TYPES.length ||
-  TRANSACTION_IDS.length !== TRANSACTION_RECEIPT_DATES.length ||
-  TRANSACTION_IDS.length !== TRANSACTION_MERCHANTS.length
-) {
-  throw "Transaction response arrays are not aligned";
-}
-
-if (
-  RECEIPTBATCH_RECEIPT_IDS.length !== RECEIPTBATCH_TOTAL_AMOUNTS.length ||
-  RECEIPTBATCH_RECEIPT_IDS.length !== RECEIPTBATCH_EXPENSE_TYPES.length ||
-  RECEIPTBATCH_RECEIPT_IDS.length !== RECEIPTBATCH_RECEIPT_DATES.length ||
-  RECEIPTBATCH_RECEIPT_IDS.length !== RECEIPTBATCH_MERCHANTS.length
-) {
-  throw "Receipt batch response arrays are not aligned";
-}
-
-/**********************************************************************/
-
-// var metchesTransactionIds = [];
-// var metchesReciptIds = [];
-
-var usedReceiptIndex = [];
-for (var i = 0; i < RECEIPTBATCH_RECEIPT_IDS.length; i++) {
-  usedReceiptIndex[i] = false;
-}
-/************************************************************/
-// console.log("===== MATCH TEST START =====");
-// console.log("TRANSACTION_IDS =", JSON.stringify(TRANSACTION_IDS));
-// console.log("RECEIPTBATCH_RECEIPT_IDS =", JSON.stringify(RECEIPTBATCH_RECEIPT_IDS));
-// console.log("TRANSACTION_AMOUNTS =", JSON.stringify(TRANSACTION_AMOUNTS));
-// console.log("RECEIPTBATCH_TOTAL_AMOUNTS =", JSON.stringify(RECEIPTBATCH_TOTAL_AMOUNTS));
-// console.log("TRANSACTION_EXPENSE_TYPES =", JSON.stringify(TRANSACTION_EXPENSE_TYPES));
-// console.log("RECEIPTBATCH_EXPENSE_TYPES =", JSON.stringify(RECEIPTBATCH_EXPENSE_TYPES));
-// console.log("TRANSACTION_RECEIPT_DATES =", JSON.stringify(TRANSACTION_RECEIPT_DATES));
-// console.log("RECEIPTBATCH_RECEIPT_DATES =", JSON.stringify(RECEIPTBATCH_RECEIPT_DATES));
-// console.log("TRANSACTION_MERCHANTS =", JSON.stringify(TRANSACTION_MERCHANTS));
-// console.log("RECEIPTBATCH_MERCHANTS =", JSON.stringify(RECEIPTBATCH_MERCHANTS));
-// console.log("usedReceiptIndex INIT =", JSON.stringify(usedReceiptIndex));
-
-/***********************************************************/
-for (var tIdx = 0; tIdx < TRANSACTION_IDS.length; tIdx++) {
-  for (var rIdx = 0; rIdx < RECEIPTBATCH_RECEIPT_IDS.length; rIdx++) {
-    if (usedReceiptIndex[rIdx]) {
+  var byDateAmount = {};
+  for (var t = 0; t < transactionIds.length; t++) {
+    var transactionId = text(transactionIds[t]);
+    var transactionKey = receiptKey(transactions.TRANSACTION_RECEIPT_DATE[t], transactions.TRANSACTION_AMOUNT[t]);
+    if (!/^[1-9]\d*$/.test(transactionId) || !transactionKey) {
       continue;
     }
+    if (!byDateAmount[transactionKey]) {
+      byDateAmount[transactionKey] = [];
+    }
+    byDateAmount[transactionKey].push({
+      id: transactionId,
+      merchant: normalizedText(transactions.TRANSACTION_MERCHANT[t]),
+      location: normalizedLocation(transactions.TRANSACTION_LOCATION[t]),
+      available: text(transactions.TRANSACTION_LINKED[t]) === 'N'
+    });
+  }
 
-    var amountMatch =
-      TRANSACTION_AMOUNTS[tIdx] !== null &&
-      RECEIPTBATCH_TOTAL_AMOUNTS[rIdx] !== null &&
-      TRANSACTION_AMOUNTS[tIdx] === RECEIPTBATCH_TOTAL_AMOUNTS[rIdx];
+  // Resolve against all candidates before checking availability. A repeat
+  // upload must not be redirected to a less suitable, unused transaction.
+  var proposals = [];
+  var claims = {};
+  for (var i = 0; i < pending.length; i++) {
+    var receipt = pending[i];
+    var candidate = resolveCandidate(byDateAmount[receipt.key] || [], receipt.merchant, receipt.location);
+    if (candidate && candidate.available) {
+      proposals.push({ receiptId: receipt.id, transactionId: candidate.id });
+      claims[candidate.id] = (claims[candidate.id] || 0) + 1;
+    }
+  }
 
-    var typeMatch =
-      TRANSACTION_EXPENSE_TYPES[tIdx] !== "" &&
-      RECEIPTBATCH_EXPENSE_TYPES[rIdx] !== "" &&
-      TRANSACTION_EXPENSE_TYPES[tIdx] === RECEIPTBATCH_EXPENSE_TYPES[rIdx];
-
-    var dateMatch =
-      TRANSACTION_RECEIPT_DATES[tIdx] !== "" &&
-      RECEIPTBATCH_RECEIPT_DATES[rIdx] !== "" &&
-      TRANSACTION_RECEIPT_DATES[tIdx] === RECEIPTBATCH_RECEIPT_DATES[rIdx];
-
-    var merchantMatch =
-      TRANSACTION_MERCHANTS[tIdx] !== "" &&
-      RECEIPTBATCH_MERCHANTS[rIdx] !== "" &&
-      TRANSACTION_MERCHANTS[tIdx] === RECEIPTBATCH_MERCHANTS[rIdx];
-
-    // console.log(
-    //   "Transaction ID " + TRANSACTION_IDS[tIdx] +
-    //   " | Receipt ID " + RECEIPTBATCH_RECEIPT_IDS[rIdx] +
-    //   " | amountMatch=" + amountMatch +
-    //   " | typeMatch=" + typeMatch +
-    //   " | dateMatch=" + dateMatch +
-    //   " | merchantMatch=" + merchantMatch
-    // );
-    
-
-    if (amountMatch && typeMatch && dateMatch && merchantMatch) {
-      Services.call("updateMatchingCreditTransaction",{
-          "TRANSACTION_ID": TRANSACTION_IDS[tIdx],
-          "RECEIPT_ID": RECEIPTBATCH_RECEIPT_IDS[rIdx]
+  for (var p = 0; p < proposals.length; p++) {
+    var proposal = proposals[p];
+    if (claims[proposal.transactionId] === 1) {
+      var updateResponse = Services.call('updateMatchingCreditTransaction', {
+        'RECEIPT_ID': proposal.receiptId,
+        'TRANSACTION_ID': proposal.transactionId
       });
-    //   metchesTransactionIds.push(TRANSACTION_IDS[tIdx]);
-    //   metchesReciptIds.push(RECEIPTBATCH_RECEIPT_IDS[rIdx]);
-      usedReceiptIndex[rIdx] = true;
-      break;
+      error = text(ServiceManager.getResponseValue(updateResponse, 'Error'));
+      if (error && error !== '[]') {
+        throw new Error('updateMatchingCreditTransaction: ' + error);
+      }
     }
   }
 }
 
-// console.log("FINAL metchesTransactionIds =", JSON.stringify(metchesTransactionIds));
-// console.log("FINAL metchesReciptIds =", JSON.stringify(metchesReciptIds));
+matchReceipts();
 
-return {
-//   "metchesTransactions": metchesTransactionIds,
-//   "metchesRecipts": metchesReciptIds
-};
+return {};

@@ -595,6 +595,9 @@ function showFailedReportChoice($cell, reportNumber, failed) {
         event.stopPropagation();
         allowReportManualEdit(reportNumber);
     }));
+    $('<button type="button" class="report-messages-link"><span class="fa fa-exclamation-triangle" aria-hidden="true"></span><span>Report Errors</span></button>')
+        .on('click', function () { openReportMessages(reportNumber, this); })
+        .appendTo($cell);
 }
 
 function isProcessingReportAction(rowId) {
@@ -885,12 +888,6 @@ function reportStatus() {
             summaryHtml += '</div>';
 
             $cell.html(summaryHtml);
-        }
-
-        if (summary && !isReportPending(reportNumber, summary)) {
-            $('<button type="button" class="report-messages-link"><span class="fa fa-exclamation-triangle" aria-hidden="true"></span><span>Report Errors</span></button>')
-                .on('click', function () { openReportMessages(reportNumber, this); })
-                .appendTo($cell);
         }
 
         if (table) {
