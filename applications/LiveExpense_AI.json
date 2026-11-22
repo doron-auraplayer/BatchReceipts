@@ -3145,7 +3145,7 @@
         {
           "dataTypeInfo": {
             "subType": "date",
-            "format": "dd-M-y",
+            "format": "dd-M-yy",
             "type": "DATE"
           },
           "isSortable": false,
@@ -9346,7 +9346,7 @@
           "action": {
             "type": "callFunction",
             "attribute": {
-              "main": "onCancel"
+              "main": "onDone"
             }
           }
         }
@@ -13482,7 +13482,6 @@
   "createdBy": "admin",
   "isCompleted": true,
   "labels": [
-    "BATCH_RECEIPTS",
-    "LIVE_EXPENSE"
+    "BATCH_RECEIPTS"
   ]
 }

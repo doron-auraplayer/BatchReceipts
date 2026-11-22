@@ -106,6 +106,16 @@ function onCancel() {
     Page.navigate(goToPage);
 }
 
+function onDone() {
+    var goToPage = "LineDetails.html";
+    if (Storage.get("GuestsCommingFrom") === "ItemizedLine") {
+        Storage.clear("GuestsCommingFrom");
+        goToPage = "ItemizedLine.html";
+    }
+    Storage.set("fromSelectGuest", "true");
+    Page.navigate(goToPage);
+}
+
 function onAddLine() {
     Storage.set("AddNewGuest", false);
     Popup.openPage("NewGuest", newGuestPopupClosed); //, height, width);

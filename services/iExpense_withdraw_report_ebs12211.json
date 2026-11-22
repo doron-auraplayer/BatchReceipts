@@ -82,5 +82,8 @@
   "type": "HTML",
   "createdBy": "admin",
   "labels": [],
-  "apps": []
+  "apps": [
+    "LiveExpense",
+    "LiveExpense_AI"
+  ]
 }

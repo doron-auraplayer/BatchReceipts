@@ -260,18 +260,13 @@ function LDshowFieldsByExpenseType() {
   });
 
   // handle search location button
+  $('#LocationName').off('change', onLocationChange);
   $('#Location_Search').hide();
-  if (Storage.get("LocationFieldEditable") === "false") {
-    $('#LocationName').prop("disabled", false);
-  }
+  $('#LocationName').prop("disabled", Storage.get("LocationFieldEditable") === "false");
   if (Storage.get("SearchLocationButtonExist") == "true") {
+    $('#LocationName').on('change', onLocationChange);
     $('#Location_Search').show();
     $('#Location_Search').insertAfter("#LocationName_container");
-    $('#LocationName').off();
-    $('#LocationName').change(onLocationChange);
-    if (Storage.get("LocationFieldEditable") === "false") {
-      $('#LocationName').prop("disabled", true);
-    }
   }
 
   // handle attendees and guest Table.setColumn(fieldName, value)
@@ -582,6 +577,7 @@ function analyzeReceipt() {
 
 function onLoad() {
   console.log("onLoad - LineDetails");
+  $("#Location_Search, #Attendees, #Guests, #Attachments, #ToggleItemization, #ItemizationTable").attr('type', 'button');
   configureAnalyzeReceiptBtn();
   setTimeout(function () { showHideAnalyzeBtn() }, 100);
 
@@ -1147,7 +1143,9 @@ function onCancel() {
       if (isCreditLine) {
         Page.navigate("Credit_Lines.html");
       } else {
-        Page.navigate("Cash_Lines.html");
+        removeCashLineOnCancel(function () {
+          Page.navigate("Cash_Lines.html");
+        });
       }
     }, displayReportServiceError('Failed to cancel line'));
   }

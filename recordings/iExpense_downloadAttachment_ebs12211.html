@@ -96,13 +96,43 @@
       <td></td>
       <td></td>
     </tr><tr>
+      <td>if</td>
+      <td>AttachmentType.toLowerCase() !== "file"</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
       <td>selectWindow</td>
       <td>null</td>
       <td></td>
       <td></td>
     </tr><tr>
+      <td>endIf</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>storeElementPresent</td>
+      <td>//div[@id='WzTtDiV' and contains(translate(@style, ' ', ''), 'visibility:visible')]//a[@id='closeIcon']</td>
+      <td>attachmentDialogOpen</td>
+      <td></td>
+    </tr><tr>
+      <td>if</td>
+      <td>attachmentDialogOpen</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
       <td>click</td>
-      <td>css=img[alt="Close Popup"]</td>
+      <td>//div[@id='WzTtDiV' and contains(translate(@style, ' ', ''), 'visibility:visible')]//a[@id='closeIcon']</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>waitForElementNotPresent</td>
+      <td>//div[@id='WzTtDiV' and contains(translate(@style, ' ', ''), 'visibility:visible')]//a[@id='closeIcon']</td>
+      <td></td>
+      <td></td>
+    </tr><tr>
+      <td>endIf</td>
+      <td></td>
       <td></td>
       <td></td>
     </tr></tbody></table></body></html>

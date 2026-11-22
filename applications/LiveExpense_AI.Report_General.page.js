@@ -11,14 +11,27 @@ populateField("ReimbCurrency", arrayItem[Object.keys(arrayItem)[0]].split(",")[0
 } catch (err) {}
 }
 function iExpense_create_onSuccess() {
-nextButtonWasPressed = true;
-var wizardTitle = Storage.get("wizardTitle");
-if (wizardTitle.indexOf("List of Values") > -1) {
-// There was an error and we stayed on the same page
-Popup.ok(getTranslationForId("@popup_title_error"), "Failed to create report, invalid department value");
-} else {
-Page.navigate(isCreditLinesFlow() ? "Credit_Transactions.html" : "Cash_Lines.html");
-}
+    var wizardTitle = Storage.get("wizardTitle") || "";
+    var errorTitle = getTranslationForId("@popup_title_error");
+
+    if (wizardTitle.indexOf("List of Values") > -1) {
+        Popup.ok(errorTitle, "Failed to create report, invalid department value");
+        return;
+    }
+
+    if (wizardTitle.indexOf("General Information") > -1) {
+        var message = Storage.get("isErrorMessage") === "true"
+            ? (Storage.get("reportErrorMessage") || "").trim()
+            : "";
+        if (Storage.get("OverridingApprover")) {
+            Popup.ok(errorTitle, message || "The report could not continue. Click OK to review the selected approver.", onSearchApprover);
+            return;
+        }
+        Popup.ok(errorTitle, message || "Review the report details and try again.");
+        return;
+    }
+    nextButtonWasPressed = true;
+    Page.navigate(isCreditLinesFlow() ? "Credit_Transactions.html" : "Cash_Lines.html");
 }
 function ReimbCurrency_lov_item_presenter(arrayItem) {
 var lovItems = [];
