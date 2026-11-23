@@ -274,6 +274,8 @@
   "validationResponseCode": 200,
   "type": "AI",
   "createdBy": "admin",
-  "labels": [],
+  "labels": [
+    "BATCH_RECEIPTS"
+  ],
   "apps": []
 }

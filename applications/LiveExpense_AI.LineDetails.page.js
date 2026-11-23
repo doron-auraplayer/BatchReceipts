@@ -7,10 +7,6 @@ if (ReimbCurrency === "") {
 var isCreditLine = Storage.get("isCreditLine") === "true";
 var ExpensesFilteredExpenseTypes = Storage.get("ExpensesFilteredExpenseTypes");
 
-// Preserve only this line's form fields while visiting a child page.
-// Attendee/guest rows and attachments keep their own updated values.
-// Keep these lists and keys in named functions: AuraPlayer's page compiler
-// emits named function declarations but not new top-level variables.
 function lineDetailsFields() {
   return [
     'expenseType', 'ReceiptCurrencyChoice', 'ExchRate', 'DetailReceiptAmount', 'StartDate',
@@ -119,7 +115,7 @@ function onLocationChange() {
   }, displayReportServiceError('Failed to select location'));
 }
 
-function loadFieldsByExpenseType(expenseType, CB, onError) {
+function loadFieldsByExpenseType(expenseType, CB, onError, keepStartDate) {
   console.log("loadFieldsByExpenseType");
   if (expenseType !== undefined) {
     store("ExpTypeInput", expenseType);
@@ -130,10 +126,20 @@ function loadFieldsByExpenseType(expenseType, CB, onError) {
   console.log("loadFieldsByExpenseType - iExpense_lineDetailsGet");
     
     
+  // Preserve the selected date only when changing Expense Type.
+  if (keepStartDate) {
+    if (Fields.get("StartDate")) storeDateFormatted("StartDate", true);
+    else Storage.set("StartDateFormatted", "");
+    keepStartDate = Storage.get("StartDateFormatted") !== "";
+  }
+
   var isInitializingLineDetails = true;//for syncing with iExpense_GetExchangeRate
   Services.call("iExpense_lineDetailsGet", function () {
     isInitializingLineDetails = false;  
     Storage.set("origExpenseType", expenseType);
+    if (keepStartDate) {
+      Storage.set("StartDate", Storage.get("StartDateFormatted"));
+    }
     setAndStoreDateField("StartDate", true);
     setAndStoreDateField("AccEndDate", true);
 
@@ -151,15 +157,15 @@ function loadFieldsByExpenseType(expenseType, CB, onError) {
       populateField("GuestNames", Storage.getArray("AttendiesGuestTableName").join(","));
     }
 
-    // if (Storage.get("doMatch")) {
-    //     trasactionReciptsMatching();
-    // }
-
     Spinner.stop();
     if (typeof CB === "function") { CB(); }
   }, function (response) {
     Spinner.stop();
     isInitializingLineDetails = false;
+    if (keepStartDate) {
+      Storage.set("StartDate", Storage.get("StartDateFormatted"));
+      setAndStoreDateField("StartDate", true);
+    }
     if (typeof onError === "function") { onError(); }
     displayReportServiceError("Failed to get expense line details")(response);
   });
@@ -184,7 +190,7 @@ function expenseType_lov_item_handler(arrayItem) {
 
   if (prevVal !== newVal) {
     console.log("loadFieldsByExpenseType - loadFieldsByExpenseType");
-    loadFieldsByExpenseType(arrayItem.ExpenseType);
+    loadFieldsByExpenseType(arrayItem.ExpenseType, undefined, undefined, true);
   }
 }
 
@@ -196,9 +202,7 @@ function showFieldIfExist(fieldName) {
   } else {
     hideField(fieldName);
   }
-  // MealNumberAttendees keeps its value (possibly 0) and min=1 while hidden.
-  // Disable it only when the Exist flag hides it, so a hidden range underflow
-  // cannot block validation, then re-enable it when it is shown again.
+
   if (fieldName === 'MealNumberAttendees') {
     var attendeeCount = document.getElementById(fieldName);
     if (attendeeCount) {
@@ -290,7 +294,6 @@ function LDshowFieldsByExpenseType() {
 }
 
 function ReceiptCurrencyChoice_lov_item_handler(arrayItem) {
-  //console.log("ReceiptCurrencyChoice_lov_item_handler");
 
   if (Storage.get("expenseType").length > 0 && Fields.get("StartDate").length === 0) {
     Popup.ok("Error", "Fill Start Date before changing currency");
@@ -315,18 +318,18 @@ function ReceiptCurrencyChoice_lov_item_handler(arrayItem) {
 }
 
 function AirTravelType_lov_item_handler(item, label) {
-  //console.log("AirTravelType_lov_item_handler");
+
   populateFieldHTML("AirTravelType", label !== undefined ? label : item);
   store("AirTravelType", item);
 }
 function AirTicketClass_lov_item_handler(item, label) {
-  //console.log("AirTicketClass_lov_item_handler");
+
   populateFieldHTML("AirTicketClass", label !== undefined ? label : item);
   store("AirTicketClass", item);
 }
 
 function validateLine() {
-  //console.log("validateLine");
+
   if (Storage.get("expenseType") === '') {
     Popup.ok(getTranslationForId("@popup_title_error"), getTranslationForId("@popup_no_expense_type"));
     return false;
@@ -342,15 +345,6 @@ function validateLine() {
     Popup.ok(getTranslationForId("@popup_title_error"), getTranslationForId("@popup_no_start_date"));
     return false;
   }
-
-  // // validate non empty attachment
-  // if ($("#attachmentPath")[0].files && $("#attachmentPath")[0].files.length > 0) {
-  //     var fileDet = $("#attachmentPath")[0].files[0];
-  //     if (fileDet.size === 0) {
-  //         Popup.ok(getTranslationForId("@popup_title_error"), getTranslationForId("@popup_empty_attachment_file"));
-  //         return false
-  //     }
-  // }
 
   return true;
 }
@@ -394,7 +388,6 @@ function openDetailedLine() {
 }
 
 function next_onSuccess() {
-  console.log("next_onSuccess");
   var index = Storage.get('index');
   
   if (isCreditLine) {
@@ -424,7 +417,6 @@ function save_onSuccess() {
 }
 
 function addReceiptbatchSubmitted(id) {
-    console.log("addReceiptbatchSubmited");
     id = String(id);
 
     var submittedIds = JSON.parse(Storage.get("receiptbatch_submitted") || "[]");
@@ -438,7 +430,6 @@ function addReceiptbatchSubmitted(id) {
 }
 
 function getCurrenyFromCreditLine(creditLineAmount) {
-  //console.log("getCurrenyFromCreditLine");
   var retVal = "USD - US dollar";
   if (creditLineAmount.indexOf("EUR") !== -1) {
     retVal = "EUR - Euro";
@@ -473,7 +464,6 @@ function setCreditLineFields() {
 }
 
 function calculateReimbursValue(forceCalculate) {
-  //console.log("calculateReimbursValue");
   var expenseType = Storage.get("expenseType") || Storage.get("EXPENSE_TYPE") || "";
 
   if (expenseType.length === 0 || isCreditLine) {
@@ -589,11 +579,6 @@ function onLoad() {
   $("#expenseType").parent().attr("class", "ui-icon-carat-d ui-btn-icon-right")
 
   Storage.remove("ContinueWithWarnings");
-  // Do not remove receiptbatch_id here. It must survive the initial scanned
-  // receipt approval and child round trips, and is cleared only on a completed
-  // line, a cancelled line, or a true new/edit entry.
-  // $("#LineNumber").prop("style", "display: inline-block; width: 35px; height: 20px; position: relative; left: 12px; margin-top: -18px; line-height: 0.5;");
-  // $("#LineNumber_container > label").attr("style", "display: inline-block");
   setTimeout(function () { $("#Location_Search").append('<i class="fa fa-search" aria-hidden="true"></i>') }, 0);
 
   $("#ExchRate").change(calculateReimbursValue);
@@ -604,8 +589,6 @@ function onLoad() {
   var staleChildReturnFlag = false;
   ['fromAttachmentsPage', 'fromSelectEmployees', 'fromSelectGuest'].forEach(function (flagName) {
     var flagValue = Storage.get(flagName);
-    // A leftover "false"/other value must not be treated as a real return or
-    // fall through to the new-line reset.
     if (flagValue !== "" && flagValue !== "true") {
       Storage.remove(flagName);
       staleChildReturnFlag = true;
@@ -613,8 +596,7 @@ function onLoad() {
   });
 
   if (Storage.get("ApproveScannedReceipt") === "true") {
-    // A fresh approval owns this navigation. A stale child return marker must
-    // never restore old fields or suppress the one receipt attachment.
+
     Storage.remove("fromSelectLocation");
     Storage.remove("fromItemization");
     Storage.remove("fromAttachmentsPage");
@@ -669,8 +651,7 @@ function onLoad() {
   }
   else if (staleChildReturnFlag && Storage.get("LineDetailsUpdate") !== "true") {
     console.log("stale child return flag");
-    // Reject the stale return state, but keep the form values AuraPlayer
-    // restored instead of dropping into the new-line reset branch.
+
     clearLineDetailsFields();
     populateField("AttendeeNames", Storage.getArray("AttendiesEmpTableEmpName").join(","));
     populateField("GuestNames", Storage.getArray("AttendiesGuestTableName").join(","));
@@ -722,11 +703,6 @@ function onLoad() {
        Storage.set("doMatch", true);
     }
     loadFieldsByExpenseType();
-    
-    // if(Storage.get("isCreditLine")){
-    //   console.log("LineDetailsUpdate - loadFieldsByExpenseType");    
-    //   trasactionReciptsMatching();
-    // }
   }
 /*****************************************/  
   else if (Storage.get("ApproveScannedReceipt") == "true") {
@@ -743,47 +719,6 @@ function onLoad() {
       Storage.set("receiptbatch_id", approvedReceiptId);
     }
     attachReceiptToLine(approvedReceiptId);
-
-    
-    // Storage.set("receiptbatch_id", Storage.get("RECEIPTBATCH_RECEIPT_ID"));
-    // console.log("receiptbatch_id: ",Storage.get("receiptbatch_id"));
-    
-    // Fields.set("RBLocation", "All Other Locations");
-    // Fields.set("LocationName", "All Other Locations");
-    // Fields.set("LineNumber", Storage.get("LineTitle").match(/.(\d+)/)[1]);
-
-    // Storage.deleteByPrefix("AttachmentType");
-
-    // clearForm();
-    // Fields.clear("attachmentPath_filename");
-    // Storage.remove("attachmentPath_filename");
-    // Storage.remove("SearchLocationButtonExist");
-    // Storage.remove("AttendeesTableExist");
-    // Storage.remove("GuestTableExist");
-    // Storage.remove("AttachFilePath");
-    // Storage.deleteByPrefix("AttendiesGuestTableName");
-    // Storage.deleteByPrefix("AttendiesEmpTableEmpName");
-    // populateField("AttendeeNames", 0);
-    // populateField("GuestNames", 0);
-
-    // Storage.clear("origExpenseType");
-
-    // // Clean old field values
-    // iExpenseLineFields.forEach(function (fieldName) {
-    //   Storage.remove(fieldName);
-    //   Storage.remove(fieldName + 'Exist');
-    // });
-
-    // store("ExpTypeInput", "");
-
-    // $('#Add_Line').show();
-
-    // Fields.clear("expenseType");
-
-
-    // $("#DetailReceiptAmount").prop("step", "0.01");
-
-    // // Receipt data population will be added in the next step.
 
   }
   else {
@@ -895,13 +830,6 @@ function isDirty() {
   return Storage.get("expenseType") !== '';
 }
 
-//function prepare_iExpense_getReportCurrencies_lov_request() {
-//    var inputParams = JSON.parse(Storage.get("iExpenseConfig"));
-//    inputParams['usernameField'] = Fields.get("usernameField");
-//    inputParams['passwordField'] = Fields.get("passwordField");
-//
-//    return inputParams;
-//}
 
 function prepare_iExpense_getReportCurrencies_lov_request() {
   //console.log("prepare_iExpense_getReportCurrencies_lov_request");
@@ -918,15 +846,7 @@ function prepare_iExpense_getExpenseTypes_lov_request() {
 
   return inputParams;
 }
-//function expenseType_lov_item_presenter(arrayItem) {
-//    var lovItems = [];
-//    lovItems.push(arrayItem["ExpenseType"]);
-//    if (ExpensesFilteredExpenseTypes.indexOf(arrayItem.ExpenseType) < 0 || arrayItem.ExpenseType.trim() == "") {
-//        return lovItems.join(",");
-//    }
-//
-//    return "Under Construction - " + lovItems.join(",");
-//}
+
 function expenseType_lov_item_presenter(arrayItem) {
   //console.log("expenseType_lov_item_presenter");
   var lovItems = [];
@@ -959,10 +879,7 @@ function onClickGuests() {
   Page.navigate("Guests.html");
 }
 
-// The expense line is already saved when this function runs. Keep a pending
-// receipt update so Add Line/Done can retry it without saving a duplicate line.
-// Busy state lives on this named function because AuraPlayer's page compiler
-// emits function declarations but drops new top-level variables.
+
 function completeReceiptLine(action) {
   if (completeReceiptLine.lineSaveBusy) { return; }
   var pendingKey = receiptLinePendingKey();
