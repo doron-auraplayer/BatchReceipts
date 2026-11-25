@@ -814,8 +814,14 @@ function finishUploadProcess(uploadState, attachmentInput) {
   receiptStepInfoUploading = false;
   console.log("finishUploadProcess");
   Spinner.stop('UPLOADING_FILES');
-  Popup.toast(
-      "Files uploaded successfully! Analysis is in progress. You can safely close this window.",7000);
+  Popup.ok(
+    "Upload complete",
+    '<div class="receipt-upload-message">' +
+      "Your receipts were uploaded successfully.<br>" +
+      "Analysis is in progress.<br>" +
+      "You can safely close this window." +
+    "</div>"
+    );
 
   removeAttachmentInput(attachmentInput);
 
@@ -1047,6 +1053,9 @@ function uploadAttachment(
 
     function () {
       successCallback();
+      Storage.remove('blob');
+      Storage.remove('fileName');
+      Storage.remove('fileType');
     },
 
     function (error) {
@@ -1057,6 +1066,9 @@ function uploadAttachment(
       );
 
       failureCallback(error);
+      Storage.remove('blob');
+      Storage.remove('fileName');
+      Storage.remove('fileType');
     }
   );
 }

@@ -581,6 +581,8 @@ function analyzeReceipt() {
 
 function onLoad() {
   console.log("onLoad - LineDetails");
+  var cardFieldsDeferred = false;
+  
   $("#Location_Search, #Attendees, #Guests, #Attachments, #ToggleItemization, #ItemizationTable").attr('type', 'button');
   configureAnalyzeReceiptBtn();
   setTimeout(function () { showHideAnalyzeBtn() }, 100);
@@ -716,7 +718,9 @@ function onLoad() {
     if (Storage.get("isCreditLine")){
        Storage.set("doMatch", true);
     }
-    loadFieldsByExpenseType();
+    
+    cardFieldsDeferred = isCreditLine;
+    loadFieldsByExpenseType(undefined,cardFieldsDeferred ? setCreditLineFields : undefined);
   }
 /*****************************************/  
   else if (Storage.get("ApproveScannedReceipt") == "true") {
