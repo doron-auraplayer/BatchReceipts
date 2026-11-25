@@ -535,7 +535,11 @@ function configureAnalyzeReceiptBtn() {
 }
 
 function showHideAnalyzeBtn() {
-  //console.log("showHideAnalyzeBtn");
+  if (isCreditLine && Storage.get("LineDetailsUpdate") === "true") {
+    $("label[for='ScanReceipt'].ui-btn").hide();
+    return;
+  }
+  
   if (Storage.get("EnableAIToScanReceipt") !== 'true') return;
 
   if (Storage.count("AttachmentType") > 0) {
