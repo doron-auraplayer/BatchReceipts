@@ -2,7 +2,7 @@
 var filePath = ServiceManager.getInput("ScanReceipt");
 var fileAbsPath = Utils.getServerPath() + filePath;
 
-var response = Services.call("IExpense_AnalyzeReceipt_NEW", {
+var response = Services.call("IExpense_AnalyzeReceipt", {
 	"ReceiptContent": Files.readFileBase64(filePath),
 	"keepAlive":false
 });

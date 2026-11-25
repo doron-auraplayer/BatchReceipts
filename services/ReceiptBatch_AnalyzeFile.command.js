@@ -139,7 +139,7 @@ function analyzeReceiptFile() {
     }
 
     try {
-        var analysisResponse = Services.call('IExpense_AnalyzeReceipt_eval',
+        var analysisResponse = Services.call('IExpense_AnalyzeReceipt',
             {"ReceiptContent": blobFile, "keepAlive": false});
 
         if (getServiceError(analysisResponse).length !== 0) {

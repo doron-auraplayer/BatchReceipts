@@ -114,6 +114,102 @@
       "visible": true
     },
     {
+      "description": "Currency code of the amount, 3 letters such as USD, EUR, GBP, from the printed code, symbol or country. Empty if not printed.",
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Currency",
+        "serviceName": "IExpense_AnalyzeReceipt"
+      },
+      "paramLabel": "Currency",
+      "visible": true
+    },
+    {
+      "description": "International or Domestic, filled only for a flight or train ticket whose route is printed on the paper, from the countries of that route. Empty for every other receipt: a taxi, a car rental, a hotel, a meal or anything else.",
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TravelType",
+        "serviceName": "IExpense_AnalyzeReceipt"
+      },
+      "paramLabel": "TravelType",
+      "visible": true
+    },
+    {
+      "description": "The ticket class as printed, such as Economy, Business, First. Empty if not printed.",
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "TicketClass",
+        "serviceName": "IExpense_AnalyzeReceipt"
+      },
+      "paramLabel": "TicketClass",
+      "visible": true
+    },
+    {
+      "description": "The departure or pickup place as printed, airport code, city or address. Empty if not printed.",
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "FromLocation",
+        "serviceName": "IExpense_AnalyzeReceipt"
+      },
+      "paramLabel": "FromLocation",
+      "visible": true
+    },
+    {
+      "description": "The arrival or drop-off place as printed, airport code, city or address. Empty if not printed.",
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "ToLocation",
+        "serviceName": "IExpense_AnalyzeReceipt"
+      },
+      "paramLabel": "ToLocation",
+      "visible": true
+    },
+    {
+      "description": "Number of people the receipt names or counts, such as guests, passengers or covers. Empty if not printed.",
+      "inTable": false,
+      "newLine": false,
+      "required": false,
+      "custom": false,
+      "validationFunction": "NONE",
+      "fromInput": false,
+      "centred": false,
+      "id": {
+        "name": "Attendees",
+        "serviceName": "IExpense_AnalyzeReceipt"
+      },
+      "paramLabel": "Attendees",
+      "visible": true
+    },
+    {
       "inTable": false,
       "newLine": false,
       "required": false,
