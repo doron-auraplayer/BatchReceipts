@@ -128,6 +128,14 @@ function loadFieldsByExpenseType(expenseType, CB, onError, keepStartDate) {
     
   // Preserve the selected date only when changing Expense Type.
   if (keepStartDate) {
+    var merchantName;
+    var justification;
+    if (!isCreditLine && Storage.get("DetailMerchantNameExist") === "true") {
+      merchantName = Fields.get("DetailMerchantName");
+    }
+    if (Storage.get("JustificationExist") === "true") {
+      justification = Fields.get("Justification");
+    }
     if (Fields.get("StartDate")) storeDateFormatted("StartDate", true);
     else Storage.set("StartDateFormatted", "");
     keepStartDate = Storage.get("StartDateFormatted") !== "";
@@ -157,6 +165,12 @@ function loadFieldsByExpenseType(expenseType, CB, onError, keepStartDate) {
       populateField("GuestNames", Storage.getArray("AttendiesGuestTableName").join(","));
     }
 
+    if (merchantName !== undefined && Storage.get("DetailMerchantNameExist") === "true") {
+      Fields.setAndStore("DetailMerchantName", merchantName);
+    }
+    if (justification !== undefined && Storage.get("JustificationExist") === "true") {
+      Fields.setAndStore("Justification", justification);
+    }
     Spinner.stop();
     if (typeof CB === "function") { CB(); }
   }, function (response) {
