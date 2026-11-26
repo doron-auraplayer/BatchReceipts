@@ -50,7 +50,11 @@ function onLogin() {
                 Storage.set('respId', Storage.get("respIds_0"));
                 Storage.set("ExpensesHomeUrl", expenseUrl);
                 Storage.set("CurrentRespName", Storage.get("respNames_0"));
-                Page.navigate("Reports.html");
+                if (Storage.get("EnableBatchReceipts") === "true") {
+                    Page.navigate("ReceiptsAttachments.html");
+                } else {
+                    Page.navigate("Reports.html");
+                }
             } else {
                 Page.navigate("Responsibilities.html");
             }

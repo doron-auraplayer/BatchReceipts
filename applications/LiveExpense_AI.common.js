@@ -54,6 +54,16 @@ function checkHomeMenu() {
     }
 }
 
+function checkReceiptsMenu() {
+    var page = Page.getCurrentPage().replace(/\.html$/i, "").toLowerCase();
+    var showReceipts = Storage.get("EnableBatchReceipts") === "true" &&
+        !!Storage.get("respId") &&
+        page !== "login" &&
+        page !== "responsibilities";
+
+    $("#menu-item-ReceiptsAttachments").closest("li").toggle(showReceipts);
+}
+
 function addShowSnapshot() {
     if ($("#show-snapshot-btn").length === 0) {
         $(".ui-listview").append('<div style="margin-left: 5px;position: absolute;bottom: 40px; margin-top: 20px;font-size: smaller;" ><button style="border: none" id="show-snapshot-btn">Display EBS Snapshot</button></div>');
@@ -98,6 +108,7 @@ Events.pageChanged = function(){
     invokeI18n();
     addUsernameToMenu();
     checkHomeMenu();
+    checkReceiptsMenu();
     showHideCinfigurationList();
     addShowSnapshot();
     
@@ -338,6 +349,7 @@ function getConfigurations() {
         ProjectTaskFieldEditable: "false",
         ExpenseShowMultiLanguage: false,
         EnableAIToScanReceipt: true,
+        EnableBatchReceipts: true,
     };
     var ebs122 = {
         EbsVersion: "12.2.14",
@@ -362,6 +374,7 @@ function getConfigurations() {
         CashLinesMinMilleageWindowSize: 5,
         CashLinesMinPerDiemWindowSize: 5,
         EnableAIToScanReceipt: true,
+        EnableBatchReceipts: true,
         SpecificServices: [
             "iExpense_OpenApproverSearchWindow_ebs12211", // Services.call("iExpense_OpenApproverSearchWindow_ebs12211")
             "iExpense_LocationSearchOpen_ebs12211", // Services.call("iExpense_LocationSearchOpen_ebs12211")
@@ -3989,6 +4002,8 @@ function matchAndLoad() {
 }
 
 
+app.isSPA = true;
+app.loginPage = 'Login.html';
 app.isSPA = true;
 app.loginPage = 'Login.html';
 app.isSPA = true;

@@ -11,6 +11,10 @@ function onTableClick(row, col, rowCells) {
     expenseUrl = expenseUrl.replace(currRespAppId,  newRespAppId);
     Storage.set("ExpensesHomeUrl", expenseUrl);
 
-    Page.navigate("Reports.html");
+    if (Storage.get("EnableBatchReceipts") === "true") {
+        Page.navigate("ReceiptsAttachments.html");
+    } else {
+        Page.navigate("Reports.html");
+    }
 }
 

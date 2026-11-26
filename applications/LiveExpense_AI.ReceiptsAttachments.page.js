@@ -14,6 +14,11 @@ var COMPRESSION_SIZE_THRESHOLD = 350000;
 
 function onLoad() {
   console.log("onLoad")
+  if (Storage.get("EnableBatchReceipts") !== "true") {
+    Page.navigate(Storage.get("respId") ? "Reports.html" : "Responsibilities.html");
+    return;
+  }
+  
   updateStepInfo("Upload receipts to get started.");
   Table.clear();
   
@@ -811,20 +816,13 @@ function uploadNextFile(uploadState, attachmentInput) {
 }
 
 function finishUploadProcess(uploadState, attachmentInput) {
+  var popupTitle;
+
   receiptStepInfoUploading = false;
   console.log("finishUploadProcess");
   Spinner.stop('UPLOADING_FILES');
-  Popup.ok(
-    "Upload complete",
-    '<div class="receipt-upload-message">' +
-      "Your receipts were uploaded successfully.<br>" +
-      "Analysis is in progress.<br>" +
-      "You can safely close this window." +
-    "</div>"
-    );
 
   removeAttachmentInput(attachmentInput);
-
   removeExtractionPendingMessages();
 
   if (uploadState.failedFiles.length > 0) {
@@ -834,13 +832,19 @@ function finishUploadProcess(uploadState, attachmentInput) {
       + uploadState.failedFiles.join(', ')
     );
   } else {
-//         Popup.ok(
-//             'Upload complete',
-//             uploadState.files.length === 1
-//                 ? '1 Receipt was uploaded'
-//                 : uploadState.files.length + ' Receipts were uploaded'
-//         );  
+    Popup.ok(
+      'Failed uploading files',
+      '<div class="receipt-upload-message">' +
+        "Your receipts were uploaded successfully.<br>" +
+        "Analysis is in progress.<br>" +
+        "You can safely close this window." +
+      "</div>"
+    );
   }
+
+  // A duplicate #popupTitle exists in the hidden page-as-popup container, so
+  // the native call can leave the visible popup title stale; set it explicitly.
+  $('#popupContainer .ui-title').text(popupTitle);
 
   // Analyze only after the upload batch has finished saving its receipts.
   console.log("call Analyze");  
