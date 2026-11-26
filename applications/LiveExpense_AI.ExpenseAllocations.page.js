@@ -149,10 +149,10 @@ Events.tablePopulated = function(){
             $(projectSelector).append('<i class="fa fa-trash-o tableSearchIcon" row="' + i + '"aria-hidden="true" id="projectRemove' + i +'"></i>');
             $(taskSelector).append('<i class="fa fa-trash-o tableSearchIcon" row="' + i + '"aria-hidden="true" id="taskRemove' + i +'"></i>');
         }
-        // Expand all but first line
-        if (i>0) {
-            $("#tablerow_" + i + " > td:first-child").click();
-        }
+        // // Expand all but first line
+        // if (i>0) {
+        //     $("#tablerow_" + i + " > td:first-child").click();
+        // }
     }
     $("[id^=projectSearch]").click(searchProject);
     $("[id^=taskSearch]").click(searchTask);

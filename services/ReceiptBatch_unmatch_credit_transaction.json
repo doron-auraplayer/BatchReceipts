@@ -2,7 +2,7 @@
   "name": "ReceiptBatch_unmatch_credit_transaction",
   "description": "",
   "formUrl": "${env.DB_CONNECTION_STR}",
-  "command": "UPDATE XX_AP_BATCH_RECEIPTS receipt\nSET CREDIT_TRANSACTION = NULL,\n    EXPENSE_DATA_JSON = JSON_TRANSFORM(receipt.EXPENSE_DATA_JSON,\n        REMOVE '$.lines[0].transactionLocation' RETURNING CLOB),\n    EXPENSE_DATA_UPDATED_DATE = SYSTIMESTAMP\nWHERE receipt.RECEIPT_ID = ${P_RECEIPT_ID:NUMERIC}\n  AND receipt.EBS_USER_NAME = UPPER(TRIM(${P_EBS_USER:VARCHAR}))\n  AND TRIM(receipt.CREDIT_TRANSACTION) = ${P_CREDIT_TRANSACTION:VARCHAR}\n  AND (\n      (receipt.REPORT_ID IS NULL AND receipt.STATUS IN ('PROCESSED', 'DRAFT', 'READY', 'LINE_FAILED'))\n      OR (receipt.STATUS = 'LINE_FAILED' AND NOT EXISTS (\n          SELECT 1\n          FROM XX_AP_BATCH_RECEIPTS sibling\n          WHERE sibling.REPORT_ID = receipt.REPORT_ID\n            AND sibling.STATUS = 'READY'\n      ))\n  )\n",
+  "command": "UPDATE XX_AP_BATCH_RECEIPTS receipt\nSET CREDIT_TRANSACTION = NULL,\n    AUTO_MATCH_BLOCKED = 'Y'\nWHERE receipt.RECEIPT_ID = ${P_RECEIPT_ID:NUMERIC}\n  AND receipt.EBS_USER_NAME = UPPER(TRIM(${P_EBS_USER:VARCHAR}))\n  AND TRIM(receipt.CREDIT_TRANSACTION) = ${P_CREDIT_TRANSACTION:VARCHAR}",
   "isEnabled": true,
   "inputParams": [
     {

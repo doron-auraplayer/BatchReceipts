@@ -1064,6 +1064,10 @@ body.receipt-unmatch-confirmation #popupContainer-screen {
   z-index: 1000001 !important;
 }
 
+#popupContainer.receipt-unmatch-popup #popupMessage {
+  text-align: left;
+}
+
 /* ============================================================================
    Split preview layout (opt-in per page)
 

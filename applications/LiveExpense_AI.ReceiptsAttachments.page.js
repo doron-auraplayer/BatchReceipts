@@ -687,6 +687,8 @@ function click_New_Report() {
   Storage.set('newAiReport', 'true');
 
   reLoginAndRun( function() {
+    Storage.remove("updateMode");
+    Storage.set('newAiReport', 'true');
     Page.navigate('Report_General');
   });
   
